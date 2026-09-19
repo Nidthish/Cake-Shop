@@ -1,0 +1,4174 @@
+[
+  {
+    "id": "normal-flavors-black-forest",
+    "name": "Black Forest",
+    "baseName": "Black Forest",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 20,
+    "description": "Layers of moist chocolate sponge, whipped fresh cream, and tangy cherries, blanketed in chocolate shavings. A timeless classic!",
+    "minPrice": 370,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 370,
+        "originalPrice": 425,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 699,
+        "originalPrice": 804,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "normal-flavors-white-forest",
+    "name": "White Forest",
+    "baseName": "White Forest",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 51,
+    "description": "A pristine delight of vanilla sponge, sweet cherry filling, and fluffy cream, adorned with white chocolate curls.",
+    "minPrice": 370,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 370,
+        "originalPrice": 425,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 699,
+        "originalPrice": 804,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "normal-flavors-butter-scotch",
+    "name": "Butter Scotch",
+    "baseName": "Butter Scotch",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 79,
+    "description": "A classic crowd-pleaser! Our butter scotch cake features a melt-in-your-mouth sponge and irresistible flavored cream.",
+    "minPrice": 370,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 370,
+        "originalPrice": 425,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 699,
+        "originalPrice": 804,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "normal-flavors-mango",
+    "name": "Mango",
+    "baseName": "Mango",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 39,
+    "description": "A classic crowd-pleaser! Our mango cake features a melt-in-your-mouth sponge and irresistible flavored cream.",
+    "minPrice": 370,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 370,
+        "originalPrice": 425,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 699,
+        "originalPrice": 804,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "normal-flavors-black-currant",
+    "name": "Black Currant",
+    "baseName": "Black Currant",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 67,
+    "description": "A classic crowd-pleaser! Our black currant cake features a melt-in-your-mouth sponge and irresistible flavored cream.",
+    "minPrice": 370,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 370,
+        "originalPrice": 425,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 699,
+        "originalPrice": 804,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "normal-flavors-strawberry",
+    "name": "Strawberry",
+    "baseName": "Strawberry",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 36,
+    "description": "A classic crowd-pleaser! Our strawberry cake features a melt-in-your-mouth sponge and irresistible flavored cream.",
+    "minPrice": 370,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 370,
+        "originalPrice": 425,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 699,
+        "originalPrice": 804,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "normal-flavors-pineapple",
+    "name": "Pineapple",
+    "baseName": "Pineapple",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 77,
+    "description": "A classic crowd-pleaser! Our pineapple cake features a melt-in-your-mouth sponge and irresistible flavored cream.",
+    "minPrice": 370,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 370,
+        "originalPrice": 425,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 699,
+        "originalPrice": 804,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "normal-flavors-blueberry",
+    "name": "Blueberry",
+    "baseName": "Blueberry",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1535141192574-5d4897c13136?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 52,
+    "description": "A classic crowd-pleaser! Our blueberry cake features a melt-in-your-mouth sponge and irresistible flavored cream.",
+    "minPrice": 420,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 420,
+        "originalPrice": 483,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 799,
+        "originalPrice": 919,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "normal-flavors-kiwi",
+    "name": "Kiwi",
+    "baseName": "Kiwi",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 35,
+    "description": "A classic crowd-pleaser! Our kiwi cake features a melt-in-your-mouth sponge and irresistible flavored cream.",
+    "minPrice": 370,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 370,
+        "originalPrice": 425,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 699,
+        "originalPrice": 804,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "normal-flavors-iris-coffee",
+    "name": "Iris Coffee",
+    "baseName": "Iris Coffee",
+    "category": "cakes",
+    "subCategory": "Normal Flavors",
+    "categoryName": "Normal Flavors",
+    "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 25,
+    "description": "A classic crowd-pleaser! Our iris coffee cake features a melt-in-your-mouth sponge and irresistible flavored cream.",
+    "minPrice": 420,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 420,
+        "originalPrice": 483,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 799,
+        "originalPrice": 919,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "choco-cakes-chocolate",
+    "name": "Chocolate",
+    "baseName": "Chocolate",
+    "category": "cakes",
+    "subCategory": "Choco Cakes",
+    "categoryName": "Choco Cakes",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 60,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The chocolate is pure cocoa bliss!",
+    "minPrice": 420,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 420,
+        "originalPrice": 483,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 750,
+        "originalPrice": 862,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "choco-cakes-choco-truffle",
+    "name": "Choco Truffle",
+    "baseName": "Choco Truffle",
+    "category": "cakes",
+    "subCategory": "Choco Cakes",
+    "categoryName": "Choco Cakes",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 37,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco truffle is pure cocoa bliss!",
+    "minPrice": 450,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 450,
+        "originalPrice": 518,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 899,
+        "originalPrice": 1034,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "choco-cakes-choco-almond",
+    "name": "Choco Almond",
+    "baseName": "Choco Almond",
+    "category": "cakes",
+    "subCategory": "Choco Cakes",
+    "categoryName": "Choco Cakes",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 20,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco almond is pure cocoa bliss!",
+    "minPrice": 550,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 550,
+        "originalPrice": 632,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1100,
+        "originalPrice": 1265,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "choco-cakes-choco-nuts",
+    "name": "Choco Nuts",
+    "baseName": "Choco Nuts",
+    "category": "cakes",
+    "subCategory": "Choco Cakes",
+    "categoryName": "Choco Cakes",
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 20,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco nuts is pure cocoa bliss!",
+    "minPrice": 550,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 550,
+        "originalPrice": 632,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1100,
+        "originalPrice": 1265,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "choco-cakes-choco-oreo",
+    "name": "Choco Oreo",
+    "baseName": "Choco Oreo",
+    "category": "cakes",
+    "subCategory": "Choco Cakes",
+    "categoryName": "Choco Cakes",
+    "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 63,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco oreo is pure cocoa bliss!",
+    "minPrice": 550,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 550,
+        "originalPrice": 632,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1100,
+        "originalPrice": 1265,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "choco-cakes-choco-delight",
+    "name": "Choco Delight",
+    "baseName": "Choco Delight",
+    "category": "cakes",
+    "subCategory": "Choco Cakes",
+    "categoryName": "Choco Cakes",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 63,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco delight is pure cocoa bliss!",
+    "minPrice": 550,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 550,
+        "originalPrice": 632,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1100,
+        "originalPrice": 1265,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "choco-cakes-choco-kit-kat",
+    "name": "Choco Kit Kat",
+    "baseName": "Choco Kit Kat",
+    "category": "cakes",
+    "subCategory": "Choco Cakes",
+    "categoryName": "Choco Cakes",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 55,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco kit kat is pure cocoa bliss!",
+    "minPrice": 550,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 550,
+        "originalPrice": 632,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1100,
+        "originalPrice": 1265,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "extreme-combo-choco-vanilla",
+    "name": "Choco Vanilla",
+    "baseName": "Choco Vanilla",
+    "category": "cakes",
+    "subCategory": "Extreme Combo",
+    "categoryName": "Extreme Combo",
+    "image": "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 37,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco vanilla is pure cocoa bliss!",
+    "minPrice": 420,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 420,
+        "originalPrice": 483,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 850,
+        "originalPrice": 977,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "extreme-combo-choco-strawberry",
+    "name": "Choco Strawberry",
+    "baseName": "Choco Strawberry",
+    "category": "cakes",
+    "subCategory": "Extreme Combo",
+    "categoryName": "Extreme Combo",
+    "image": "https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 40,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco strawberry is pure cocoa bliss!",
+    "minPrice": 420,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 420,
+        "originalPrice": 483,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 850,
+        "originalPrice": 977,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "extreme-combo-2-in-1-fruit-cake-flavour",
+    "name": "2 In 1 Fruit Cake Flavour",
+    "baseName": "2 In 1 Fruit Cake Flavour",
+    "category": "cakes",
+    "subCategory": "Extreme Combo",
+    "categoryName": "Extreme Combo",
+    "image": "https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 63,
+    "description": "A vibrant, refreshing masterpiece packed with fresh, exotic fruits atop a light and airy sponge.",
+    "minPrice": 420,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 420,
+        "originalPrice": 483,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 850,
+        "originalPrice": 977,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "extreme-combo-3-in-1-fruit-cake-flavour",
+    "name": "3 In 1 Fruit Cake Flavour",
+    "baseName": "3 In 1 Fruit Cake Flavour",
+    "category": "cakes",
+    "subCategory": "Extreme Combo",
+    "categoryName": "Extreme Combo",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 73,
+    "description": "A vibrant, refreshing masterpiece packed with fresh, exotic fruits atop a light and airy sponge.",
+    "minPrice": 450,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 450,
+        "originalPrice": 518,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 900,
+        "originalPrice": 1035,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "choco-special-nutty-choco-truffle",
+    "name": "Nutty Choco Truffle",
+    "baseName": "Nutty Choco Truffle",
+    "category": "cakes",
+    "subCategory": "Choco Special",
+    "categoryName": "Choco Special",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 69,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The nutty choco truffle is pure cocoa bliss!",
+    "minPrice": 550,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 550,
+        "originalPrice": 632,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1200,
+        "originalPrice": 1380,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "choco-special-nutty-ferrero-truffle",
+    "name": "Nutty Ferrero Truffle",
+    "baseName": "Nutty Ferrero Truffle",
+    "category": "cakes",
+    "subCategory": "Choco Special",
+    "categoryName": "Choco Special",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 28,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The nutty ferrero truffle is pure cocoa bliss!",
+    "minPrice": 550,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 550,
+        "originalPrice": 632,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1200,
+        "originalPrice": 1380,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-strawberry",
+    "name": "Strawberry",
+    "baseName": "Strawberry",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 36,
+    "description": "An exquisite gourmet creation! The strawberry features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 570,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 570,
+        "originalPrice": 656,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1190,
+        "originalPrice": 1368,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1390,
+        "originalPrice": 1598,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-black-currant",
+    "name": "Black Currant",
+    "baseName": "Black Currant",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 67,
+    "description": "An exquisite gourmet creation! The black currant features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 570,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 570,
+        "originalPrice": 656,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1190,
+        "originalPrice": 1368,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1390,
+        "originalPrice": 1598,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-mango",
+    "name": "Mango",
+    "baseName": "Mango",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 39,
+    "description": "An exquisite gourmet creation! The mango features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 570,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 570,
+        "originalPrice": 656,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1190,
+        "originalPrice": 1368,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1390,
+        "originalPrice": 1598,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-pineapple",
+    "name": "Pineapple",
+    "baseName": "Pineapple",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 77,
+    "description": "An exquisite gourmet creation! The pineapple features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 570,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 570,
+        "originalPrice": 656,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1190,
+        "originalPrice": 1368,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1390,
+        "originalPrice": 1598,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-blueberry",
+    "name": "Blueberry",
+    "baseName": "Blueberry",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1535141192574-5d4897c13136?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 52,
+    "description": "An exquisite gourmet creation! The blueberry features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 600,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 600,
+        "originalPrice": 690,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1220,
+        "originalPrice": 1403,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1420,
+        "originalPrice": 1633,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-butterscotch",
+    "name": "Butterscotch",
+    "baseName": "Butterscotch",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 24,
+    "description": "An exquisite gourmet creation! The butterscotch features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 570,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 570,
+        "originalPrice": 656,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1190,
+        "originalPrice": 1368,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1390,
+        "originalPrice": 1598,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-caramel",
+    "name": "Caramel",
+    "baseName": "Caramel",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 26,
+    "description": "An exquisite gourmet creation! The caramel features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 600,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 600,
+        "originalPrice": 690,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1220,
+        "originalPrice": 1403,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1420,
+        "originalPrice": 1633,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-tender-coconut",
+    "name": "Tender Coconut",
+    "baseName": "Tender Coconut",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1528756514091-dee5ecaa8278?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 51,
+    "description": "An exquisite gourmet creation! The tender coconut features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 570,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 570,
+        "originalPrice": 656,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1190,
+        "originalPrice": 1368,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1390,
+        "originalPrice": 1598,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-nutella",
+    "name": "Nutella",
+    "baseName": "Nutella",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 48,
+    "description": "An exquisite gourmet creation! The nutella features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 590,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 590,
+        "originalPrice": 678,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1290,
+        "originalPrice": 1483,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1490,
+        "originalPrice": 1713,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-pista",
+    "name": "Pista",
+    "baseName": "Pista",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 51,
+    "description": "An exquisite gourmet creation! The pista features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 590,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 590,
+        "originalPrice": 678,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1290,
+        "originalPrice": 1483,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1490,
+        "originalPrice": 1713,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "delight-cakes-rasamalai",
+    "name": "Rasamalai",
+    "baseName": "Rasamalai",
+    "category": "cakes",
+    "subCategory": "Delight Cakes",
+    "categoryName": "Delight Cakes",
+    "image": "https://images.unsplash.com/photo-1605807646983-377bc5a76493?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 83,
+    "description": "An exquisite gourmet creation! The rasamalai features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 590,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 590,
+        "originalPrice": 678,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1290,
+        "originalPrice": 1483,
+        "offer": "Step 1: Get 1kg Free!"
+      },
+      {
+        "weight": "Step 2",
+        "price": 1490,
+        "originalPrice": 1713,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "fruit-cake-fruit-fantacy",
+    "name": "Fruit Fantacy",
+    "baseName": "Fruit Fantacy",
+    "category": "cakes",
+    "subCategory": "Fruit Cake",
+    "categoryName": "Fruit Cake",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 54,
+    "description": "A vibrant, refreshing masterpiece packed with fresh, exotic fruits atop a light and airy sponge.",
+    "minPrice": 700,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 700,
+        "originalPrice": 805,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1400,
+        "originalPrice": 1610,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "fruit-cake-choco-fantacy",
+    "name": "Choco Fantacy",
+    "baseName": "Choco Fantacy",
+    "category": "cakes",
+    "subCategory": "Fruit Cake",
+    "categoryName": "Fruit Cake",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 84,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco fantacy is pure cocoa bliss!",
+    "minPrice": 700,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 700,
+        "originalPrice": 805,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1400,
+        "originalPrice": 1610,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "rich-special-red-velvet",
+    "name": "Red Velvet",
+    "baseName": "Red Velvet",
+    "category": "cakes",
+    "subCategory": "Rich Special",
+    "categoryName": "Rich Special",
+    "image": "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 22,
+    "description": "An exquisite gourmet creation! The red velvet features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 450,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 450,
+        "originalPrice": 518,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "rich-special-rasamalai",
+    "name": "Rasamalai",
+    "baseName": "Rasamalai",
+    "category": "cakes",
+    "subCategory": "Rich Special",
+    "categoryName": "Rich Special",
+    "image": "https://images.unsplash.com/photo-1605807646983-377bc5a76493?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 83,
+    "description": "An exquisite gourmet creation! The rasamalai features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 450,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 450,
+        "originalPrice": 518,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "rich-special-gulab-jamun",
+    "name": "Gulab Jamun",
+    "baseName": "Gulab Jamun",
+    "category": "cakes",
+    "subCategory": "Rich Special",
+    "categoryName": "Rich Special",
+    "image": "https://images.unsplash.com/photo-1605807646983-377bc5a76493?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 29,
+    "description": "An exquisite gourmet creation! The gulab jamun features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 450,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 450,
+        "originalPrice": 518,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "rich-special-rasagulla",
+    "name": "Rasagulla",
+    "baseName": "Rasagulla",
+    "category": "cakes",
+    "subCategory": "Rich Special",
+    "categoryName": "Rich Special",
+    "image": "https://images.unsplash.com/photo-1605807646983-377bc5a76493?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 53,
+    "description": "An exquisite gourmet creation! The rasagulla features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 450,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 450,
+        "originalPrice": 518,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "rich-special-caramel",
+    "name": "Caramel",
+    "baseName": "Caramel",
+    "category": "cakes",
+    "subCategory": "Rich Special",
+    "categoryName": "Rich Special",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 26,
+    "description": "An exquisite gourmet creation! The caramel features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 450,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 450,
+        "originalPrice": 518,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "rich-special-milky-truffle",
+    "name": "Milky Truffle",
+    "baseName": "Milky Truffle",
+    "category": "cakes",
+    "subCategory": "Rich Special",
+    "categoryName": "Rich Special",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 54,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The milky truffle is pure cocoa bliss!",
+    "minPrice": 500,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 500,
+        "originalPrice": 575,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1100,
+        "originalPrice": 1265,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "rich-special-ferrero-truffle",
+    "name": "Ferrero Truffle",
+    "baseName": "Ferrero Truffle",
+    "category": "cakes",
+    "subCategory": "Rich Special",
+    "categoryName": "Rich Special",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 49,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The ferrero truffle is pure cocoa bliss!",
+    "minPrice": 500,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 500,
+        "originalPrice": 575,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1100,
+        "originalPrice": 1265,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-vancho",
+    "name": "Vancho",
+    "baseName": "Vancho",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 82,
+    "description": "An exquisite gourmet creation! The vancho features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 500,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 500,
+        "originalPrice": 575,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-nutty-bubble",
+    "name": "Nutty Bubble",
+    "baseName": "Nutty Bubble",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 67,
+    "description": "An exquisite gourmet creation! The nutty bubble features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 500,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 500,
+        "originalPrice": 575,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-ferrero-rocher",
+    "name": "Ferrero Rocher",
+    "baseName": "Ferrero Rocher",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 54,
+    "description": "An exquisite gourmet creation! The ferrero rocher features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 600,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 600,
+        "originalPrice": 690,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1200,
+        "originalPrice": 1380,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-fudge-nut",
+    "name": "Fudge Nut",
+    "baseName": "Fudge Nut",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 53,
+    "description": "An exquisite gourmet creation! The fudge nut features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 500,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 500,
+        "originalPrice": 575,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-choco-snickers",
+    "name": "Choco Snickers",
+    "baseName": "Choco Snickers",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 65,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco snickers is pure cocoa bliss!",
+    "minPrice": 600,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 600,
+        "originalPrice": 690,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1200,
+        "originalPrice": 1380,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-spanish-delight",
+    "name": "Spanish Delight",
+    "baseName": "Spanish Delight",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 54,
+    "description": "An exquisite gourmet creation! The spanish delight features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 500,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 500,
+        "originalPrice": 575,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-raffaello-cake",
+    "name": "Raffaello Cake",
+    "baseName": "Raffaello Cake",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 68,
+    "description": "An exquisite gourmet creation! The raffaello cake features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 600,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 600,
+        "originalPrice": 690,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1200,
+        "originalPrice": 1380,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-louts-biscoff",
+    "name": "Louts Biscoff",
+    "baseName": "Louts Biscoff",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 46,
+    "description": "An exquisite gourmet creation! The louts biscoff features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 650,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 650,
+        "originalPrice": 747,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1300,
+        "originalPrice": 1495,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-pistachio-cake",
+    "name": "Pistachio Cake",
+    "baseName": "Pistachio Cake",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 76,
+    "description": "An exquisite gourmet creation! The pistachio cake features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 650,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 650,
+        "originalPrice": 747,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1300,
+        "originalPrice": 1495,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-red-bee",
+    "name": "Red Bee",
+    "baseName": "Red Bee",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 52,
+    "description": "An exquisite gourmet creation! The red bee features premium ingredients and unparalleled flavor profiles for special moments.",
+    "minPrice": 500,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 500,
+        "originalPrice": 575,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "premium-cake-choco-redvelvet",
+    "name": "Choco Redvelvet",
+    "baseName": "Choco Redvelvet",
+    "category": "cakes",
+    "subCategory": "Premium Cake",
+    "categoryName": "Premium Cake",
+    "image": "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 48,
+    "description": "Dive into intense, velvety chocolate layers that melt gracefully on your palate. The choco redvelvet is pure cocoa bliss!",
+    "minPrice": 500,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 500,
+        "originalPrice": 575,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1000,
+        "originalPrice": 1150,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "dry-cakes-rich-plum-cake",
+    "name": "Rich plum cake",
+    "baseName": "Rich plum cake",
+    "category": "dry-cakes",
+    "subCategory": "Dry Cakes",
+    "categoryName": "Dry Cakes",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 35,
+    "description": "A wonderfully rich rich plum cake loaded with premium dried fruits and warm festive spices.",
+    "minPrice": 40,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 40,
+        "originalPrice": 46,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "dry-cakes-plum-cake",
+    "name": "Plum cake",
+    "baseName": "Plum cake",
+    "category": "dry-cakes",
+    "subCategory": "Dry Cakes",
+    "categoryName": "Dry Cakes",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 29,
+    "description": "A wonderfully rich plum cake loaded with premium dried fruits and warm festive spices.",
+    "minPrice": 35,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 35,
+        "originalPrice": 40,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "dry-cakes-banana-cake",
+    "name": "Banana cake",
+    "baseName": "Banana cake",
+    "category": "dry-cakes",
+    "subCategory": "Dry Cakes",
+    "categoryName": "Dry Cakes",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 70,
+    "description": "Soft, moist, and incredibly comforting. Our banana cake is baked to perfection for a delightful treat.",
+    "minPrice": 20,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 20,
+        "originalPrice": 23,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "dry-cakes-pudding-cake",
+    "name": "Pudding cake",
+    "baseName": "Pudding cake",
+    "category": "dry-cakes",
+    "subCategory": "Dry Cakes",
+    "categoryName": "Dry Cakes",
+    "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 37,
+    "description": "Soft, moist, and incredibly comforting. Our pudding cake is baked to perfection for a delightful treat.",
+    "minPrice": 18,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 18,
+        "originalPrice": 21,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "dry-cakes-tea-cake",
+    "name": "Tea cake",
+    "baseName": "Tea cake",
+    "category": "dry-cakes",
+    "subCategory": "Dry Cakes",
+    "categoryName": "Dry Cakes",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 59,
+    "description": "Soft, moist, and incredibly comforting. Our tea cake is baked to perfection for a delightful treat.",
+    "minPrice": 16,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 16,
+        "originalPrice": 18,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "dry-cakes-plain-cake",
+    "name": "Plain cake",
+    "baseName": "Plain cake",
+    "category": "dry-cakes",
+    "subCategory": "Dry Cakes",
+    "categoryName": "Dry Cakes",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 46,
+    "description": "Soft, moist, and incredibly comforting. Our plain cake is baked to perfection for a delightful treat.",
+    "minPrice": 16,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 16,
+        "originalPrice": 18,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "dry-cakes-banana-walnut-cake",
+    "name": "Banana walnut cake",
+    "baseName": "Banana walnut cake",
+    "category": "dry-cakes",
+    "subCategory": "Dry Cakes",
+    "categoryName": "Dry Cakes",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 76,
+    "description": "Soft, moist, and incredibly comforting. Our banana walnut cake is baked to perfection for a delightful treat.",
+    "minPrice": 25,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 25,
+        "originalPrice": 29,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "dry-cakes-banana-choco-chips-cake",
+    "name": "Banana choco chips cake",
+    "baseName": "Banana choco chips cake",
+    "category": "dry-cakes",
+    "subCategory": "Dry Cakes",
+    "categoryName": "Dry Cakes",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 77,
+    "description": "Soft, moist, and incredibly comforting. Our banana choco chips cake is baked to perfection for a delightful treat.",
+    "minPrice": 25,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 25,
+        "originalPrice": 29,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "doughnuts-doughnut",
+    "name": "Doughnut",
+    "baseName": "Doughnut",
+    "category": "snacks",
+    "subCategory": "Doughnuts",
+    "categoryName": "Doughnuts",
+    "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 47,
+    "description": "Classic, fluffy, and perfectly sweet. A melt-in-your-mouth bakery favorite!",
+    "minPrice": 25,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 25,
+        "originalPrice": 29,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "doughnuts-choco-filled-doughnut",
+    "name": "Choco Filled Doughnut",
+    "baseName": "Choco Filled Doughnut",
+    "category": "snacks",
+    "subCategory": "Doughnuts",
+    "categoryName": "Doughnuts",
+    "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 78,
+    "description": "Fluffy, golden dough bursting with a rich, gooey chocolate center. Pure indulgence!",
+    "minPrice": 30,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 30,
+        "originalPrice": 34,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "doughnuts-cream-doughnut",
+    "name": "Cream Doughnut",
+    "baseName": "Cream Doughnut",
+    "category": "snacks",
+    "subCategory": "Doughnuts",
+    "categoryName": "Doughnuts",
+    "image": "https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 56,
+    "description": "A pillowy soft doughnut loaded with luscious, velvety sweet cream.",
+    "minPrice": 30,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 30,
+        "originalPrice": 34,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cup-cakes-blueberry-cupcake",
+    "name": "Blueberry Cupcake",
+    "baseName": "Blueberry Cupcake",
+    "category": "snacks",
+    "subCategory": "Cup Cakes",
+    "categoryName": "Cup Cakes",
+    "image": "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 82,
+    "description": "Soft, moist, and incredibly comforting. Our blueberry cupcake is baked to perfection for a delightful treat.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cup-cakes-strawberry-cupcake",
+    "name": "Strawberry Cupcake",
+    "baseName": "Strawberry Cupcake",
+    "category": "snacks",
+    "subCategory": "Cup Cakes",
+    "categoryName": "Cup Cakes",
+    "image": "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 58,
+    "description": "Soft, moist, and incredibly comforting. Our strawberry cupcake is baked to perfection for a delightful treat.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cup-cakes-choco-chips-cupcake",
+    "name": "Choco Chips Cupcake",
+    "baseName": "Choco Chips Cupcake",
+    "category": "snacks",
+    "subCategory": "Cup Cakes",
+    "categoryName": "Cup Cakes",
+    "image": "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 75,
+    "description": "Soft, moist, and incredibly comforting. Our choco chips cupcake is baked to perfection for a delightful treat.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cup-cakes-banana-cupcake",
+    "name": "Banana Cupcake",
+    "baseName": "Banana Cupcake",
+    "category": "snacks",
+    "subCategory": "Cup Cakes",
+    "categoryName": "Cup Cakes",
+    "image": "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 27,
+    "description": "Soft, moist, and incredibly comforting. Our banana cupcake is baked to perfection for a delightful treat.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cup-cakes-carrot-cupcake",
+    "name": "Carrot Cupcake",
+    "baseName": "Carrot Cupcake",
+    "category": "snacks",
+    "subCategory": "Cup Cakes",
+    "categoryName": "Cup Cakes",
+    "image": "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 22,
+    "description": "Soft, moist, and incredibly comforting. Our carrot cupcake is baked to perfection for a delightful treat.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cup-cakes-orange-cupcake",
+    "name": "Orange Cupcake",
+    "baseName": "Orange Cupcake",
+    "category": "snacks",
+    "subCategory": "Cup Cakes",
+    "categoryName": "Cup Cakes",
+    "image": "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 44,
+    "description": "Soft, moist, and incredibly comforting. Our orange cupcake is baked to perfection for a delightful treat.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cup-cakes-fruit-cupcake",
+    "name": "Fruit Cupcake",
+    "baseName": "Fruit Cupcake",
+    "category": "snacks",
+    "subCategory": "Cup Cakes",
+    "categoryName": "Cup Cakes",
+    "image": "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 63,
+    "description": "Soft, moist, and incredibly comforting. Our fruit cupcake is baked to perfection for a delightful treat.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "brownies-normal-brownie",
+    "name": "Normal Brownie",
+    "baseName": "Normal Brownie",
+    "category": "snacks",
+    "subCategory": "Brownies",
+    "categoryName": "Brownies",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 67,
+    "description": "Decadently fudgy, dense, and ultra-chocolatey. This normal brownie is the ultimate sweet tooth satisfaction!",
+    "minPrice": 45,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 45,
+        "originalPrice": 52,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "brownies-walnut-brownie",
+    "name": "Walnut Brownie",
+    "baseName": "Walnut Brownie",
+    "category": "snacks",
+    "subCategory": "Brownies",
+    "categoryName": "Brownies",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 77,
+    "description": "Decadently fudgy, dense, and ultra-chocolatey. This walnut brownie is the ultimate sweet tooth satisfaction!",
+    "minPrice": 60,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 60,
+        "originalPrice": 69,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "brownies-chocolate-peanut-butter",
+    "name": "Chocolate Peanut Butter",
+    "baseName": "Chocolate Peanut Butter",
+    "category": "snacks",
+    "subCategory": "Brownies",
+    "categoryName": "Brownies",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 36,
+    "description": "Decadently fudgy, dense, and ultra-chocolatey. This chocolate peanut butter is the ultimate sweet tooth satisfaction!",
+    "minPrice": 70,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 70,
+        "originalPrice": 80,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "brownies-biscoff-blondie",
+    "name": "Biscoff Blondie",
+    "baseName": "Biscoff Blondie",
+    "category": "snacks",
+    "subCategory": "Brownies",
+    "categoryName": "Brownies",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 54,
+    "description": "Decadently fudgy, dense, and ultra-chocolatey. This biscoff blondie is the ultimate sweet tooth satisfaction!",
+    "minPrice": 70,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 70,
+        "originalPrice": 80,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "brownies-pistachio-brownie",
+    "name": "Pistachio Brownie",
+    "baseName": "Pistachio Brownie",
+    "category": "snacks",
+    "subCategory": "Brownies",
+    "categoryName": "Brownies",
+    "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 81,
+    "description": "Decadently fudgy, dense, and ultra-chocolatey. This pistachio brownie is the ultimate sweet tooth satisfaction!",
+    "minPrice": 70,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 70,
+        "originalPrice": 80,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "brownies-kit-kat-brownie",
+    "name": "Kit-kat Brownie",
+    "baseName": "Kit-kat Brownie",
+    "category": "snacks",
+    "subCategory": "Brownies",
+    "categoryName": "Brownies",
+    "image": "https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 21,
+    "description": "Decadently fudgy, dense, and ultra-chocolatey. This kit-kat brownie is the ultimate sweet tooth satisfaction!",
+    "minPrice": 70,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 70,
+        "originalPrice": 80,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "brownies-double-choco-chip",
+    "name": "Double Choco-chip",
+    "baseName": "Double Choco-chip",
+    "category": "snacks",
+    "subCategory": "Brownies",
+    "categoryName": "Brownies",
+    "image": "https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 76,
+    "description": "Decadently fudgy, dense, and ultra-chocolatey. This double choco-chip is the ultimate sweet tooth satisfaction!",
+    "minPrice": 70,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 70,
+        "originalPrice": 80,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "brownies-white-chocolate-brownie",
+    "name": "White Chocolate Brownie",
+    "baseName": "White Chocolate Brownie",
+    "category": "snacks",
+    "subCategory": "Brownies",
+    "categoryName": "Brownies",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 23,
+    "description": "Decadently fudgy, dense, and ultra-chocolatey. This white chocolate brownie is the ultimate sweet tooth satisfaction!",
+    "minPrice": 70,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 70,
+        "originalPrice": 80,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "brownies-caramel-brownie",
+    "name": "Caramel Brownie",
+    "baseName": "Caramel Brownie",
+    "category": "snacks",
+    "subCategory": "Brownies",
+    "categoryName": "Brownies",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 82,
+    "description": "Decadently fudgy, dense, and ultra-chocolatey. This caramel brownie is the ultimate sweet tooth satisfaction!",
+    "minPrice": 70,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 70,
+        "originalPrice": 80,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cookies-salt-cookies",
+    "name": "Salt Cookies",
+    "baseName": "Salt Cookies",
+    "category": "snacks",
+    "subCategory": "Cookies",
+    "categoryName": "Cookies",
+    "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 31,
+    "description": "Crisp edges, perfect crunch, and rich flavors. Our salt cookies are your coffee's best friend.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cookies-almond-cookies",
+    "name": "Almond Cookies",
+    "baseName": "Almond Cookies",
+    "category": "snacks",
+    "subCategory": "Cookies",
+    "categoryName": "Cookies",
+    "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 51,
+    "description": "Crisp edges, perfect crunch, and rich flavors. Our almond cookies are your coffee's best friend.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cookies-coconut-cookies",
+    "name": "Coconut Cookies",
+    "baseName": "Coconut Cookies",
+    "category": "snacks",
+    "subCategory": "Cookies",
+    "categoryName": "Cookies",
+    "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 30,
+    "description": "Crisp edges, perfect crunch, and rich flavors. Our coconut cookies are your coffee's best friend.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cookies-cashew-cookies",
+    "name": "Cashew Cookies",
+    "baseName": "Cashew Cookies",
+    "category": "snacks",
+    "subCategory": "Cookies",
+    "categoryName": "Cookies",
+    "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 42,
+    "description": "Crisp edges, perfect crunch, and rich flavors. Our cashew cookies are your coffee's best friend.",
+    "minPrice": 50,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 50,
+        "originalPrice": 57,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cookies-butter-cookies",
+    "name": "Butter Cookies",
+    "baseName": "Butter Cookies",
+    "category": "snacks",
+    "subCategory": "Cookies",
+    "categoryName": "Cookies",
+    "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 62,
+    "description": "Crisp edges, perfect crunch, and rich flavors. Our butter cookies are your coffee's best friend.",
+    "minPrice": 60,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 60,
+        "originalPrice": 69,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "cookies-choco-chips-cookies",
+    "name": "Choco Chips Cookies",
+    "baseName": "Choco Chips Cookies",
+    "category": "snacks",
+    "subCategory": "Cookies",
+    "categoryName": "Cookies",
+    "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 53,
+    "description": "Crisp edges, perfect crunch, and rich flavors. Our choco chips cookies are your coffee's best friend.",
+    "minPrice": 60,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 60,
+        "originalPrice": 69,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "puffs-veg-puff",
+    "name": "Veg Puff",
+    "baseName": "Veg Puff",
+    "category": "snacks",
+    "subCategory": "Puffs",
+    "categoryName": "Puffs",
+    "image": "https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 35,
+    "description": "Golden, flaky layers of puff pastry generously stuffed with our signature savory veg filling.",
+    "minPrice": 18,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 18,
+        "originalPrice": 21,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "puffs-egg-puff",
+    "name": "Egg Puff",
+    "baseName": "Egg Puff",
+    "category": "snacks",
+    "subCategory": "Puffs",
+    "categoryName": "Puffs",
+    "image": "https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 81,
+    "description": "Golden, flaky layers of puff pastry generously stuffed with our signature savory egg filling.",
+    "minPrice": 20,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 20,
+        "originalPrice": 23,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "puffs-paneer-puff",
+    "name": "Paneer Puff",
+    "baseName": "Paneer Puff",
+    "category": "snacks",
+    "subCategory": "Puffs",
+    "categoryName": "Puffs",
+    "image": "https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 77,
+    "description": "Golden, flaky layers of puff pastry generously stuffed with our signature savory paneer filling.",
+    "minPrice": 25,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 25,
+        "originalPrice": 29,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "puffs-mushroom-puff",
+    "name": "Mushroom Puff",
+    "baseName": "Mushroom Puff",
+    "category": "snacks",
+    "subCategory": "Puffs",
+    "categoryName": "Puffs",
+    "image": "https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 59,
+    "description": "Golden, flaky layers of puff pastry generously stuffed with our signature savory mushroom filling.",
+    "minPrice": 25,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 25,
+        "originalPrice": 29,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "puffs-chicken-puff",
+    "name": "Chicken Puff",
+    "baseName": "Chicken Puff",
+    "category": "snacks",
+    "subCategory": "Puffs",
+    "categoryName": "Puffs",
+    "image": "https://images.unsplash.com/photo-1621236378699-8597faf6a176?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 70,
+    "description": "Golden, flaky layers of puff pastry generously stuffed with our signature savory chicken filling.",
+    "minPrice": 30,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 30,
+        "originalPrice": 34,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "buns-plain-bun",
+    "name": "Plain Bun",
+    "baseName": "Plain Bun",
+    "category": "snacks",
+    "subCategory": "Buns",
+    "categoryName": "Buns",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 66,
+    "description": "Freshly baked, super soft plain bun that simply melts in your mouth.",
+    "minPrice": 10,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 10,
+        "originalPrice": 12,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "buns-jam-bun",
+    "name": "Jam Bun",
+    "baseName": "Jam Bun",
+    "category": "snacks",
+    "subCategory": "Buns",
+    "categoryName": "Buns",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.7,
+    "reviewCount": 57,
+    "description": "Freshly baked, super soft jam bun that simply melts in your mouth.",
+    "minPrice": 15,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 15,
+        "originalPrice": 17,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "buns-cream-bun",
+    "name": "Cream Bun",
+    "baseName": "Cream Bun",
+    "category": "snacks",
+    "subCategory": "Buns",
+    "categoryName": "Buns",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 73,
+    "description": "Freshly baked, super soft cream bun that simply melts in your mouth.",
+    "minPrice": 15,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 15,
+        "originalPrice": 17,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "buns-coconut-bun",
+    "name": "Coconut Bun",
+    "baseName": "Coconut Bun",
+    "category": "snacks",
+    "subCategory": "Buns",
+    "categoryName": "Buns",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 54,
+    "description": "Freshly baked, super soft coconut bun that simply melts in your mouth.",
+    "minPrice": 15,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 15,
+        "originalPrice": 17,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "buns-burger-bun",
+    "name": "Burger Bun",
+    "baseName": "Burger Bun",
+    "category": "snacks",
+    "subCategory": "Buns",
+    "categoryName": "Buns",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 54,
+    "description": "Freshly baked, super soft burger bun that simply melts in your mouth.",
+    "minPrice": 15,
+    "variants": [
+      {
+        "weight": "1 Piece",
+        "price": 15,
+        "originalPrice": 17,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "buns-mini-bun-8-no-s",
+    "name": "Mini Bun (8 no's)",
+    "baseName": "Mini Bun (8 no's)",
+    "category": "snacks",
+    "subCategory": "Buns",
+    "categoryName": "Buns",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 63,
+    "description": "Freshly baked, super soft mini bun (8 no's) that simply melts in your mouth.",
+    "minPrice": 25,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 25,
+        "originalPrice": 29,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "breads-pizza-base",
+    "name": "Pizza Base",
+    "baseName": "Pizza Base",
+    "category": "snacks",
+    "subCategory": "Breads",
+    "categoryName": "Breads",
+    "image": "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800",
+    "rating": 4.6,
+    "reviewCount": 31,
+    "description": "Bakery-fresh pizza base with the perfect crust and softest crumb. Perfect for any meal.",
+    "minPrice": 20,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 20,
+        "originalPrice": 23,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "breads-sweet-bread",
+    "name": "Sweet Bread",
+    "baseName": "Sweet Bread",
+    "category": "snacks",
+    "subCategory": "Breads",
+    "categoryName": "Breads",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 40,
+    "description": "Bakery-fresh sweet bread with the perfect crust and softest crumb. Perfect for any meal.",
+    "minPrice": 35,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 35,
+        "originalPrice": 40,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "breads-wheat-bread",
+    "name": "Wheat Bread",
+    "baseName": "Wheat Bread",
+    "category": "snacks",
+    "subCategory": "Breads",
+    "categoryName": "Breads",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.5,
+    "reviewCount": 80,
+    "description": "Bakery-fresh wheat bread with the perfect crust and softest crumb. Perfect for any meal.",
+    "minPrice": 40,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 40,
+        "originalPrice": 46,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "breads-multi-grains-bread",
+    "name": "Multi-grains Bread",
+    "baseName": "Multi-grains Bread",
+    "category": "snacks",
+    "subCategory": "Breads",
+    "categoryName": "Breads",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 84,
+    "description": "Bakery-fresh multi-grains bread with the perfect crust and softest crumb. Perfect for any meal.",
+    "minPrice": 45,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 45,
+        "originalPrice": 52,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "breads-sandwich-bread",
+    "name": "Sandwich Bread",
+    "baseName": "Sandwich Bread",
+    "category": "snacks",
+    "subCategory": "Breads",
+    "categoryName": "Breads",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 84,
+    "description": "Bakery-fresh sandwich bread with the perfect crust and softest crumb. Perfect for any meal.",
+    "minPrice": 100,
+    "variants": [
+      {
+        "weight": "1 Pack",
+        "price": 100,
+        "originalPrice": 115,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "🌱 Fresh Baked",
+      "Premium Ingredients",
+      "Handcrafted Daily"
+    ],
+    "egglessAvailable": false
+  },
+  {
+    "id": "bento-cake-cute-teddy",
+    "name": "Teddy Pastel Bento Cake",
+    "baseName": "Teddy Pastel Bento Cake",
+    "category": "cakes",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "https://images.unsplash.com/photo-1535141192574-5d4897c13136?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 88,
+    "description": "Adorable Korean-style mini bento cake packed in a box with custom teddy frosting.",
+    "minPrice": 299,
+    "variants": [
+      {
+        "weight": "0.25kg",
+        "price": 299,
+        "originalPrice": 349,
+        "offer": "Popular Bento"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Buttercream",
+      "Korean Design"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "bento-cake-pastel-heart",
+    "name": "Pastel Pink Heart Bento Cake",
+    "baseName": "Pastel Pink Heart Bento Cake",
+    "category": "cakes",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 72,
+    "description": "Charming mini heart-shaped bento cake topped with delicate pink frosting and sprinkles.",
+    "minPrice": 320,
+    "variants": [
+      {
+        "weight": "0.25kg",
+        "price": 320,
+        "originalPrice": 375,
+        "offer": "Trending Design"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Vanilla Cream",
+      "Heart Shaped"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "1st-birthday-royal-crown-cake",
+    "name": "Royal Crown 1st Birthday Cake",
+    "baseName": "Royal Crown 1st Birthday Cake",
+    "category": "cakes",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 64,
+    "description": "Magical multi-tiered crown themed cake handcrafted for your baby's memorable first milestone.",
+    "minPrice": 1200,
+    "variants": [
+      {
+        "weight": "1.5kg",
+        "price": 1200,
+        "originalPrice": 1400,
+        "offer": "Custom Crown"
+      },
+      {
+        "weight": "2kg",
+        "price": 1800,
+        "originalPrice": 2100,
+        "offer": "Free Candle Pack"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Fondant Accents",
+      "Custom Name Tag"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "wedding-graceful-3-tier-floral-cake",
+    "name": "Graceful 3-Tier Floral Wedding Cake",
+    "baseName": "Graceful 3-Tier Floral Wedding Cake",
+    "category": "cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "image": "https://images.unsplash.com/photo-1535254973040-607b474cb50d?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 45,
+    "description": "Extravagant 3-tiered white wedding cake adorned with edible sugar roses & gold leaf accents.",
+    "minPrice": 3500,
+    "variants": [
+      {
+        "weight": "3kg",
+        "price": 3500,
+        "originalPrice": 4000,
+        "offer": "Free Delivery & Setup"
+      },
+      {
+        "weight": "5kg",
+        "price": 5500,
+        "originalPrice": 6200,
+        "offer": "Free Delivery & Setup"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless Option",
+      "Edible Gold Leaf",
+      "Sugar Flowers"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "pastel-pink-ribbon-bento-cake",
+    "name": "Pastel Pink Ribbon Bento Cake",
+    "baseName": "Pastel Pink Ribbon Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "badge": "Korean Mini",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 64,
+    "description": "300g aesthetic Korean bento lunchbox cake with silk ribbon bow piping & vanilla berry filling.",
+    "price": 380,
+    "originalPrice": 450,
+    "variants": [
+      {
+        "weight": "300g (Mini)",
+        "price": 380,
+        "originalPrice": 450,
+        "offer": "Includes Cute Candle & Fork"
+      },
+      {
+        "weight": "500g",
+        "price": 580,
+        "originalPrice": 680,
+        "offer": "Includes Custom Gift Box"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Vanilla Bean Cream",
+      "Wild Strawberry Jam",
+      "Soft Sponge"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "strawberry-matcha-bento-cake",
+    "name": "Strawberry Cream Bento Lunchbox Cake",
+    "baseName": "Strawberry Cream Bento Lunchbox Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "badge": "Best Seller",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 52,
+    "description": "Mini Korean style bento cake filled with fresh whipped cream, strawberry compote, and delicate piping.",
+    "price": 360,
+    "originalPrice": 420,
+    "variants": [
+      {
+        "weight": "300g (Mini)",
+        "price": 360,
+        "originalPrice": 420,
+        "offer": "Free Custom Name Tag"
+      },
+      {
+        "weight": "500g",
+        "price": 550,
+        "originalPrice": 650,
+        "offer": "Free Delivery Box"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Fresh Cream",
+      "Real Strawberries",
+      "Organic Vanilla"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "cute-bear-chocolate-bento-cake",
+    "name": "Cute Teddy Bear Choco Fudge Bento Cake",
+    "baseName": "Cute Teddy Bear Choco Fudge Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "badge": "Trending",
+    "image": "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 89,
+    "description": "Adorable 3D piped teddy bear design on rich dark chocolate fudge bento cake in eco sugarcane box.",
+    "price": 390,
+    "originalPrice": 460,
+    "variants": [
+      {
+        "weight": "300g (Mini)",
+        "price": 390,
+        "originalPrice": 460,
+        "offer": "Includes Wooden Fork & Candle"
+      },
+      {
+        "weight": "500g",
+        "price": 590,
+        "originalPrice": 690,
+        "offer": "Free Custom Note Card"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Belgian Dark Chocolate",
+      "Chocolate Ganache",
+      "Soft Chocolate Sponge"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "vintage-floral-bento-cake",
+    "name": "Vintage Floral Piping Bento Cake",
+    "baseName": "Vintage Floral Piping Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "badge": "Chef Special",
+    "image": "https://images.unsplash.com/photo-1535141192574-5d4897c13136?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 41,
+    "description": "Elegant vintage Victorian buttercream piping with gold pearl sprinkles and customizable message.",
+    "price": 375,
+    "originalPrice": 440,
+    "variants": [
+      {
+        "weight": "300g (Mini)",
+        "price": 375,
+        "originalPrice": 440,
+        "offer": "Custom Message Piped Free"
+      },
+      {
+        "weight": "500g",
+        "price": 570,
+        "originalPrice": 670,
+        "offer": "Includes Luxury Box"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Swiss Buttercream",
+      "Edible Pearls",
+      "Vanilla Sponge"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "baby-teddy-bear-smash-cake",
+    "name": "Baby Teddy Bear 1st Birthday Smash Cake",
+    "baseName": "Baby Teddy Bear 1st Birthday Smash Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "badge": "Milestone Special",
+    "image": "https://images.unsplash.com/photo-1535141192574-5d4897c13136?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 78,
+    "description": "Safe, low-sugar smash cake decorated with handmade fondant 3D baby teddy bear and pastel balloons.",
+    "price": 1250,
+    "originalPrice": 1450,
+    "variants": [
+      {
+        "weight": "1kg",
+        "price": 1250,
+        "originalPrice": 1450,
+        "offer": "Free 'ONE' Acrylic Crown Topper"
+      },
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2200,
+        "originalPrice": 2500,
+        "offer": "Free Milestone Photo Board"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Low Sugar Recipe",
+      "Natural Fruit Puree",
+      "Soft Sponge"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "royal-prince-crown-birthday-cake",
+    "name": "Royal Prince Blue & Gold 1st Birthday Cake",
+    "baseName": "Royal Prince Blue & Gold 1st Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "badge": "Luxury Tier",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 61,
+    "description": "Regal baby blue and 24K gold foil accent birthday cake topped with edible royal prince crown and star wand.",
+    "price": 1390,
+    "originalPrice": 1600,
+    "variants": [
+      {
+        "weight": "1kg",
+        "price": 1390,
+        "originalPrice": 1600,
+        "offer": "Free Custom Name Plaque"
+      },
+      {
+        "weight": "2kg",
+        "price": 2400,
+        "originalPrice": 2800,
+        "offer": "Free Crown Topper & Candles"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Vanilla Swiss Cream",
+      "Edible Gold Leaf",
+      "Blue Velvet Sponge"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "pastel-safari-animal-birthday-cake",
+    "name": "Pastel Woodland Safari 1st Birthday Cake",
+    "baseName": "Pastel Woodland Safari 1st Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "badge": "Top Rated",
+    "image": "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 92,
+    "description": "Enchanting safari theme with edible fondant elephant, lion cub, and giraffe figures on soft pastel cream sponge.",
+    "price": 1450,
+    "originalPrice": 1700,
+    "variants": [
+      {
+        "weight": "1.5kg",
+        "price": 1450,
+        "originalPrice": 1700,
+        "offer": "Free Safari Animal Toppers"
+      },
+      {
+        "weight": "2.5kg (2-Tier)",
+        "price": 2650,
+        "originalPrice": 3000,
+        "offer": "Free Custom Name Ribbon"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Buttercream Frosting",
+      "Fondant Sculptures",
+      "Fresh Strawberry Cream"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "classic-white-rose-3tier-wedding-cake",
+    "name": "Grand 3-Tier Classic White Rose Wedding Cake",
+    "baseName": "Grand 3-Tier Classic White Rose Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "badge": "Masterpiece",
+    "image": "https://images.unsplash.com/photo-1535254973040-607b474cb50d?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 110,
+    "description": "Majestic 3-tiered wedding cake draped in delicate white sugar lace with a cascading waterfall of fresh white roses.",
+    "price": 4200,
+    "originalPrice": 4800,
+    "variants": [
+      {
+        "weight": "3kg (3-Tier)",
+        "price": 4200,
+        "originalPrice": 4800,
+        "offer": "Free Venue Delivery & Tasting Session"
+      },
+      {
+        "weight": "5kg (4-Tier)",
+        "price": 6800,
+        "originalPrice": 7500,
+        "offer": "Free Delivery, Setup & Floral Cake Stand"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "White Chocolate Ganache",
+      "French Vanilla Sponge",
+      "Sugar Rose Bouquet"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "24k-gold-leaf-luxury-wedding-cake",
+    "name": "24K Gold Leaf Luxury Tiered Wedding Cake",
+    "baseName": "24K Gold Leaf Luxury Tiered Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "badge": "Royal Collection",
+    "image": "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 85,
+    "description": "Opulent 2-tier wedding masterpiece featuring handcrafted marble fondant texture embellished with pure 24K edible gold leaf.",
+    "price": 3800,
+    "originalPrice": 4400,
+    "variants": [
+      {
+        "weight": "2.5kg (2-Tier)",
+        "price": 3800,
+        "originalPrice": 4400,
+        "offer": "Free Custom Monogram Topper"
+      },
+      {
+        "weight": "4kg (3-Tier)",
+        "price": 5900,
+        "originalPrice": 6600,
+        "offer": "Free On-Site Chef Setup"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "24K Edible Gold Leaf",
+      "Belgian Truffle Ganache",
+      "Almond Sponge"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "vintage-rustic-naked-wedding-cake",
+    "name": "Rustic Floral Semi-Naked Wedding Cake",
+    "baseName": "Rustic Floral Semi-Naked Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "badge": "Aesthetic Choice",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 73,
+    "description": "Charming semi-naked layered cake with vanilla bean cream, fresh figs, wild berries, and organic greenery.",
+    "price": 3200,
+    "originalPrice": 3700,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 3200,
+        "originalPrice": 3700,
+        "offer": "Free Organic Berry Topping"
+      },
+      {
+        "weight": "3.5kg (3-Tier)",
+        "price": 5100,
+        "originalPrice": 5800,
+        "offer": "Free Delivery & Wooden Cake Base"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Organic Fresh Berries",
+      "Vanilla Bean Cream",
+      "Moist Soft Sponge"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "custom-edible-photo-cake",
+    "name": "Custom Edible Photo Print Cake",
+    "baseName": "Custom Edible Photo Print Cake",
+    "category": "cakes",
+    "subCategory": "Photo Cakes",
+    "categoryName": "Photo Cakes",
+    "badge": "Custom Print",
+    "image": "https://images.unsplash.com/photo-1535141192574-5d4897c13136?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 74,
+    "description": "Vanilla cream cake topped with high-definition edible photo sugar sheet of your choice.",
+    "price": 650,
+    "originalPrice": 750,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 650,
+        "originalPrice": 750,
+        "offer": "Free Custom Photo Print"
+      },
+      {
+        "weight": "1kg",
+        "price": 1050,
+        "originalPrice": 1250,
+        "offer": "Free Photo Print + Box"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Edible Sugar Sheet",
+      "Organic Food Colors",
+      "Vanilla Cream"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "royal-hd-birthday-photo-cake",
+    "name": "Royal HD Birthday Photo Frame Cake",
+    "baseName": "Royal HD Birthday Photo Frame Cake",
+    "category": "cakes",
+    "subCategory": "Photo Cakes",
+    "categoryName": "Photo Cakes",
+    "badge": "Popular",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 98,
+    "description": "Elegant framed photo cake with personalized picture centerpiece, whipped chocolate ganache, and edible pearl border.",
+    "price": 690,
+    "originalPrice": 800,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 690,
+        "originalPrice": 800,
+        "offer": "Includes Photo Upload Assistance"
+      },
+      {
+        "weight": "1kg",
+        "price": 1150,
+        "originalPrice": 1350,
+        "offer": "Includes Free Birthday Candle Set"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "HD Rice Paper Print",
+      "Belgian Truffle Cream",
+      "Gold Edible Pearls"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "couple-romantic-memories-photo-cake",
+    "name": "Couple Romantic Memories Photo Cake",
+    "baseName": "Couple Romantic Memories Photo Cake",
+    "category": "cakes",
+    "subCategory": "Photo Cakes",
+    "categoryName": "Photo Cakes",
+    "badge": "Anniversary Special",
+    "image": "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 56,
+    "description": "Heart-shaped red velvet photo cake with customizable couple photograph print.",
+    "price": 720,
+    "originalPrice": 850,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 720,
+        "originalPrice": 850,
+        "offer": "Free Heart Candle Pack"
+      },
+      {
+        "weight": "1kg",
+        "price": 1190,
+        "originalPrice": 1390,
+        "offer": "Free Rose Bouquet Card"
+      }
+    ],
+    "ingredients": [
+      "🌱 Eggless",
+      "Red Velvet Sponge",
+      "Edible Icing Sheet",
+      "Cream Cheese"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "kids-superhero-cartoon-photo-cake",
+    "name": "Kids Superhero Animated Photo Cake",
+    "baseName": "Kids Superhero Animated Photo Cake",
+    "category": "cakes",
+    "subCategory": "Photo Cakes",
+    "categoryName": "Photo Cakes",
+    "badge": "Kids Favorite",
+    "image": "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 81,
+    "description": "Vibrant cartoon & superhero themed edible photo cake with chocolate fudge layers.",
+    "price": 670,
+    "originalPrice": 780,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 670,
+        "originalPrice": 780,
+        "offer": "Includes Party Mask"
+      },
+      {
+        "weight": "1kg",
+        "price": 1090,
+        "originalPrice": 1290,
+        "offer": "Includes Party Hat & Candles"
+      }
+    ]
+  },
+  {
+    "id": "wedding-cakes-graceful-3tier-floral",
+    "name": "Graceful 3-Tier Floral Wedding Cake",
+    "baseName": "Graceful 3-Tier Floral Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Masterpieces",
+    "categoryName": "Wedding Cakes",
+    "image": "https://images.unsplash.com/photo-1535141192574-5d4897c13136?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 45,
+    "description": "Extravagant 3-tiered white wedding cake adorned with edible sugar roses & 24K gold leaf accents.",
+    "minPrice": 3500,
+    "variants": [
+      {
+        "weight": "1kg",
+        "price": 3500,
+        "originalPrice": 4000,
+        "offer": "Get 1/2kg Free!"
+      },
+      {
+        "weight": "2kg",
+        "price": 6500,
+        "originalPrice": 7500,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "Handcrafted Sugar Flowers",
+      "Belgian Chocolate",
+      "24K Gold Leaf"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "wedding-cakes-grand-white-rose",
+    "name": "Grand 3-Tier Classic White Rose Wedding Cake",
+    "baseName": "Grand 3-Tier Classic White Rose Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Masterpieces",
+    "categoryName": "Wedding Cakes",
+    "image": "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 110,
+    "description": "Majestic 3-tiered wedding cake draped in delicate white sugar lace with a rich velvet vanilla cream.",
+    "minPrice": 4200,
+    "variants": [
+      {
+        "weight": "1kg",
+        "price": 4200,
+        "originalPrice": 4800,
+        "offer": "Get 1/2kg Free!"
+      },
+      {
+        "weight": "2kg",
+        "price": 7900,
+        "originalPrice": 8900,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "French Vanilla Sponge",
+      "Royal Sugar Lace",
+      "White Chocolate Ganache"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "wedding-cakes-24k-gold-leaf-luxury",
+    "name": "24K Gold Leaf Luxury Tiered Wedding Cake",
+    "baseName": "24K Gold Leaf Luxury Tiered Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Masterpieces",
+    "categoryName": "Wedding Cakes",
+    "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 85,
+    "description": "Opulent 2-tier wedding masterpiece featuring handcrafted marble fondant texture embellished with pure 24K gold leaf.",
+    "minPrice": 3800,
+    "variants": [
+      {
+        "weight": "1kg",
+        "price": 3800,
+        "originalPrice": 4400,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "24K Edible Gold Leaf",
+      "Marble Fondant",
+      "Rich Truffle"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "wedding-cakes-rustic-semi-naked",
+    "name": "Rustic Floral Semi-Naked Wedding Cake",
+    "baseName": "Rustic Floral Semi-Naked Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Masterpieces",
+    "categoryName": "Wedding Cakes",
+    "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 73,
+    "description": "Charming semi-naked layered cake with vanilla bean cream, fresh figs, wild berries, and organic greenery.",
+    "minPrice": 3200,
+    "variants": [
+      {
+        "weight": "1kg",
+        "price": 3200,
+        "originalPrice": 3700,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "Vanilla Bean Cream",
+      "Fresh Wild Berries",
+      "Organic Greenery"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "first-birthday-safari-smash-cake",
+    "name": "Safari Animal 2-Tier Smash Cake",
+    "baseName": "Safari Animal 2-Tier Smash Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday",
+    "categoryName": "1st Birthday Cakes",
+    "image": "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 68,
+    "description": "Cute baby-friendly safari animal themed 2-tier smash cake made with organic vanilla bean cream.",
+    "minPrice": 1200,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 1200,
+        "originalPrice": 1400,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 2100,
+        "originalPrice": 2400,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "Low-Sugar Vanilla Sponge",
+      "Sugar Safari Cutouts",
+      "Organic Cream"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "first-birthday-princess-crown",
+    "name": "Pastel Princess Crown Milestone Cake",
+    "baseName": "Pastel Princess Crown Milestone Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday",
+    "categoryName": "1st Birthday Cakes",
+    "image": "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 92,
+    "description": "Adorable pastel pink milestone cake crowned with handcrafted sugar tiara and edible golden stars.",
+    "minPrice": 1100,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 1100,
+        "originalPrice": 1300,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1950,
+        "originalPrice": 2200,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "Pastel Pink Buttercream",
+      "Handcrafted Tiara",
+      "Strawberry Jam"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "first-birthday-little-bear-cloud",
+    "name": "Little Bear & Clouds Smash Cake",
+    "baseName": "Little Bear & Clouds Smash Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday",
+    "categoryName": "1st Birthday Cakes",
+    "image": "https://images.unsplash.com/photo-1535141192574-5d4897c13136?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 54,
+    "description": "Fluffy blue cloud & sleeping teddy bear cake, perfectly baked for your baby's 1st birthday photo session.",
+    "minPrice": 980,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 980,
+        "originalPrice": 1150,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 1800,
+        "originalPrice": 2000,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "Blue Cloud Frosting",
+      "Edible Sugar Bear",
+      "Soft Sponge"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "first-birthday-wild-one-jungle",
+    "name": "Wild One Golden Birthday Cake",
+    "baseName": "Wild One Golden Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday",
+    "categoryName": "1st Birthday Cakes",
+    "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800",
+    "rating": 5,
+    "reviewCount": 77,
+    "description": "Charming jungle foliage theme cake with custom 'Wild One' topper and fresh fruit cream filling.",
+    "minPrice": 1250,
+    "variants": [
+      {
+        "weight": "0.5kg",
+        "price": 1250,
+        "originalPrice": 1450,
+        "offer": ""
+      },
+      {
+        "weight": "1kg",
+        "price": 2200,
+        "originalPrice": 2500,
+        "offer": "Get 1/2kg Free!"
+      }
+    ],
+    "ingredients": [
+      "Fresh Mango Cream",
+      "Jungle Sugar Toppers",
+      "Vanilla Sponge"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "bento-cake-korean-daisy-aesthetic",
+    "name": "Korean Aesthetic Daisy Bento Cake",
+    "baseName": "Korean Aesthetic Daisy Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 114,
+    "description": "Iconic Korean style mini bento cake styled with delicate piping daisies and soft pastel buttercream.",
+    "minPrice": 320,
+    "variants": [
+      {
+        "weight": "250g Mini",
+        "price": 320,
+        "originalPrice": 380,
+        "offer": ""
+      },
+      {
+        "weight": "0.5kg",
+        "price": 580,
+        "originalPrice": 650,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "Korean Buttercream",
+      "Vanilla Sponge",
+      "Eco Sugarcane Box"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "bento-cake-vintage-ribbon-heart",
+    "name": "Vintage Ribbon Heart Bento Cake",
+    "baseName": "Vintage Ribbon Heart Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 89,
+    "description": "Elegant heart-shaped bento cake featuring vintage shell borders and customized hand-piped message.",
+    "minPrice": 350,
+    "variants": [
+      {
+        "weight": "250g Mini",
+        "price": 350,
+        "originalPrice": 420,
+        "offer": ""
+      },
+      {
+        "weight": "0.5kg",
+        "price": 620,
+        "originalPrice": 700,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "Red Velvet Sponge",
+      "Cream Cheese",
+      "Vintage Piping"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "bento-cake-custom-message-pastel",
+    "name": "Custom Message Pastel Bento Cake",
+    "baseName": "Custom Message Pastel Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=800",
+    "rating": 4.8,
+    "reviewCount": 61,
+    "description": "Bespoke mini Korean bento cake in your choice of pastel tint and personalized custom quote.",
+    "minPrice": 340,
+    "variants": [
+      {
+        "weight": "250g Mini",
+        "price": 340,
+        "originalPrice": 400,
+        "offer": ""
+      },
+      {
+        "weight": "0.5kg",
+        "price": 600,
+        "originalPrice": 680,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "Pastel Buttercream",
+      "Vanilla Fudge",
+      "Custom Lettering"
+    ],
+    "egglessAvailable": true
+  },
+  {
+    "id": "bento-cake-strawberry-shortcake",
+    "name": "Mini Strawberry Cream Bento Cake",
+    "baseName": "Mini Strawberry Cream Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?q=80&w=800",
+    "rating": 4.9,
+    "reviewCount": 97,
+    "description": "Delicious fresh strawberry jam & whipped cream filled mini bento cake served in eco-friendly sugarcane box.",
+    "minPrice": 360,
+    "variants": [
+      {
+        "weight": "250g Mini",
+        "price": 360,
+        "originalPrice": 430,
+        "offer": ""
+      },
+      {
+        "weight": "0.5kg",
+        "price": 640,
+        "originalPrice": 720,
+        "offer": ""
+      }
+    ],
+    "ingredients": [
+      "Fresh Strawberry Jam",
+      "Whipped Cream",
+      "Vanilla Sponge"
+    ],
+    "egglessAvailable": true
+  }
+]

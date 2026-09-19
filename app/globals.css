@@ -1,0 +1,1552 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ───────────────────────────────────────────────────────────────
+   Ported (structure preserved) from the original assets/css/style.css
+   Custom properties, keyframes, and component classes below are the
+   exact visual source of truth for buttons, cards, header glass
+   effect, decorative background, and animations.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Lollipop Luxury Patisserie - Custom Design System & Responsive Typography */
+
+:root {
+  --font-heading: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-body: var(--font-manrope), 'Manrope', system-ui, -apple-system, sans-serif;
+}
+
+html {
+  background-color: #250527;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: var(--font-body);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    color: #1C0D0A;
+    background-color: #FFF9F5;
+    line-height: 1.6;
+    font-size: 15px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-display,
+  .font-heading {
+    font-family: var(--font-heading);
+    color: #1C0D0A;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .font-script {
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+}
+
+/* Global Typography Fallbacks & Utilities */
+body,
+input,
+textarea,
+select,
+button {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-display,
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.brand-logo,
+.brand-title {
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+}
+
+/* 3D Canvas Container Layering (Layer 2: Foreground 3D Ambient Bakery Objects) */
+#bg-3d-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.26;
+}
+
+/* 100% Eggless Luxury Badge Styles */
+.eggless-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: #E8F5E9;
+  color: #1B5E20;
+  border: 1px solid #C8E6C9;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  box-shadow: 0 2px 5px rgba(27, 94, 32, 0.08);
+}
+
+.eggless-badge-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: #2E7D32;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 0.5rem;
+}
+
+/* Glassmorphism Header */
+.glass-header {
+  background: rgba(255, 249, 245, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Announcement Marquee Ticker */
+.marquee-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  background: linear-gradient(90deg, #2A082C 0%, #962854 50%, #2A082C 100%);
+  color: #FFF9F5;
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: marqueeScroll 25s linear infinite;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Melting Cake Glaze Drip Section Divider */
+.chocolate-drip-top {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.chocolate-drip-top svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 48px;
+}
+
+.chocolate-drip-top .shape-fill {
+  fill: #962854;
+}
+
+.chocolate-drip-dark .shape-fill {
+  fill: #23110D;
+}
+
+/* Dripping animation for drops */
+@keyframes dripMelt {
+
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+
+  50% {
+    transform: translateY(5px) scaleY(1.12);
+  }
+}
+
+.animate-drip {
+  animation: dripMelt 2.8s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+/* Floating WhatsApp Button with Integrated Cake Glaze & Badge */
+.whatsapp-float-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 45;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 0.75rem;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.whatsapp-float-container.menu-open-hide {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(20px) scale(0.8) !important;
+  visibility: hidden !important;
+}
+
+.whatsapp-float-btn {
+  position: relative;
+  width: 3.8rem;
+  height: 3.8rem;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #FFFFFF;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+  border: 2.5px solid #E6C184;
+  overflow: visible;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.whatsapp-float-btn:hover {
+  transform: scale(1.1) rotate(-4deg);
+  box-shadow: 0 14px 35px rgba(37, 211, 102, 0.6);
+  border-color: #FFFFFF;
+}
+
+/* Integrated Dripping Icing Overlay clipped on top edge */
+.whatsapp-drip-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 45%;
+  pointer-events: none;
+  z-index: 5;
+  border-top-left-radius: 9999px;
+  border-top-right-radius: 9999px;
+  overflow: hidden;
+}
+
+.whatsapp-drip-overlay path {
+  fill: #962854;
+}
+
+/* Mini Cake Badge attached to top right corner of button */
+.whatsapp-cake-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #962854;
+  color: #FFFFFF;
+  border: 2px solid #FFF9F5;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  z-index: 12;
+  animation: bounceSlow 3s infinite ease-in-out;
+}
+
+.whatsapp-pulse-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 2px solid #25D366;
+  opacity: 0;
+  animation: pulseRing 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.85;
+  }
+
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+/* Tooltip Badge for WhatsApp */
+.whatsapp-tooltip {
+  background: #1C0D0A;
+  color: #FFF9F5;
+  padding: 0.55rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(35, 17, 13, 0.3);
+  border: 1px solid #E6C184;
+  white-space: nowrap;
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .whatsapp-tooltip {
+    display: none;
+  }
+}
+
+/* Compact Luxury Product Cards with High Readability & 3D Depth */
+.product-card {
+  background: #FFFFFF;
+  border: 1px solid #F1E6DF;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.25), box-shadow 0.35s ease, border-color 0.35s ease;
+  box-shadow: 0 8px 20px -4px rgba(35, 17, 13, 0.05), 0 3px 8px rgba(0, 0, 0, 0.02);
+  will-change: transform, box-shadow;
+  position: relative;
+  z-index: 2;
+  animation: cardReveal 0.35s ease-out forwards;
+}
+
+.product-card:hover {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 0 20px 40px -10px rgba(150, 40, 84, 0.2), 0 6px 16px rgba(230, 193, 132, 0.25);
+  border-color: rgba(230, 193, 132, 0.9);
+}
+
+.product-card .img-container {
+  position: relative;
+  overflow: hidden;
+  height: 175px;
+  margin: 0.5rem;
+  border-radius: 1.25rem;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 640px) {
+  .product-card .img-container {
+    height: 200px;
+  }
+}
+
+.product-card-title {
+  font-family: var(--font-heading) !important;
+  font-size: 1.15rem !important;
+  line-height: 1.35 !important;
+  font-weight: 600 !important;
+  color: #1C0D0A !important;
+}
+
+.product-card-desc {
+  font-family: var(--font-body) !important;
+  font-size: 0.85rem !important;
+  line-height: 1.5 !important;
+  font-weight: 400 !important;
+  color: #4A3E39 !important;
+}
+
+.product-card-price {
+  font-family: var(--font-body) !important;
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
+  color: #1C0D0A !important;
+}
+
+.product-card-btn {
+  font-family: var(--font-body) !important;
+  font-size: 0.825rem !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 1.1rem !important;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-card .img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.product-card:hover .img-container img {
+  transform: scale(1.08);
+}
+
+/* Celebration Category Cards */
+.celebration-card {
+  background: #FFFFFF;
+  border: 1px solid #F1E6DF;
+  border-radius: 1.25rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.celebration-card:hover {
+  transform: translateY(-4px);
+  border-color: #962854;
+  box-shadow: 0 12px 28px -5px rgba(150, 40, 84, 0.18);
+}
+
+/* Shimmer Badge Animation */
+.shimmer-badge {
+  background: linear-gradient(90deg, #962854 0%, #C43B71 50%, #962854 100%);
+  background-size: 200% 100%;
+  animation: shimmerMove 3s infinite linear;
+}
+
+@keyframes shimmerMove {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Scroll Fade In Animation - Cards are always visible; animation is additive only */
+.fade-in-on-scroll {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+/* Only hide cards that are specifically set to animate */
+.fade-in-on-scroll.will-animate {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.fade-in-on-scroll.visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Product card entry animation */
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* Button Styles */
+.btn-primary,
+.btn-secondary,
+.btn-pink-cart,
+button,
+input[type="submit"] {
+  font-family: var(--font-body) !important;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2A082C 0%, #962854 100%);
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #962854 0%, #2A082C 100%);
+  box-shadow: 0 10px 25px -5px rgba(150, 40, 84, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: #FAF3EC;
+  color: #1C0D0A;
+  border: 1px solid #E6C184;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+.btn-secondary:hover {
+  background: #1C0D0A;
+  color: #FFFFFF;
+  border-color: #1C0D0A;
+}
+
+.btn-pink-cart {
+  background: #962854;
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 3px 10px rgba(150, 40, 84, 0.3);
+}
+
+.btn-pink-cart:hover {
+  background: #2A082C;
+  transform: scale(1.06);
+  box-shadow: 0 6px 16px rgba(42, 8, 44, 0.4);
+}
+
+.wishlist-btn {
+  background: rgba(255, 255, 255, 0.92);
+  color: #5C524E;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.wishlist-btn:hover {
+  color: #962854;
+  background: #FFFFFF;
+  transform: scale(1.15);
+}
+
+/* Nav Link Hover Underline */
+.nav-link {
+  font-family: var(--font-body);
+  position: relative;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #962854;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Floating Cake Animation */
+@keyframes floatCake {
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+.animate-float-cake {
+  animation: floatCake 4s infinite ease-in-out;
+}
+
+@keyframes bounceSlow {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounceSlow 3s infinite ease-in-out;
+}
+
+/* Toast Message */
+#toast-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+  background: #2A082C;
+  color: #FFFFFF;
+  padding: 0.9rem 1.6rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1.5px solid #962854;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#toast-notification.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Touch-friendly Mobile Controls & Card Title Wrapping */
+.product-card-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #1C0D0A;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+
+  .product-card-title {
+    font-size: 0.95rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .product-card-desc {
+    font-size: 0.8rem !important;
+  }
+}
+
+
+/* ==========================================
+   PROFESSIONAL CARD ALIGNMENT & TYPOGRAPHY
+   ========================================== */
+
+.cake-card,
+.cake-card,
+.product-card {
+  background: #FFFFFF;
+  border: 1px solid #F1E6DF;
+  border-radius: 1.25rem;
+  padding: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.25), box-shadow 0.35s ease, border-color 0.35s ease;
+  box-shadow: 0 8px 20px -6px rgba(35, 17, 13, 0.05);
+  position: relative;
+  z-index: 2;
+  will-change: transform, box-shadow;
+}
+
+.cake-card:hover,
+.product-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 18px 40px -10px rgba(150, 40, 84, 0.15), 0 6px 16px rgba(230, 193, 132, 0.2);
+  border-color: rgba(150, 40, 84, 0.3);
+}
+
+/* Card Image Container - Perfect Square Aspect Ratio & Framing */
+.cake-card .card-img,
+.product-card .img-container {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+  margin: 0 0 0.5rem 0;
+  border-radius: 0.85rem;
+  background: #FAF5F0;
+  border: 1px solid rgba(230, 193, 132, 0.35);
+  padding: 0.35rem;
+}
+
+.cake-card .card-img img,
+.product-card .img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0.6rem;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.cake-card:hover .card-img img,
+.product-card:hover .img-container img {
+  transform: scale(1.06);
+}
+
+/* Card Titles & Text - Crisp Mobile & Desktop Typography */
+.cake-card h3,
+.product-card-title {
+  font-family: var(--font-body) !important;
+  font-size: clamp(0.85rem, 1.2vw, 1.05rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  color: #1C0D0A !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: auto;
+  margin-bottom: 0.35rem;
+}
+
+.product-card-desc {
+  font-family: var(--font-body) !important;
+  font-size: 0.8rem !important;
+  line-height: 1.45 !important;
+  font-weight: 400 !important;
+  color: #5C524E !important;
+}
+
+.product-card-price,
+.price-display {
+  font-family: var(--font-body) !important;
+  font-size: clamp(0.95rem, 1.3vw, 1.15rem) !important;
+  font-weight: 800 !important;
+  color: #962854 !important;
+}
+
+.weight-btn {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.65rem;
+  border: 1.5px solid #D8C3B3;
+  background: #FFFFFF;
+  color: #1C0D0A;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.weight-btn.sel,
+.weight-btn:hover {
+  border-color: #962854;
+  background: #FAF0F2;
+  color: #962854;
+}
+
+/* Egg / Eggless Toggle Buttons */
+.egg-toggle-btn {
+  font-family: var(--font-body);
+  flex: 1;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.45rem 0.5rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid #D8C3B3;
+  background: #FFFFFF;
+  color: #1C0D0A;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.egg-toggle-btn.sel-egg {
+  border-color: #2A082C;
+  background: #2A082C;
+  color: #FFFFFF;
+}
+
+.egg-toggle-btn.sel-eggless {
+  border-color: #962854;
+  background: #962854;
+  color: #FFFFFF;
+}
+
+/* Offer Badges */
+.offer-badge {
+  font-family: var(--font-body);
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #78350F;
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.offer-badge.show {
+  display: inline-flex;
+}
+
+/* Eggless Notice Box on Cards */
+.eggless-notice {
+  font-family: var(--font-body);
+  display: none;
+  font-size: 0.68rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #1b5e20;
+  background: #E8F5E9;
+  border: 1px solid #C8E6C9;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.65rem;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.eggless-notice.show {
+  display: flex;
+}
+
+/* ==========================================
+   CONSISTENT TYPOGRAPHY SCALE & UTILITIES
+   ========================================== */
+.hero-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(2rem, 3.8vw, 3.15rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+
+.hero-subtext {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+  color: #5C524E;
+}
+
+.page-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.section-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.product-detail-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 2.8vw, 2.25rem);
+  line-height: 1.12;
+}
+
+/* ==========================================================================
+   LOLLIPOP BAKERY - SUBTLE & PREMIUM MICRO-INTERACTION SYSTEM (60FPS)
+   ========================================================================== */
+
+/* 1. Global Interactive Button & Element Press Effect */
+.btn-primary,
+.btn-secondary,
+.btn-pink-cart,
+button,
+.weight-btn,
+.variety-btn,
+.egg-toggle-btn,
+.wishlist-btn,
+.thumb-btn,
+.add-to-cart-btn {
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  will-change: transform;
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-pink-cart:active,
+button:active,
+.weight-btn:active,
+.variety-btn:active,
+.egg-toggle-btn:active,
+.add-to-cart-btn:active {
+  transform: scale(0.97) !important;
+}
+
+/* 2. Product Card & Celebration Card Hover */
+.product-card,
+.cake-card,
+.celebration-card {
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
+  will-change: transform, box-shadow;
+}
+
+.product-card:hover,
+.cake-card:hover,
+.celebration-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 36px -8px rgba(150, 40, 84, 0.16), 0 6px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.product-card:hover .img-container img,
+.cake-card:hover .card-img img,
+.product-card:hover img {
+  transform: scale(1.03) !important;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+/* 3. Wishlist Heart Pop Animation */
+@keyframes heartPop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.22);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.wishlist-btn {
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.27), color 0.2s ease, background-color 0.2s ease;
+}
+
+.wishlist-btn.pop-heart {
+  animation: heartPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+  color: #962854 !important;
+}
+
+.wishlist-btn.pop-heart .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
+  color: #962854 !important;
+}
+
+/* 4. Cart Icon Bounce & Badge Pulse */
+@keyframes cartBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.22);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+
+  60% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.cart-icon-pulse {
+  animation: cartBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cart-badge-pop {
+  animation: badgePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 5. Bakery Category Cards Decorative Micro-Accents */
+.cat-micro-accent {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.1rem;
+  opacity: 0;
+  transform: scale(0.6) rotate(-10deg);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.27), opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.92);
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(150, 40, 84, 0.2);
+  border: 1px solid rgba(230, 193, 132, 0.6);
+}
+
+.group:hover .cat-micro-accent,
+.category-card:hover .cat-micro-accent {
+  opacity: 1;
+  transform: scale(1) rotate(6deg);
+}
+
+/* 6. Navigation Link Animated Underline */
+.nav-link {
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #962854;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* 7. Arrow Motion Micro-Interaction */
+.btn-primary:hover .material-symbols-outlined,
+.btn-secondary:hover .material-symbols-outlined,
+a:hover .material-symbols-outlined,
+a:hover .arrow-icon {
+  transform: translateX(4px);
+  transition: transform 0.25s ease-out;
+}
+
+/* 8. Price Update Pop Animation */
+@keyframes pricePop {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.price-pop {
+  animation: pricePop 0.28s ease-out;
+}
+
+/* 9. Image Gallery & Thumbnail Selection */
+.thumb-btn {
+  transition: border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.thumb-btn:hover {
+  transform: scale(1.04);
+}
+
+.main-img-fade {
+  animation: imgFadeIn 0.25s ease-out;
+}
+
+@keyframes imgFadeIn {
+  from {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 10. Variant Option Checkmark Pop */
+@keyframes checkPop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.check-pop {
+  animation: checkPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+}
+
+/* 11. Order Success Checkmark Draw-In & Stagger Entrance */
+@keyframes checkDraw {
+  0% {
+    transform: scale(0) rotate(-20deg);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.18) rotate(0deg);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.order-check-draw {
+  animation: checkDraw 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.27) forwards;
+}
+
+.stagger-in {
+  animation: staggerIn 0.4s ease-out forwards;
+}
+
+@keyframes staggerIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 12. Order Tracking Status Pulse */
+@keyframes statusPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.75;
+    transform: scale(1.05);
+  }
+}
+
+.status-pulse {
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+/* 13. Toast Notification Smooth Slide & Fade */
+#toast-notification {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(24px);
+  background-color: #2A082C;
+  color: #FFF9F5;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(230, 193, 132, 0.4);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.27), visibility 0.3s ease;
+  pointer-events: none;
+}
+
+#toast-notification.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 14. Mobile Optimization: Disable hover-only transforms on touch screens */
+@media (hover: none) {
+
+  .product-card:hover,
+  .cake-card:hover,
+  .celebration-card:hover {
+    transform: none !important;
+  }
+
+  button:active,
+  a:active {
+    transform: scale(0.97) !important;
+  }
+}
+
+/* =========================================================
+   PART 1 — SUBTLE BAKERY-THEMED ANIMATED BACKGROUND LAYER
+   ========================================================= */
+
+.bakery-bg-layer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  /* Layer 1: Background decorative layer behind 3D canvas (z-index: 1) and content (z-index: 10+) */
+  overflow: hidden;
+}
+
+/* Line-Art Bakery Watermark Items */
+.bakery-bg-item {
+  position: absolute;
+  opacity: 0.09;
+  /* 6–15% visible contrast against cream background */
+  will-change: transform, opacity;
+  pointer-events: none;
+  transition: filter 0.5s ease, scale 0.5s ease;
+}
+
+/* Harmonious Bakery Brand Color Variations (Contrasting & Soft) */
+.bakery-bg-item.tone-rose {
+  color: #A63A5E;
+}
+
+.bakery-bg-item.tone-coral {
+  color: #C24D63;
+}
+
+.bakery-bg-item.tone-caramel {
+  color: #B86B35;
+}
+
+.bakery-bg-item.tone-berry {
+  color: #8A1C3C;
+}
+
+.bakery-bg-item.tone-amber {
+  color: #C88E3E;
+}
+
+.bakery-bg-item.proximity-active {
+  opacity: 0.15 !important;
+  scale: 1.06;
+  filter: drop-shadow(0 0 8px rgba(166, 58, 94, 0.18));
+}
+
+/* Very Slow Motion Keyframes: 5-10px Drifting & 1-2° Gentle Rotation (15–30s) */
+@keyframes bakeryDriftSlow1 {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0.08;
+  }
+
+  50% {
+    transform: translate3d(5px, -8px, 0) rotate(1.5deg);
+    opacity: 0.13;
+  }
+}
+
+@keyframes bakeryDriftSlow2 {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0.09;
+  }
+
+  50% {
+    transform: translate3d(-6px, -7px, 0) rotate(-1.5deg);
+    opacity: 0.14;
+  }
+}
+
+@keyframes bakeryDriftSlow3 {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0.07;
+  }
+
+  50% {
+    transform: translate3d(4px, -10px, 0) rotate(1.2deg);
+    opacity: 0.12;
+  }
+}
+
+@keyframes bakeryDriftSlow4 {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0.08;
+  }
+
+  50% {
+    transform: translate3d(-5px, -8px, 0) rotate(-1deg);
+    opacity: 0.13;
+  }
+}
+
+.bakery-drift-1 {
+  animation: bakeryDriftSlow1 20s ease-in-out infinite;
+}
+
+.bakery-drift-2 {
+  animation: bakeryDriftSlow2 26s ease-in-out infinite -4s;
+}
+
+.bakery-drift-3 {
+  animation: bakeryDriftSlow3 22s ease-in-out infinite -8s;
+}
+
+.bakery-drift-4 {
+  animation: bakeryDriftSlow4 28s ease-in-out infinite -12s;
+}
+
+.bakery-drift-5 {
+  animation: bakeryDriftSlow1 18s ease-in-out infinite -6s;
+}
+
+.bakery-drift-6 {
+  animation: bakeryDriftSlow2 24s ease-in-out infinite -10s;
+}
+
+/* Subtle Floating Sugar Particles (8-14 tiny particles around margins) */
+.sugar-particle {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@keyframes sugarDriftUp1 {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.16;
+  }
+
+  80% {
+    opacity: 0.16;
+  }
+
+  100% {
+    transform: translate3d(8px, -45px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes sugarDriftUp2 {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 0.20;
+  }
+
+  75% {
+    opacity: 0.20;
+  }
+
+  100% {
+    transform: translate3d(-10px, -50px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes sugarDriftUp3 {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 0.15;
+  }
+
+  70% {
+    opacity: 0.15;
+  }
+
+  100% {
+    transform: translate3d(6px, -38px, 0);
+    opacity: 0;
+  }
+}
+
+.sugar-float-1 {
+  animation: sugarDriftUp1 18s ease-in-out infinite;
+}
+
+.sugar-float-2 {
+  animation: sugarDriftUp2 22s ease-in-out infinite;
+}
+
+.sugar-float-3 {
+  animation: sugarDriftUp3 16s ease-in-out infinite;
+}
+
+/* Reduced Motion Compliance */
+@media (prefers-reduced-motion: reduce) {
+
+  .bakery-bg-item,
+  .sugar-particle {
+    animation: none !important;
+    transform: none !important;
+    opacity: 0.08 !important;
+  }
+}
+
+/* =========================================================
+   PART 2 — PREMIUM NAVIGATION HEADER ENHANCEMENTS
+   ========================================================= */
+
+#main-header {
+  z-index: 50 !important;
+  transition: background-color 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-header {
+  background: rgba(255, 249, 245, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+header.header-scrolled {
+  background: rgba(255, 249, 245, 0.98) !important;
+  box-shadow: 0 8px 30px -4px rgba(42, 8, 44, 0.08) !important;
+  border-bottom-color: rgba(230, 193, 132, 0.4) !important;
+}
+
+.nav-link {
+  position: relative;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  /* 13px */
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: color 0.25s ease, font-weight 0.2s ease;
+  padding-bottom: 4px;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background: #962854;
+  border-radius: 9999px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+
+.nav-link.active {
+  color: #962854 !important;
+  font-weight: 700 !important;
+}
+
+/* =========================================================
+   REVOLVING WAVE BORDER & STATIC LOGO CONTENT ANIMATIONS
+   ========================================================= */
+
+@keyframes revolveWaveBorder {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-wave-border-revolve {
+  animation: revolveWaveBorder 22s linear infinite;
+  transform-origin: center center;
+}
+
+@keyframes heroContainerFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-hero-float {
+  animation: heroContainerFloat 5s ease-in-out infinite;
+}
+/* Toast enter animation (Next.js migration addition) */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #2A082C 0%, #5c1b5e 40%, #962854 70%, #e6c184 100%);
+}
+
