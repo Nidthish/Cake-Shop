@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { getProductsByCategory } from "@/lib/products";
+import { getDbProducts } from "@/lib/products";
 import SnacksCatalogClient from "@/components/products/SnacksCatalogClient";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "French Pastries & Artisanal Snacks - Lollipop Cake Shop",
@@ -8,8 +10,9 @@ export const metadata: Metadata = {
     "Explore fresh doughnuts, cupcakes, fudge brownies, cookies, puff pastries, buns, and breads.",
 };
 
-export default function Page() {
-  const products = getProductsByCategory("snacks");
+export default async function Page() {
+  const allProducts = await getDbProducts();
+  const products = allProducts.filter((p) => p.category === "snacks");
 
   return (
     <>

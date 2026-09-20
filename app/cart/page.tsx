@@ -2,13 +2,68 @@
 
 /* eslint-disable @next/next/no-img-element */
 
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/cart/CartProvider";
+import { useToast } from "@/components/common/ToastProvider";
 
 export default function CartPage() {
   const { items, summary, updateQuantity, removeItem, isHydrated } = useCart();
+  const { showToast } = useToast();
   const router = useRouter();
+
+  // Helper date calculations
+  const todayStr = useMemo(() => {
+    const d = new Date();
+    return d.toISOString().split("T")[0];
+  }, []);
+
+  const tomorrowStr = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split("T")[0];
+  }, []);
+
+  const egglessItems = useMemo(
+    () => items.filter((i) => i.eggPreference === "eggless"),
+    [items]
+  );
+  const hasEggless = egglessItems.length > 0;
+
+  // Selected date defaults to tomorrow if eggless cakes present
+  const [selectedDate, setSelectedDate] = useState<string>(
+    hasEggless ? tomorrowStr : todayStr
+  );
+  const [showTodayError, setShowTodayError] = useState<boolean>(false);
+
+  const minAllowedDate = hasEggless ? tomorrowStr : todayStr;
+
+  function handleDateChange(newDate: string) {
+    if (hasEggless && newDate === todayStr) {
+      setShowTodayError(true);
+      setSelectedDate(tomorrowStr);
+      showToast(
+        `Eggless cake delivery is not available today. Please select tomorrow or a later date.`,
+        "error"
+      );
+    } else {
+      setShowTodayError(false);
+      setSelectedDate(newDate);
+    }
+  }
+
+  function handleProceedToCheckout() {
+    if (hasEggless && selectedDate === todayStr) {
+      setShowTodayError(true);
+      showToast(
+        `For eggless cakes, you need to select a delivery date at least one day after today.`,
+        "error"
+      );
+      return;
+    }
+    router.push("/checkout");
+  }
 
   if (!isHydrated) {
     return (
@@ -67,6 +122,27 @@ export default function CartPage() {
 
       <div id="cart-content-layout" className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-4">
+          {/* Eggless Warning Banner if eggless cakes present */}
+          {hasEggless && (
+            <div className="bg-[#FAF3EC] border border-[#D8C3B3] p-4 rounded-2xl flex items-start gap-3 shadow-xs">
+              <span className="material-symbols-outlined text-[#962854] text-xl shrink-0 mt-0.5">
+                schedule
+              </span>
+              <div className="text-xs text-[#2A082C] space-y-1">
+                <p className="font-bold text-sm text-[#962854]">
+                  Order 1 Day Prior Required for Eggless Cakes
+                </p>
+                <p>
+                  You have selected eggless cake(s):{" "}
+                  <span className="font-bold underline text-[#1C0D0A]">
+                    {egglessItems.map((i) => i.name).join(", ")}
+                  </span>
+                  . For eggless cakes, you need to select a delivery date at least one day after today. Delivery for today is not possible.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div id="cart-items-container" className="space-y-4">
             {items.map((item) => (
               <div
@@ -87,9 +163,18 @@ export default function CartPage() {
                       ✨ Fresh Daily
                     </span>
                   </div>
-                  <p className="text-xs text-[#5C524E]">
-                    Portion: <span className="font-medium text-[#1C0D0A]">{item.weight}</span>
-                  </p>
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-xs text-[#5C524E]">
+                    <span>Portion: <strong className="text-[#1C0D0A]">{item.weight}</strong></span>
+                    {item.eggPreference && (
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        item.eggPreference === "eggless"
+                          ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                          : "bg-[#FAF3EC] text-[#1C0D0A] border border-[#D8C3B3]"
+                      }`}>
+                        {item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}
+                      </span>
+                    )}
+                  </div>
                   <p className="font-sans font-semibold text-lg text-[#962854]">
                     ₹{item.price}
                   </p>
@@ -137,11 +222,44 @@ export default function CartPage() {
           </div>
         </div>
 
-        {/* Price Summary */}
+        {/* Price Summary & Delivery Schedule */}
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-[#F1E6DF] shadow-lg space-y-6">
           <h2 className="font-display font-bold text-2xl text-[#1C0D0A] border-b border-[#F1E6DF] pb-4">
             Order Summary
           </h2>
+
+          {/* Preferred Delivery Date Selector */}
+          <div className="space-y-2 bg-[#FAF5F0] p-4 rounded-2xl border border-[#E6C184]/30">
+            <label className="text-xs font-bold uppercase tracking-wider text-[#1C0D0A] flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-base text-[#962854]">calendar_month</span>
+              Select Delivery Date
+            </label>
+            <input
+              type="date"
+              min={minAllowedDate}
+              value={selectedDate}
+              onChange={(e) => handleDateChange(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-[#E6C184]/50 bg-white text-xs font-bold text-[#1C0D0A] focus:outline-none focus:ring-2 focus:ring-[#962854]/30"
+            />
+
+            {hasEggless && (
+              <p className="text-[10.5px] text-[#962854] font-semibold flex items-center gap-1">
+                <span>🌱 Minimum date for Eggless: Tomorrow ({tomorrowStr})</span>
+              </p>
+            )}
+
+            {showTodayError && hasEggless && (
+              <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-800 text-[11px] font-semibold space-y-1">
+                <p>⚠️ You selected eggless cake(s):</p>
+                <p className="font-bold underline">
+                  {egglessItems.map((i) => i.name).join(", ")}
+                </p>
+                <p className="text-red-700 font-normal">
+                  For eggless cakes, you need to select a delivery date at least one day after today. Delivery today is not possible.
+                </p>
+              </div>
+            )}
+          </div>
 
           <div className="space-y-3 text-sm text-[#4A3E39]">
             <div className="flex justify-between items-center">
@@ -163,7 +281,7 @@ export default function CartPage() {
           </div>
 
           <button
-            onClick={() => router.push("/checkout")}
+            onClick={handleProceedToCheckout}
             className="w-full btn-primary py-4 text-xs uppercase tracking-wider font-bold shadow-xl flex items-center justify-center gap-2"
           >
             PROCEED TO CHECKOUT <span className="material-symbols-outlined text-lg">east</span>
@@ -173,3 +291,4 @@ export default function CartPage() {
     </main>
   );
 }
+

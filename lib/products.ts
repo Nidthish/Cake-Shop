@@ -1,38 +1,116 @@
 import type { Product } from "@/types";
 import rawProducts from "./products-data.json";
+import { prisma } from "./prisma";
 
-// The full 133-item catalog, migrated verbatim from the original
-// assets/js/products.js (auto-generated from Lollipop_Menu_Final_Catchy.xlsx).
+// The full 133-item catalog backup
 export const PRODUCTS_DATA: Product[] = rawProducts as Product[];
 
 /**
- * Slugify a product's display name the same way the legacy site did,
- * for fuzzy-matching legacy links like /product-detail.html?id=...
+ * Fetch live active products from MySQL database using Prisma Client.
+ * Falls back to PRODUCTS_DATA if MySQL server is unavailable.
+ */
+export async function getDbProducts(): Promise<Product[]> {
+  try {
+    const dbProducts = await prisma.product.findMany({
+      where: { isActive: true },
+      include: {
+        category: true,
+        variants: {
+          where: { isAvailable: true },
+        },
+        offers: {
+          where: { isActive: true },
+        },
+      },
+      orderBy: { id: "asc" },
+    });
+
+    if (!dbProducts || dbProducts.length === 0) {
+      return PRODUCTS_DATA;
+    }
+
+    return dbProducts.map((p: any) => {
+      const variants = p.variants.map((v: any) => {
+        const hasOffer = p.offers.some((o: any) => o.buyVariantId === v.id);
+        return {
+          weight: v.name,
+          price: Number(v.price),
+          originalPrice: Number(v.price),
+          offer: hasOffer ? "Buy 1kg Get 1/2kg Free (Offer)" : undefined,
+        };
+      });
+
+      const minPrice = variants.length > 0 ? Math.min(...variants.map((v: any) => v.price)) : 0;
+
+      // Map DB category slug to primary store section category
+      const catSlug = (p.category.slug || "").toLowerCase();
+      let mainCategory = "cakes";
+      if (p.productType === "SNACK" || ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug)) {
+        mainCategory = "snacks";
+      } else if (catSlug.includes("dry")) {
+        mainCategory = "dry-cakes";
+      } else if (catSlug.includes("bento")) {
+        mainCategory = "bento-cake";
+      } else if (catSlug.includes("wedding")) {
+        mainCategory = "wedding-cakes";
+      } else if (catSlug.includes("1st") || catSlug.includes("first")) {
+        mainCategory = "first-birthday";
+      }
+
+      return {
+        id: p.slug,
+        name: p.name,
+        baseName: p.name,
+        category: mainCategory,
+        subCategory: p.category.name,
+        categoryName: p.category.name,
+        price: minPrice,
+        minPrice,
+        originalPrice: minPrice,
+        image: p.imageName || "product.image",
+        rating: Number(p.rating),
+        reviewCount: p.reviewCount,
+        badge: p.badge || undefined,
+        description: p.description || "",
+        variants,
+        egglessAvailable: true,
+      };
+    });
+  } catch (error) {
+    console.warn("Prisma MySQL fetch failed, falling back to static JSON:", error);
+    return PRODUCTS_DATA;
+  }
+}
+
+/**
+ * Slugify a product's display name
  */
 function slugify(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 }
 
-/**
- * Get the display price for a product card: explicit price, else the
- * catalog's minPrice, else the first variant's price.
- */
 export function getCardPrice(p: Product): number {
   return p.price ?? p.minPrice ?? p.variants?.[0]?.price ?? 0;
 }
 
 export function getCardOriginalPrice(p: Product): number {
+  return p.originalPrice ?? p.variants?.[0]?.originalPrice ?? getCardPrice(p);
+}
+
+export function is1kgFreeOfferVariant(
+  variant?: { weight?: string; offer?: string; price?: number } | null
+): boolean {
+  if (!variant) return false;
+  const offerText = (variant.offer || "").toLowerCase();
+  const weightText = (variant.weight || "").toLowerCase();
   return (
-    p.originalPrice ??
-    p.variants?.[0]?.originalPrice ??
-    getCardPrice(p)
+    offerText.includes("1/2kg") ||
+    offerText.includes("1kg free") ||
+    (weightText.includes("1kg") && offerText.includes("free")) ||
+    (weightText.includes("1kg") && variant.price === 699)
   );
 }
 
-/**
- * Ported 1:1 from getProductsByCategory() in the legacy products.js —
- * same fuzzy category/subcategory/keyword matching rules.
- */
 export function getProductsByCategory(cat?: string | null): Product[] {
   if (!cat || cat === "all" || cat.toLowerCase().trim() === "all") {
     return PRODUCTS_DATA;
@@ -119,9 +197,6 @@ export function getProductsByCategory(cat?: string | null): Product[] {
   });
 }
 
-/**
- * Ported 1:1 from getProductById() in the legacy products.js.
- */
 export function getProductById(id?: string | null): Product | null {
   if (!id || !id.trim()) return null;
   const clean = id.toLowerCase().trim();
@@ -138,17 +213,13 @@ export function getProductById(id?: string | null): Product | null {
   if (found) return found;
 
   found = PRODUCTS_DATA.find(
-    (p) =>
-      slugify(p.name).includes(clean) || clean.includes(slugify(p.name))
+    (p) => slugify(p.name).includes(clean) || clean.includes(slugify(p.name))
   );
   if (found) return found;
 
   return null;
 }
 
-/**
- * Ported 1:1 from getSimilarProducts() in the legacy products.js.
- */
 export function getSimilarProducts(currentId: string, limit = 4): Product[] {
   const current = getProductById(currentId);
   if (!current) return PRODUCTS_DATA.slice(0, limit);

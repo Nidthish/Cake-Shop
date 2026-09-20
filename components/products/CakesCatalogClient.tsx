@@ -26,6 +26,33 @@ export default function CakesCatalogClient({
   const [currentSearch, setCurrentSearch] = useState("");
   const [currentSort, setCurrentSort] = useState("default");
 
+  const categoryPills = useMemo(() => {
+    const defaultSubs = [
+      "Normal Flavors",
+      "Choco Cakes",
+      "Choco Special",
+      "Delight Cakes",
+      "Rich Special",
+      "Premium Cakes",
+      "Fruit Cakes",
+      "Extreme Combo",
+    ];
+
+    const extraSubs = new Set<string>();
+    allCakes.forEach((c) => {
+      const sub = c.subCategory || c.categoryName;
+      if (sub && sub !== "General" && sub !== "cakes" && !defaultSubs.includes(sub)) {
+        extraSubs.add(sub);
+      }
+    });
+
+    const combined = [...defaultSubs, ...Array.from(extraSubs)];
+    return [
+      { label: "All Cakes", subcat: "all" },
+      ...combined.map((s) => ({ label: s, subcat: s })),
+    ];
+  }, [allCakes]);
+
   function resetAll() {
     setCurrentSubCat("all");
     setCurrentWeight("all");
@@ -189,7 +216,7 @@ export default function CakesCatalogClient({
 
           {/* Category Filter Buttons - Rectangular responsive layout */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold flex-nowrap sm:flex-wrap">
-            {CATEGORY_PILLS.map((pill) => {
+            {categoryPills.map((pill) => {
               const isActive = currentSubCat === pill.subcat;
               return (
                 <button

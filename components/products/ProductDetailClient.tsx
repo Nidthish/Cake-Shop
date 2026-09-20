@@ -7,6 +7,8 @@ import { useCart } from "@/components/cart/CartProvider";
 import { useToast } from "@/components/common/ToastProvider";
 import ProductCard from "@/components/products/ProductCard";
 
+import { is1kgFreeOfferVariant } from "@/lib/products";
+
 export default function ProductDetailClient({
   product,
   similar,
@@ -23,7 +25,8 @@ export default function ProductDetailClient({
     : [{ weight: "Regular", price: product.price ?? product.minPrice ?? 0 }];
 
   const [variantIdx, setVariantIdx] = useState(0);
-  const [eggless, setEggless] = useState<boolean>(!!product.egglessAvailable);
+  // Default to Egg ("With Egg" = false)
+  const [eggless, setEggless] = useState<boolean>(false);
   const [quantity, setQuantity] = useState(1);
   const [tab, setTab] = useState<"description" | "ingredients">("description");
 
@@ -31,12 +34,13 @@ export default function ProductDetailClient({
   const price = variant.price;
   const originalPrice = variant.originalPrice;
   const hasDiscount = Boolean(originalPrice && originalPrice > price);
+  const isKgOffer = is1kgFreeOfferVariant(variant);
 
   const rating = useMemo(() => Math.round(product.rating * 10) / 10, [product.rating]);
 
   function handleAddToCart() {
     addItem({
-      id: product.id,
+      id: `${product.id}${product.egglessAvailable && eggless ? "-eggless" : ""}`,
       name: product.name,
       image: product.image,
       weight: variant.weight,
@@ -88,9 +92,15 @@ export default function ProductDetailClient({
 
           <p className="text-[#5C524E] text-sm leading-relaxed mb-6">{product.description}</p>
 
-          <div className="flex items-baseline gap-3 mb-6">
+          <div className="flex flex-wrap items-baseline gap-3 mb-6">
             <span className="font-display font-bold text-3xl text-[#1C0D0A]">₹{price}</span>
             {hasDiscount && <span className="text-base text-[#9C8B84] line-through">₹{originalPrice}</span>}
+            {!eggless && (variant.offer || isKgOffer) && (
+              <span className="bg-[#FAF0F2] text-[#962854] border border-[#962854]/30 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs flex items-center gap-1.5 animate-pulse">
+                <span>🎁</span>
+                <span>{variant.offer || "1kg + 1/2kg Free"} (With Egg Only)</span>
+              </span>
+            )}
           </div>
 
           {/* Weight / variant selector */}
@@ -98,45 +108,58 @@ export default function ProductDetailClient({
             <div className="mb-5">
               <p className="text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">Select Weight</p>
               <div className="flex flex-wrap gap-2">
-                {variants.map((v, idx) => (
-                  <button
-                    key={v.weight}
-                    onClick={() => setVariantIdx(idx)}
-                    className={`thumb-btn px-4 py-2 rounded-xl text-xs font-semibold border transition-colors ${
-                      idx === variantIdx
-                        ? "bg-[#1C0D0A] text-white border-[#1C0D0A]"
-                        : "bg-white text-[#5C524E] border-[#E6C184]/40 hover:border-[#962854]"
-                    }`}
-                  >
-                    {v.weight}
-                  </button>
-                ))}
+                {variants.map((v, idx) => {
+                  const hasVOffer = !eggless && (v.offer || is1kgFreeOfferVariant(v));
+                  return (
+                    <button
+                      key={v.weight}
+                      onClick={() => setVariantIdx(idx)}
+                      className={`thumb-btn px-4 py-2 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1.5 ${
+                        idx === variantIdx
+                          ? "bg-[#1C0D0A] text-white border-[#1C0D0A]"
+                          : "bg-white text-[#5C524E] border-[#E6C184]/40 hover:border-[#962854]"
+                      }`}
+                    >
+                      <span>{v.weight}</span>
+                      {hasVOffer && (
+                        <span className="text-[10px] bg-[#962854] text-white px-1.5 py-0.5 rounded-md font-bold">
+                          FREE 1/2kg
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
 
-          {/* Eggless toggle */}
+          {/* Egg Preference Dropdown */}
           {product.egglessAvailable && (
-            <div className="mb-5">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">Preference</p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setEggless(true)}
-                  className={`egg-toggle-btn sel-egg px-4 py-2 rounded-xl text-xs font-semibold border flex items-center gap-1.5 transition-colors ${
-                    eggless ? "bg-emerald-600 text-white border-emerald-600" : "bg-white text-[#5C524E] border-[#E6C184]/40"
-                  }`}
+            <div className="mb-6 max-w-xs">
+              <label htmlFor="egg-preference-select" className="block text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">
+                Cake Preference
+              </label>
+              <div className="relative">
+                <select
+                  id="egg-preference-select"
+                  value={eggless ? "eggless" : "egg"}
+                  onChange={(e) => setEggless(e.target.value === "eggless")}
+                  className="w-full appearance-none bg-white border-2 border-[#E6C184]/50 hover:border-[#962854] text-[#1C0D0A] font-bold text-sm px-4 py-3 pr-10 rounded-2xl shadow-sm focus:outline-none focus:border-[#962854] focus:ring-4 focus:ring-[#962854]/15 transition-all cursor-pointer"
                 >
-                  🌱 Eggless
-                </button>
-                <button
-                  onClick={() => setEggless(false)}
-                  className={`egg-toggle-btn px-4 py-2 rounded-xl text-xs font-semibold border flex items-center gap-1.5 transition-colors ${
-                    !eggless ? "bg-[#1C0D0A] text-white border-[#1C0D0A]" : "bg-white text-[#5C524E] border-[#E6C184]/40"
-                  }`}
-                >
-                  🥚 With Egg
-                </button>
+                  <option value="egg">🥚 With Egg (Default)</option>
+                  <option value="eggless">🌱 Eggless (No Egg)</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-[#962854]">
+                  <span className="material-symbols-outlined text-xl">expand_more</span>
+                </div>
               </div>
+
+              {eggless && (
+                <div className="mt-3 p-3.5 rounded-2xl bg-[#FAF3EC] border border-[#D8C3B3] flex items-center gap-2.5 text-xs text-[#2A082C] font-semibold animate-fadeIn shadow-xs">
+                  <span className="material-symbols-outlined text-base text-[#962854] shrink-0">info</span>
+                  <span>For eggless cakes, you need to order one day prior.</span>
+                </div>
+              )}
             </div>
           )}
 

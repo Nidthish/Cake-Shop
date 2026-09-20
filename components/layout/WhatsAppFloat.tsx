@@ -3,9 +3,9 @@
 import { useState, useRef } from "react";
 
 const CONTACTS = [
-  { name: "Lollipop Support 1", phone: "919876543210", display: "+91 98765 43210" },
-  { name: "Lollipop Support 2", phone: "919876543211", display: "+91 98765 43211" },
-  { name: "Lollipop Support 3", phone: "919876543212", display: "+91 98765 43212" },
+  { name: "Direct Contact 1", phone: "918489324697", display: "+91 84893 24697" },
+  { name: "Direct Contact 2", phone: "919655888829", display: "+91 96558 88829" },
+  { name: "Direct Contact 3", phone: "917373737810", display: "+91 73737 37810" },
 ];
 
 export default function WhatsAppFloat() {
@@ -25,24 +25,24 @@ export default function WhatsAppFloat() {
       {open && (
         <div
           id="wa-contact-popup"
-          className="wa-popup-menu absolute bottom-20 right-0 w-64 bg-white rounded-2xl p-3.5 border border-[#E6C184] shadow-2xl z-50 transition-all duration-300"
+          className="wa-popup-menu absolute bottom-20 right-0 w-72 bg-white rounded-2xl p-4 border border-[#E6C184] shadow-2xl z-50 transition-all duration-300"
         >
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#F1E6DF]">
+          <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#F1E6DF]">
             <h4 className="font-display font-bold text-xs text-[#1C0D0A] flex items-center gap-1.5">
-              <span className="text-emerald-600">💬</span> WhatsApp Support
+              <span className="text-emerald-600">💬</span> WhatsApp &amp; Mobile Support
             </h4>
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {CONTACTS.map((c) => (
               <a
                 key={c.phone}
                 href={`https://wa.me/${c.phone}?text=${encodeURIComponent(
-                  "Hi! I want to connect via WhatsApp."
+                  "Hi! I want to place an order or inquire with Lollipop Cake Shop."
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 p-2 rounded-xl hover:bg-emerald-50 border border-transparent hover:border-emerald-200 transition-all group"
+                className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50 border border-emerald-100/60 hover:border-emerald-300 transition-all group"
               >
                 <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold flex-shrink-0 group-hover:scale-110 transition-transform">
                   📞
@@ -61,6 +61,7 @@ export default function WhatsAppFloat() {
 
       <button
         id="wa-toggle-btn"
+        suppressHydrationWarning
         className="whatsapp-float-btn group cursor-pointer"
         aria-label="Order on WhatsApp"
         onClick={() => setOpen((o) => !o)}

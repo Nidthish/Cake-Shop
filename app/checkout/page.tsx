@@ -44,7 +44,14 @@ export default function CheckoutPage() {
     }
   }, []);
 
-  const minDate = useMemo(() => tomorrow(), []);
+  const egglessItems = useMemo(
+    () => items.filter((i) => i.eggPreference === "eggless"),
+    [items]
+  );
+  const hasEggless = egglessItems.length > 0;
+  const todayStr = useMemo(() => new Date().toISOString().split("T")[0], []);
+
+  const minDate = useMemo(() => (hasEggless ? tomorrow() : todayStr), [hasEggless, todayStr]);
 
   function validate(): boolean {
     const next: Record<string, string> = {};
@@ -54,6 +61,9 @@ export default function CheckoutPage() {
     if (street.trim().length < 5) next.street = "Enter your full delivery address.";
     if (city.trim().length < 2) next.city = "City is required.";
     if (!/^\d{6}$/.test(pincode.trim())) next.pincode = "Enter a valid 6-digit pincode.";
+    if (hasEggless && date === todayStr) {
+      next.date = "Delivery for today is not possible for eggless cakes. Select tomorrow or later.";
+    }
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -216,6 +226,12 @@ export default function CheckoutPage() {
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">Delivery Date</label>
                   <input type="date" min={minDate} value={date} onChange={(e) => setDate(e.target.value)} className="w-full mt-1 px-3 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#962854]/30" />
+                  {errors.date && <p className="text-xs text-red-600 mt-1">{errors.date}</p>}
+                  {hasEggless && (
+                    <p className="text-[11px] text-[#962854] font-semibold mt-1">
+                      🌱 Note: Eggless cakes require 1 day prior notice. Earliest available date: {minDate}.
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">Time Slot</label>

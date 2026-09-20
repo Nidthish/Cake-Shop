@@ -45,7 +45,9 @@ export default function Footer() {
               Contact Us
             </h4>
             <p>📍 Bandra, Mumbai &amp; Pune</p>
-            <p>📞 +91 98765 43210</p>
+            <p>📞 +91 84893 24697</p>
+            <p>📞 +91 96558 88829</p>
+            <p>📞 +91 73737 37810</p>
             <p>✉️ orders@lollipop.com</p>
           </div>
         </div>

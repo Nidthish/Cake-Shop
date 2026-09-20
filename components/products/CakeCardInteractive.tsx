@@ -5,6 +5,8 @@ import { useState } from "react";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
 
+import { is1kgFreeOfferVariant } from "@/lib/products";
+
 export default function CakeCardInteractive({
   product,
   animDelay = 0,
@@ -31,34 +33,29 @@ export default function CakeCardInteractive({
 
   const currentVariant = variants[selectedWeightIdx] || variants[0];
   const price = currentVariant.price;
-  const offer = currentVariant.offer || "";
+  const rawOffer = currentVariant.offer || "";
 
-  const is1kgOffer =
-    currentVariant.weight.toLowerCase().includes("1kg") ||
-    offer.toLowerCase().includes("1/2kg") ||
-    offer.toLowerCase().includes("free");
-
-  const effectiveEggPreference = is1kgOffer ? "egg" : eggPreference;
+  // The 1kg + 1/2kg free offer is active ONLY for egg cakes ("With Egg")
+  const isVariantOffer = is1kgFreeOfferVariant(currentVariant) || Boolean(rawOffer);
+  const showOfferTag = eggPreference === "egg" && isVariantOffer;
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
 
     addItem({
-      id: `${product.id}${effectiveEggPreference === "eggless" ? "-eggless" : ""}`,
+      id: `${product.id}${eggPreference === "eggless" ? "-eggless" : ""}`,
       name: product.name,
       image: product.image,
       weight: currentVariant.weight,
       price: price,
       quantity: 1,
-      eggPreference: effectiveEggPreference,
+      eggPreference: eggPreference,
     });
 
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 1200);
   }
-
-
 
   return (
     <div
@@ -82,11 +79,16 @@ export default function CakeCardInteractive({
       </div>
 
       <div className="pt-2 px-1 flex flex-col flex-grow">
-        {/* SubCategory Tag */}
-        <div className="flex items-center justify-start mb-1.5">
+        {/* SubCategory Tag & Offer Badge */}
+        <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
           <span className="text-[10px] font-bold text-[#962854] bg-[#FAF0F2] px-2 py-0.5 rounded-full">
             {product.subCategory}
           </span>
+          {showOfferTag && (
+            <span className="text-[9.5px] font-extrabold text-white bg-[#962854] px-2 py-0.5 rounded-full shadow-xs animate-pulse">
+              🎁 1kg + 1/2kg Free
+            </span>
+          )}
         </div>
 
         {/* Title */}
@@ -107,13 +109,13 @@ export default function CakeCardInteractive({
             Select Weight
           </p>
           <div className="card-side-info text-[9.5px] font-bold">
-            {is1kgOffer ? (
+            {showOfferTag ? (
               <span className="text-[#962854] bg-[#FAF0F2] border border-[#962854]/30 px-2 py-0.5 rounded-full inline-flex items-center gap-0.5">
-                🎁 Special Offer
+                {rawOffer || "1/2kg Free Offer"}
               </span>
-            ) : effectiveEggPreference === "eggless" ? (
-              <span className="text-[#2A082C] bg-[#FAF3EC] border border-[#D8C3B3] px-2 py-0.5 rounded-md inline-flex items-center gap-0.5 font-sans">
-                🕒 1 Day Prior Order
+            ) : eggPreference === "eggless" ? (
+              <span className="text-[#962854] bg-[#FAF0F2] border border-[#962854]/30 px-2 py-0.5 rounded-md inline-flex items-center gap-0.5 font-sans">
+                🕒 Order 1 Day Prior
               </span>
             ) : null}
           </div>
@@ -146,33 +148,38 @@ export default function CakeCardInteractive({
         <div className="flex-grow" />
 
         {/* Egg Preference Section */}
-        <div className="mt-2 font-sans">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#5C524E] mb-1.5">
-            Egg Preference
-          </p>
-          <div className="flex gap-1.5 items-center">
-            <button
-              type="button"
-              onClick={() => setEggPreference("egg")}
-              className={`egg-toggle-btn font-sans ${
-                effectiveEggPreference === "egg" ? "sel-egg" : ""
-              }`}
-            >
-              With Egg
-            </button>
-            {!is1kgOffer && (
+        {product.egglessAvailable !== false && (
+          <div className="mt-2 font-sans">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#5C524E] mb-1.5">
+              Egg Preference
+            </p>
+            <div className="flex gap-1.5 items-center">
+              <button
+                type="button"
+                onClick={() => setEggPreference("egg")}
+                className={`egg-toggle-btn font-sans ${
+                  eggPreference === "egg" ? "sel-egg" : ""
+                }`}
+              >
+                With Egg
+              </button>
               <button
                 type="button"
                 onClick={() => setEggPreference("eggless")}
                 className={`egg-toggle-btn font-sans ${
-                  effectiveEggPreference === "eggless" ? "sel-eggless" : ""
+                  eggPreference === "eggless" ? "sel-eggless" : ""
                 }`}
               >
                 Eggless
               </button>
+            </div>
+            {eggPreference === "eggless" && (
+              <p className="text-[10px] text-[#962854] font-semibold mt-1.5 flex items-center gap-1">
+                <span>ℹ️ For eggless cakes, you need to order 1 day prior.</span>
+              </p>
             )}
           </div>
-        </div>
+        )}
 
         {/* Card Footer: View Details & Add to Cart */}
         <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-[#F1E6DF] font-sans">
