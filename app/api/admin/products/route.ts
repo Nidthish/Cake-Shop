@@ -114,12 +114,12 @@ const createProductSchema = z.object({
     .min(1, "At least one variant price is required"),
 });
 
-// POST /api/admin/products — Create a new product with category and variants in MySQL
+// POST /api/admin/products — Create a new product (SUPERADMIN only)
 export async function POST(req: NextRequest) {
   try {
     const admin = await getAuthenticatedAdmin(req);
-    if (!admin) {
-      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    if (!admin || admin.role !== "SUPERADMIN") {
+      return NextResponse.json({ success: false, error: "Access denied. Only Super Admins can add new products." }, { status: 403 });
     }
 
     const json = await req.json();

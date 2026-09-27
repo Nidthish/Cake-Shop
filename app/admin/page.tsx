@@ -182,10 +182,10 @@ export default function AdminPage() {
         setAdminUser(data.user);
         loadDashboardData();
       } else {
-        setLoginError(data.error || "Invalid credentials.");
+        setLoginError(data.error || "Invalid email or password.");
       }
     } catch (err: any) {
-      setLoginError("Login server error. Please try again.");
+      setLoginError("Login failed. Please try again.");
     } finally {
       setLoggingIn(false);
     }
@@ -258,7 +258,7 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setAlertMessage(`✅ Admin user "${newAdminName}" created successfully!`);
+        setAlertMessage(`Admin user "${newAdminName}" created successfully.`);
         setShowUserModal(false);
         setNewAdminName("");
         setNewAdminEmail("");
@@ -268,7 +268,7 @@ export default function AdminPage() {
         alert(data.error || "Failed to create admin user.");
       }
     } catch (err: any) {
-      alert("Error creating admin user: " + err.message);
+      alert("Error: " + err.message);
     } finally {
       setCreatingUser(false);
     }
@@ -308,9 +308,8 @@ export default function AdminPage() {
     const totalCount = filteredOrders.length;
     const avgOrderValue = totalCount > 0 ? totalRevenue / totalCount : 0;
     const paidOrders = filteredOrders.filter((o) => o.paymentStatus === "PAID").length;
-    const pendingOrders = filteredOrders.filter((o) => o.status === "PENDING" || o.paymentStatus === "PENDING").length;
 
-    return { totalRevenue, totalCount, avgOrderValue, paidOrders, pendingOrders };
+    return { totalRevenue, totalCount, avgOrderValue, paidOrders };
   }, [filteredOrders]);
 
   // Product Helpers
@@ -383,16 +382,16 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (data.success) {
-        setAlertMessage(`Product sales status updated to ${!currentActive ? "Active" : "Paused"}`);
+        setAlertMessage(`Product sales status updated.`);
         fetchProducts();
       }
     } catch (err) {
-      alert("Failed to toggle product status.");
+      alert("Failed to update status.");
     }
   }
 
   async function handleDeleteProduct(id: string, nameStr: string) {
-    if (!confirm(`Are you sure you want to delete "${nameStr}" from MySQL database?`)) return;
+    if (!confirm(`Are you sure you want to delete "${nameStr}"?`)) return;
     try {
       const res = await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
       const data = await res.json();
@@ -432,7 +431,7 @@ export default function AdminPage() {
 
       const data = await res.json();
       if (res.ok && data.success) {
-        setAlertMessage(data.message || "Product saved successfully!");
+        setAlertMessage(data.message || "Product saved successfully.");
         setShowAddModal(false);
         fetchProducts();
       } else {
@@ -454,7 +453,7 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (data.success) {
-        setAlertMessage("Order status updated successfully!");
+        setAlertMessage("Order status updated.");
         fetchOrders();
       }
     } catch (err) {
@@ -483,13 +482,13 @@ export default function AdminPage() {
       <div className="min-h-screen bg-[#250527] flex items-center justify-center text-white">
         <div className="text-center space-y-3">
           <div className="w-10 h-10 border-4 border-[#E6C184] border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="font-serif text-sm text-[#E6C184] tracking-widest uppercase">Verifying Admin JWT Security Session...</p>
+          <p className="font-serif text-sm text-[#E6C184] tracking-widest uppercase">Loading Admin Portal...</p>
         </div>
       </div>
     );
   }
 
-  // 🔒 HIGH-SECURITY LOGIN PORTAL (UNAUTHENTICATED VIEW)
+  // 🔒 LOGIN SCREEN (UNAUTHENTICATED VIEW)
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#1C061E] flex items-center justify-center px-4 py-12">
@@ -499,10 +498,10 @@ export default function AdminPage() {
               🔐
             </div>
             <h1 className="font-serif text-2xl font-bold text-white tracking-wide">
-              Lollipop Admin Security Portal
+              Lollipop Admin Portal
             </h1>
             <p className="text-xs text-[#D8C3B3]">
-              Ethical Hacker JWT Standard Secured Control Panel
+              Sign in to manage your cake shop catalog and orders
             </p>
           </div>
 
@@ -515,7 +514,7 @@ export default function AdminPage() {
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
               <label className="block text-xs font-bold uppercase text-[#E6C184] mb-2 tracking-wider">
-                Admin Email Address
+                Admin Email
               </label>
 
               <input
@@ -550,19 +549,13 @@ export default function AdminPage() {
               {loggingIn ? (
                 <>
                   <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Authenticating...
+                  Signing in...
                 </>
               ) : (
-                "Sign In To Admin Console ➔"
+                "Sign In"
               )}
             </button>
           </form>
-
-          <div className="border-t border-white/10 pt-4 text-center">
-            <p className="text-[11px] text-gray-400">
-              Default Seed Email: <code className="text-[#E6C184]">admin@lollipopcakeshop.com</code> | Password: <code className="text-[#E6C184]">Admin@123456</code>
-            </p>
-          </div>
         </div>
       </div>
     );
@@ -571,7 +564,7 @@ export default function AdminPage() {
   // 🏆 AUTHENTICATED ADMIN DASHBOARD
   return (
     <div className="min-h-screen bg-[#FAF5EE] text-[#2D2327]">
-      {/* Sleek Admin Navbar Header (Client Header Removed!) */}
+      {/* Admin Navbar Header */}
       <header className="bg-[#2A082C] border-b border-[#962854]/40 text-white px-4 sm:px-8 py-4 shadow-xl">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -581,25 +574,24 @@ export default function AdminPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-serif font-bold text-xl sm:text-2xl text-white tracking-wide">
-                  Lollipop Administration
+                  Lollipop Admin
                 </h1>
-                <span className="bg-[#E6C184]/20 border border-[#E6C184]/40 text-[#E6C184] text-[10px] font-bold uppercase px-2 py-0.5 rounded">
-                  {adminUser?.role || "ADMIN"}
-                </span>
               </div>
               <p className="text-xs text-[#D8C3B3]">
-                Logged in as <strong className="text-white">{adminUser?.fullName}</strong> ({adminUser?.email})
+                Logged in as <strong className="text-white">{adminUser?.fullName}</strong>
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <button
-              onClick={handleOpenCreateModal}
-              className="bg-[#E6C184] hover:bg-[#d8b070] text-[#2A082C] text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
-            >
-              ➕ Add New Cake / Product
-            </button>
+            {adminUser?.role === "SUPERADMIN" && (
+              <button
+                onClick={handleOpenCreateModal}
+                className="bg-[#E6C184] hover:bg-[#d8b070] text-[#2A082C] text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+              >
+                ➕ Add New Cake / Product
+              </button>
+            )}
 
             <a
               href="/"
@@ -641,7 +633,7 @@ export default function AdminPage() {
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
             }`}
           >
-            📊 Sales &amp; Analytics
+            📊 Sales &amp; Overview
           </button>
 
           <button
@@ -663,31 +655,33 @@ export default function AdminPage() {
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
             }`}
           >
-            📦 Live Customer Orders ({orders.length})
+            📦 Customer Orders ({orders.length})
           </button>
 
-          <button
-            onClick={() => setActiveTab("users")}
-            className={`py-3 px-5 font-bold text-sm border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
-              activeTab === "users"
-                ? "border-[#802B52] text-[#802B52]"
-                : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
-            }`}
-          >
-            👥 Manage Admin Users ({adminUsersList.length})
-          </button>
+          {adminUser?.role === "SUPERADMIN" && (
+            <button
+              onClick={() => setActiveTab("users")}
+              className={`py-3 px-5 font-bold text-sm border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+                activeTab === "users"
+                  ? "border-[#802B52] text-[#802B52]"
+                  : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
+              }`}
+            >
+              👥 Manage Admin Users ({adminUsersList.length})
+            </button>
+          )}
         </div>
 
-        {/* TAB 1: SALES & ANALYTICS DASHBOARD */}
+        {/* TAB 1: SALES & OVERVIEW */}
         {activeTab === "sales" && (
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm">
               <div>
                 <h2 className="font-serif text-2xl font-bold text-[#5B1E38]">
-                  Sales Performance &amp; Revenue Analytics
+                  Sales Overview
                 </h2>
                 <p className="text-xs text-[#7A6B72]">
-                  Real-time transaction statistics from live order history.
+                  View your store sales and order summary.
                 </p>
               </div>
 
@@ -721,49 +715,49 @@ export default function AdminPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               <div className="bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Total Sales Revenue
+                  Total Revenue
                 </span>
                 <div className="text-3xl font-extrabold text-[#802B52]">
                   ₹{salesStats.totalRevenue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </div>
                 <p className="text-[11px] text-emerald-600 font-medium">
-                  💳 Total gross receipts in filter window
+                  💳 Total sales revenue
                 </p>
               </div>
 
               <div className="bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Total Orders Count
+                  Total Orders
                 </span>
                 <div className="text-3xl font-extrabold text-[#2A082C]">
                   {salesStats.totalCount} Orders
                 </div>
                 <p className="text-[11px] text-[#7A6B72] font-medium">
-                  📦 Completed &amp; processing purchases
+                  📦 Total orders placed
                 </p>
               </div>
 
               <div className="bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Average Order Value (AOV)
+                  Average Order Value
                 </span>
                 <div className="text-3xl font-extrabold text-[#962854]">
                   ₹{salesStats.avgOrderValue.toFixed(2)}
                 </div>
                 <p className="text-[11px] text-[#7A6B72] font-medium">
-                  🎂 Mean customer cart spend
+                  🎂 Average spend per order
                 </p>
               </div>
 
               <div className="bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Payment Verified (PAID)
+                  Paid Orders
                 </span>
                 <div className="text-3xl font-extrabold text-emerald-600">
                   {salesStats.paidOrders} / {salesStats.totalCount}
                 </div>
                 <p className="text-[11px] text-emerald-700 font-medium">
-                  ✅ Verified via Razorpay signature
+                  ✅ Paid online
                 </p>
               </div>
             </div>
@@ -777,7 +771,7 @@ export default function AdminPage() {
               <div className="w-full sm:w-auto flex-1 max-w-md">
                 <input
                   type="text"
-                  placeholder="Search products by name, code or slug..."
+                  placeholder="Search products by name or code..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-[#E6DBCE] text-sm focus:outline-none focus:border-[#802B52]"
@@ -808,7 +802,7 @@ export default function AdminPage() {
 
             {filteredProducts.length === 0 ? (
               <div className="text-center py-12 text-[#7A6B72]">
-                No products found matching your filter criteria.
+                No products found matching your filter.
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -816,7 +810,7 @@ export default function AdminPage() {
                   <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
                     <tr>
                       <th className="py-3 px-4">Code</th>
-                      <th className="py-3 px-4">Product Details</th>
+                      <th className="py-3 px-4">Product Name</th>
                       <th className="py-3 px-4">Category</th>
                       <th className="py-3 px-4">Variants &amp; Pricing</th>
                       <th className="py-3 px-4">Status</th>
@@ -829,7 +823,6 @@ export default function AdminPage() {
                         <td className="py-4 px-4 font-mono font-bold text-[#802B52]">{p.productCode}</td>
                         <td className="py-4 px-4">
                           <div className="font-bold text-sm text-[#2D2327]">{p.name}</div>
-                          <div className="text-[11px] text-[#7A6B72]">{p.slug}</div>
                         </td>
                         <td className="py-4 px-4 font-medium text-[#5B1E38]">{p.categoryName}</td>
                         <td className="py-4 px-4">
@@ -852,18 +845,22 @@ export default function AdminPage() {
                             >
                               {p.isActive ? "Pause Sales" : "Resume Sales"}
                             </button>
-                            <button
-                              onClick={() => handleEditClick(p)}
-                              className="px-3 py-1.5 rounded text-[11px] font-semibold bg-[#802B52] text-white hover:bg-[#682242] cursor-pointer"
-                            >
-                              Edit Item
-                            </button>
-                            <button
-                              onClick={() => handleDeleteProduct(p.id, p.name)}
-                              className="px-2.5 py-1.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 cursor-pointer"
-                            >
-                              🗑️
-                            </button>
+                            {adminUser?.role === "SUPERADMIN" && (
+                              <>
+                                <button
+                                  onClick={() => handleEditClick(p)}
+                                  className="px-3 py-1.5 rounded text-[11px] font-semibold bg-[#802B52] text-white hover:bg-[#682242] cursor-pointer"
+                                >
+                                  Edit Item
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteProduct(p.id, p.name)}
+                                  className="px-2.5 py-1.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 cursor-pointer"
+                                >
+                                  🗑️
+                                </button>
+                              </>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -875,12 +872,12 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* TAB 3: LIVE CUSTOMER ORDERS (REMOVED DUMMY ORDER!) */}
+        {/* TAB 3: CUSTOMER ORDERS */}
         {activeTab === "orders" && (
           <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm p-6 space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="font-serif text-xl font-bold text-[#5B1E38]">
-                Recent Orders in Database
+                Recent Customer Orders
               </h2>
               <button
                 onClick={fetchOrders}
@@ -892,7 +889,7 @@ export default function AdminPage() {
 
             {orders.length === 0 ? (
               <div className="text-center py-12 text-[#7A6B72] font-serif">
-                No customer orders recorded in the database yet.
+                No customer orders recorded yet.
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -929,18 +926,24 @@ export default function AdminPage() {
                         </td>
                         <td className="py-4 px-4 font-bold text-[#802B52]">₹{o.totalAmount}</td>
                         <td className="py-4 px-4">
-                          <select
-                            value={o.status}
-                            onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
-                            className="px-2 py-1 rounded border border-[#E6DBCE] bg-white text-xs font-semibold focus:outline-none focus:border-[#802B52]"
-                          >
-                            <option value="PENDING">PENDING</option>
-                            <option value="CONFIRMED">CONFIRMED</option>
-                            <option value="PREPARING">PREPARING</option>
-                            <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
-                            <option value="DELIVERED">DELIVERED</option>
-                            <option value="CANCELLED">CANCELLED</option>
-                          </select>
+                          {adminUser?.role === "SUPERADMIN" ? (
+                            <select
+                              value={o.status}
+                              onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
+                              className="px-2 py-1 rounded border border-[#E6DBCE] bg-white text-xs font-semibold focus:outline-none focus:border-[#802B52]"
+                            >
+                              <option value="PENDING">PENDING</option>
+                              <option value="CONFIRMED">CONFIRMED</option>
+                              <option value="PREPARING">PREPARING</option>
+                              <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
+                              <option value="DELIVERED">DELIVERED</option>
+                              <option value="CANCELLED">CANCELLED</option>
+                            </select>
+                          ) : (
+                            <span className="inline-block px-2.5 py-1 rounded text-[11px] font-bold bg-[#2A082C] text-[#E6C184]">
+                              {o.status}
+                            </span>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -952,15 +955,15 @@ export default function AdminPage() {
         )}
 
         {/* TAB 4: MANAGE ADMIN USERS */}
-        {activeTab === "users" && (
+        {adminUser?.role === "SUPERADMIN" && activeTab === "users" && (
           <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm p-6 space-y-6">
             <div className="flex justify-between items-center">
               <div>
                 <h2 className="font-serif text-xl font-bold text-[#5B1E38]">
-                  Authorized Admin User Accounts
+                  Admin Users
                 </h2>
                 <p className="text-xs text-[#7A6B72]">
-                  Existing admins can grant administrator permissions to new staff members.
+                  Manage your admin team and staff accounts.
                 </p>
               </div>
 
@@ -979,7 +982,7 @@ export default function AdminPage() {
                     <th className="py-3 px-4">Full Name</th>
                     <th className="py-3 px-4">Email Address</th>
                     <th className="py-3 px-4">Role</th>
-                    <th className="py-3 px-4">Account Status</th>
+                    <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4">Created Date</th>
                   </tr>
                 </thead>
@@ -990,7 +993,7 @@ export default function AdminPage() {
                       <td className="py-4 px-4 font-mono text-[#802B52]">{u.email}</td>
                       <td className="py-4 px-4">
                         <span className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold ${u.role === "SUPERADMIN" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"}`}>
-                          {u.role}
+                          {u.role === "SUPERADMIN" ? "Super Admin" : "Admin"}
                         </span>
                       </td>
                       <td className="py-4 px-4">
@@ -1016,7 +1019,7 @@ export default function AdminPage() {
           <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-2xl max-w-md w-full p-6 space-y-5 text-[#2D2327]">
             <div className="flex justify-between items-center pb-3 border-b border-[#E6DBCE]">
               <h3 className="font-serif text-xl font-bold text-[#5B1E38]">
-                Add New Admin Account
+                Add New Admin User
               </h3>
               <button onClick={() => setShowUserModal(false)} className="text-gray-400 hover:text-gray-600">
                 ✕
@@ -1054,7 +1057,7 @@ export default function AdminPage() {
 
               <div>
                 <label className="block text-xs font-bold uppercase text-[#5B1E38] mb-1">
-                  Initial Password *
+                  Password *
                 </label>
                 <input
                   type="password"
@@ -1069,15 +1072,15 @@ export default function AdminPage() {
 
               <div>
                 <label className="block text-xs font-bold uppercase text-[#5B1E38] mb-1">
-                  Assigned Privilege Role *
+                  Role *
                 </label>
                 <select
                   value={newAdminRole}
                   onChange={(e) => setNewAdminRole(e.target.value as any)}
                   className="w-full px-3.5 py-2 rounded-lg border border-[#E6DBCE] text-sm bg-white focus:outline-none focus:border-[#802B52]"
                 >
-                  <option value="ADMIN">ADMIN (Catalog &amp; Orders Management)</option>
-                  <option value="SUPERADMIN">SUPERADMIN (Full Privileges)</option>
+                  <option value="ADMIN">Admin</option>
+                  <option value="SUPERADMIN">Super Admin</option>
                 </select>
               </div>
 
@@ -1094,7 +1097,7 @@ export default function AdminPage() {
                   disabled={creatingUser}
                   className="px-5 py-2 rounded-lg text-xs font-bold bg-[#802B52] hover:bg-[#962854] text-white"
                 >
-                  {creatingUser ? "Creating..." : "Save Admin User"}
+                  {creatingUser ? "Saving..." : "Save Admin User"}
                 </button>
               </div>
             </form>

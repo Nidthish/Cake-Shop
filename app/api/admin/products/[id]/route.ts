@@ -98,7 +98,7 @@ export async function PUT(
       );
     }
 
-    // 1. Partial Update: Toggle isActive (Pause / Resume Sales)
+    // 1. Partial Update: Toggle isActive (Pause / Resume Sales) - Allowed for both ADMIN & SUPERADMIN
     if (typeof body.isActive === "boolean" && Object.keys(body).length === 1) {
       const updated = await prisma.product.update({
         where: { id: productId },
@@ -115,7 +115,14 @@ export async function PUT(
       });
     }
 
-    // 2. Full Update: Name, Category, SubCategory, Description, Badge, Variants
+    // 2. Full Update: Name, Category, SubCategory, Description, Badge, Variants — SUPERADMIN Only!
+    if (admin.role !== "SUPERADMIN") {
+      return NextResponse.json(
+        { success: false, error: "Access denied. Normal admins can only pause/resume sales, not edit product details." },
+        { status: 403 }
+      );
+    }
+
     const {
       name,
       categorySlug,
@@ -263,15 +270,15 @@ export async function PUT(
   }
 }
 
-// DELETE /api/admin/products/[id] — Delete product from MySQL
+// DELETE /api/admin/products/[id] — Delete product from MySQL (SUPERADMIN only)
 export async function DELETE(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
     const admin = await getAuthenticatedAdmin(req);
-    if (!admin) {
-      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    if (!admin || admin.role !== "SUPERADMIN") {
+      return NextResponse.json({ success: false, error: "Access denied. Only Super Admins can delete products." }, { status: 403 });
     }
 
     const { id } = await context.params;

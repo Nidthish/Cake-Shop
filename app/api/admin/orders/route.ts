@@ -62,12 +62,12 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// PUT /api/admin/orders — Update status of an order
+// PUT /api/admin/orders — Update status of an order (SUPERADMIN only)
 export async function PUT(req: NextRequest) {
   try {
     const admin = await getAuthenticatedAdmin(req);
-    if (!admin) {
-      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    if (!admin || admin.role !== "SUPERADMIN") {
+      return NextResponse.json({ success: false, error: "Access denied. Only Super Admins can update order status." }, { status: 403 });
     }
 
     const body = await req.json();

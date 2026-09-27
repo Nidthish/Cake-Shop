@@ -5,12 +5,12 @@ import { hashPassword } from "@/lib/crypto";
 
 export const runtime = "nodejs";
 
-// GET /api/admin/users — Fetch all Admin & Superadmin users
+// GET /api/admin/users — Fetch all Admin & Superadmin users (SUPERADMIN only)
 export async function GET(req: NextRequest) {
   try {
     const admin = await getAuthenticatedAdmin(req);
-    if (!admin) {
-      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    if (!admin || admin.role !== "SUPERADMIN") {
+      return NextResponse.json({ success: false, error: "Access denied. Only Super Admins can manage users." }, { status: 403 });
     }
 
     const users = await prisma.user.findMany({
@@ -48,12 +48,12 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST /api/admin/users — Create a new Admin user (One admin creating another admin)
+// POST /api/admin/users — Create a new Admin user (SUPERADMIN only)
 export async function POST(req: NextRequest) {
   try {
     const admin = await getAuthenticatedAdmin(req);
-    if (!admin) {
-      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    if (!admin || admin.role !== "SUPERADMIN") {
+      return NextResponse.json({ success: false, error: "Access denied. Only Super Admins can create new admin accounts." }, { status: 403 });
     }
 
     const body = await req.json();

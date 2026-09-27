@@ -18,9 +18,12 @@ export async function POST(req: NextRequest) {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // Auto-seed initial Super Admin if database has 0 users
-    const totalUsers = await prisma.user.count();
-    if (totalUsers === 0) {
+    // Auto-seed initial Super Admin if admin@lollipopcakeshop.com does not exist yet
+    const existingDefaultAdmin = await prisma.user.findUnique({
+      where: { email: "admin@lollipopcakeshop.com" },
+    });
+
+    if (!existingDefaultAdmin) {
       console.log("🌱 Auto-seeding initial Super Admin user...");
       const defaultPasswordHash = hashPassword("Admin@123456");
       await prisma.user.create({
