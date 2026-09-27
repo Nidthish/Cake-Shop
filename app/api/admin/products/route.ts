@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthenticatedAdmin } from "@/lib/auth";
 import { z } from "zod";
 
 export const runtime = "nodejs";
 
 // GET /api/admin/products — List all products with categories and variants from MySQL
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    }
+
     const products = await prisma.product.findMany({
       include: {
         category: true,
@@ -111,6 +117,11 @@ const createProductSchema = z.object({
 // POST /api/admin/products — Create a new product with category and variants in MySQL
 export async function POST(req: NextRequest) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    }
+
     const json = await req.json();
     const parsed = createProductSchema.safeParse(json);
 

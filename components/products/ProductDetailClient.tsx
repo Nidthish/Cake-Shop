@@ -25,7 +25,7 @@ export default function ProductDetailClient({
     : [{ weight: "Regular", price: product.price ?? product.minPrice ?? 0 }];
 
   const [variantIdx, setVariantIdx] = useState(0);
-  // Default to Egg ("With Egg" = false)
+  // Default to With Egg (false) for everything
   const [eggless, setEggless] = useState<boolean>(false);
   const [quantity, setQuantity] = useState(1);
   const [tab, setTab] = useState<"description" | "ingredients">("description");
@@ -133,8 +133,8 @@ export default function ProductDetailClient({
             </div>
           )}
 
-          {/* Egg Preference Dropdown */}
-          {product.egglessAvailable && (
+          {/* Egg Preference Dropdown (Only available for Cakes category) */}
+          {product.category === "cakes" && product.egglessAvailable && (
             <div className="mb-6 max-w-xs">
               <label htmlFor="egg-preference-select" className="block text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">
                 Cake Preference

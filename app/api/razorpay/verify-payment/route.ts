@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { verifyPaymentSignature } from "@/lib/razorpay";
 import { orderStore } from "@/lib/orders";
+import { sendOrderConfirmationEmail } from "@/lib/email";
 import type { ApiError } from "@/types";
 
 export const runtime = "nodejs";
@@ -82,6 +83,13 @@ export async function POST(req: NextRequest) {
       orderStatus: "PROCESSING",
       razorpayPaymentId: razorpay_payment_id,
     });
+
+    if (updated) {
+      // Trigger automatic receipt & invoice email
+      sendOrderConfirmationEmail(updated).catch((emailErr) => {
+        console.error("⚠️ [Email Trigger Notice] Failed to send order receipt:", emailErr);
+      });
+    }
 
     return NextResponse.json({
       success: true,

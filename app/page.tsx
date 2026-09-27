@@ -1,6 +1,8 @@
 import Link from "next/link";
-import { getProductsByCategory, PRODUCTS_DATA } from "@/lib/products";
+import { getDbProducts, getProductsByCategory, PRODUCTS_DATA } from "@/lib/products";
 import ProductCard from "@/components/products/ProductCard";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Lollipop Cake Shop - Handcrafted Artisanal Cakes & Pastries",
@@ -128,7 +130,9 @@ const REVIEWS = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const allProducts = await getDbProducts();
+
   return (
     <div className="relative overflow-x-hidden min-h-screen bg-[#FFF9F5]/70">
       {/* ───────────────────────────────────────────────────────────────
@@ -351,15 +355,15 @@ export default function HomePage() {
       <section className="py-10 bg-[#FAF3EC]/40 space-y-16 sm:space-y-20">
         {CATEGORY_SHOWCASES.map((sec) => {
           // Retrieve up to 4 items from the catalog for each category section
-          let items = getProductsByCategory(sec.slug);
+          let items = getProductsByCategory(sec.slug, allProducts);
           if (sec.id === "custom-cake") {
-            items = PRODUCTS_DATA.filter((p) => p.badge || p.subCategory?.includes("Special")).slice(0, 4);
+            items = allProducts.filter((p) => p.badge || p.subCategory?.includes("Special")).slice(0, 4);
           } else {
             items = items.slice(0, 4);
           }
 
           if (items.length === 0) {
-            items = PRODUCTS_DATA.slice(0, 4);
+            items = allProducts.slice(0, 4);
           }
 
           return (

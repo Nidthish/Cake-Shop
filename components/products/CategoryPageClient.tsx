@@ -112,9 +112,23 @@ export default function CategoryPageClient({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {filtered.length === 0 ? (
-          <p className="text-center text-[#5C524E] py-20 font-medium">
-            No products match your search. Try a different keyword.
-          </p>
+          <div className="text-center py-16 px-6 bg-[#FAF5EE] rounded-3xl border border-[#E6DBCE] max-w-lg mx-auto shadow-sm">
+            <span className="text-4xl mb-3 block">🎂</span>
+            <h3 className="font-serif font-bold text-xl text-[#5B1E38] mb-2">
+              No Items Currently in This Collection
+            </h3>
+            <p className="text-xs sm:text-sm text-[#7A6B72] mb-6 leading-relaxed">
+              We prepare custom handcrafted cakes on demand. Contact our master bakers directly on WhatsApp to design & order your custom cake!
+            </p>
+            <a
+              href="https://wa.me/919489569661?text=Hello%20Lollipop%20Cake%20Shop,%20I%20would%20like%20to%20place%20a%20custom%20cake%20order."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#25D366] text-white font-bold text-xs sm:text-sm hover:bg-[#20ba5a] transition-all shadow-md"
+            >
+              <span>💬 Custom Order via WhatsApp</span>
+            </a>
+          </div>
         ) : (
           <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {filtered.map((p) => (

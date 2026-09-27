@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProductById, getSimilarProducts, getAllProductSlugs, getCardPrice } from "@/lib/products";
+import { getDbProducts, getProductById, getSimilarProducts, getCardPrice } from "@/lib/products";
 import ProductDetailClient from "@/components/products/ProductDetailClient";
 
-export function generateStaticParams() {
-  return getAllProductSlugs().map((id) => ({ slug: id }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -13,7 +11,8 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductById(slug);
+  const allProducts = await getDbProducts();
+  const product = getProductById(slug, allProducts);
   if (!product) return { title: "Product Not Found" };
   return {
     title: product.name,
@@ -32,10 +31,11 @@ export default async function ProductDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductById(slug);
+  const allProducts = await getDbProducts();
+  const product = getProductById(slug, allProducts);
   if (!product) notFound();
 
-  const similar = getSimilarProducts(product.id, 4);
+  const similar = getSimilarProducts(product.id, 4, allProducts);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthenticatedAdmin } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -9,6 +10,11 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    }
+
     const { id } = await context.params;
     const productId = BigInt(id);
 
@@ -72,6 +78,11 @@ export async function PUT(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    }
+
     const { id } = await context.params;
     const productId = BigInt(id);
     const body = await req.json();
@@ -258,6 +269,11 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    }
+
     const { id } = await context.params;
     const productId = BigInt(id);
 

@@ -36,6 +36,40 @@ function getServingSize(weightStr: string): string {
 async function main() {
   console.log("🌱 Starting MySQL Database Seed from products-data.json...");
 
+  // Delete all offers first to avoid FK constraint issues on variant IDs
+  await prisma.productOffer.deleteMany({});
+
+  // Delete old dummy products for empty categories
+  const targetDummySlugs = ["bento-cake", "wedding-cakes", "first-birthday", "custom-cake"];
+
+  await prisma.productVariant.deleteMany({
+    where: {
+      product: {
+        OR: [
+          { category: { slug: { in: targetDummySlugs } } },
+          { slug: { contains: "bento" } },
+          { slug: { contains: "wedding" } },
+          { slug: { contains: "birthday" } },
+          { slug: { contains: "photo" } },
+        ],
+      },
+    },
+  });
+
+  await prisma.product.deleteMany({
+    where: {
+      OR: [
+        { category: { slug: { in: targetDummySlugs } } },
+        { slug: { contains: "bento" } },
+        { slug: { contains: "wedding" } },
+        { slug: { contains: "birthday" } },
+        { slug: { contains: "photo" } },
+      ],
+    },
+  });
+
+  console.log("🧹 Cleaned dummy products from bento, wedding, 1st birthday, and custom cake categories.");
+
   // 1. Group Categories
   const categoryMap = new Map<string, any>();
   for (const item of rawProducts) {
@@ -73,7 +107,7 @@ async function main() {
   let offerCount = 0;
 
   for (let idx = 0; idx < rawProducts.length; idx++) {
-    const item = rawProducts[idx];
+    const item: any = rawProducts[idx];
     const catName = item.categoryName || item.category || "Normal Flavors";
     const category = dbCategories.get(catName);
 
@@ -90,7 +124,6 @@ async function main() {
       where: { slug: productSlug },
       update: {
         name: item.name,
-        productCode,
         description: item.description || `${item.name} freshly made cake.`,
         imageName: item.image,
         badge: item.badge || null,
@@ -130,6 +163,8 @@ async function main() {
         where: { productId: product.id, name: variantName, isEggless: true },
       });
 
+      const isCakeCat = category.slug === "cakes" || catName.toLowerCase() === "cakes";
+
       const variant = await prisma.productVariant.create({
         data: {
           productId: product.id,
@@ -137,7 +172,7 @@ async function main() {
           weightValue: value,
           weightUnit: unit,
           price: v.price,
-          isEggless: true,
+          isEggless: isCakeCat,
           serves: getServingSize(variantName),
           isAvailable: true,
         },

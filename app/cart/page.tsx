@@ -84,7 +84,7 @@ export default function CartPage() {
             Your Shopping Cart
           </h1>
           <span className="bg-[#FAF0F2] text-[#962854] text-[11px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-full border border-[#962854]/30 shadow-xs">
-            ✨ Handcrafted Fresh Daily
+             Handcrafted Fresh Daily
           </span>
         </div>
 
@@ -116,7 +116,7 @@ export default function CartPage() {
           Your Shopping Cart
         </h1>
         <span className="bg-[#FAF0F2] text-[#962854] text-[11px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-full border border-[#962854]/30 shadow-xs">
-          ✨ Handcrafted Fresh Daily
+          Handcrafted Fresh Daily
         </span>
       </div>
 

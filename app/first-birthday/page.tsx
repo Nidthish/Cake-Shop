@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { getProductsByCategory } from "@/lib/products";
+import { getDbProducts, getProductsByCategory } from "@/lib/products";
 import CategoryPageClient from "@/components/products/CategoryPageClient";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "1st Birthday Milestone Cakes - Lollipop Cake Shop",
@@ -8,8 +10,9 @@ export const metadata: Metadata = {
     "Baby-friendly low-sugar smash cakes, 2-tier safari themes, and princess crown milestone cakes.",
 };
 
-export default function Page() {
-  const products = getProductsByCategory("first-birthday");
+export default async function Page() {
+  const allProducts = await getDbProducts();
+  const products = getProductsByCategory("first-birthday", allProducts);
 
   return (
     <>

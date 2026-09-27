@@ -33,13 +33,33 @@ export async function GET() {
         };
       });
 
-      const firstVariant = variants[0];
       const minPrice = variants.length > 0 ? Math.min(...variants.map((v: any) => v.price)) : 0;
+
+      const catSlug = (p.category.slug || "").toLowerCase();
+      let mainCategory = "cakes";
+      if (
+        p.productType === "SNACK" ||
+        ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug)
+      ) {
+        mainCategory = "snacks";
+      } else if (catSlug.includes("dry")) {
+        mainCategory = "dry-cakes";
+      } else if (catSlug.includes("bento")) {
+        mainCategory = "bento-cake";
+      } else if (catSlug.includes("wedding")) {
+        mainCategory = "wedding-cakes";
+      } else if (catSlug.includes("1st") || catSlug.includes("first")) {
+        mainCategory = "first-birthday";
+      } else if (catSlug.includes("custom")) {
+        mainCategory = "custom-cake";
+      }
 
       return {
         id: p.slug,
         name: p.name,
-        category: p.category.slug,
+        baseName: p.name,
+        category: mainCategory,
+        subCategory: p.category.name,
         categoryName: p.category.name,
         price: minPrice,
         minPrice,
@@ -48,9 +68,9 @@ export async function GET() {
         rating: Number(p.rating),
         reviewCount: p.reviewCount,
         badge: p.badge || undefined,
-        description: p.description || undefined,
+        description: p.description || "",
         variants,
-        egglessAvailable: true,
+        egglessAvailable: mainCategory === "cakes",
       };
     });
 

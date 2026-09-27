@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 const CONTACTS = [
   { name: "Direct Contact 1", phone: "918489324697", display: "+91 84893 24697" },
@@ -9,8 +10,11 @@ const CONTACTS = [
 ];
 
 export default function WhatsAppFloat() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  if (pathname?.startsWith("/admin")) return null;
 
   const show = () => {
     if (hideTimer.current) clearTimeout(hideTimer.current);

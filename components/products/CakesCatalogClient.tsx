@@ -159,9 +159,6 @@ export default function CakesCatalogClient({
             <span className="flex items-center gap-1.5 bg-white/20 text-white text-xs font-bold px-4 py-2 rounded-lg border border-white/30">
               Advance Orders Welcome
             </span>
-            <span className="flex items-center gap-1.5 bg-white/15 text-white text-xs font-bold px-4 py-2 rounded-lg border border-white/25">
-              Express 2-Hour Delivery
-            </span>
           </div>
         </div>
       </section>
@@ -181,6 +178,7 @@ export default function CakesCatalogClient({
                 onChange={(e) => setCurrentSearch(e.target.value)}
                 placeholder="Search Black Forest, Truffle, 0.5kg…"
                 className="w-full bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] focus:ring-2 focus:ring-[#962854]/20 rounded-lg pl-10 pr-4 py-2 text-sm font-semibold text-[#1C0D0A] outline-none transition-all placeholder-[#A89890]"
+                suppressHydrationWarning
               />
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -188,6 +186,7 @@ export default function CakesCatalogClient({
                 value={currentWeight}
                 onChange={(e) => setCurrentWeight(e.target.value)}
                 className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 sm:flex-none"
+                suppressHydrationWarning
               >
                 <option value="all">⚡ All Weights</option>
                 <option value="0.5kg">🍰 0.5 kg</option>
@@ -198,6 +197,7 @@ export default function CakesCatalogClient({
                 value={currentSort}
                 onChange={(e) => setCurrentSort(e.target.value)}
                 className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 sm:flex-none"
+                suppressHydrationWarning
               >
                 <option value="default">✨ Featured</option>
                 <option value="price-low">💰 Price: Low→High</option>
@@ -208,6 +208,7 @@ export default function CakesCatalogClient({
                 type="button"
                 onClick={resetAll}
                 className="px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-[#962854] hover:bg-[#FAF0F2] border border-[#962854]/30 rounded-lg transition-all whitespace-nowrap"
+                suppressHydrationWarning
               >
                 RESET
               </button>
@@ -223,11 +224,10 @@ export default function CakesCatalogClient({
                   key={pill.subcat}
                   type="button"
                   onClick={() => setCurrentSubCat(pill.subcat)}
-                  className={`cat-pill px-3.5 py-2 rounded-lg border transition-all whitespace-nowrap text-xs font-bold ${
-                    isActive
+                  className={`cat-pill px-3.5 py-2 rounded-lg border transition-all whitespace-nowrap text-xs font-bold ${isActive
                       ? "bg-[#962854] text-white border-[#962854] shadow-xs"
                       : "bg-[#FFF9F5] text-[#1C0D0A] border-[#D8C3B3] hover:border-[#962854] hover:bg-[#FAF0F2]"
-                  }`}
+                    }`}
                 >
                   {pill.label}{" "}
                   {pill.subcat === "all" && (

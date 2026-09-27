@@ -21,7 +21,7 @@ export default async function Page() {
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF0F2] border border-[#962854]/30 mb-3 font-sans">
             <span className="w-2 h-2 rounded-full bg-[#962854]" />
             <span className="text-xs font-bold text-[#962854] uppercase tracking-wider">
-              ✨ Artisanal Fresh Baked Daily
+               Artisanal Fresh Baked Daily
             </span>
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">

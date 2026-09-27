@@ -50,7 +50,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
         {product.badge && (
           <div className="absolute top-2 left-2 z-10 pointer-events-none">
-            <span className="bg-[#962854] text-white text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md shadow-xs">
+            <span className="bg-[#962854] text-white text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md shadow-xs font-sans">
               {product.badge}
             </span>
           </div>
@@ -59,48 +59,65 @@ export default function ProductCard({ product }: { product: Product }) {
 
       <div className="pt-2.5 px-1 flex flex-col flex-grow justify-between">
         <div>
-          <div className="flex items-center gap-1 text-[#B99A62] text-[11px] mb-1 font-sans">
-            <span className="material-symbols-outlined text-xs font-fill">star</span>
-            <span className="font-bold text-[#1C0D0A]">{product.rating}</span>
-            <span className="text-[#8C7E77]">({product.reviewCount})</span>
+          {/* SubCategory Tag */}
+          <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
+            <span className="text-[10px] font-bold text-[#962854] bg-[#FAF0F2] px-2 py-0.5 rounded-full font-sans">
+              {product.subCategory || product.categoryName || "Special"}
+            </span>
+            <div className="flex items-center gap-1 text-[#B99A62] text-[11px] font-sans">
+              <span className="material-symbols-outlined text-xs font-fill">star</span>
+              <span className="font-bold text-[#1C0D0A]">{product.rating}</span>
+              <span className="text-[#8C7E77]">({product.reviewCount})</span>
+            </div>
           </div>
 
           <Link href={`/products/${product.id}`}>
             <h3
-              className="font-sans text-sm sm:text-base font-bold text-[#1C0D0A] group-hover:text-[#962854] transition-colors leading-snug line-clamp-2 mb-1"
+              className="font-sans text-sm sm:text-base font-bold text-[#1C0D0A] group-hover:text-[#962854] transition-colors leading-snug line-clamp-2 mb-1 text-left"
               title={product.name}
             >
               {product.name}
             </h3>
           </Link>
-          <p className="text-[11px] text-[#5C524E] line-clamp-2 mb-2.5 leading-relaxed font-normal">
+          <p className="font-sans text-xs text-[#5C524E] line-clamp-2 mb-2.5 leading-relaxed font-normal text-left">
             {product.description}
           </p>
         </div>
 
-        <div className="pt-2 border-t border-[#F1E6DF] flex items-center justify-between mt-auto gap-1">
+        <div className="pt-2.5 border-t border-[#F1E6DF] flex items-center justify-between mt-auto gap-1 font-sans">
           <div className="flex items-baseline gap-1">
-            <span className="text-sm sm:text-base font-extrabold text-[#962854] font-sans">
+            <span className="text-base sm:text-lg font-extrabold text-[#962854] font-sans">
               ₹{price}
             </span>
           </div>
 
-          <button
-            onClick={handleAddToCart}
-            className={`btn-pink-cart flex items-center gap-1 text-[11px] sm:text-xs font-bold px-3 py-1.5 rounded-lg transition-all duration-200 shadow-xs hover:shadow-sm hover:scale-105 active:scale-95 ${
-              addedToast ? "bg-[#2A082C] text-white" : "bg-[#962854] text-white hover:bg-[#2A082C]"
-            }`}
-          >
-            {addedToast ? (
-              <>
-                <span className="material-symbols-outlined text-xs">check</span> Added
-              </>
-            ) : (
-              <>
-                Add <span className="material-symbols-outlined text-xs">add_shopping_cart</span>
-              </>
-            )}
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/products/${product.id}`}
+              className="text-xs font-semibold text-[#5C524E] hover:text-[#962854] flex items-center gap-0.5 transition-colors group/link font-sans"
+            >
+              View Details{" "}
+              <span className="material-symbols-outlined text-xs transition-transform group-hover/link:translate-x-0.5">
+                arrow_forward
+              </span>
+            </Link>
+            <button
+              onClick={handleAddToCart}
+              className={`add-to-cart-btn ${
+                addedToast ? "bg-[#2A082C]" : "bg-[#962854] hover:bg-[#2A082C]"
+              } text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 shadow-xs hover:shadow-sm hover:scale-105 active:scale-95 font-sans`}
+            >
+              {addedToast ? (
+                <>
+                  <span className="material-symbols-outlined text-xs">check</span> Added
+                </>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined text-xs">shopping_bag</span> Add
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getAuthenticatedAdmin } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
 // GET /api/admin/orders — Fetch all orders with items & payment details from MySQL
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    }
+
     const orders = await prisma.order.findMany({
       include: {
         items: true,
@@ -59,6 +65,11 @@ export async function GET() {
 // PUT /api/admin/orders — Update status of an order
 export async function PUT(req: NextRequest) {
   try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin) {
+      return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
+    }
+
     const body = await req.json();
     const { orderId, status, paymentStatus } = body;
 

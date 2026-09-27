@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useCart } from "@/components/cart/CartProvider";
 import { PRODUCTS_DATA, getCardPrice } from "@/lib/products";
@@ -31,11 +31,16 @@ const DRAWER_LINKS = [
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
   const { itemCount } = useCart();
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   useEffect(() => {
     document.body.style.overflow = drawerOpen || searchOpen ? "hidden" : "";
@@ -93,6 +98,7 @@ export default function Navbar() {
               className="search-toggle-btn p-2 text-[#1C0D0A] hover:text-[#962854] hover:bg-[#FAF3EC] rounded-full transition-colors"
               aria-label="Search"
               onClick={() => setSearchOpen(true)}
+              suppressHydrationWarning
             >
               <span className="material-symbols-outlined text-2xl">search</span>
             </button>
@@ -112,6 +118,7 @@ export default function Navbar() {
               className="mobile-menu-toggle lg:hidden p-2 text-[#1C0D0A] hover:bg-[#FAF3EC] rounded-full transition-colors"
               aria-label="Open Menu"
               onClick={() => setDrawerOpen(true)}
+              suppressHydrationWarning
             >
               <span className="material-symbols-outlined text-2xl">menu</span>
             </button>
@@ -140,6 +147,7 @@ export default function Navbar() {
               className="p-2 text-[#5C524E] hover:text-[#1C0D0A] rounded-full hover:bg-[#FAF3EC] transition-colors"
               onClick={() => setDrawerOpen(false)}
               aria-label="Close menu"
+              suppressHydrationWarning
             >
               <span className="material-symbols-outlined">close</span>
             </button>
@@ -188,11 +196,13 @@ export default function Navbar() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search Belgian Truffle, Bento Cakes, Pastries..."
                 className="w-full bg-transparent text-base text-[#1C0D0A] font-medium focus:outline-none placeholder-[#5C524E]"
+                suppressHydrationWarning
               />
               <button
                 className="p-2 text-[#5C524E] hover:text-[#1C0D0A]"
                 onClick={() => setSearchOpen(false)}
                 aria-label="Close search"
+                suppressHydrationWarning
               >
                 <span className="material-symbols-outlined">close</span>
               </button>

@@ -73,7 +73,7 @@ export async function getDbProducts(): Promise<Product[]> {
         badge: p.badge || undefined,
         description: p.description || "",
         variants,
-        egglessAvailable: true,
+        egglessAvailable: mainCategory === "cakes",
       };
     });
   } catch (error) {
@@ -111,20 +111,21 @@ export function is1kgFreeOfferVariant(
   );
 }
 
-export function getProductsByCategory(cat?: string | null): Product[] {
+export function getProductsByCategory(cat?: string | null, customSource?: Product[]): Product[] {
+  const source = customSource && customSource.length > 0 ? customSource : PRODUCTS_DATA;
   if (!cat || cat === "all" || cat.toLowerCase().trim() === "all") {
-    return PRODUCTS_DATA;
+    return source;
   }
 
   const query = cat.toLowerCase().trim();
   const queryClean = query.replace(/[^a-z0-9]/g, "");
 
-  const strictMatches = PRODUCTS_DATA.filter(
+  const strictMatches = source.filter(
     (p) => (p.category || "").toLowerCase().trim() === query
   );
   if (strictMatches.length > 0) return strictMatches;
 
-  return PRODUCTS_DATA.filter((p) => {
+  return source.filter((p) => {
     const pCategory = (p.category || "").toLowerCase().trim();
     const pSubCategory = (p.subCategory || "").toLowerCase().trim();
     const pCategoryName = (p.categoryName || "").toLowerCase().trim();
@@ -197,22 +198,23 @@ export function getProductsByCategory(cat?: string | null): Product[] {
   });
 }
 
-export function getProductById(id?: string | null): Product | null {
+export function getProductById(id?: string | null, customSource?: Product[]): Product | null {
   if (!id || !id.trim()) return null;
   const clean = id.toLowerCase().trim();
+  const source = customSource && customSource.length > 0 ? customSource : PRODUCTS_DATA;
 
-  let found = PRODUCTS_DATA.find(
+  let found = source.find(
     (p) => p.id === clean || p.id.toLowerCase() === clean
   );
   if (found) return found;
 
-  found = PRODUCTS_DATA.find(
+  found = source.find(
     (p) =>
       p.id.toLowerCase().endsWith(clean) || clean.endsWith(p.id.toLowerCase())
   );
   if (found) return found;
 
-  found = PRODUCTS_DATA.find(
+  found = source.find(
     (p) => slugify(p.name).includes(clean) || clean.includes(slugify(p.name))
   );
   if (found) return found;
@@ -220,24 +222,25 @@ export function getProductById(id?: string | null): Product | null {
   return null;
 }
 
-export function getSimilarProducts(currentId: string, limit = 4): Product[] {
-  const current = getProductById(currentId);
-  if (!current) return PRODUCTS_DATA.slice(0, limit);
+export function getSimilarProducts(currentId: string, limit = 4, customSource?: Product[]): Product[] {
+  const source = customSource && customSource.length > 0 ? customSource : PRODUCTS_DATA;
+  const current = getProductById(currentId, source);
+  if (!current) return source.slice(0, limit);
 
   const cat = current.category;
   const sub = current.subCategory;
 
-  let matches = PRODUCTS_DATA.filter(
+  let matches = source.filter(
     (p) => p.id !== current.id && p.subCategory === sub
   );
   if (matches.length < limit) {
-    const catMatches = PRODUCTS_DATA.filter(
+    const catMatches = source.filter(
       (p) => p.id !== current.id && p.category === cat && !matches.includes(p)
     );
     matches = matches.concat(catMatches);
   }
   if (matches.length < limit) {
-    const allOther = PRODUCTS_DATA.filter(
+    const allOther = source.filter(
       (p) => p.id !== current.id && !matches.includes(p)
     );
     matches = matches.concat(allOther);
@@ -245,10 +248,12 @@ export function getSimilarProducts(currentId: string, limit = 4): Product[] {
   return matches.slice(0, limit);
 }
 
-export function getFeaturedProducts(limit = 4): Product[] {
-  return PRODUCTS_DATA.filter((p) => p.category === "cakes").slice(0, limit);
+export function getFeaturedProducts(limit = 4, customSource?: Product[]): Product[] {
+  const source = customSource && customSource.length > 0 ? customSource : PRODUCTS_DATA;
+  return source.filter((p) => p.category === "cakes").slice(0, limit);
 }
 
-export function getAllProductSlugs(): string[] {
-  return PRODUCTS_DATA.map((p) => p.id);
+export function getAllProductSlugs(customSource?: Product[]): string[] {
+  const source = customSource && customSource.length > 0 ? customSource : PRODUCTS_DATA;
+  return source.map((p) => p.id);
 }
