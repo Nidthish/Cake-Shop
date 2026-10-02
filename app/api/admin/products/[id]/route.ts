@@ -220,6 +220,9 @@ export async function PUT(
       let buy1kgVariantId: bigint | null = null;
       let free05kgVariantId: bigint | null = null;
 
+      const buyVariantName = body.offerBuyVariant || "1kg";
+      const freeVariantName = body.offerFreeVariant || "0.5kg";
+
       for (const v of variants) {
         const variant = await prisma.productVariant.create({
           data: {
@@ -234,21 +237,22 @@ export async function PUT(
           },
         });
 
-        if (v.name.includes("1kg") || v.isOffer1kgFree) {
-          buy1kgVariantId = variant.id;
+        if (v.name.includes(buyVariantName) || v.name.includes("1kg") || v.isOffer1kgFree) {
+          if (!buy1kgVariantId) buy1kgVariantId = variant.id;
         }
-        if (v.name.includes("0.5kg") || v.name.includes("500g")) {
-          free05kgVariantId = variant.id;
+        if (v.name.includes(freeVariantName) || v.name.includes("0.5kg") || v.name.includes("500g")) {
+          if (!free05kgVariantId) free05kgVariantId = variant.id;
         }
       }
 
-      // 4. Re-create product offer if requested on any variant
-      if (hasAnyOffer && buy1kgVariantId && free05kgVariantId) {
+      // 4. Re-create product offer if requested on any variant or hasOffer is true
+      const shouldCreateOffer = (hasAnyOffer || Boolean(body.hasOffer)) && buy1kgVariantId && free05kgVariantId;
+      if (shouldCreateOffer) {
         await prisma.productOffer.create({
           data: {
             productId,
-            buyVariantId: buy1kgVariantId,
-            freeVariantId: free05kgVariantId,
+            buyVariantId: buy1kgVariantId!,
+            freeVariantId: free05kgVariantId!,
             buyQuantity: 1,
             freeQuantity: 1,
             isActive: true,

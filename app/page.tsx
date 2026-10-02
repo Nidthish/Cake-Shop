@@ -108,25 +108,32 @@ const CATEGORY_SHOWCASES = [
 
 const REVIEWS = [
   {
-    name: "Ananya Patel",
-    location: "Mumbai",
-    rating: 5,
-    text: "The Belgian Dark Chocolate Truffle was the absolute highlight of my daughter's 1st birthday! So soft, rich, and delicious.",
-    initial: "A",
-  },
-  {
-    name: "Rohan Mehta",
-    location: "Pune",
-    rating: 5,
-    text: "The Belgian Chocolate Truffle Cake with the silky rich ganache was insane! Everyone asked me where I ordered it from.",
-    initial: "R",
-  },
-  {
-    name: "Siddharth Kapoor",
-    location: "Mumbai",
-    rating: 5,
-    text: "Ordered a 3-tier custom wedding cake with gold leaf detailing. It looked like pure art and tasted divine!",
+    name: "Shirly Joeshirly",
+    location: "",
+    rating: 4.5,
+    text: "Ordered for my daughter’s birthday. Loved their service, on-time delivery and the cake was fantastic. The taste was really awesome. My kid and whole family enjoyed the flavour and finishing of the cake.",
     initial: "S",
+  },
+  {
+    name: "Hajira Jagan",
+    location: "",
+    rating: 5,
+    text: "The strawberry pinata choco truffle cake was very tasty and worth the amount. Comfortable payment option and correct-time delivery.",
+    initial: "H",
+  },
+  {
+    name: "Christelle Mendoza",
+    location: "Philippines",
+    rating: 4.5,
+    text: "Pastry is very tasty and service is recommendable. I’m ordering all the way from Philippines for my father-in-law. Special thanks to Guru.",
+    initial: "C",
+  },
+  {
+    name: "Ramya",
+    location: "",
+    rating: 5,
+    text: "Their food is not only tasty, but the staff is also incredibly friendly and welcoming. I was blown away by the good quantity of food they offer.",
+    initial: "R",
   },
 ];
 
@@ -145,7 +152,7 @@ export default async function HomePage() {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 shadow-sm">
               <span className="material-symbols-outlined text-sm text-[#962854]">auto_awesome</span>
               <span className="text-xs font-bold text-[#1C0D0A] uppercase tracking-wider">
-                ✨ PREMIUM ARTISANAL BAKERY
+                 PREMIUM ARTISANAL BAKERY
               </span>
             </div>
 
@@ -245,7 +252,7 @@ export default async function HomePage() {
                   workspace_premium
                 </span>
                 <span className="text-[11px] sm:text-xs font-bold text-[#1C0D0A] tracking-wide">
-                  ✨ Official Signature Badge
+                  Official Signature Badge
                 </span>
               </div>
 
@@ -408,31 +415,45 @@ export default async function HomePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
             {REVIEWS.map((rev, idx) => (
               <div
                 key={idx}
-                className="bg-white border border-[#F1E6DF] rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between relative"
+                className="bg-white border border-[#F1E6DF] rounded-3xl p-5 lg:p-6 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between relative h-full"
               >
-                <div className="mb-6">
-                  <div className="flex items-center gap-1 text-[#E6C184] mb-4">
-                    {Array.from({ length: rev.rating }).map((_, i) => (
-                      <span key={i} className="material-symbols-outlined text-lg fill-current">
-                        star
-                      </span>
-                    ))}
+                <div className="mb-4">
+                  <div className="flex items-center gap-1 mb-3">
+                    {Array.from({ length: 5 }).map((_, i) => {
+                      const starValue = i + 1;
+                      const isFull = rev.rating >= starValue;
+                      const isHalf = !isFull && rev.rating >= starValue - 0.5;
+                      return (
+                        <span
+                          key={i}
+                          className="material-symbols-outlined text-lg sm:text-xl text-[#D97706]"
+                          style={{
+                            fontVariationSettings: isFull || isHalf ? "'FILL' 1, 'wght' 400" : "'FILL' 0, 'wght' 400",
+                            opacity: isFull || isHalf ? 1 : 0.35,
+                          }}
+                        >
+                          {isHalf ? "star_half" : "star"}
+                        </span>
+                      );
+                    })}
+                    <span className="text-xs font-bold text-[#962854] ml-1.5">{rev.rating.toFixed(1)}</span>
                   </div>
-                  <p className="text-sm text-[#4A3E39] italic leading-relaxed font-sans">&ldquo;{rev.text}&rdquo;</p>
+                  <p className="text-xs sm:text-sm text-[#4A3E39] italic leading-relaxed font-sans">&ldquo;{rev.text}&rdquo;</p>
                 </div>
 
                 <div className="flex items-center gap-3 pt-4 border-t border-[#F1E6DF]">
-                  <div className="w-10 h-10 rounded-full bg-[#962854] text-white font-bold font-display flex items-center justify-center text-base shadow-md">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#962854] text-white font-bold font-display flex items-center justify-center text-sm sm:text-base shadow-md flex-shrink-0">
                     {rev.initial}
                   </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-[#1C0D0A]">{rev.name}</h4>
-                    <span className="text-[11px] text-[#9C8B84] font-medium flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-[#1B5E20]"></span> Verified Buyer • {rev.location}
+                  <div className="min-w-0">
+                    <h4 className="font-bold text-xs sm:text-sm text-[#1C0D0A] truncate">{rev.name}</h4>
+                    <span className="text-[10px] sm:text-[11px] text-[#9C8B84] font-medium flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-[#1B5E20] flex-shrink-0"></span>
+                      <span>{rev.location ? `Verified Buyer • ${rev.location}` : "Verified Buyer"}</span>
                     </span>
                   </div>
                 </div>

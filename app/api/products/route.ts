@@ -29,7 +29,8 @@ export async function GET() {
           weight: v.name,
           price: Number(v.price),
           originalPrice: Number(v.price),
-          offer: hasOffer ? "Buy 1kg Get 1/2kg Free (Offer)" : undefined,
+          offer: hasOffer ? (p.badge || "Buy 1kg Get 1/2kg Free (Offer)") : undefined,
+          isEggless: v.isEggless,
         };
       });
 
@@ -54,6 +55,9 @@ export async function GET() {
         mainCategory = "custom-cake";
       }
 
+      const hasEgglessVariant = p.variants.some((v: any) => v.isEggless);
+      const isCakeCategory = ["cakes", "dry-cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
+
       return {
         id: p.slug,
         name: p.name,
@@ -70,7 +74,8 @@ export async function GET() {
         badge: p.badge || undefined,
         description: p.description || "",
         variants,
-        egglessAvailable: mainCategory === "cakes",
+        isEggless: hasEgglessVariant,
+        egglessAvailable: isCakeCategory || hasEgglessVariant,
       };
     });
 

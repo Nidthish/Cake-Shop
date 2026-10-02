@@ -97,6 +97,10 @@ const createProductSchema = z.object({
   description: z.string().optional(),
   imageName: z.string().optional(),
   badge: z.string().optional(),
+  hasOffer: z.boolean().optional().default(false),
+  offerBadge: z.string().optional(),
+  offerBuyVariant: z.string().optional(),
+  offerFreeVariant: z.string().optional(),
   productType: z.enum(["CAKE", "SNACK"]).default("CAKE"),
   isActive: z.boolean().default(true),
   variants: z
@@ -210,6 +214,9 @@ export async function POST(req: NextRequest) {
     let buy1kgVariantId: bigint | null = null;
     let free05kgVariantId: bigint | null = null;
 
+    const buyVariantName = data.offerBuyVariant || "1kg";
+    const freeVariantName = data.offerFreeVariant || "0.5kg";
+
     for (const v of data.variants) {
       const variant = await prisma.productVariant.create({
         data: {
@@ -224,21 +231,22 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      if (v.name.includes("1kg") || v.isOffer1kgFree) {
-        buy1kgVariantId = variant.id;
+      if (v.name.includes(buyVariantName) || v.name.includes("1kg") || v.isOffer1kgFree) {
+        if (!buy1kgVariantId) buy1kgVariantId = variant.id;
       }
-      if (v.name.includes("0.5kg") || v.name.includes("500g")) {
-        free05kgVariantId = variant.id;
+      if (v.name.includes(freeVariantName) || v.name.includes("0.5kg") || v.name.includes("500g")) {
+        if (!free05kgVariantId) free05kgVariantId = variant.id;
       }
     }
 
-    // Create product offer if requested on any variant
-    if (hasAnyOffer && buy1kgVariantId && free05kgVariantId) {
+    // Create product offer if requested on any variant or hasOffer is true
+    const shouldCreateOffer = (hasAnyOffer || Boolean(data.hasOffer)) && buy1kgVariantId && free05kgVariantId;
+    if (shouldCreateOffer) {
       await prisma.productOffer.create({
         data: {
           productId: newProduct.id,
-          buyVariantId: buy1kgVariantId,
-          freeVariantId: free05kgVariantId,
+          buyVariantId: buy1kgVariantId!,
+          freeVariantId: free05kgVariantId!,
           buyQuantity: 1,
           freeQuantity: 1,
           isActive: true,

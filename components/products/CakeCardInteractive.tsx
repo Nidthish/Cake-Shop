@@ -16,7 +16,9 @@ export default function CakeCardInteractive({
 }) {
   const { addItem } = useCart();
   const [selectedWeightIdx, setSelectedWeightIdx] = useState(0);
-  const [eggPreference, setEggPreference] = useState<"egg" | "eggless">("egg");
+  const [eggPreference, setEggPreference] = useState<"egg" | "eggless">(
+    product.isEggless !== undefined ? (product.isEggless ? "eggless" : "egg") : "eggless"
+  );
   const [isAdded, setIsAdded] = useState(false);
 
   const variants =
@@ -147,8 +149,8 @@ export default function CakeCardInteractive({
 
         <div className="flex-grow" />
 
-        {/* Egg Preference Section (Only for Cakes category) */}
-        {product.category === "cakes" && product.egglessAvailable !== false && (
+        {/* Egg Preference Section (Available for all cake categories) */}
+        {product.egglessAvailable !== false && (
           <div className="mt-2 font-sans">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-[#5C524E] mb-1.5 text-left font-sans">
               Egg Preference

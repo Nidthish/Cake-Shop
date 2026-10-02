@@ -7,6 +7,7 @@ export interface ProductVariant {
   price: number;
   originalPrice?: number;
   offer?: string;
+  isEggless?: boolean;
 }
 
 export interface Product {
@@ -27,6 +28,7 @@ export interface Product {
   variants: ProductVariant[];
   ingredients?: string[];
   egglessAvailable?: boolean;
+  isEggless?: boolean;
 }
 
 export interface CartItem {

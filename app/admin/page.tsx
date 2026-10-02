@@ -132,6 +132,12 @@ export default function AdminPage() {
     { name: "1kg", price: 850, weightValue: 1.0, weightUnit: "kg", isEggless: true, serves: "8-10 Servings", isOffer1kgFree: false },
   ]);
 
+  // Special Offer Form State
+  const [hasOffer, setHasOffer] = useState<boolean>(false);
+  const [offerBadge, setOfferBadge] = useState<string>("1kg Free Offer");
+  const [offerBuyVariant, setOfferBuyVariant] = useState<string>("1kg");
+  const [offerFreeVariant, setOfferFreeVariant] = useState<string>("0.5kg");
+
   // Create Admin User Modal State
   const [showUserModal, setShowUserModal] = useState<boolean>(false);
   const [newAdminName, setNewAdminName] = useState<string>("");
@@ -343,6 +349,10 @@ export default function AdminPage() {
     setDescription("");
     setImageName("signature.cake.1");
     setBadge("");
+    setHasOffer(false);
+    setOfferBadge("1kg Free Offer");
+    setOfferBuyVariant("1kg");
+    setOfferFreeVariant("0.5kg");
     setVariants([
       { name: "0.5kg", price: 450, weightValue: 0.5, weightUnit: "kg", isEggless: true, serves: "4-6 Servings", isOffer1kgFree: false },
       { name: "1kg", price: 850, weightValue: 1.0, weightUnit: "kg", isEggless: true, serves: "8-10 Servings", isOffer1kgFree: false },
@@ -358,6 +368,19 @@ export default function AdminPage() {
     setDescription(p.description || "");
     setImageName(p.imageName || "signature.cake.1");
     setBadge(p.badge || "");
+    
+    const activeOffer = p.offers?.find((o) => o.isActive);
+    const isOffer = Boolean(activeOffer || p.isOfferProduct || (p.badge || "").includes("1kg Free") || (p.badge || "").includes("Offer"));
+    setHasOffer(isOffer);
+    setOfferBadge(p.badge || "1kg Free Offer");
+
+    if (p.variants && p.variants.length > 0) {
+      const buyVar = p.variants.find((v) => v.name.includes("1kg") || v.isOffer1kgFree) || p.variants[0];
+      const freeVar = p.variants.find((v) => v.name.includes("0.5kg") || v.name.includes("500g")) || p.variants[0];
+      setOfferBuyVariant(buyVar.name);
+      setOfferFreeVariant(freeVar.name);
+    }
+
     setVariants(
       p.variants.map((v) => ({
         id: v.id,
@@ -408,16 +431,25 @@ export default function AdminPage() {
     e.preventDefault();
     setSaving(true);
     try {
+      const updatedVariants = variants.map((v) => ({
+        ...v,
+        isOffer1kgFree: hasOffer && v.name.includes(offerBuyVariant),
+      }));
+
       const payload = {
         name,
         categorySlug,
         subCategory: categorySlug === "cakes" && subCategory === "__NEW__" ? customSubCategory : subCategory,
         description,
         imageName,
-        badge,
+        badge: hasOffer ? (offerBadge || "1kg Free Offer") : badge,
+        hasOffer,
+        offerBadge: hasOffer ? (offerBadge || "1kg Free Offer") : "",
+        offerBuyVariant,
+        offerFreeVariant,
         productType: categorySlug === "snacks" ? "SNACK" : "CAKE",
         isActive: true,
-        variants,
+        variants: updatedVariants,
       };
 
       const url = editingProduct ? `/api/admin/products/${editingProduct.id}` : "/api/admin/products";
@@ -1231,6 +1263,75 @@ export default function AdminPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Special Offers & Extra Weight Section */}
+              <div className="border border-[#E6C184]/60 rounded-xl p-3 bg-[#FAF0F2] space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="enable-product-offer"
+                      checked={hasOffer}
+                      onChange={(e) => setHasOffer(e.target.checked)}
+                      className="w-4 h-4 text-[#802B52] rounded focus:ring-[#802B52] cursor-pointer"
+                    />
+                    <label htmlFor="enable-product-offer" className="font-bold text-[#802B52] uppercase cursor-pointer">
+                      🎁 Enable Special Offer (e.g. Buy 1kg Get 0.5kg Free)
+                    </label>
+                  </div>
+                </div>
+
+                {hasOffer && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <div>
+                      <label className="block text-[11px] font-bold text-[#5B1E38] uppercase mb-1">
+                        Offer Badge / Title
+                      </label>
+                      <input
+                        type="text"
+                        value={offerBadge}
+                        onChange={(e) => setOfferBadge(e.target.value)}
+                        placeholder="e.g. 1kg Free Offer"
+                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded bg-white text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-[#5B1E38] uppercase mb-1">
+                        Required Buy Variant
+                      </label>
+                      <select
+                        value={offerBuyVariant}
+                        onChange={(e) => setOfferBuyVariant(e.target.value)}
+                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded bg-white text-xs"
+                      >
+                        {variants.map((v, i) => (
+                          <option key={i} value={v.name}>
+                            {v.name} (₹{v.price})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-[#5B1E38] uppercase mb-1">
+                        Free Bonus Extra Weight
+                      </label>
+                      <select
+                        value={offerFreeVariant}
+                        onChange={(e) => setOfferFreeVariant(e.target.value)}
+                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded bg-white text-xs"
+                      >
+                        {variants.map((v, i) => (
+                          <option key={i} value={v.name}>
+                            {v.name} (Free Extra)
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="pt-2 flex justify-end gap-2">
