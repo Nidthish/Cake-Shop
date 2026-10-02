@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "Since 2019, Lollipop The Cake Shop has been making good-quality cakes affordable for Trichy. Our story, our two branches and our Times of India feature.",
 };
 
-const TOI_ARTICLE_URL = "https://timesofindia.indiatimes.com";
+const TOI_ARTICLE_URL = "https://timesofindia.indiatimes.com/city/trichy/home-bakers-in-trichy-see-rising-demand-for-custom-cakes/amp_articleshow/116636146.cms";
 
 const FAQS = [
   {
@@ -16,16 +16,28 @@ const FAQS = [
     a: "Yes. Our cakes are prepared with careful attention to freshness, flavour and presentation, and custom orders are baked after you place them.",
   },
   {
-    q: "Can I customise a cake design?",
-    a: "Absolutely. Use our Custom Cake Studio to upload your reference picture and share the details.",
+    q: "Can I customise a cake design at Lollipop The Cake Shop?",
+    a: "Yes, you can order a customised cake from Lollipop The Cake Shop! Use our Custom Cake Studio to upload your reference picture and share the details.",
     linkText: "Custom Cake Studio",
     linkUrl: "/custom-cake",
   },
   {
-    q: "Where are you located?",
-    a: "We have two branches in Trichy. See the map above for addresses and directions.",
+    q: "Does Lollipop The Cake Shop in Trichy provide vegan cakes?",
+    a: "You can get in touch with Lollipop The Cake Shop during our working hours (Monday to Sunday, 8:00 AM – 10:00 PM) to check for custom vegan cake availability.",
+  },
+  {
+    q: "How are cakes stored in shops?",
+    a: "The cakes in the shops are stored in temperature-controlled refrigerators for them to last longer and taste good.",
+  },
+  {
+    q: "Where are you located in Trichy?",
+    a: "We have two branches in Trichy (Branch 1: Sanjeevi Nagar & Branch 2: Andar Veedhi). See the map above for complete addresses and directions.",
     linkText: "map above",
     linkUrl: "#branches",
+  },
+  {
+    q: "How can I contact Lollipop The Cake Shop for enquiries?",
+    a: "You can contact Lollipop The Cake Shop directly at +91 96558 88829 or through the contact details available above for all enquiries.",
   },
   {
     q: "What payment methods do you accept?",

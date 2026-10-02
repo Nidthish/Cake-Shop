@@ -13,39 +13,63 @@ export const metadata = {
 const OCCASIONS = [
   {
     id: "first-birthday",
-    title: "1st Birthday Smash",
-    icon: "child_care",
+    badge: "Milestone",
+    title: "1st Birthday\nSmash",
     tagline: "Pure & Low Sugar",
     desc: "Crafted tenderly with organic, low-sugar ingredients perfect for baby's first celebration.",
+    image: "/images/asserts/1st_birthdaycake.png",
     href: "/first-birthday",
-    badge: "Milestone",
+    iconType: "cake",
+    doodle: "sparkle",
+    doodleClass: "right-[43%] top-[24%]",
+    isPrimary: true,
+    archClass: "right-2 top-7 bottom-12 w-[46%] bg-[#FAF0EB]",
+    imageContainerClass: "right-0 top-7 bottom-12 w-[48%]",
   },
   {
     id: "wedding",
-    title: "Wedding Centerpieces",
-    icon: "church",
+    badge: "Luxury",
+    title: "Wedding\nCenterpieces",
     tagline: "Multi-tiered Luxury",
     desc: "Bespoke tier architecture decorated with edible gold leaf and delicate sugar flowers.",
+    image: "/images/asserts/weddingcake.png",
     href: "/wedding-cakes",
-    badge: "Luxury",
+    iconType: "rings",
+    doodle: null,
+    doodleClass: "",
+    isPrimary: false,
+    archClass: "right-2 top-4 bottom-12 w-[45%] bg-[#F7ECE4]",
+    imageContainerClass: "right-0 top-4 bottom-12 w-[47%]",
   },
   {
     id: "custom",
-    title: "Custom 3D Studio",
-    icon: "auto_awesome",
+    badge: "Personalized",
+    title: "Custom 3D\nStudio",
     tagline: "Bespoke Custom Design",
     desc: "You imagine it, our master artisans bring your dream cake concept to sweet reality.",
+    image: "/images/asserts/customizecake.png",
     href: "/custom-cake",
-    badge: "Personalized",
+    iconType: "sparkles",
+    doodle: "sparkle",
+    doodleClass: "right-[43%] top-[26%]",
+    isPrimary: false,
+    archClass: "right-2 top-7 bottom-12 w-[46%] bg-[#FAF0EB]",
+    imageContainerClass: "right-0 top-7 bottom-12 w-[48%]",
   },
   {
     id: "bento",
-    title: "Korean Bento Box",
-    icon: "takeout_dining",
+    badge: "Trending",
+    title: "Korean Bento\nBox",
     tagline: "Cute 300g Mini Treats",
     desc: "Adorable mini cakes packed in eco-friendly minimalist bento boxes with wooden cutlery.",
+    image: "/images/asserts/betocake.png",
     href: "/bento-cake",
-    badge: "Trending",
+    iconType: "gift",
+    doodle: "heart",
+    doodleClass: "right-4 top-5",
+    isPrimary: false,
+    archClass: "right-2 top-7 bottom-12 w-[46%] bg-[#F9ECE4]",
+    imageContainerClass: "right-0 top-7 bottom-12 w-[48%]",
   },
 ];
 
@@ -320,34 +344,117 @@ export default async function HomePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {OCCASIONS.map((occ) => (
               <Link
                 key={occ.id}
                 href={occ.href}
-                className="celebration-card p-6 flex flex-col justify-between group hover:border-[#962854] transition-all"
+                className={`group relative bg-white rounded-[26px] p-5 sm:p-6 border transition-all duration-300 flex flex-col justify-between overflow-hidden h-[310px] ${
+                  occ.isPrimary
+                    ? "border-[#F0C2CE] shadow-[0_8px_25px_rgba(150,40,84,0.08)] hover:shadow-xl hover:-translate-y-1"
+                    : "border-[#F1E6DF] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-[#F0C2CE] hover:-translate-y-1"
+                }`}
               >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#FAF3EC] border border-[#E6C184]/40 flex items-center justify-center text-[#962854] group-hover:bg-[#962854] group-hover:text-white transition-colors">
-                      <span className="material-symbols-outlined text-2xl">{occ.icon}</span>
-                    </div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-[#FAF3EC] text-[#962854] px-2.5 py-1 rounded-full border border-[#E6C184]/40">
-                      {occ.badge}
-                    </span>
-                  </div>
+                {/* Arch Backdrop */}
+                <div
+                  className={`absolute rounded-t-full rounded-b-3xl pointer-events-none transition-transform duration-500 group-hover:scale-105 ${occ.archClass}`}
+                />
 
-                  <h3 className="font-display font-bold text-xl text-[#1C0D0A] mb-1 group-hover:text-[#962854] transition-colors">
-                    {occ.title}
-                  </h3>
-                  <span className="text-xs font-semibold text-[#962854] block mb-2">{occ.tagline}</span>
-                  <p className="text-xs text-[#5C524E] leading-relaxed mb-6">{occ.desc}</p>
+                {/* Doodle accents */}
+                {occ.doodle === "sparkle" && (
+                  <div className={`absolute pointer-events-none text-[#BA9684] ${occ.doodleClass}`}>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                      <path d="M5 16L9 12" />
+                      <path d="M11 18L12 11" />
+                      <path d="M18 15L14 10" />
+                    </svg>
+                  </div>
+                )}
+                {occ.doodle === "heart" && (
+                  <div className={`absolute pointer-events-none z-10 text-[#9A7067] ${occ.doodleClass}`}>
+                    <svg className="w-6 h-6" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 10L9 12" />
+                      <path d="M8 6L11 9" />
+                      <path d="M21 9C19 6 15 7 15 10C15 7 11 6 9 9C6.5 12.8 15 22 15 22C15 22 23.5 12.8 21 9Z" transform="rotate(12 15 15)" />
+                    </svg>
+                  </div>
+                )}
+
+                {/* Cake Image */}
+                <div className={`absolute flex items-center justify-center p-1 pointer-events-none ${occ.imageContainerClass}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={occ.image}
+                    alt={occ.title.replace("\n", " ")}
+                    className="max-w-full max-h-full object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.08)] group-hover:scale-105 transition-transform duration-500 ease-out"
+                    loading="lazy"
+                  />
                 </div>
 
-                <div className="flex items-center gap-1 text-xs font-bold text-[#1C0D0A] group-hover:text-[#962854] transition-colors pt-3 border-t border-[#F1E6DF]">
-                  <span>EXPLORE COLLECTION</span>
-                  <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">
-                    east
+                {/* Left Content Column */}
+                <div className="relative z-10 max-w-[50%]">
+                  {/* Top-left Icon */}
+                  <div className="w-9 h-9 rounded-2xl bg-[#FAF0EE] flex items-center justify-center text-[#962854] mb-3 shadow-xs">
+                    {occ.iconType === "cake" && (
+                      <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="currentColor">
+                        <circle cx="7.5" cy="3.5" r="1.2" />
+                        <circle cx="12" cy="3" r="1.2" />
+                        <circle cx="16.5" cy="3.5" r="1.2" />
+                        <rect x="7" y="5.5" width="1" height="2" rx="0.5" />
+                        <rect x="11.5" y="5" width="1" height="2.5" rx="0.5" />
+                        <rect x="16" y="5.5" width="1" height="2" rx="0.5" />
+                        <path d="M5.5 9C5.5 8.44772 5.94772 8 6.5 8H17.5C18.0523 8 18.5 8.44772 18.5 9V12C18.5 12.5523 18.0523 13 17.5 13H6.5C5.94772 13 5.5 12.5523 5.5 12V9Z" />
+                        <path d="M4 14C4 13.4477 4.44772 13 5 13H19C19.5523 13 20 13.4477 20 14V18.5C20 19.3284 19.3284 20 18.5 20H5.5C4.67157 20 4 19.3284 4 18.5V14Z" />
+                      </svg>
+                    )}
+                    {occ.iconType === "rings" && (
+                      <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M8 2.5L9.5 4.5H6.5L8 2.5Z" fill="currentColor" strokeWidth="1.2" />
+                        <circle cx="8" cy="12.5" r="5.5" />
+                        <circle cx="15.5" cy="14" r="5" />
+                      </svg>
+                    )}
+                    {occ.iconType === "sparkles" && (
+                      <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 3C9 6.31 6.31 9 3 9C6.31 9 9 11.69 9 15C9 11.69 11.69 9 15 9C11.69 9 9 6.31 9 3Z" />
+                        <path d="M17.5 11C17.5 13.21 15.71 15 13.5 15C15.71 15 17.5 16.79 17.5 19C17.5 16.79 19.29 15 21.5 15C19.29 15 17.5 13.21 17.5 11Z" />
+                      </svg>
+                    )}
+                    {occ.iconType === "gift" && (
+                      <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9.5 6.5C8.67 6.5 8 5.83 8 5C8 4.17 8.67 3.5 9.5 3.5C10.5 3.5 11.5 4.5 12 5.5C12.5 4.5 13.5 3.5 14.5 3.5C15.33 3.5 16 4.17 16 5C16 5.83 15.33 6.5 14.5 6.5C13.5 6.5 12.5 5.5 12 5.5C11.5 5.5 10.5 6.5 9.5 6.5Z" />
+                        <path d="M4 7C4 6.45 4.45 6 5 6H19C19.55 6 20 6.45 20 7V9C20 9.55 19.55 10 19 10H5C4.45 10 4 9.55 4 9V7Z" />
+                        <path d="M5 11H10.5V20H6C5.45 20 5 19.55 5 19V11Z" />
+                        <path d="M13.5 11H19V19C19 19.55 18.55 20 18 20H13.5V11Z" />
+                      </svg>
+                    )}
+                  </div>
+
+                  <span className="text-[9.5px] font-bold uppercase tracking-[0.16em] text-[#C07887] block mb-1">
+                    {occ.badge}
+                  </span>
+                  <h3 className="font-display font-bold text-lg sm:text-[21px] text-[#1C0D0A] leading-[1.15] mb-1 whitespace-pre-line">
+                    {occ.title}
+                  </h3>
+                  <span className="text-[11px] sm:text-xs font-semibold text-[#962854] block mb-1.5">
+                    {occ.tagline}
+                  </span>
+                  <p className="text-[10.5px] text-[#5C524E] leading-relaxed line-clamp-3">
+                    {occ.desc}
+                  </p>
+                </div>
+
+                {/* Bottom Button */}
+                <div className="relative z-10 pt-2">
+                  <span
+                    className={`rounded-full px-3.5 py-1.5 text-[9.5px] font-bold tracking-wider inline-flex items-center gap-1.5 transition-all duration-300 ${
+                      occ.isPrimary
+                        ? "bg-gradient-to-r from-[#8C2346] to-[#711634] text-white shadow-md shadow-[#8C2346]/20 border border-transparent"
+                        : "border border-[#E2B8C2] text-[#8C2346] bg-transparent group-hover:bg-gradient-to-r group-hover:from-[#8C2346] group-hover:to-[#711634] group-hover:text-white group-hover:border-transparent"
+                    }`}
+                  >
+                    <span>EXPLORE COLLECTION</span>
+                    <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
                   </span>
                 </div>
               </Link>
