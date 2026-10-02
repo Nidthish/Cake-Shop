@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/crypto";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // GET /api/admin/users — Fetch all Admin & Superadmin users (SUPERADMIN only)
 export async function GET(req: NextRequest) {

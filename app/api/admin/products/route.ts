@@ -4,6 +4,7 @@ import { getAuthenticatedAdmin } from "@/lib/auth";
 import { z } from "zod";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // GET /api/admin/products — List all products with categories and variants from MySQL
 export async function GET(req: NextRequest) {
@@ -256,7 +257,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Product "${newProduct.name}" created successfully in MySQL!`,
+      message: `Product "${newProduct.name}" created successfully in Neon PostgreSQL database!`,
       productId: newProduct.id.toString(),
       slug: newProduct.slug,
     });

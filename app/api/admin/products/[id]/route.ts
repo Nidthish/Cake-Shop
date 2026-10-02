@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // GET /api/admin/products/[id] — Get single product by ID
 export async function GET(
@@ -107,7 +108,7 @@ export async function PUT(
 
       return NextResponse.json({
         success: true,
-        message: `Product sales ${updated.isActive ? "resumed" : "paused"} in MySQL database!`,
+        message: `Product sales ${updated.isActive ? "resumed" : "paused"} in Neon PostgreSQL database!`,
         product: {
           id: updated.id.toString(),
           isActive: updated.isActive,
@@ -263,7 +264,7 @@ export async function PUT(
 
     return NextResponse.json({
       success: true,
-      message: `Product "${updatedProduct.name}" updated successfully in MySQL!`,
+      message: `Product "${updatedProduct.name}" updated successfully in Neon PostgreSQL database!`,
     });
   } catch (error: any) {
     console.error("[PUT /api/admin/products/[id]] Error:", error);
@@ -296,7 +297,7 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: "Product deleted successfully from MySQL database!",
+      message: "Product deleted successfully from Neon PostgreSQL database!",
     });
   } catch (error: any) {
     console.error("[DELETE /api/admin/products/[id]] Error:", error);

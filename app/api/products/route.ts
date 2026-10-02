@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
@@ -79,7 +82,7 @@ export async function GET() {
       };
     });
 
-    return NextResponse.json({ success: true, count: formattedProducts.length, source: "MySQL", products: formattedProducts });
+    return NextResponse.json({ success: true, count: formattedProducts.length, source: "Neon-PostgreSQL", products: formattedProducts });
   } catch (error: any) {
     console.error("Database query failed:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

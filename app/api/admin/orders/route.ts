@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // GET /api/admin/orders — Fetch all orders with items & payment details from MySQL
 export async function GET(req: NextRequest) {
@@ -95,7 +96,7 @@ export async function PUT(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Order status updated successfully in MySQL!",
+      message: "Order status updated successfully in Neon PostgreSQL database!",
     });
   } catch (error: any) {
     console.error("[PUT /api/admin/orders] Error:", error);

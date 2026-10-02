@@ -6,6 +6,7 @@ import { sendOrderConfirmationEmail } from "@/lib/email";
 import type { ApiError } from "@/types";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const requestSchema = z.object({
   orderId: z.string().min(1),

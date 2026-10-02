@@ -9,8 +9,14 @@ export default function CartLineItem({ item }: { item: CartItem }) {
   return (
     <div className="flex items-center gap-4 py-5 border-b border-[#E6C184]/20">
       <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#F1E6DF] flex-shrink-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+        <img
+          src={item.image}
+          alt={item.name}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/images/hero_cake.png";
+          }}
+        />
       </div>
       <div className="flex-grow min-w-0">
         <p className="font-display font-bold text-base text-[#1C0D0A] truncate">{item.name}</p>

@@ -3,6 +3,7 @@ import { orderStore } from "@/lib/orders";
 import type { ApiError } from "@/types";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function GET(
   _req: NextRequest,

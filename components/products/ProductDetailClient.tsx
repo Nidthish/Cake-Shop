@@ -62,8 +62,14 @@ export default function ProductDetailClient({
         {/* Gallery */}
         <div>
           <div className="rounded-3xl overflow-hidden bg-[#F1E6DF] aspect-square shadow-md">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/images/hero_cake.png";
+              }}
+            />
           </div>
         </div>
 

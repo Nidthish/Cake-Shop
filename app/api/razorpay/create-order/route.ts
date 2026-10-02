@@ -6,6 +6,7 @@ import { orderStore, generateOrderId } from "@/lib/orders";
 import type { CreateOrderResponse, ApiError, Order } from "@/types";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const requestSchema = z.object({
   items: z

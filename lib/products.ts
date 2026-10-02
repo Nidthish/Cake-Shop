@@ -1,16 +1,93 @@
 import type { Product } from "@/types";
 import rawProducts from "./products-data.json";
 import { prisma } from "./prisma";
+import { getNeonSql } from "./neon";
 
 // The full 133-item catalog backup
 export const PRODUCTS_DATA: Product[] = rawProducts as Product[];
 
 /**
- * Fetch live active products from MySQL database using Prisma Client.
- * Falls back to PRODUCTS_DATA if MySQL server is unavailable.
+ * Fetch live active products from Neon PostgreSQL database.
+ * Uses direct Neon serverless driver or Prisma Client.
+ * Falls back to PRODUCTS_DATA if database is unavailable.
  */
 export async function getDbProducts(): Promise<Product[]> {
   try {
+    const sql = getNeonSql();
+    if (sql) {
+      const rows = await sql`
+        SELECT p.id, p.product_code, p.name, p.slug, p.description, p.image_name, p.badge, 
+               p.rating, p.review_count, p.is_active, p.product_type,
+               c.name as category_name, c.slug as category_slug,
+               COALESCE(
+                 json_agg(
+                   json_build_object(
+                     'name', v.name,
+                     'price', v.price,
+                     'is_eggless', v.is_eggless,
+                     'is_available', v.is_available
+                   )
+                 ) FILTER (WHERE v.id IS NOT NULL), '[]'
+               ) as variants
+        FROM products p
+        LEFT JOIN categories c ON p.category_id = c.id
+        LEFT JOIN product_variants v ON v.product_id = p.id AND v.is_available = true
+        WHERE p.is_active = true
+        GROUP BY p.id, c.id
+        ORDER BY p.id ASC
+      `;
+
+      if (rows && rows.length > 0) {
+        return rows.map((p: any) => {
+          const variantsList = Array.isArray(p.variants) ? p.variants : [];
+          const mappedVariants = variantsList.map((v: any) => ({
+            weight: v.name,
+            price: Number(v.price),
+            originalPrice: Number(v.price),
+            offer: (p.badge || "").includes("1kg Free") ? "Buy 1kg Get 1/2kg Free (Offer)" : undefined,
+            isEggless: Boolean(v.is_eggless),
+          }));
+
+          const minPrice = mappedVariants.length > 0 ? Math.min(...mappedVariants.map((v: any) => v.price)) : 0;
+          const catSlug = (p.category_slug || "").toLowerCase();
+          let mainCategory = "cakes";
+          if (p.product_type === "SNACK" || ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug)) {
+            mainCategory = "snacks";
+          } else if (catSlug.includes("dry")) {
+            mainCategory = "dry-cakes";
+          } else if (catSlug.includes("bento")) {
+            mainCategory = "bento-cake";
+          } else if (catSlug.includes("wedding")) {
+            mainCategory = "wedding-cakes";
+          } else if (catSlug.includes("1st") || catSlug.includes("first")) {
+            mainCategory = "first-birthday";
+          }
+
+          const hasEggless = mappedVariants.some((v: any) => v.isEggless);
+
+          return {
+            id: p.slug,
+            name: p.name,
+            baseName: p.name,
+            category: mainCategory,
+            subCategory: p.category_name || "Cakes",
+            categoryName: p.category_name || "Cakes",
+            price: minPrice,
+            minPrice,
+            originalPrice: minPrice,
+            image: p.image_name || "product.image",
+            rating: Number(p.rating),
+            reviewCount: p.review_count,
+            badge: p.badge || undefined,
+            description: p.description || "",
+            variants: mappedVariants,
+            isEggless: hasEggless,
+            egglessAvailable: true,
+          };
+        });
+      }
+    }
+
     const dbProducts = await prisma.product.findMany({
       where: { isActive: true },
       include: {
