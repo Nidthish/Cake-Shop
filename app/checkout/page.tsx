@@ -262,10 +262,26 @@ export default function CheckoutPage() {
               <div className="border-t border-[#E6C184]/30 mt-4 pt-4 flex justify-between font-bold text-lg text-[#1C0D0A]">
                 <span>Total</span><span>₹{summary.total}</span>
               </div>
+              <div className="mt-4 pt-3 border-t border-[#E6C184]/20 text-[11px] text-[#7A6B63] leading-relaxed">
+                By placing your order, you agree to our{" "}
+                <Link href="/terms-and-conditions" target="_blank" className="text-[#962854] font-semibold underline hover:text-[#7A1E43]">
+                  Terms &amp; Conditions
+                </Link>
+                ,{" "}
+                <Link href="/refund-policy" target="_blank" className="text-[#962854] font-semibold underline hover:text-[#7A1E43]">
+                  Refund Policy
+                </Link>
+                , and{" "}
+                <Link href="/privacy-policy" target="_blank" className="text-[#962854] font-semibold underline hover:text-[#7A1E43]">
+                  Privacy Policy
+                </Link>
+                .
+              </div>
+
               <button
                 onClick={handlePay}
                 disabled={submitting}
-                className="btn-primary w-full mt-6 py-3.5 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 disabled:opacity-60"
+                className="btn-primary w-full mt-4 py-3.5 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 disabled:opacity-60"
               >
                 {submitting ? "Processing…" : (
                   <>
@@ -273,8 +289,14 @@ export default function CheckoutPage() {
                   </>
                 )}
               </button>
-              <p className="text-[10px] text-[#9C8B84] text-center mt-3">
-                Your total is recalculated and verified on our server — payment is processed securely by Razorpay.
+
+              <div className="mt-3 flex items-center justify-center gap-1.5 text-[10px] text-[#7A6B63]">
+                <span className="text-emerald-700 font-bold">🔒 256-Bit SSL Encrypted</span>
+                <span>•</span>
+                <span>PCI-DSS Level 1 Gateway</span>
+              </div>
+              <p className="text-[10px] text-[#9C8B84] text-center mt-1">
+                Amount verified on server — processed securely via Razorpay (UPI, Cards, NetBanking).
               </p>
             </div>
           </div>

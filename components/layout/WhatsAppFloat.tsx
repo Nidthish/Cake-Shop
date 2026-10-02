@@ -4,9 +4,9 @@ import { useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 
 const CONTACTS = [
-  { name: "Direct Contact 1", phone: "918489324697", display: "+91 84893 24697" },
-  { name: "Direct Contact 2", phone: "919655888829", display: "+91 96558 88829" },
-  { name: "Direct Contact 3", phone: "917373737810", display: "+91 73737 37810" },
+  { name: "Lollipop Support 1", phone: "918489324697", display: "+91 84893 24697" },
+  { name: "Lollipop Support 2", phone: "919655888829", display: "+91 96558 88829" },
+  { name: "Lollipop Support 3", phone: "917373737810", display: "+91 73737 37810" },
 ];
 
 export default function WhatsAppFloat() {

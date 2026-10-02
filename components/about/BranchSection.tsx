@@ -152,11 +152,6 @@ export default function BranchSection() {
                     <h3 className="font-display font-bold text-xl sm:text-2xl text-white">
                       {b.name}
                     </h3>
-                    {isSelected && (
-                      <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-[#E6C184] text-[#1C0D0A]">
-                        Active
-                      </span>
-                    )}
                   </div>
                   <p className="text-xs sm:text-sm text-[#D8C3B3] mt-2 leading-relaxed">
                     📍 {b.address}

@@ -17,14 +17,13 @@ const OCCASIONS = [
     title: "1st Birthday\nSmash",
     tagline: "Pure & Low Sugar",
     desc: "Crafted tenderly with organic, low-sugar ingredients perfect for baby's first celebration.",
-    image: "/images/asserts/1st_birthdaycake.png",
+    image: "/images/celebration_opt/1st_birthdaycake.png",
     href: "/first-birthday",
     iconType: "cake",
     doodle: "sparkle",
-    doodleClass: "right-[43%] top-[24%]",
+    doodleClass: "right-[46%] top-[20%]",
     isPrimary: true,
-    archClass: "right-2 top-7 bottom-12 w-[46%] bg-[#FAF0EB]",
-    imageContainerClass: "right-0 top-7 bottom-12 w-[48%]",
+    archClass: "right-0 top-3 sm:top-4 bottom-0 w-[52%] sm:w-[50%] bg-[#FAF0EB] rounded-tl-full rounded-tr-[28px] rounded-br-[28px]",
   },
   {
     id: "wedding",
@@ -32,14 +31,13 @@ const OCCASIONS = [
     title: "Wedding\nCenterpieces",
     tagline: "Multi-tiered Luxury",
     desc: "Bespoke tier architecture decorated with edible gold leaf and delicate sugar flowers.",
-    image: "/images/asserts/weddingcake.png",
+    image: "/images/celebration_opt/weddingcake.png",
     href: "/wedding-cakes",
     iconType: "rings",
     doodle: null,
     doodleClass: "",
     isPrimary: false,
-    archClass: "right-2 top-4 bottom-12 w-[45%] bg-[#F7ECE4]",
-    imageContainerClass: "right-0 top-4 bottom-12 w-[47%]",
+    archClass: "right-0 top-3 sm:top-4 bottom-0 w-[52%] sm:w-[50%] bg-[#F6ECE4] rounded-tl-full rounded-tr-[28px] rounded-br-[28px]",
   },
   {
     id: "custom",
@@ -47,14 +45,13 @@ const OCCASIONS = [
     title: "Custom 3D\nStudio",
     tagline: "Bespoke Custom Design",
     desc: "You imagine it, our master artisans bring your dream cake concept to sweet reality.",
-    image: "/images/asserts/customizecake.png",
+    image: "/images/celebration_opt/customizecake.png",
     href: "/custom-cake",
     iconType: "sparkles",
     doodle: "sparkle",
-    doodleClass: "right-[43%] top-[26%]",
+    doodleClass: "right-[46%] top-[25%]",
     isPrimary: false,
-    archClass: "right-2 top-7 bottom-12 w-[46%] bg-[#FAF0EB]",
-    imageContainerClass: "right-0 top-7 bottom-12 w-[48%]",
+    archClass: "right-0 top-3 sm:top-4 bottom-0 w-[52%] sm:w-[50%] bg-[#FAF0EB] rounded-tl-full rounded-tr-[28px] rounded-br-[28px]",
   },
   {
     id: "bento",
@@ -62,14 +59,13 @@ const OCCASIONS = [
     title: "Korean Bento\nBox",
     tagline: "Cute 300g Mini Treats",
     desc: "Adorable mini cakes packed in eco-friendly minimalist bento boxes with wooden cutlery.",
-    image: "/images/asserts/betocake.png",
+    image: "/images/celebration_opt/betocake.png",
     href: "/bento-cake",
     iconType: "gift",
     doodle: "heart",
-    doodleClass: "right-4 top-5",
+    doodleClass: "right-4 sm:right-5 top-4 sm:top-5",
     isPrimary: false,
-    archClass: "right-2 top-7 bottom-12 w-[46%] bg-[#F9ECE4]",
-    imageContainerClass: "right-0 top-7 bottom-12 w-[48%]",
+    archClass: "right-0 top-3 sm:top-4 bottom-0 w-[52%] sm:w-[50%] bg-[#F8EFE7] rounded-tl-full rounded-tr-[28px] rounded-br-[28px]",
   },
 ];
 
@@ -349,15 +345,11 @@ export default async function HomePage() {
               <Link
                 key={occ.id}
                 href={occ.href}
-                className={`group relative bg-white rounded-[26px] p-5 sm:p-6 border transition-all duration-300 flex flex-col justify-between overflow-hidden h-[310px] ${
-                  occ.isPrimary
-                    ? "border-[#F0C2CE] shadow-[0_8px_25px_rgba(150,40,84,0.08)] hover:shadow-xl hover:-translate-y-1"
-                    : "border-[#F1E6DF] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-[#F0C2CE] hover:-translate-y-1"
-                }`}
+                className="group relative bg-white rounded-[28px] p-5 sm:p-6 border border-[#F2EAE4] transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[310px] h-[310px] shadow-[0_16px_36px_-10px_rgba(140,80,70,0.14),0_6px_16px_-4px_rgba(70,20,30,0.06),0_1px_2px_rgba(0,0,0,0.02)] hover:shadow-[0_22px_44px_-10px_rgba(140,80,70,0.22),0_10px_22px_-6px_rgba(70,20,30,0.10)] hover:-translate-y-1"
               >
                 {/* Arch Backdrop */}
                 <div
-                  className={`absolute rounded-t-full rounded-b-3xl pointer-events-none transition-transform duration-500 group-hover:scale-105 ${occ.archClass}`}
+                  className={`absolute pointer-events-none transition-transform duration-500 group-hover:scale-105 ${occ.archClass}`}
                 />
 
                 {/* Doodle accents */}
@@ -380,21 +372,31 @@ export default async function HomePage() {
                   </div>
                 )}
 
+                {/* Ground Contact Shadow under cake base */}
+                <div
+                  className="absolute bottom-3 sm:bottom-4 right-1 sm:right-2 w-[48%] h-3.5 rounded-full pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse at center, rgba(40, 15, 25, 0.28) 0%, rgba(60, 20, 30, 0.10) 45%, transparent 72%)",
+                    filter: "blur(3px)",
+                  }}
+                />
+
                 {/* Cake Image */}
-                <div className={`absolute flex items-center justify-center p-1 pointer-events-none ${occ.imageContainerClass}`}>
+                <div className="absolute right-0 top-3 sm:top-4 bottom-3 sm:bottom-4 w-[52%] sm:w-[50%] flex items-end justify-center pointer-events-none pb-1">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={occ.image}
                     alt={occ.title.replace("\n", " ")}
-                    className="max-w-full max-h-full object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.08)] group-hover:scale-105 transition-transform duration-500 ease-out"
-                    loading="lazy"
+                    className="max-w-full max-h-[88%] sm:max-h-[90%] object-contain filter drop-shadow-[0_10px_16px_rgba(60,20,30,0.14)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)] group-hover:scale-105 transition-transform duration-500 ease-out"
+                    loading="eager"
                   />
                 </div>
 
                 {/* Left Content Column */}
-                <div className="relative z-10 max-w-[50%]">
+                <div className="relative z-10 max-w-[52%] sm:max-w-[50%]">
                   {/* Top-left Icon */}
-                  <div className="w-9 h-9 rounded-2xl bg-[#FAF0EE] flex items-center justify-center text-[#962854] mb-3 shadow-xs">
+                  <div className="w-9 h-9 rounded-2xl bg-[#FAF0EE] flex items-center justify-center text-[#962854] mb-2.5 shadow-xs">
                     {occ.iconType === "cake" && (
                       <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="currentColor">
                         <circle cx="7.5" cy="3.5" r="1.2" />
@@ -433,7 +435,7 @@ export default async function HomePage() {
                   <span className="text-[9.5px] font-bold uppercase tracking-[0.16em] text-[#C07887] block mb-1">
                     {occ.badge}
                   </span>
-                  <h3 className="font-display font-bold text-lg sm:text-[21px] text-[#1C0D0A] leading-[1.15] mb-1 whitespace-pre-line">
+                  <h3 className="font-display font-bold text-lg sm:text-[21px] text-[#1C0D0A] leading-[1.12] mb-1 whitespace-pre-line">
                     {occ.title}
                   </h3>
                   <span className="text-[11px] sm:text-xs font-semibold text-[#962854] block mb-1.5">
@@ -449,8 +451,8 @@ export default async function HomePage() {
                   <span
                     className={`rounded-full px-3.5 py-1.5 text-[9.5px] font-bold tracking-wider inline-flex items-center gap-1.5 transition-all duration-300 ${
                       occ.isPrimary
-                        ? "bg-gradient-to-r from-[#8C2346] to-[#711634] text-white shadow-md shadow-[#8C2346]/20 border border-transparent"
-                        : "border border-[#E2B8C2] text-[#8C2346] bg-transparent group-hover:bg-gradient-to-r group-hover:from-[#8C2346] group-hover:to-[#711634] group-hover:text-white group-hover:border-transparent"
+                        ? "bg-gradient-to-r from-[#8C2346] to-[#711634] text-white shadow-md shadow-[#8C2346]/25 border border-transparent"
+                        : "border border-[#C88FA0]/60 text-[#8C2346] bg-transparent group-hover:bg-gradient-to-r group-hover:from-[#8C2346] group-hover:to-[#711634] group-hover:text-white group-hover:border-transparent group-hover:shadow-md"
                     }`}
                   >
                     <span>EXPLORE COLLECTION</span>
