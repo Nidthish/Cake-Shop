@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { priceOrder, PricingError } from "@/lib/pricing";
-import { getRazorpayClient, getRazorpayPublicKeyId } from "@/lib/razorpay";
+import { getRazorpayClient, getRazorpayPublicKeyId, isRazorpayConfigured } from "@/lib/razorpay";
 import { orderStore, generateOrderId } from "@/lib/orders";
 import type { CreateOrderResponse, ApiError, Order } from "@/types";
 
@@ -15,6 +15,8 @@ const requestSchema = z.object({
         productId: z.string().min(1),
         weight: z.string().min(1),
         quantity: z.number().int().min(1).max(50),
+        eggPreference: z.string().optional(),
+        cakeMessage: z.string().optional(),
       })
     )
     .min(1, "Cart cannot be empty."),
@@ -35,10 +37,19 @@ const requestSchema = z.object({
     date: z.string().trim().min(1, "Delivery date is required."),
     timeSlot: z.string().trim().min(1, "Delivery time slot is required."),
   }),
+  cakeMessage: z.string().trim().optional(),
+  specialInstructions: z.string().trim().optional(),
   idempotencyKey: z.string().trim().optional(),
 });
 
+import { rateLimit } from "@/lib/rate-limit";
+
 export async function POST(req: NextRequest) {
+  const limiter = rateLimit(req, { limit: 10, windowMs: 60000, endpointKey: "razorpay-create" });
+  if (!limiter.allowed && limiter.response) {
+    return limiter.response;
+  }
+
   try {
     const json = await req.json();
     const parsed = requestSchema.safeParse(json);
@@ -90,6 +101,18 @@ export async function POST(req: NextRequest) {
     const orderId = generateOrderId();
     const amountInPaise = Math.round(priced.total * 100);
 
+    if (!isRazorpayConfigured()) {
+      return NextResponse.json<ApiError>(
+        {
+          success: false,
+          error:
+            "Razorpay API credentials (RAZORPAY_KEY_ID & RAZORPAY_KEY_SECRET) are not configured yet in .env (placeholder values detected). Please select Cash on Delivery (COD) or provide valid Razorpay keys.",
+          code: "RAZORPAY_NOT_CONFIGURED",
+        },
+        { status: 400 }
+      );
+    }
+
     const razorpay = getRazorpayClient();
     const razorpayOrder = await razorpay.orders.create({
       amount: amountInPaise,
@@ -105,7 +128,11 @@ export async function POST(req: NextRequest) {
     const now = new Date().toISOString();
     const order: Order = {
       id: orderId,
-      items: priced.lineItems,
+      items: priced.lineItems.map((item, idx) => ({
+        ...item,
+        eggPreference: (items[idx]?.eggPreference === "egg" ? "egg" : "eggless") as "eggless" | "egg",
+        cakeMessage: items[idx]?.cakeMessage || parsed.data.cakeMessage,
+      })),
       customer,
       address,
       schedule,
@@ -118,6 +145,8 @@ export async function POST(req: NextRequest) {
       orderStatus: "PENDING",
       paymentStatus: "PAYMENT_INITIATED",
       razorpayOrderId: razorpayOrder.id,
+      cakeMessage: parsed.data.cakeMessage,
+      specialInstructions: parsed.data.specialInstructions,
       createdAt: now,
       updatedAt: now,
     };

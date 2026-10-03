@@ -15,9 +15,8 @@ export default function CakeCardInteractive({
   animDelay?: number;
 }) {
   const { addItem } = useCart();
-  const [selectedWeightIdx, setSelectedWeightIdx] = useState(0);
   const [eggPreference, setEggPreference] = useState<"egg" | "eggless">(
-    product.isEggless !== undefined ? (product.isEggless ? "eggless" : "egg") : "eggless"
+    product.isEggless !== undefined ? (product.isEggless ? "eggless" : "egg") : "egg"
   );
   const [isAdded, setIsAdded] = useState(false);
 
@@ -32,6 +31,28 @@ export default function CakeCardInteractive({
             offer: "",
           },
         ];
+
+  const [selectedWeightIdx, setSelectedWeightIdx] = useState(() => {
+    const vars =
+      product.variants && product.variants.length > 0
+        ? product.variants
+        : [
+            {
+              weight: "0.5kg",
+              price: product.minPrice || 370,
+              originalPrice: product.originalPrice,
+              offer: "",
+            },
+          ];
+    const halfKgIdx = vars.findIndex(
+      (v) =>
+        v.weight.toLowerCase().includes("0.5") ||
+        v.weight.toLowerCase().includes("500") ||
+        v.weight.toLowerCase().includes("1/2") ||
+        v.weight.toLowerCase().includes("half")
+    );
+    return halfKgIdx !== -1 ? halfKgIdx : 0;
+  });
 
   const currentVariant = variants[selectedWeightIdx] || variants[0];
   const price = currentVariant.price;

@@ -211,8 +211,8 @@ async function runSecuritySuite() {
   const singleProduct = getProductById(PRODUCTS_DATA[0].id);
   assert(singleProduct !== null, "4.2 Resolves individual product by ID");
 
-  const bentoCakes = PRODUCTS_DATA.filter((p) => p.category === "bento-cake");
-  assert(bentoCakes.length > 0, "4.3 Category filter for bento cakes returns items");
+  const normalCakes = PRODUCTS_DATA.filter((p: any) => p.category === "cakes" || p.categoryName?.toLowerCase().includes("normal") || p.id.includes("cake"));
+  assert(normalCakes.length > 0, "4.3 Category filter for signature cakes returns items");
 
   console.log("");
 

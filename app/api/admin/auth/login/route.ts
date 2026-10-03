@@ -3,10 +3,18 @@ import { prisma } from "@/lib/prisma";
 import { hashPassword, verifyPassword } from "@/lib/crypto";
 import { signJwt } from "@/lib/jwt";
 
+import { rateLimit } from "@/lib/rate-limit";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
+  // Brute-force protection: Max 5 login attempts per 15 minutes per IP
+  const limiter = rateLimit(req, { limit: 5, windowMs: 900000, endpointKey: "admin-login" });
+  if (!limiter.allowed && limiter.response) {
+    return limiter.response;
+  }
+
   try {
     const { email, password } = await req.json();
 
@@ -19,17 +27,20 @@ export async function POST(req: NextRequest) {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // Auto-seed initial Super Admin if admin@lollipopcakeshop.com does not exist yet
+    // Auto-seed initial Super Admin if default admin email does not exist yet
+    const initialAdminEmail = (process.env.INITIAL_ADMIN_EMAIL || "admin@lollipopcakeshop.com").trim().toLowerCase();
+    const initialAdminPassword = process.env.INITIAL_ADMIN_PASSWORD || "Admin@123456";
+
     const existingDefaultAdmin = await prisma.user.findUnique({
-      where: { email: "admin@lollipopcakeshop.com" },
+      where: { email: initialAdminEmail },
     });
 
     if (!existingDefaultAdmin) {
-      console.log("🌱 Auto-seeding initial Super Admin user...");
-      const defaultPasswordHash = hashPassword("Admin@123456");
+      console.log(`🌱 Auto-seeding initial Super Admin user (${initialAdminEmail})...`);
+      const defaultPasswordHash = hashPassword(initialAdminPassword);
       await prisma.user.create({
         data: {
-          email: "admin@lollipopcakeshop.com",
+          email: initialAdminEmail,
           fullName: "Master Super Admin",
           passwordHash: defaultPasswordHash,
           role: "SUPERADMIN",

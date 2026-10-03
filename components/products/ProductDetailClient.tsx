@@ -24,9 +24,21 @@ export default function ProductDetailClient({
     ? product.variants
     : [{ weight: "Regular", price: product.price ?? product.minPrice ?? 0 }];
 
-  const [variantIdx, setVariantIdx] = useState(0);
-  // Default to product.isEggless preference if set, otherwise default to eggless true for cakes
-  const [eggless, setEggless] = useState<boolean>(product.isEggless !== undefined ? product.isEggless : true);
+  const [variantIdx, setVariantIdx] = useState(() => {
+    const vars = product.variants?.length
+      ? product.variants
+      : [{ weight: "Regular", price: product.price ?? product.minPrice ?? 0 }];
+    const halfKgIdx = vars.findIndex(
+      (v) =>
+        v.weight.toLowerCase().includes("0.5") ||
+        v.weight.toLowerCase().includes("500") ||
+        v.weight.toLowerCase().includes("1/2") ||
+        v.weight.toLowerCase().includes("half")
+    );
+    return halfKgIdx !== -1 ? halfKgIdx : 0;
+  });
+  // Default to product.isEggless preference if set, otherwise default to with egg (false) for cakes
+  const [eggless, setEggless] = useState<boolean>(product.isEggless !== undefined ? product.isEggless : false);
   const [quantity, setQuantity] = useState(1);
   const [tab, setTab] = useState<"description" | "ingredients">("description");
 

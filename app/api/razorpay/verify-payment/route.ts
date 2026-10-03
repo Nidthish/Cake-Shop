@@ -15,7 +15,14 @@ const requestSchema = z.object({
   razorpay_signature: z.string().min(1),
 });
 
+import { rateLimit } from "@/lib/rate-limit";
+
 export async function POST(req: NextRequest) {
+  const limiter = rateLimit(req, { limit: 10, windowMs: 60000, endpointKey: "razorpay-verify" });
+  if (!limiter.allowed && limiter.response) {
+    return limiter.response;
+  }
+
   try {
     const json = await req.json();
     const parsed = requestSchema.safeParse(json);
@@ -81,7 +88,7 @@ export async function POST(req: NextRequest) {
 
     const updated = await orderStore.update(orderId, {
       paymentStatus: "PAID",
-      orderStatus: "PROCESSING",
+      orderStatus: "CONFIRMED",
       razorpayPaymentId: razorpay_payment_id,
     });
 

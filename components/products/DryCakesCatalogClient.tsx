@@ -252,8 +252,29 @@ export default function DryCakesCatalogClient({
             </div>
           </div>
 
-          {/* Subcategory Quick Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold flex-nowrap sm:flex-wrap">
+          {/* Mobile View Subcategory Dropdown (sm:hidden) */}
+          <div className="block sm:hidden w-full">
+            <div className="relative">
+              <select
+                value={currentKeyword}
+                onChange={(e) => setCurrentKeyword(e.target.value)}
+                className="w-full appearance-none bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] focus:ring-2 focus:ring-[#962854]/20 rounded-xl px-4 py-2.5 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer pr-10 shadow-xs transition-all"
+                suppressHydrationWarning
+              >
+                {SUB_PILLS.map((pill) => (
+                  <option key={pill.keyword} value={pill.keyword}>
+                    🥮 {pill.label} {pill.keyword === "all" ? `(${allDryCakes.length})` : ""}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#962854]">
+                <span className="material-symbols-outlined text-xl">expand_more</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop View Subcategory Quick Filter Pills (hidden sm:flex) */}
+          <div className="hidden sm:flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold flex-wrap">
             {SUB_PILLS.map((pill) => {
               const isActive = currentKeyword === pill.keyword;
               return (

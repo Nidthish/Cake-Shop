@@ -190,8 +190,9 @@ async function main() {
 
   // Seed Admin User
   console.log("👤 Seeding default Super Admin user into Neon...");
-  const adminEmail = "admin@lollipopcakeshop.com";
-  const adminPasswordHash = hashPassword("Admin@123456");
+  const adminEmail = (process.env.INITIAL_ADMIN_EMAIL || "admin@lollipopcakeshop.com").trim().toLowerCase();
+  const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || "Admin@123456";
+  const adminPasswordHash = hashPassword(adminPassword);
 
   await sql`
     INSERT INTO users (email, password_hash, full_name, role, is_active)
@@ -199,7 +200,7 @@ async function main() {
     ON CONFLICT (email) 
     DO UPDATE SET password_hash = ${adminPasswordHash}, role = 'SUPERADMIN', is_active = true
   `;
-  console.log("✅ Admin user ready: admin@lollipopcakeshop.com");
+  console.log(`✅ Admin user ready: ${adminEmail}`);
 
   // Seed Categories
   console.log("🌱 Seeding Categories into Neon...");

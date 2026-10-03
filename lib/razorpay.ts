@@ -8,21 +8,39 @@ import crypto from "crypto";
  */
 function getEnv(name: string): string {
   const value = process.env[name];
-  if (!value) {
-    throw new Error(
-      `Missing required environment variable "${name}". Copy .env.example to .env.local and fill in your Razorpay keys.`
-    );
-  }
-  return value;
+  if (!value) return "";
+  return value.trim().replace(/^["']|["']$/g, "");
 }
 
 let cachedClient: Razorpay | null = null;
 
+export function isRazorpayConfigured(): boolean {
+  const keyId = getEnv("RAZORPAY_KEY_ID");
+  const keySecret = getEnv("RAZORPAY_KEY_SECRET");
+  if (!keyId || !keySecret) return false;
+  if (
+    keyId.includes("xxxxxxxx") ||
+    keyId.startsWith("rzp_test_xxxx") ||
+    keySecret.includes("your_razorpay") ||
+    keySecret.includes("here")
+  ) {
+    return false;
+  }
+  return true;
+}
+
 export function getRazorpayClient(): Razorpay {
   if (cachedClient) return cachedClient;
+  const keyId = getEnv("RAZORPAY_KEY_ID");
+  const keySecret = getEnv("RAZORPAY_KEY_SECRET");
+  if (!keyId || !keySecret) {
+    throw new Error(
+      `Razorpay environment variables "RAZORPAY_KEY_ID" or "RAZORPAY_KEY_SECRET" are missing or not set in .env`
+    );
+  }
   cachedClient = new Razorpay({
-    key_id: getEnv("RAZORPAY_KEY_ID"),
-    key_secret: getEnv("RAZORPAY_KEY_SECRET"),
+    key_id: keyId,
+    key_secret: keySecret,
   });
   return cachedClient;
 }

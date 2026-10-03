@@ -1,6 +1,9 @@
 import crypto from "crypto";
 
 const JWT_SECRET = process.env.JWT_SECRET || "lollipop_super_secret_jwt_key_2026_production_secure_9921";
+if (!process.env.JWT_SECRET && process.env.NODE_ENV === "production") {
+  console.warn("⚠️ [SECURITY WARNING] JWT_SECRET is not set in environment variables! Using default fallback is insecure for production.");
+}
 const TOKEN_EXPIRY_SECONDS = 24 * 60 * 60; // 24 hours
 
 export interface JwtPayload {

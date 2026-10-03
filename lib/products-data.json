@@ -30,7 +30,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-101"
   },
   {
     "id": "normal-flavors-white-forest",
@@ -63,7 +64,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-102"
   },
   {
     "id": "normal-flavors-butter-scotch",
@@ -96,7 +98,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-103"
   },
   {
     "id": "normal-flavors-mango",
@@ -129,7 +132,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-104"
   },
   {
     "id": "normal-flavors-black-currant",
@@ -162,7 +166,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-105"
   },
   {
     "id": "normal-flavors-strawberry",
@@ -195,7 +200,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-106"
   },
   {
     "id": "normal-flavors-pineapple",
@@ -228,7 +234,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-107"
   },
   {
     "id": "normal-flavors-blueberry",
@@ -261,7 +268,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-108"
   },
   {
     "id": "normal-flavors-kiwi",
@@ -294,7 +302,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-109"
   },
   {
     "id": "normal-flavors-iris-coffee",
@@ -327,7 +336,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-NF-110"
   },
   {
     "id": "choco-cakes-chocolate",
@@ -360,7 +370,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CC-101"
   },
   {
     "id": "choco-cakes-choco-truffle",
@@ -393,7 +404,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CC-102"
   },
   {
     "id": "choco-cakes-choco-almond",
@@ -426,7 +438,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CC-103"
   },
   {
     "id": "choco-cakes-choco-nuts",
@@ -459,7 +472,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CC-104"
   },
   {
     "id": "choco-cakes-choco-oreo",
@@ -492,7 +506,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CC-105"
   },
   {
     "id": "choco-cakes-choco-delight",
@@ -525,7 +540,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CC-106"
   },
   {
     "id": "choco-cakes-choco-kit-kat",
@@ -558,7 +574,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CC-107"
   },
   {
     "id": "extreme-combo-choco-vanilla",
@@ -591,7 +608,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-EC-101"
   },
   {
     "id": "extreme-combo-choco-strawberry",
@@ -624,7 +642,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-EC-102"
   },
   {
     "id": "extreme-combo-2-in-1-fruit-cake-flavour",
@@ -657,7 +676,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-EC-103"
   },
   {
     "id": "extreme-combo-3-in-1-fruit-cake-flavour",
@@ -690,7 +710,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-EC-104"
   },
   {
     "id": "choco-special-nutty-choco-truffle",
@@ -723,7 +744,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CC-108"
   },
   {
     "id": "choco-special-nutty-ferrero-truffle",
@@ -756,7 +778,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CC-109"
   },
   {
     "id": "delight-cakes-strawberry",
@@ -795,7 +818,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-101"
   },
   {
     "id": "delight-cakes-black-currant",
@@ -834,7 +858,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-102"
   },
   {
     "id": "delight-cakes-mango",
@@ -873,7 +898,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-103"
   },
   {
     "id": "delight-cakes-pineapple",
@@ -912,7 +938,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-104"
   },
   {
     "id": "delight-cakes-blueberry",
@@ -951,7 +978,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-105"
   },
   {
     "id": "delight-cakes-butterscotch",
@@ -990,7 +1018,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-106"
   },
   {
     "id": "delight-cakes-caramel",
@@ -1029,7 +1058,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-107"
   },
   {
     "id": "delight-cakes-tender-coconut",
@@ -1068,7 +1098,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-108"
   },
   {
     "id": "delight-cakes-nutella",
@@ -1107,7 +1138,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-109"
   },
   {
     "id": "delight-cakes-pista",
@@ -1146,7 +1178,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-110"
   },
   {
     "id": "delight-cakes-rasamalai",
@@ -1185,7 +1218,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-111"
   },
   {
     "id": "fruit-cake-fruit-fantacy",
@@ -1218,7 +1252,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-FC-101"
   },
   {
     "id": "fruit-cake-choco-fantacy",
@@ -1251,7 +1286,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-FC-102"
   },
   {
     "id": "rich-special-red-velvet",
@@ -1284,7 +1320,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-RF-101"
   },
   {
     "id": "rich-special-rasamalai",
@@ -1317,7 +1354,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-RF-102"
   },
   {
     "id": "rich-special-gulab-jamun",
@@ -1350,7 +1388,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-RF-103"
   },
   {
     "id": "rich-special-rasagulla",
@@ -1383,7 +1422,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-RF-104"
   },
   {
     "id": "rich-special-caramel",
@@ -1416,7 +1456,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-RF-105"
   },
   {
     "id": "rich-special-milky-truffle",
@@ -1449,7 +1490,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-RF-106"
   },
   {
     "id": "rich-special-ferrero-truffle",
@@ -1482,7 +1524,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-RF-107"
   },
   {
     "id": "premium-cake-vancho",
@@ -1515,7 +1558,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-112"
   },
   {
     "id": "premium-cake-nutty-bubble",
@@ -1548,7 +1592,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-113"
   },
   {
     "id": "premium-cake-ferrero-rocher",
@@ -1581,7 +1626,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-114"
   },
   {
     "id": "premium-cake-fudge-nut",
@@ -1614,7 +1660,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-115"
   },
   {
     "id": "premium-cake-choco-snickers",
@@ -1647,7 +1694,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-116"
   },
   {
     "id": "premium-cake-spanish-delight",
@@ -1680,7 +1728,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-117"
   },
   {
     "id": "premium-cake-raffaello-cake",
@@ -1713,7 +1762,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-118"
   },
   {
     "id": "premium-cake-louts-biscoff",
@@ -1746,7 +1796,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-119"
   },
   {
     "id": "premium-cake-pistachio-cake",
@@ -1779,7 +1830,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-120"
   },
   {
     "id": "premium-cake-red-bee",
@@ -1812,7 +1864,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-121"
   },
   {
     "id": "premium-cake-choco-redvelvet",
@@ -1845,7 +1898,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": true
+    "egglessAvailable": true,
+    "productCode": "LLP-CK-122"
   },
   {
     "id": "dry-cakes-rich-plum-cake",
@@ -1872,7 +1926,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-123"
   },
   {
     "id": "dry-cakes-plum-cake",
@@ -1899,7 +1954,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-124"
   },
   {
     "id": "dry-cakes-banana-cake",
@@ -1926,7 +1982,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-125"
   },
   {
     "id": "dry-cakes-pudding-cake",
@@ -1953,7 +2010,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-126"
   },
   {
     "id": "dry-cakes-tea-cake",
@@ -1980,7 +2038,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-127"
   },
   {
     "id": "dry-cakes-plain-cake",
@@ -2007,7 +2066,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-128"
   },
   {
     "id": "dry-cakes-banana-walnut-cake",
@@ -2034,7 +2094,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-129"
   },
   {
     "id": "dry-cakes-banana-choco-chips-cake",
@@ -2061,7 +2122,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-130"
   },
   {
     "id": "doughnuts-doughnut",
@@ -2088,7 +2150,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-131"
   },
   {
     "id": "doughnuts-choco-filled-doughnut",
@@ -2115,7 +2178,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-132"
   },
   {
     "id": "doughnuts-cream-doughnut",
@@ -2142,7 +2206,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-133"
   },
   {
     "id": "cup-cakes-blueberry-cupcake",
@@ -2169,7 +2234,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-134"
   },
   {
     "id": "cup-cakes-strawberry-cupcake",
@@ -2196,7 +2262,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-135"
   },
   {
     "id": "cup-cakes-choco-chips-cupcake",
@@ -2223,7 +2290,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-136"
   },
   {
     "id": "cup-cakes-banana-cupcake",
@@ -2250,7 +2318,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-137"
   },
   {
     "id": "cup-cakes-carrot-cupcake",
@@ -2277,7 +2346,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-138"
   },
   {
     "id": "cup-cakes-orange-cupcake",
@@ -2304,7 +2374,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-139"
   },
   {
     "id": "cup-cakes-fruit-cupcake",
@@ -2331,7 +2402,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-140"
   },
   {
     "id": "brownies-normal-brownie",
@@ -2358,7 +2430,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-141"
   },
   {
     "id": "brownies-walnut-brownie",
@@ -2385,7 +2458,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-142"
   },
   {
     "id": "brownies-chocolate-peanut-butter",
@@ -2412,7 +2486,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-143"
   },
   {
     "id": "brownies-biscoff-blondie",
@@ -2439,7 +2514,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-144"
   },
   {
     "id": "brownies-pistachio-brownie",
@@ -2466,7 +2542,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-145"
   },
   {
     "id": "brownies-kit-kat-brownie",
@@ -2493,7 +2570,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-146"
   },
   {
     "id": "brownies-double-choco-chip",
@@ -2520,7 +2598,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-147"
   },
   {
     "id": "brownies-white-chocolate-brownie",
@@ -2547,7 +2626,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-148"
   },
   {
     "id": "brownies-caramel-brownie",
@@ -2574,7 +2654,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-149"
   },
   {
     "id": "cookies-salt-cookies",
@@ -2601,7 +2682,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CKI-101"
   },
   {
     "id": "cookies-almond-cookies",
@@ -2628,7 +2710,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CKI-102"
   },
   {
     "id": "cookies-coconut-cookies",
@@ -2655,7 +2738,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CKI-103"
   },
   {
     "id": "cookies-cashew-cookies",
@@ -2682,7 +2766,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CKI-104"
   },
   {
     "id": "cookies-butter-cookies",
@@ -2709,7 +2794,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CKI-105"
   },
   {
     "id": "cookies-choco-chips-cookies",
@@ -2736,7 +2822,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CKI-106"
   },
   {
     "id": "puffs-veg-puff",
@@ -2763,7 +2850,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-150"
   },
   {
     "id": "puffs-egg-puff",
@@ -2790,7 +2878,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-151"
   },
   {
     "id": "puffs-paneer-puff",
@@ -2817,7 +2906,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-152"
   },
   {
     "id": "puffs-mushroom-puff",
@@ -2844,7 +2934,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-153"
   },
   {
     "id": "puffs-chicken-puff",
@@ -2871,7 +2962,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-154"
   },
   {
     "id": "buns-plain-bun",
@@ -2898,7 +2990,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-155"
   },
   {
     "id": "buns-jam-bun",
@@ -2925,7 +3018,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-156"
   },
   {
     "id": "buns-cream-bun",
@@ -2952,7 +3046,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-157"
   },
   {
     "id": "buns-coconut-bun",
@@ -2979,7 +3074,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-158"
   },
   {
     "id": "buns-burger-bun",
@@ -3006,7 +3102,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-159"
   },
   {
     "id": "buns-mini-bun-8-no-s",
@@ -3033,7 +3130,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-160"
   },
   {
     "id": "breads-pizza-base",
@@ -3060,7 +3158,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-161"
   },
   {
     "id": "breads-sweet-bread",
@@ -3087,7 +3186,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-162"
   },
   {
     "id": "breads-wheat-bread",
@@ -3114,7 +3214,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-163"
   },
   {
     "id": "breads-multi-grains-bread",
@@ -3141,7 +3242,8 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-164"
   },
   {
     "id": "breads-sandwich-bread",
@@ -3168,6 +3270,7 @@
       "Premium Ingredients",
       "Handcrafted Daily"
     ],
-    "egglessAvailable": false
+    "egglessAvailable": false,
+    "productCode": "LLP-CK-165"
   }
 ]

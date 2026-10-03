@@ -35,6 +35,9 @@ export async function GET(
       total: order.total,
       orderStatus: order.orderStatus,
       paymentStatus: order.paymentStatus,
+      paymentMethod: order.paymentMethod,
+      cakeMessage: order.cakeMessage,
+      specialInstructions: order.specialInstructions,
       createdAt: order.createdAt,
     },
   });

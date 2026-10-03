@@ -74,6 +74,8 @@ export interface DeliverySchedule {
 
 export type OrderStatus =
   | "PENDING"
+  | "CONFIRMED"
+  | "PREPARING"
   | "PROCESSING"
   | "OUT_FOR_DELIVERY"
   | "DELIVERED"
@@ -92,6 +94,8 @@ export interface OrderLineItem {
   quantity: number;
   unitPrice: number;
   lineTotal: number;
+  eggPreference?: "eggless" | "egg";
+  cakeMessage?: string;
 }
 
 export interface Order {
@@ -108,6 +112,9 @@ export interface Order {
   total: number;
   orderStatus: OrderStatus;
   paymentStatus: PaymentStatus;
+  paymentMethod?: "COD" | "RAZORPAY" | "DIRECT";
+  cakeMessage?: string;
+  specialInstructions?: string;
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
   createdAt: string;

@@ -1,9 +1,14 @@
-import { neon, NeonQueryFunction } from "@neondatabase/serverless";
+import { neon, neonConfig, NeonQueryFunction } from "@neondatabase/serverless";
 
 /**
  * Lollipop Cake Shop — Neon Serverless Database Helper
  * Configures direct serverless SQL access using @neondatabase/serverless
  */
+
+// Route queries directly to host /sql to prevent DNS ENOTFOUND on regional api subdomains
+if (typeof neonConfig !== "undefined" && neonConfig) {
+  neonConfig.fetchEndpoint = (host: string) => `https://${host}/sql`;
+}
 
 export function normalizeNeonConnectionString(url: string): string {
   return url

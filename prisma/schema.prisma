@@ -3,7 +3,8 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -103,12 +104,12 @@ model Product {
   id           BigInt      @id @default(autoincrement())
   categoryId   BigInt      @map("category_id")
 
-  productCode  String      @unique @map("product_code") @db.VarChar(30)
-  name         String      @db.VarChar(200)
-  slug         String      @unique @db.VarChar(220)
+  productCode  String      @unique @map("product_code") @db.VarChar(100)
+  name         String      @db.VarChar(255)
+  slug         String      @unique @db.VarChar(255)
   description  String?     @db.Text
-  imageName    String?     @map("image_name") @db.VarChar(255)
-  badge        String?     @db.VarChar(50)  // "Bestseller", "New", "1kg Free Offer"
+  imageName    String?     @map("image_name") @db.VarChar(500)
+  badge        String?     @db.VarChar(100)
   rating       Decimal     @default(5.00) @db.Decimal(3, 2)
   reviewCount  Int         @map("review_count") @default(0)
   isActive     Boolean     @map("is_active") @default(true)   // Admin switch to enable/disable product
@@ -276,9 +277,9 @@ model OrderItem {
   productId     BigInt         @map("product_id")
   variantId     BigInt?        @map("variant_id")
 
-  productCode   String         @map("product_code") @db.VarChar(30)
-  productName   String         @map("product_name") @db.VarChar(200)
-  variantName   String         @map("variant_name") @db.VarChar(50)
+  productCode   String         @map("product_code") @db.VarChar(100)
+  productName   String         @map("product_name") @db.VarChar(255)
+  variantName   String         @map("variant_name") @db.VarChar(100)
   isEggless     Boolean        @map("is_eggless") @default(false)
 
   quantity      Int            @default(1)

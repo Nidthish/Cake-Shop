@@ -12,9 +12,17 @@ export default function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
   const [addedToast, setAddedToast] = useState(false);
 
-  const price = getCardPrice(product);
-  const isEggless = product.egglessAvailable !== false;
-  const weight = product.variants?.[0]?.weight || "500g";
+  const halfKgVariant =
+    product.variants?.find(
+      (v) =>
+        v.weight.toLowerCase().includes("0.5") ||
+        v.weight.toLowerCase().includes("500") ||
+        v.weight.toLowerCase().includes("1/2") ||
+        v.weight.toLowerCase().includes("half")
+    ) || product.variants?.[0];
+
+  const price = halfKgVariant?.price || getCardPrice(product);
+  const weight = halfKgVariant?.weight || "0.5kg";
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
@@ -26,7 +34,7 @@ export default function ProductCard({ product }: { product: Product }) {
       weight: weight,
       price: price,
       quantity: 1,
-      eggPreference: isEggless ? "eggless" : "egg",
+      eggPreference: "egg",
     });
     setAddedToast(true);
     setTimeout(() => setAddedToast(false), 1800);

@@ -81,31 +81,56 @@ export default function CategoryPageClient({
             </select>
           </div>
           {pills && pills.length > 0 && (
-            <div className="flex gap-2 overflow-x-auto no-scrollbar mt-3 pb-1">
-              <button
-                onClick={() => setActivePill("all")}
-                className={`cat-pill flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold border transition-colors ${
-                  activePill === "all"
-                    ? "bg-[#1C0D0A] text-white border-[#1C0D0A]"
-                    : "bg-white text-[#5C524E] border-[#E6C184]/40 hover:border-[#962854]"
-                }`}
-              >
-                All
-              </button>
-              {pills.map((p) => (
+            <>
+              {/* Mobile View Category Dropdown (sm:hidden) */}
+              <div className="block sm:hidden w-full mt-3">
+                <div className="relative">
+                  <select
+                    value={activePill}
+                    onChange={(e) => setActivePill(e.target.value)}
+                    className="w-full appearance-none bg-white border border-[#E6C184]/50 focus:border-[#962854] focus:ring-2 focus:ring-[#962854]/20 rounded-xl px-4 py-2.5 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer pr-10 shadow-xs transition-all"
+                    suppressHydrationWarning
+                  >
+                    <option value="all">✨ All Items</option>
+                    {pills.map((p) => (
+                      <option key={p.keyword} value={p.keyword}>
+                        {p.label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#962854]">
+                    <span className="material-symbols-outlined text-xl">expand_more</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Desktop View Category Pills (hidden sm:flex) */}
+              <div className="hidden sm:flex gap-2 overflow-x-auto no-scrollbar mt-3 pb-1">
                 <button
-                  key={p.keyword}
-                  onClick={() => setActivePill(p.keyword)}
+                  onClick={() => setActivePill("all")}
                   className={`cat-pill flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold border transition-colors ${
-                    activePill === p.keyword
+                    activePill === "all"
                       ? "bg-[#1C0D0A] text-white border-[#1C0D0A]"
                       : "bg-white text-[#5C524E] border-[#E6C184]/40 hover:border-[#962854]"
                   }`}
                 >
-                  {p.label}
+                  All
                 </button>
-              ))}
-            </div>
+                {pills.map((p) => (
+                  <button
+                    key={p.keyword}
+                    onClick={() => setActivePill(p.keyword)}
+                    className={`cat-pill flex-shrink-0 px-4 py-2 rounded-full text-xs font-semibold border transition-colors ${
+                      activePill === p.keyword
+                        ? "bg-[#1C0D0A] text-white border-[#1C0D0A]"
+                        : "bg-white text-[#5C524E] border-[#E6C184]/40 hover:border-[#962854]"
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>

@@ -9,7 +9,7 @@ function getTransporter() {
   const host = process.env.SMTP_HOST || "smtp.gmail.com";
   const port = parseInt(process.env.SMTP_PORT || "465", 10);
   const user = process.env.SMTP_USER || "";
-  const pass = process.env.SMTP_PASS || "";
+  const pass = (process.env.SMTP_PASS || "").replace(/\s+/g, "");
 
   if (!user || !pass) {
     console.warn(
@@ -52,7 +52,11 @@ function generateOrderConfirmationHtml(order: Order): string {
       <tr>
         <td style="padding: 14px 16px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; color: #1C0D0A;">
           <strong style="color: #802B52; font-size: 15px;">${item.name}</strong><br />
-          <span style="font-size: 12px; color: #7A6B72;">Weight / Size: <strong>${item.weight}</strong></span>
+          <span style="font-size: 12px; color: #7A6B72;">
+            Weight / Variant: <strong>${item.weight}</strong>
+            ${item.eggPreference ? ` | <span style="color: ${item.eggPreference === "eggless" ? "#2E7D32" : "#D97706"}; font-weight: bold;">${item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}</span>` : ""}
+          </span>
+          ${item.cakeMessage ? `<br/><span style="font-size: 12px; color: #802B52; font-style: italic;">🎂 Message: "${item.cakeMessage}"</span>` : ""}
         </td>
         <td style="padding: 14px 16px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; color: #1C0D0A; text-align: center; font-weight: bold;">
           ${item.quantity}
@@ -67,6 +71,8 @@ function generateOrderConfirmationHtml(order: Order): string {
     `
     )
     .join("");
+
+  const paymentModeLabel = order.paymentMethod === "COD" ? "Cash on Delivery / Direct Order" : order.paymentMethod === "DIRECT" ? "Direct Bakery Order" : "Prepaid Online (Razorpay)";
 
   return `
   <!DOCTYPE html>
@@ -105,7 +111,7 @@ function generateOrderConfirmationHtml(order: Order): string {
                   🎉 Thank You! Your Order is Confirmed
                 </div>
                 <div style="font-size: 13px; color: #5B1E38;">
-                  We have received your payment and our master chefs are preparing your cakes fresh!
+                  Your order is received and our master bakers are preparing your handcrafted treats!
                 </div>
               </td>
             </tr>
@@ -123,9 +129,9 @@ function generateOrderConfirmationHtml(order: Order): string {
                           📋 Order & Transaction Details
                         </span>
                         <div style="font-size: 13px; color: #1C0D0A; line-height: 1.6;">
-                          <strong>Order ID:</strong> <span style="color: #802B52;">${order.id}</span><br />
-                          <strong>Payment ID:</strong> ${order.razorpayPaymentId || "Verified (COD / Prepaid)"}<br />
-                          <strong>Payment Status:</strong> <span style="background-color: #E8F5E9; color: #2E7D32; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 11px;">PAID</span><br />
+                          <strong>Order ID:</strong> <span style="color: #802B52; font-weight: bold;">${order.id}</span><br />
+                          <strong>Payment Method:</strong> ${paymentModeLabel}<br />
+                          <strong>Payment Status:</strong> <span style="background-color: ${order.paymentStatus === "PAID" ? "#E8F5E9" : "#FFF3E0"}; color: ${order.paymentStatus === "PAID" ? "#2E7D32" : "#E65100"}; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 11px;">${order.paymentStatus}</span><br />
                           <strong>Order Date:</strong> ${formattedDate}
                         </div>
                       </div>
@@ -140,12 +146,20 @@ function generateOrderConfirmationHtml(order: Order): string {
                           <strong>Phone:</strong> ${order.customer.phone}<br />
                           <strong>Address:</strong> ${order.address.street}, ${order.address.city} - ${order.address.pincode}<br />
                           <strong>Scheduled Date:</strong> ${deliveryDateFormatted}<br />
-                          <strong>Time Slot:</strong> ${order.schedule.timeSlot}
+                          <strong>Time Slot:</strong> <span style="color: #802B52; font-weight: bold;">${order.schedule.timeSlot}</span>
                         </div>
                       </div>
                     </td>
                   </tr>
                 </table>
+
+                ${order.cakeMessage || order.specialInstructions ? `
+                <!-- Custom Instructions Banner -->
+                <div style="background-color: #FFF8E7; border: 1px border-[#E6C184]; border-radius: 12px; padding: 14px 18px; margin-bottom: 25px;">
+                  ${order.cakeMessage ? `<div style="font-size: 13px; color: #802B52; margin-bottom: 4px;"><strong>🎂 Custom Message on Cake:</strong> "${order.cakeMessage}"</div>` : ""}
+                  ${order.specialInstructions ? `<div style="font-size: 13px; color: #5B1E38;"><strong>📝 Bakery Instructions:</strong> ${order.specialInstructions}</div>` : ""}
+                </div>
+                ` : ""}
 
                 <!-- Items Table Header -->
                 <h3 style="margin: 0 0 12px 0; font-size: 16px; font-weight: bold; color: #5B1E38; font-family: Georgia, serif;">
