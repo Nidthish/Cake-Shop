@@ -194,6 +194,16 @@ export async function POST(req: NextRequest) {
       finalBadge = "1kg Free Offer";
     }
 
+    let cleanImageName = data.imageName || "product.image";
+    if (cleanImageName && (cleanImageName.startsWith("data:") || cleanImageName.length > 450)) {
+      if (cleanImageName.startsWith("data:")) {
+        const subDir = data.categorySlug?.toLowerCase().includes("snack") ? "Snacks" : "cakes";
+        cleanImageName = `/PRODUCT_IMAGES/${subDir}/product-${Date.now()}.jpg`;
+      } else {
+        cleanImageName = cleanImageName.substring(0, 450);
+      }
+    }
+
     // Create Product in MySQL
     const newProduct = await prisma.product.create({
       data: {
@@ -202,7 +212,7 @@ export async function POST(req: NextRequest) {
         slug,
         categoryId: category.id,
         description: data.description || `Freshly baked ${data.name}. 100% handcrafted perfection!`,
-        imageName: data.imageName || "product.image",
+        imageName: cleanImageName,
         badge: finalBadge,
         productType: data.productType,
         isActive: data.isActive,

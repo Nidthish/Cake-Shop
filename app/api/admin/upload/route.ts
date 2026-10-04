@@ -110,16 +110,24 @@ export async function POST(req: NextRequest) {
     const publicDir = path.join(process.cwd(), "public", "PRODUCT_IMAGES", subDir);
     const rootDir = path.join(process.cwd(), "PRODUCT_IMAGES", subDir);
 
-    await fs.promises.mkdir(publicDir, { recursive: true });
-    await fs.promises.mkdir(rootDir, { recursive: true });
+    try {
+      await fs.promises.mkdir(publicDir, { recursive: true });
+      await fs.promises.mkdir(rootDir, { recursive: true });
 
-    const publicFilePath = path.join(publicDir, fileName);
-    const rootFilePath = path.join(rootDir, fileName);
+      const publicFilePath = path.join(publicDir, fileName);
+      const rootFilePath = path.join(rootDir, fileName);
 
-    await Promise.all([
-      fs.promises.writeFile(publicFilePath, buffer),
-      fs.promises.writeFile(rootFilePath, buffer),
-    ]);
+      await Promise.all([
+        fs.promises.writeFile(publicFilePath, buffer).catch((err) => {
+          console.warn("Notice: Local public filesystem write skipped (serverless environment):", err?.message);
+        }),
+        fs.promises.writeFile(rootFilePath, buffer).catch((err) => {
+          console.warn("Notice: Local root filesystem write skipped (serverless environment):", err?.message);
+        }),
+      ]);
+    } catch (fsErr: any) {
+      console.warn("Notice: Filesystem directory creation skipped (serverless environment):", fsErr?.message);
+    }
 
     const imageUrl = `/PRODUCT_IMAGES/${subDir}/${fileName}`;
 

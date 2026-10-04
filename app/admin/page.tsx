@@ -792,12 +792,18 @@ export default function AdminPage() {
       // Persist in browser localStorage under "cakes"
       saveCakeToLocalStorage(cakeRecord);
 
+      let payloadImageName = finalImage || imageName || "signature.cake.1";
+      if (payloadImageName.startsWith("data:")) {
+        const subDir = categorySlug === "snacks" ? "Snacks" : "cakes";
+        payloadImageName = `/PRODUCT_IMAGES/${subDir}/cake-${Date.now()}.jpg`;
+      }
+
       const payload = {
         name,
         categorySlug,
         subCategory: resolvedSubCategory,
         description,
-        imageName: finalImage || imageName || "signature.cake.1",
+        imageName: payloadImageName,
         badge: hasOffer ? (offerBadge || "1kg Free Offer") : badge,
         hasOffer,
         offerBadge: hasOffer ? (offerBadge || "1kg Free Offer") : "",

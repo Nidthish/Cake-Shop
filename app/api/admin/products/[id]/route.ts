@@ -186,6 +186,16 @@ export async function PUT(
       finalBadge = null;
     }
 
+    let cleanImageName = imageName || existingProduct.imageName;
+    if (cleanImageName && (cleanImageName.startsWith("data:") || cleanImageName.length > 450)) {
+      if (cleanImageName.startsWith("data:")) {
+        const subDir = categorySlug?.toLowerCase().includes("snack") ? "Snacks" : "cakes";
+        cleanImageName = `/PRODUCT_IMAGES/${subDir}/product-${Date.now()}.jpg`;
+      } else {
+        cleanImageName = cleanImageName.substring(0, 450);
+      }
+    }
+
     const updatedProduct = await prisma.product.update({
       where: { id: productId },
       data: {
@@ -198,7 +208,7 @@ export async function PUT(
           description !== undefined
             ? description
             : existingProduct.description,
-        imageName: imageName || existingProduct.imageName,
+        imageName: cleanImageName,
         badge: finalBadge,
         productType: productType || existingProduct.productType,
         isActive: typeof isActive === "boolean" ? isActive : existingProduct.isActive,
