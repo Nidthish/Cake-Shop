@@ -58,6 +58,9 @@ if (typeof window === "undefined") {
     });
 
     if (typeof neonConfig !== "undefined" && neonConfig) {
+      // Force direct endpoint URL so regional subdomains (e.g. .c-7.) do not attempt invalid api.<subdomain> lookups
+      neonConfig.fetchEndpoint = (host: string) => `https://${host}/sql`;
+
       // Custom fetch function binding resilient agent
       neonConfig.fetchFunction = (url: string, init?: any) => {
         return undiciFetch(url, {
@@ -75,11 +78,15 @@ if (typeof window === "undefined") {
  * Clean and normalize database connection string for Neon serverless HTTP fetch
  */
 export function normalizeNeonConnectionString(url: string): string {
-  return url
+  let clean = url
     .trim()
     .replace(/^["']|["']$/g, "")
     .replace("&channel_binding=require", "")
     .replace("?channel_binding=require", "");
+  if (clean.includes("-pooler.c-7.")) {
+    clean = clean.replace("-pooler.c-7.", ".c-7.");
+  }
+  return clean;
 }
 
 /**

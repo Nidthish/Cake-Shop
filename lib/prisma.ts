@@ -17,7 +17,12 @@ function createPrismaClient(): PrismaClient {
 
   // Sanitize DATABASE_URL in process.env if present
   if (process.env.DATABASE_URL) {
-    process.env.DATABASE_URL = process.env.DATABASE_URL.trim().replace(/^["']|["']$/g, "");
+    let sanitized = process.env.DATABASE_URL.trim().replace(/^["']|["']$/g, "");
+    if (!sanitized.includes("connect_timeout=")) {
+      const sep = sanitized.includes("?") ? "&" : "?";
+      sanitized = `${sanitized}${sep}connect_timeout=30`;
+    }
+    process.env.DATABASE_URL = sanitized;
   }
 
   const client =

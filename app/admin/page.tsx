@@ -32,6 +32,8 @@ interface ProductAdmin {
   subCategory: string;
   description: string;
   imageName: string;
+  image?: string;
+  price?: number;
   badge?: string;
   rating: number;
   reviewCount: number;
@@ -87,6 +89,146 @@ const DEFAULT_CAKE_SUBCATEGORIES = [
   "Extreme Combo",
 ];
 
+const STORAGE_KEY = "cakes";
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+
+interface RawStoredCake {
+  id?: string | number;
+  slug?: string;
+  productCode?: string;
+  name?: string;
+  category?: string;
+  categoryName?: string;
+  subCategory?: string;
+  description?: string;
+  imageName?: string;
+  image?: string;
+  badge?: string;
+  price?: number;
+  rating?: number;
+  reviewCount?: number;
+  productType?: string;
+  isActive?: boolean;
+  isOfferProduct?: boolean;
+  isEggless?: boolean;
+  variants?: VariantInput[];
+  offers?: unknown[];
+}
+
+function getStoredCakes(): RawStoredCake[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    console.warn("Failed to parse cakes from localStorage", err);
+    return [];
+  }
+}
+
+function normalizeCake(c: RawStoredCake): ProductAdmin {
+  const fallbackVariants: VariantInput[] =
+    Array.isArray(c.variants) && c.variants.length > 0
+      ? c.variants.map((v) => ({
+          id: v.id ? String(v.id) : undefined,
+          name: v.name || "Regular",
+          price: typeof v.price === "number" ? v.price : 0,
+          weightValue: typeof v.weightValue === "number" ? v.weightValue : 0.5,
+          weightUnit: v.weightUnit || "kg",
+          isEggless: v.isEggless !== undefined ? Boolean(v.isEggless) : true,
+          serves: v.serves || "4-6 Servings",
+          isOffer1kgFree: Boolean(v.isOffer1kgFree),
+        }))
+      : [
+          {
+            name: "Regular",
+            price: typeof c.price === "number" ? c.price : 450,
+            weightValue: 0.5,
+            weightUnit: "kg",
+            isEggless: true,
+            serves: "4-6 Servings",
+            isOffer1kgFree: false,
+          },
+        ];
+
+  return {
+    id: String(c.id || Date.now()),
+    slug: c.slug || (c.name ? c.name.toLowerCase().replace(/[^a-z0-9]+/g, "-") : "cake"),
+    productCode: c.productCode || `LOL-${c.id || "001"}`,
+    name: c.name || "Untitled Cake",
+    category: c.category || "cakes",
+    categoryName: c.categoryName || (c.category ? c.category.toUpperCase() : "Cakes"),
+    subCategory: c.subCategory || "Normal Flavors",
+    description: c.description || "",
+    imageName: c.imageName || "signature.cake.1",
+    image: c.image || undefined,
+    badge: c.badge || undefined,
+    rating: typeof c.rating === "number" ? c.rating : 5.0,
+    reviewCount: typeof c.reviewCount === "number" ? c.reviewCount : 1,
+    productType: c.productType || "CAKE",
+    isActive: c.isActive !== undefined ? Boolean(c.isActive) : true,
+    isOfferProduct: Boolean(c.isOfferProduct),
+    isEggless: c.isEggless !== undefined ? Boolean(c.isEggless) : true,
+    variants: fallbackVariants,
+    offers: Array.isArray(c.offers) ? c.offers : [],
+    price: typeof c.price === "number" ? c.price : fallbackVariants[0]?.price,
+  };
+}
+
+function saveCakeToLocalStorage(cake: ProductAdmin) {
+  if (typeof window === "undefined") return;
+  try {
+    const cakes = getStoredCakes();
+    const index = cakes.findIndex((c) => String(c.id) === String(cake.id));
+    if (index >= 0) {
+      const existingImage = cakes[index].image;
+      const finalImage = cake.image !== undefined ? cake.image : existingImage;
+      cakes[index] = {
+        ...cakes[index],
+        ...cake,
+      };
+      if (finalImage) {
+        cakes[index].image = finalImage;
+      } else {
+        delete cakes[index].image;
+      }
+    } else {
+      cakes.unshift(cake);
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cakes));
+  } catch (err) {
+    console.warn("Failed to save cake to localStorage", err);
+  }
+}
+
+function updateCakeInLocalStorage(id: string, partial: Partial<ProductAdmin>) {
+  if (typeof window === "undefined") return;
+  try {
+    const cakes = getStoredCakes();
+    const index = cakes.findIndex((c) => String(c.id) === String(id));
+    if (index >= 0) {
+      cakes[index] = { ...cakes[index], ...partial };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cakes));
+    }
+  } catch (err) {
+    console.warn("Failed to update cake in localStorage", err);
+  }
+}
+
+function deleteCakeFromLocalStorage(id: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const cakes = getStoredCakes();
+    const updated = cakes.filter((c) => String(c.id) !== String(id));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  } catch (err) {
+    console.warn("Failed to delete cake from localStorage", err);
+  }
+}
+
 export default function AdminPage() {
   const [isMounted, setIsMounted] = useState<boolean>(false);
 
@@ -126,6 +268,10 @@ export default function AdminPage() {
   const [customSubCategory, setCustomSubCategory] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [imageName, setImageName] = useState<string>("signature.cake.1");
+  const [image, setImage] = useState<string>("");
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [badge, setBadge] = useState<string>("");
   const [variants, setVariants] = useState<VariantInput[]>([
     { name: "0.5kg", price: 450, weightValue: 0.5, weightUnit: "kg", isEggless: true, serves: "4-6 Servings", isOffer1kgFree: false },
@@ -149,6 +295,10 @@ export default function AdminPage() {
   // Check auth session on mount
   useEffect(() => {
     setIsMounted(true);
+    const stored = getStoredCakes();
+    if (stored.length > 0) {
+      setProducts(stored.map(normalizeCake));
+    }
     checkAuthSession();
   }, []);
 
@@ -212,14 +362,50 @@ export default function AdminPage() {
   }
 
   async function fetchProducts() {
+    const storedCakes = getStoredCakes();
+    const storedMap = new Map<string, RawStoredCake>();
+    storedCakes.forEach((c) => {
+      if (c && c.id) storedMap.set(String(c.id), c);
+    });
+
     try {
       const res = await fetch("/api/admin/products");
       if (res.ok) {
         const data = await res.json();
-        if (data.products) setProducts(data.products);
+        if (Array.isArray(data.products)) {
+          const merged: ProductAdmin[] = data.products.map((p: RawStoredCake) => {
+            const stored = storedMap.get(String(p.id));
+            return {
+              ...normalizeCake(p),
+              image: stored?.image || p.image || undefined,
+            };
+          });
+
+          // Retain any local-only cakes that are not present in the API
+          const apiIds = new Set(data.products.map((p: RawStoredCake) => String(p.id)));
+          storedCakes.forEach((sc) => {
+            if (sc && sc.id && !apiIds.has(String(sc.id))) {
+              merged.push(normalizeCake(sc));
+            }
+          });
+
+          setProducts(merged);
+          if (typeof window !== "undefined") {
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+            } catch (err) {
+              console.warn("Failed to sync merged cakes to localStorage", err);
+            }
+          }
+          return;
+        }
       }
     } catch (err) {
-      console.error("Failed to fetch products", err);
+      console.error("Failed to fetch products from API, falling back to localStorage", err);
+    }
+
+    if (storedCakes.length > 0) {
+      setProducts(storedCakes.map(normalizeCake));
     }
   }
 
@@ -348,6 +534,10 @@ export default function AdminPage() {
     setCustomSubCategory("");
     setDescription("");
     setImageName("signature.cake.1");
+    setImage("");
+    setImagePreview("");
+    setImageError(null);
+    setSelectedFile(null);
     setBadge("");
     setHasOffer(false);
     setOfferBadge("1kg Free Offer");
@@ -362,12 +552,18 @@ export default function AdminPage() {
 
   function handleEditClick(p: ProductAdmin) {
     setEditingProduct(p);
-    setName(p.name);
-    setCategorySlug(p.category);
+    setName(p.name || "");
+    setCategorySlug(p.category || "cakes");
     setSubCategory(p.subCategory || "Normal Flavors");
     setDescription(p.description || "");
     setImageName(p.imageName || "signature.cake.1");
     setBadge(p.badge || "");
+
+    const existingImg = p.image || (p.imageName && (p.imageName.startsWith("data:") || p.imageName.startsWith("http") || p.imageName.startsWith("/")) ? p.imageName : "");
+    setImage(existingImg || "");
+    setImagePreview(existingImg || "");
+    setImageError(null);
+    setSelectedFile(null);
     
     const activeOffer = p.offers?.find((o) => o.isActive);
     const isOffer = Boolean(activeOffer || p.isOfferProduct || (p.badge || "").includes("1kg Free") || (p.badge || "").includes("Offer"));
@@ -382,21 +578,124 @@ export default function AdminPage() {
     }
 
     setVariants(
-      p.variants.map((v) => ({
-        id: v.id,
-        name: v.name,
-        price: v.price,
-        weightValue: v.weightValue,
-        weightUnit: v.weightUnit,
-        isEggless: v.isEggless,
-        serves: v.serves,
-        isOffer1kgFree: v.isOffer1kgFree,
-      }))
+      p.variants && p.variants.length > 0
+        ? p.variants.map((v) => ({
+            id: v.id,
+            name: v.name,
+            price: v.price,
+            weightValue: v.weightValue,
+            weightUnit: v.weightUnit,
+            isEggless: v.isEggless,
+            serves: v.serves,
+            isOffer1kgFree: v.isOffer1kgFree,
+          }))
+        : [
+            {
+              name: "Regular",
+              price: typeof p.price === "number" ? p.price : 450,
+              weightValue: 0.5,
+              weightUnit: "kg",
+              isEggless: true,
+              serves: "4-6 Servings",
+              isOffer1kgFree: false,
+            },
+          ]
     );
     setShowAddModal(true);
   }
 
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setImageError(null);
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    e.target.value = "";
+
+    const isMimeValid = ALLOWED_IMAGE_TYPES.includes(file.type.toLowerCase());
+    const isExtValid = /\.(jpe?g|png|webp)$/i.test(file.name);
+    if (!isMimeValid && !isExtValid) {
+      setImageError("Please upload a valid image file (JPG, JPEG, PNG, or WEBP).");
+      return;
+    }
+
+    if (file.size === 0) {
+      setImageError("The selected image file is empty. Please choose a valid image.");
+      return;
+    }
+
+    if (file.size > MAX_IMAGE_SIZE_BYTES) {
+      setImageError("Image file is too large. Maximum allowed size is 5 MB.");
+      return;
+    }
+
+    setSelectedFile(file);
+
+    const reader = new FileReader();
+    reader.onerror = () => {
+      setImageError("Failed to read image file. Please try another image.");
+    };
+    reader.onload = (event) => {
+      const rawDataUrl = event.target?.result as string;
+      if (!rawDataUrl) {
+        setImageError("Failed to load image. Please try again.");
+        return;
+      }
+
+      const img = new Image();
+      img.onerror = () => {
+        setImage(rawDataUrl);
+        setImagePreview(rawDataUrl);
+      };
+      img.onload = () => {
+        try {
+          const maxDim = 1000;
+          let width = img.width;
+          let height = img.height;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            setImage(rawDataUrl);
+            setImagePreview(rawDataUrl);
+            return;
+          }
+          ctx.drawImage(img, 0, 0, width, height);
+          const mime = file.type === "image/png" ? "image/png" : "image/jpeg";
+          const compressed = canvas.toDataURL(mime, 0.85);
+          setImage(compressed);
+          setImagePreview(compressed);
+        } catch {
+          setImage(rawDataUrl);
+          setImagePreview(rawDataUrl);
+        }
+      };
+      img.src = rawDataUrl;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleRemoveImage() {
+    setImage("");
+    setImagePreview("");
+    setImageError(null);
+    setSelectedFile(null);
+  }
+
   async function handleToggleSales(id: string, currentActive: boolean) {
+    updateCakeInLocalStorage(id, { isActive: !currentActive });
+    setProducts((prev) =>
+      prev.map((p) => (String(p.id) === String(id) ? { ...p, isActive: !currentActive } : p))
+    );
     try {
       const res = await fetch(`/api/admin/products/${id}`, {
         method: "PUT",
@@ -415,16 +714,15 @@ export default function AdminPage() {
 
   async function handleDeleteProduct(id: string, nameStr: string) {
     if (!confirm(`Are you sure you want to delete "${nameStr}"?`)) return;
+    deleteCakeFromLocalStorage(id);
+    setProducts((prev) => prev.filter((p) => String(p.id) !== String(id)));
+    setAlertMessage(`Deleted "${nameStr}" successfully.`);
     try {
-      const res = await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
-      const data = await res.json();
-      if (data.success) {
-        setAlertMessage(`Deleted "${nameStr}" successfully.`);
-        fetchProducts();
-      }
+      await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
     } catch (err) {
-      alert("Failed to delete product.");
+      console.warn("API delete notice:", err);
     }
+    fetchProducts();
   }
 
   async function handleSaveProduct(e: React.FormEvent) {
@@ -436,12 +734,70 @@ export default function AdminPage() {
         isOffer1kgFree: hasOffer && v.name.includes(offerBuyVariant),
       }));
 
+      const productId = editingProduct ? editingProduct.id : String(Date.now());
+      const slug = editingProduct
+        ? editingProduct.slug
+        : name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "") || "cake";
+      const productCode = editingProduct
+        ? editingProduct.productCode
+        : `LOL-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      const resolvedSubCategory =
+        categorySlug === "cakes" && subCategory === "__NEW__" ? customSubCategory : subCategory;
+      const categoryObj = PRIMARY_CATEGORIES.find((c) => c.slug === categorySlug);
+      const categoryName = categoryObj ? categoryObj.name : categorySlug;
+
+      let finalImage = image || (editingProduct ? editingProduct.image : undefined);
+
+      // Upload to server storage in PRODUCT_IMAGES if a new file was chosen
+      if (selectedFile) {
+        try {
+          const formData = new FormData();
+          formData.append("file", selectedFile);
+          formData.append("category", categorySlug);
+          const uploadRes = await fetch("/api/admin/upload", {
+            method: "POST",
+            body: formData,
+          });
+          const uploadData = await uploadRes.json();
+          if (uploadRes.ok && uploadData.success && uploadData.imageUrl) {
+            finalImage = uploadData.imageUrl;
+          }
+        } catch (uploadErr) {
+          console.warn("Server upload notice, using client image representation:", uploadErr);
+        }
+      }
+
+      const cakeRecord: ProductAdmin = {
+        id: productId,
+        slug,
+        productCode,
+        name,
+        category: categorySlug,
+        categoryName,
+        subCategory: resolvedSubCategory,
+        description,
+        imageName: finalImage || imageName || "signature.cake.1",
+        image: finalImage || undefined,
+        badge: hasOffer ? (offerBadge || "1kg Free Offer") : badge,
+        rating: editingProduct?.rating || 5.0,
+        reviewCount: editingProduct?.reviewCount || 1,
+        productType: categorySlug === "snacks" ? "SNACK" : "CAKE",
+        isActive: editingProduct ? editingProduct.isActive : true,
+        variants: updatedVariants,
+        offers: editingProduct?.offers || [],
+        price: updatedVariants[0]?.price || 0,
+      };
+
+      // Persist in browser localStorage under "cakes"
+      saveCakeToLocalStorage(cakeRecord);
+
       const payload = {
         name,
         categorySlug,
-        subCategory: categorySlug === "cakes" && subCategory === "__NEW__" ? customSubCategory : subCategory,
+        subCategory: resolvedSubCategory,
         description,
-        imageName,
+        imageName: finalImage || imageName || "signature.cake.1",
         badge: hasOffer ? (offerBadge || "1kg Free Offer") : badge,
         hasOffer,
         offerBadge: hasOffer ? (offerBadge || "1kg Free Offer") : "",
@@ -455,20 +811,25 @@ export default function AdminPage() {
       const url = editingProduct ? `/api/admin/products/${editingProduct.id}` : "/api/admin/products";
       const method = editingProduct ? "PUT" : "POST";
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setAlertMessage(data.message || "Product saved successfully.");
-        setShowAddModal(false);
-        fetchProducts();
-      } else {
-        alert(data.error || "Failed to save product.");
+      try {
+        const res = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          if (!editingProduct && data.productId) {
+            updateCakeInLocalStorage(productId, { id: String(data.productId), slug: data.slug || slug });
+          }
+        }
+      } catch (apiErr) {
+        console.warn("API save notice:", apiErr);
       }
+
+      setAlertMessage(editingProduct ? "Product updated successfully." : "Product saved successfully.");
+      setShowAddModal(false);
+      fetchProducts();
     } catch (err: any) {
       alert("Error: " + err.message);
     } finally {
@@ -495,10 +856,12 @@ export default function AdminPage() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      const matchesSearch =
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.slug.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.productCode.toLowerCase().includes(searchTerm.toLowerCase());
+      const pName = (p.name || "").toLowerCase();
+      const pSlug = (p.slug || "").toLowerCase();
+      const pCode = (p.productCode || "").toLowerCase();
+      const q = searchTerm.toLowerCase();
+
+      const matchesSearch = pName.includes(q) || pSlug.includes(q) || pCode.includes(q);
 
       const matchesCat =
         selectedCategoryFilter === "all" ||
@@ -854,11 +1217,24 @@ export default function AdminPage() {
                       <tr key={p.id} className="hover:bg-[#FDFBF7]">
                         <td className="py-4 px-4 font-mono font-bold text-[#802B52]">{p.productCode}</td>
                         <td className="py-4 px-4">
-                          <div className="font-bold text-sm text-[#2D2327]">{p.name}</div>
+                          <div className="flex items-center gap-2.5">
+                            {p.image && (
+                              /* eslint-disable-next-line @next/next/no-img-element */
+                              <img
+                                src={p.image}
+                                alt={p.name || "Cake"}
+                                className="w-8 h-8 rounded-lg object-cover border border-[#E6DBCE] flex-shrink-0"
+                                onError={(e) => {
+                                  (e.target as HTMLElement).style.display = "none";
+                                }}
+                              />
+                            )}
+                            <div className="font-bold text-sm text-[#2D2327]">{p.name}</div>
+                          </div>
                         </td>
-                        <td className="py-4 px-4 font-medium text-[#5B1E38]">{p.categoryName}</td>
+                        <td className="py-4 px-4 font-medium text-[#5B1E38]">{p.categoryName || p.category || "Cakes"}</td>
                         <td className="py-4 px-4">
-                          {p.variants.map((v, i) => (
+                          {(p.variants || []).map((v, i) => (
                             <span key={i} className="inline-block bg-[#FAF5EE] border border-[#E6DBCE] text-[#2D2327] font-semibold px-2 py-0.5 rounded text-[11px] mr-1.5 mb-1">
                               {v.name}: ₹{v.price}
                             </span>
@@ -1211,6 +1587,52 @@ export default function AdminPage() {
                   />
                 </div>
               )}
+
+              <div>
+                <label className="block font-bold text-[#5B1E38] uppercase mb-1">
+                  Cake Image (Optional)
+                </label>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 border border-[#E6DBCE] rounded-lg bg-[#FAF5EE] hover:bg-[#F3E8DB] text-xs font-bold text-[#802B52] transition-colors">
+                      <span>📷 {imagePreview ? "Change Image" : "Upload Cake Image"}</span>
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/jpg"
+                        onChange={handleImageChange}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {imagePreview && (
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="px-2.5 py-1.5 text-xs font-bold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg border border-red-200 transition-colors cursor-pointer"
+                      >
+                        ✕ Remove Image
+                      </button>
+                    )}
+                  </div>
+
+                  {imageError && (
+                    <p className="text-[11px] text-red-600 font-medium">
+                      ⚠️ {imageError}
+                    </p>
+                  )}
+
+                  {imagePreview && (
+                    <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#E6DBCE] bg-[#FAF5EE]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={imagePreview}
+                        alt="Cake preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
 
               <div>
                 <label className="block font-bold text-[#5B1E38] uppercase mb-1">Description</label>

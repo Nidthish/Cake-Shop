@@ -23,9 +23,18 @@ export async function getAuthenticatedAdmin(req: NextRequest): Promise<JwtPayloa
 
     // 4. Verify Admin user exists in Database and is active
     const userIdBigInt = BigInt(payload.userId);
-    const dbUser = await prisma.user.findUnique({
-      where: { id: userIdBigInt },
-    });
+    let dbUser = null;
+    try {
+      dbUser = await prisma.user.findUnique({
+        where: { id: userIdBigInt },
+      });
+    } catch (err: any) {
+      console.warn("[getAuthenticatedAdmin] DB query error on first attempt, retrying in 600ms...", err?.message);
+      await new Promise((r) => setTimeout(r, 600));
+      dbUser = await prisma.user.findUnique({
+        where: { id: userIdBigInt },
+      });
+    }
 
     if (!dbUser || !dbUser.isActive) return null;
     if (dbUser.role !== "ADMIN" && dbUser.role !== "SUPERADMIN") return null;

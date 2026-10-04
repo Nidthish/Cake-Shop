@@ -11,6 +11,16 @@ export function getProductCardImage(product: {
   categoryName?: string;
   image?: string;
 }): string {
+  if (
+    product.image &&
+    (product.image.startsWith("data:") ||
+      product.image.startsWith("http://") ||
+      product.image.startsWith("https://") ||
+      product.image.startsWith("/"))
+  ) {
+    return product.image;
+  }
+
   const name = (product.name || "").toLowerCase();
   const id = (product.id || "").toLowerCase();
   const cat = (product.category || product.categoryName || product.subCategory || "").toLowerCase();

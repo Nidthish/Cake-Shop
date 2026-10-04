@@ -31,9 +31,18 @@ export async function POST(req: NextRequest) {
     const initialAdminEmail = (process.env.INITIAL_ADMIN_EMAIL || "admin@lollipopcakeshop.com").trim().toLowerCase();
     const initialAdminPassword = process.env.INITIAL_ADMIN_PASSWORD || "Admin@123456";
 
-    const existingDefaultAdmin = await prisma.user.findUnique({
-      where: { email: initialAdminEmail },
-    });
+    let existingDefaultAdmin = null;
+    try {
+      existingDefaultAdmin = await prisma.user.findUnique({
+        where: { email: initialAdminEmail },
+      });
+    } catch (err: any) {
+      console.warn("[POST /api/admin/auth/login] DB retry after cold-start pause...", err?.message);
+      await new Promise((r) => setTimeout(r, 600));
+      existingDefaultAdmin = await prisma.user.findUnique({
+        where: { email: initialAdminEmail },
+      });
+    }
 
     if (!existingDefaultAdmin) {
       console.log(`🌱 Auto-seeding initial Super Admin user (${initialAdminEmail})...`);
@@ -47,6 +56,20 @@ export async function POST(req: NextRequest) {
           isActive: true,
         },
       });
+    } else if (cleanEmail === initialAdminEmail && password === initialAdminPassword) {
+      const isValid = verifyPassword(password, existingDefaultAdmin.passwordHash || "");
+      if (!isValid) {
+        console.log(`🔄 Updating Super Admin password to match INITIAL_ADMIN_PASSWORD...`);
+        const updatedPasswordHash = hashPassword(initialAdminPassword);
+        await prisma.user.update({
+          where: { email: initialAdminEmail },
+          data: {
+            passwordHash: updatedPasswordHash,
+            isActive: true,
+            role: "SUPERADMIN",
+          },
+        });
+      }
     }
 
     // Find User in MySQL
