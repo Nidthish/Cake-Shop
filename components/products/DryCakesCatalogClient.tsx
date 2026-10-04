@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
+import { getProductCardImage } from "@/lib/dummy-images";
 
 const SUB_PILLS = [
   { label: "All Dry Cakes", keyword: "all" },
@@ -15,6 +16,8 @@ const SUB_PILLS = [
 function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
   const { addItem } = useCart();
   const [isAdded, setIsAdded] = useState(false);
+
+  const cardImage = getProductCardImage(p);
 
   const price = p.price || p.minPrice || (p.variants && p.variants[0] ? p.variants[0].price : 20);
   const originalPrice =
@@ -32,7 +35,7 @@ function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
     addItem({
       id: p.id,
       name: p.name,
-      image: p.image,
+      image: cardImage,
       weight: "1 pc",
       price: price,
       quantity: 1,
@@ -51,7 +54,7 @@ function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
         <Link href={`/products/${p.id}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={p.image}
+            src={cardImage}
             alt={p.name}
             loading="lazy"
             className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"

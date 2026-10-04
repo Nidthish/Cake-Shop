@@ -7,6 +7,7 @@ import Link from "next/link";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
 import { useToast } from "@/components/common/ToastProvider";
+import { getProductCardImage } from "@/lib/dummy-images";
 
 const SUB_CATEGORIES = [
   { label: "All Snacks & Pastries", value: "all" },
@@ -68,7 +69,7 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
       id: p.id,
       name: p.name,
       price,
-      image: p.image,
+      image: getProductCardImage(p),
       weight,
       quantity: 1,
     });
@@ -210,7 +211,7 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
                   <div className="relative aspect-square overflow-hidden bg-[#FAF5F0] rounded-xl border border-[#E6C184]/20 p-2 group-hover:border-[#962854]/40 transition-colors mb-2.5">
                     <Link href={`/products/${p.id}`}>
                       <img
-                        src={p.image}
+                        src={getProductCardImage(p)}
                         alt={p.name}
                         className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
                         loading="lazy"

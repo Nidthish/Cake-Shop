@@ -7,10 +7,13 @@ import { useState } from "react";
 import type { Product } from "@/types";
 import { getCardPrice } from "@/lib/products";
 import { useCart } from "@/components/cart/CartProvider";
+import { getProductCardImage } from "@/lib/dummy-images";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
   const [addedToast, setAddedToast] = useState(false);
+
+  const cardImage = getProductCardImage(product);
 
   const halfKgVariant =
     product.variants?.find(
@@ -30,7 +33,7 @@ export default function ProductCard({ product }: { product: Product }) {
     addItem({
       id: product.id,
       name: product.name,
-      image: product.image,
+      image: cardImage,
       weight: weight,
       price: price,
       quantity: 1,
@@ -47,7 +50,7 @@ export default function ProductCard({ product }: { product: Product }) {
         className="block relative aspect-square overflow-hidden bg-[#FAF5F0] rounded-xl border border-[#E6C184]/20 p-2 group-hover:border-[#962854]/40 transition-colors"
       >
         <img
-          src={product.image}
+          src={cardImage}
           alt={product.name}
           className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
           loading="lazy"

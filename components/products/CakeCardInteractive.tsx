@@ -6,6 +6,7 @@ import type { Product } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
 
 import { is1kgFreeOfferVariant } from "@/lib/products";
+import { getProductCardImage } from "@/lib/dummy-images";
 
 export default function CakeCardInteractive({
   product,
@@ -62,6 +63,8 @@ export default function CakeCardInteractive({
   const isVariantOffer = is1kgFreeOfferVariant(currentVariant) || Boolean(rawOffer);
   const showOfferTag = eggPreference === "egg" && isVariantOffer;
 
+  const cardImage = getProductCardImage(product);
+
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
@@ -69,7 +72,7 @@ export default function CakeCardInteractive({
     addItem({
       id: `${product.id}${eggPreference === "eggless" ? "-eggless" : ""}`,
       name: product.name,
-      image: product.image,
+      image: cardImage,
       weight: currentVariant.weight,
       price: price,
       quantity: 1,
@@ -90,7 +93,7 @@ export default function CakeCardInteractive({
         <Link href={`/products/${product.id}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={product.image}
+            src={cardImage}
             alt={product.name}
             loading="lazy"
             className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"

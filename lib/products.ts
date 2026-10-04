@@ -1,41 +1,59 @@
 import type { Product } from "@/types";
 import rawProducts from "./products-data.json";
-import { prisma } from "./prisma";
-import { getNeonSql } from "./neon";
 
 // The full 133-item catalog backup
 export const PRODUCTS_DATA: Product[] = rawProducts as Product[];
 
 /**
  * Fetch live active products from Neon PostgreSQL database.
- * Uses direct Neon serverless driver or Prisma Client.
+ * Uses direct Neon serverless driver with auto-retry and Prisma Client fallback.
  * Falls back to PRODUCTS_DATA if database is unavailable.
  */
 export async function getDbProducts(): Promise<Product[]> {
+  if (typeof window !== "undefined") {
+    return PRODUCTS_DATA;
+  }
+
+  // 1. Primary: Direct high-performance Neon PostgreSQL serverless HTTP query
   try {
+    const { getNeonSql } = await import("./neon");
     const sql = getNeonSql();
     if (sql) {
-      const rows = await sql`
-        SELECT p.id, p.product_code, p.name, p.slug, p.description, p.image_name, p.badge, 
-               p.rating, p.review_count, p.is_active, p.product_type,
-               c.name as category_name, c.slug as category_slug,
-               COALESCE(
-                 json_agg(
-                   json_build_object(
-                     'name', v.name,
-                     'price', v.price,
-                     'is_eggless', v.is_eggless,
-                     'is_available', v.is_available
-                   )
-                 ) FILTER (WHERE v.id IS NOT NULL), '[]'
-               ) as variants
-        FROM products p
-        LEFT JOIN categories c ON p.category_id = c.id
-        LEFT JOIN product_variants v ON v.product_id = p.id AND v.is_available = true
-        WHERE p.is_active = true
-        GROUP BY p.id, c.id
-        ORDER BY p.id ASC
-      `;
+      let rows: any = null;
+      let lastErr: any = null;
+
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          rows = await sql`
+            SELECT p.id, p.product_code, p.name, p.slug, p.description, p.image_name, p.badge, 
+                   p.rating, p.review_count, p.is_active, p.product_type,
+                   c.name as category_name, c.slug as category_slug,
+                   COALESCE(
+                     json_agg(
+                       json_build_object(
+                         'name', v.name,
+                         'price', v.price,
+                         'is_eggless', v.is_eggless,
+                         'is_available', v.is_available
+                       )
+                     ) FILTER (WHERE v.id IS NOT NULL), '[]'
+                   ) as variants
+            FROM products p
+            LEFT JOIN categories c ON p.category_id = c.id
+            LEFT JOIN product_variants v ON v.product_id = p.id AND v.is_available = true
+            WHERE p.is_active = true
+            GROUP BY p.id, c.id
+            ORDER BY p.id ASC
+          `;
+          if (rows) break;
+        } catch (err: any) {
+          lastErr = err;
+          if (attempt === 1) {
+            // Pause 500ms to allow sleeping compute endpoint to complete wake-up
+            await new Promise((r) => setTimeout(r, 500));
+          }
+        }
+      }
 
       if (rows && rows.length > 0) {
         return rows.map((p: any) => {
@@ -86,8 +104,18 @@ export async function getDbProducts(): Promise<Product[]> {
           };
         });
       }
-    }
 
+      if (lastErr) {
+        console.warn("⚠️ [Neon PostgreSQL] Direct SQL query notice:", lastErr?.message || lastErr);
+      }
+    }
+  } catch (neonErr: any) {
+    console.warn("⚠️ [Neon PostgreSQL] Direct query attempt failed:", neonErr?.message || neonErr);
+  }
+
+  // 2. Secondary: Prisma Client PostgreSQL connection
+  try {
+    const { prisma } = await import("./prisma");
     const dbProducts = await prisma.product.findMany({
       where: { isActive: true },
       include: {
@@ -102,66 +130,67 @@ export async function getDbProducts(): Promise<Product[]> {
       orderBy: { id: "asc" },
     });
 
-    if (!dbProducts || dbProducts.length === 0) {
-      return PRODUCTS_DATA;
-    }
+    if (dbProducts && dbProducts.length > 0) {
+      return dbProducts.map((p: any) => {
+        const variants = p.variants.map((v: any) => {
+          const hasOffer = p.offers.some((o: any) => o.buyVariantId === v.id);
+          return {
+            weight: v.name,
+            price: Number(v.price),
+            originalPrice: Number(v.price),
+            offer: hasOffer ? (p.badge || "Buy 1kg Get 1/2kg Free (Offer)") : undefined,
+            isEggless: v.isEggless,
+          };
+        });
 
-    return dbProducts.map((p: any) => {
-      const variants = p.variants.map((v: any) => {
-        const hasOffer = p.offers.some((o: any) => o.buyVariantId === v.id);
+        const minPrice = variants.length > 0 ? Math.min(...variants.map((v: any) => v.price)) : 0;
+
+        // Map DB category slug to primary store section category
+        const catSlug = (p.category.slug || "").toLowerCase();
+        let mainCategory = "cakes";
+        if (p.productType === "SNACK" || ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug)) {
+          mainCategory = "snacks";
+        } else if (catSlug.includes("dry")) {
+          mainCategory = "dry-cakes";
+        } else if (catSlug.includes("bento")) {
+          mainCategory = "bento-cake";
+        } else if (catSlug.includes("wedding")) {
+          mainCategory = "wedding-cakes";
+        } else if (catSlug.includes("1st") || catSlug.includes("first")) {
+          mainCategory = "first-birthday";
+        }
+
+        const hasEgglessVariant = p.variants.some((v: any) => v.isEggless);
+        const isCakeCategory = ["cakes", "dry-cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
+
         return {
-          weight: v.name,
-          price: Number(v.price),
-          originalPrice: Number(v.price),
-          offer: hasOffer ? (p.badge || "Buy 1kg Get 1/2kg Free (Offer)") : undefined,
-          isEggless: v.isEggless,
+          id: p.slug,
+          name: p.name,
+          baseName: p.name,
+          category: mainCategory,
+          subCategory: p.category.name,
+          categoryName: p.category.name,
+          price: minPrice,
+          minPrice,
+          originalPrice: minPrice,
+          image: p.imageName || "product.image",
+          rating: Number(p.rating),
+          reviewCount: p.reviewCount,
+          badge: p.badge || undefined,
+          description: p.description || "",
+          variants,
+          isEggless: hasEgglessVariant,
+          egglessAvailable: isCakeCategory || hasEgglessVariant,
         };
       });
-
-      const minPrice = variants.length > 0 ? Math.min(...variants.map((v: any) => v.price)) : 0;
-
-      // Map DB category slug to primary store section category
-      const catSlug = (p.category.slug || "").toLowerCase();
-      let mainCategory = "cakes";
-      if (p.productType === "SNACK" || ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug)) {
-        mainCategory = "snacks";
-      } else if (catSlug.includes("dry")) {
-        mainCategory = "dry-cakes";
-      } else if (catSlug.includes("bento")) {
-        mainCategory = "bento-cake";
-      } else if (catSlug.includes("wedding")) {
-        mainCategory = "wedding-cakes";
-      } else if (catSlug.includes("1st") || catSlug.includes("first")) {
-        mainCategory = "first-birthday";
-      }
-
-      const hasEgglessVariant = p.variants.some((v: any) => v.isEggless);
-      const isCakeCategory = ["cakes", "dry-cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
-
-      return {
-        id: p.slug,
-        name: p.name,
-        baseName: p.name,
-        category: mainCategory,
-        subCategory: p.category.name,
-        categoryName: p.category.name,
-        price: minPrice,
-        minPrice,
-        originalPrice: minPrice,
-        image: p.imageName || "product.image",
-        rating: Number(p.rating),
-        reviewCount: p.reviewCount,
-        badge: p.badge || undefined,
-        description: p.description || "",
-        variants,
-        isEggless: hasEgglessVariant,
-        egglessAvailable: isCakeCategory || hasEgglessVariant,
-      };
-    });
-  } catch (error) {
-    console.warn("Prisma MySQL fetch failed, falling back to static JSON:", error);
-    return PRODUCTS_DATA;
+    }
+  } catch (prismaErr: any) {
+    console.warn("⚠️ [Neon PostgreSQL] Prisma pooler fallback failed:", prismaErr?.message || prismaErr);
   }
+
+  // 3. Fallback: Static products catalog backup
+  console.warn("⚠️ [Neon PostgreSQL] Database unavailable, serving catalog from local cache.");
+  return PRODUCTS_DATA;
 }
 
 /**
