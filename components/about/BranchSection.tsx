@@ -22,7 +22,7 @@ const BRANCHES: Branch[] = [
     phone: "+91 96558 88829",
     lat: 10.835,
     lng: 78.702,
-    mapsUrl: "https://maps.google.com/?q=Sanjeevi+Nagar+Main+Rd,+Saravana+Nagar,+Sanjeevi+Nagar,+Tiruchirappalli,+Tamil+Nadu+620002",
+    mapsUrl: "https://maps.app.goo.gl/ngnZyn7GuqFfxaaw5",
   },
   {
     id: "b2",
@@ -32,7 +32,7 @@ const BRANCHES: Branch[] = [
     phone: "+91 96558 88829",
     lat: 10.8285,
     lng: 78.6948,
-    mapsUrl: "https://maps.google.com/?q=150,+N+Andar+St,+Tiruchirappalli,+Tamil+Nadu+620002",
+    mapsUrl: "https://maps.app.goo.gl/JbPYv92uBmfUy9RY9",
   },
 ];
 

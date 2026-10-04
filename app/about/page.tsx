@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import BranchSection from "@/components/about/BranchSection";
 
 export const metadata: Metadata = {
@@ -88,11 +89,15 @@ export default function AboutPage() {
 
           <div className="lg:col-span-5 flex justify-center">
             <div className="w-full max-w-md aspect-square rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-2xl bg-white relative group">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/about/image%20copy.png"
+              <Image
+                src="/images/about/hero-storefront.webp"
                 alt="Lollipop The Cake Shop storefront in Trichy, lit with festive string lights at night"
+                width={600}
+                height={600}
+                priority
+                quality={85}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 500px"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1C0D0A]/60 via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-4 left-4 right-4 text-white text-xs font-bold bg-[#1C0D0A]/70 backdrop-blur-md p-3 rounded-xl border border-white/20">
@@ -167,11 +172,15 @@ export default function AboutPage() {
       <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-6">
           <figure className="md:col-span-7 relative rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-md h-72 sm:h-96 group">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/about/image%20copy%202.png"
+            <Image
+              src="/images/about/counter-display.webp"
               alt="Display counter with cakes, pastries and fondant cake posters at Lollipop"
+              width={800}
+              height={500}
+              loading="lazy"
+              quality={85}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              sizes="(max-width: 768px) 100vw, 700px"
             />
             <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md">
               Fresh cakes and bakes, daily
@@ -179,11 +188,15 @@ export default function AboutPage() {
           </figure>
 
           <figure className="md:col-span-5 relative rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-md h-72 sm:h-96 group">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/about/image%20copy%203.png"
+            <Image
+              src="/images/about/seating-area.webp"
               alt="Seating area inside Lollipop with colourful chairs and framed custom cake photos"
+              width={600}
+              height={500}
+              loading="lazy"
+              quality={85}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              sizes="(max-width: 768px) 100vw, 500px"
             />
             <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md">
               Sit, taste, celebrate
@@ -370,11 +383,15 @@ export default function AboutPage() {
               rel="noopener noreferrer"
               className="block rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-2xl bg-white group"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/about/timesofindia.png"
+              <Image
+                src="/images/about/timesofindia.webp"
                 alt="Times of India article headline: Home Bakers In Trichy See Rising Demand For Custom Cakes, dated Dec 24, 2024"
+                width={700}
+                height={500}
+                loading="lazy"
+                quality={85}
                 className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                sizes="(max-width: 768px) 100vw, 600px"
               />
               <div className="p-4 bg-[#1C0D0A] text-white flex items-center justify-between text-xs font-bold">
                 <span>The Times of India Coverage</span>
