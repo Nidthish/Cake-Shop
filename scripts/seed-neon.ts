@@ -63,21 +63,14 @@ function getServingSize(weightStr: string): string {
 }
 
 async function main() {
-  let connectionString = process.env.DATABASE_URL || process.env.NEON_DATABASE_URL;
+  console.log("⚡ Connecting to Neon PostgreSQL Serverless...");
+  const { getNeonSql } = await import("../lib/neon");
+  const sql = getNeonSql();
 
-  if (!connectionString) {
-    console.error("❌ ERROR: DATABASE_URL is not set. Please add your Neon connection string to .env file.");
+  if (!sql) {
+    console.error("❌ ERROR: Could not initialize Neon SQL client. Check DATABASE_URL in .env");
     process.exit(1);
   }
-
-  // Clean pooler suffix for @neondatabase/serverless HTTP protocol
-  connectionString = connectionString
-    .replace("-pooler.", ".")
-    .replace("&channel_binding=require", "")
-    .replace("?channel_binding=require", "");
-
-  console.log("⚡ Connecting to Neon PostgreSQL Serverless...");
-  const sql = neon(connectionString);
 
   console.log("🛠️ Creating Neon Database tables if not exist...");
 
