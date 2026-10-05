@@ -288,6 +288,14 @@ class HybridOrderStore implements OrderStore {
             paymentStatus: o.payment_status || "PENDING",
             paymentMethod: o.payment_method || "COD",
             razorpayOrderId: o.razorpay_order_id || undefined,
+            deliveryOtp: o.delivery_otp || undefined,
+            deliveryOtpVerified: Boolean(o.delivery_otp_verified),
+            deliveryPartnerName: o.delivery_partner_name || undefined,
+            deliveryPartnerPhone: o.delivery_partner_phone || undefined,
+            cancellationReason: o.cancellation_reason || undefined,
+            cancelledAt: o.cancelled_at ? new Date(o.cancelled_at).toISOString() : undefined,
+            deliveredAt: o.delivered_at ? new Date(o.delivered_at).toISOString() : undefined,
+            assignedAt: o.assigned_at ? new Date(o.assigned_at).toISOString() : undefined,
             createdAt: new Date(o.created_at).toISOString(),
             updatedAt: new Date(o.updated_at).toISOString(),
           };
@@ -346,6 +354,14 @@ class HybridOrderStore implements OrderStore {
             paymentStatus: o.payment_status || "PENDING",
             paymentMethod: o.payment_method || "COD",
             razorpayOrderId: o.razorpay_order_id || undefined,
+            deliveryOtp: o.delivery_otp || undefined,
+            deliveryOtpVerified: Boolean(o.delivery_otp_verified),
+            deliveryPartnerName: o.delivery_partner_name || undefined,
+            deliveryPartnerPhone: o.delivery_partner_phone || undefined,
+            cancellationReason: o.cancellation_reason || undefined,
+            cancelledAt: o.cancelled_at ? new Date(o.cancelled_at).toISOString() : undefined,
+            deliveredAt: o.delivered_at ? new Date(o.delivered_at).toISOString() : undefined,
+            assignedAt: o.assigned_at ? new Date(o.assigned_at).toISOString() : undefined,
             createdAt: new Date(o.created_at).toISOString(),
             updatedAt: new Date(o.updated_at).toISOString(),
           };
@@ -425,20 +441,49 @@ class HybridOrderStore implements OrderStore {
         const sql = getNeonSql();
         if (sql) {
           const isNum = /^\d+$/.test(orderId);
-          if (patch.orderStatus) {
-            if (isNum) {
-              await sql`
-                UPDATE orders 
-                SET status = ${patch.orderStatus}, updated_at = NOW() 
-                WHERE order_number = ${orderId} OR id = ${Number(orderId)}
-              `;
-            } else {
-              await sql`
-                UPDATE orders 
-                SET status = ${patch.orderStatus}, updated_at = NOW() 
-                WHERE order_number = ${orderId}
-              `;
-            }
+          const deliveredAtVal = patch.deliveredAt ? new Date(patch.deliveredAt) : (patch.orderStatus === "DELIVERED" ? new Date() : null);
+          const cancelledAtVal = patch.cancelledAt ? new Date(patch.cancelledAt) : (patch.orderStatus === "CANCELLED" ? new Date() : null);
+          const assignedAtVal = patch.assignedAt ? new Date(patch.assignedAt) : (patch.orderStatus === "OUT_FOR_DELIVERY" ? new Date() : null);
+
+          // Update order status & delivery fields
+          if (isNum) {
+            await sql`
+              UPDATE orders 
+              SET 
+                status = COALESCE(${patch.orderStatus || null}, status),
+                delivery_otp = COALESCE(${patch.deliveryOtp || null}, delivery_otp),
+                delivery_otp_verified = CASE 
+                  WHEN ${patch.deliveryOtpVerified !== undefined} THEN ${Boolean(patch.deliveryOtpVerified)} 
+                  ELSE delivery_otp_verified 
+                END,
+                delivery_partner_name = COALESCE(${patch.deliveryPartnerName || null}, delivery_partner_name),
+                delivery_partner_phone = COALESCE(${patch.deliveryPartnerPhone || null}, delivery_partner_phone),
+                cancellation_reason = COALESCE(${patch.cancellationReason || null}, cancellation_reason),
+                cancelled_at = COALESCE(${cancelledAtVal}, cancelled_at),
+                delivered_at = COALESCE(${deliveredAtVal}, delivered_at),
+                assigned_at = COALESCE(${assignedAtVal}, assigned_at),
+                updated_at = NOW() 
+              WHERE order_number = ${orderId} OR id = ${Number(orderId)}
+            `;
+          } else {
+            await sql`
+              UPDATE orders 
+              SET 
+                status = COALESCE(${patch.orderStatus || null}, status),
+                delivery_otp = COALESCE(${patch.deliveryOtp || null}, delivery_otp),
+                delivery_otp_verified = CASE 
+                  WHEN ${patch.deliveryOtpVerified !== undefined} THEN ${Boolean(patch.deliveryOtpVerified)} 
+                  ELSE delivery_otp_verified 
+                END,
+                delivery_partner_name = COALESCE(${patch.deliveryPartnerName || null}, delivery_partner_name),
+                delivery_partner_phone = COALESCE(${patch.deliveryPartnerPhone || null}, delivery_partner_phone),
+                cancellation_reason = COALESCE(${patch.cancellationReason || null}, cancellation_reason),
+                cancelled_at = COALESCE(${cancelledAtVal}, cancelled_at),
+                delivered_at = COALESCE(${deliveredAtVal}, delivered_at),
+                assigned_at = COALESCE(${assignedAtVal}, assigned_at),
+                updated_at = NOW() 
+              WHERE order_number = ${orderId}
+            `;
           }
 
           if (patch.paymentStatus || patch.razorpayPaymentId) {
@@ -478,19 +523,43 @@ class HybridOrderStore implements OrderStore {
       const mysqlPool = getMySqlPool();
       if (mysqlPool) {
         const isNumeric = /^\d+$/.test(orderId);
-        if (patch.orderStatus) {
-          if (isNumeric) {
-            await mysqlPool.query(
-              "UPDATE lollipop_db.orders SET status = ?, updated_at = NOW() WHERE order_number = ? OR id = ?",
-              [patch.orderStatus, orderId, Number(orderId)]
-            );
-          } else {
-            await mysqlPool.query(
-              "UPDATE lollipop_db.orders SET status = ?, updated_at = NOW() WHERE order_number = ?",
-              [patch.orderStatus, orderId]
-            );
-          }
-        }
+        const deliveredAtVal = patch.deliveredAt ? new Date(patch.deliveredAt) : (patch.orderStatus === "DELIVERED" ? new Date() : null);
+        const cancelledAtVal = patch.cancelledAt ? new Date(patch.cancelledAt) : (patch.orderStatus === "CANCELLED" ? new Date() : null);
+        const assignedAtVal = patch.assignedAt ? new Date(patch.assignedAt) : (patch.orderStatus === "OUT_FOR_DELIVERY" ? new Date() : null);
+
+        const mysqlUpdateQuery = `
+          UPDATE lollipop_db.orders 
+          SET 
+            status = COALESCE(?, status),
+            delivery_otp = COALESCE(?, delivery_otp),
+            delivery_otp_verified = CASE WHEN ? IS NOT NULL THEN ? ELSE delivery_otp_verified END,
+            delivery_partner_name = COALESCE(?, delivery_partner_name),
+            delivery_partner_phone = COALESCE(?, delivery_partner_phone),
+            cancellation_reason = COALESCE(?, cancellation_reason),
+            cancelled_at = COALESCE(?, cancelled_at),
+            delivered_at = COALESCE(?, delivered_at),
+            assigned_at = COALESCE(?, assigned_at),
+            updated_at = NOW()
+          WHERE ${isNumeric ? "order_number = ? OR id = ?" : "order_number = ?"}
+        `;
+
+        const otpVerifiedParam = patch.deliveryOtpVerified !== undefined ? (patch.deliveryOtpVerified ? 1 : 0) : null;
+        const mysqlParams = [
+          patch.orderStatus || null,
+          patch.deliveryOtp || null,
+          otpVerifiedParam,
+          otpVerifiedParam,
+          patch.deliveryPartnerName || null,
+          patch.deliveryPartnerPhone || null,
+          patch.cancellationReason || null,
+          cancelledAtVal,
+          deliveredAtVal,
+          assignedAtVal,
+          orderId,
+          ...(isNumeric ? [Number(orderId)] : []),
+        ];
+
+        await mysqlPool.query(mysqlUpdateQuery, mysqlParams);
 
         if (patch.paymentStatus || patch.razorpayPaymentId) {
           if (isNumeric) {
@@ -535,3 +604,100 @@ export function generateOrderId(): string {
   const rand = Math.floor(1000 + Math.random() * 9000);
   return `LLP-${dateStr}-${rand}`;
 }
+
+export function generateDeliveryOtp(): string {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+}
+
+export async function getOrGenerateDeliveryOtp(orderId: string): Promise<{ otp: string; order: Order } | null> {
+  const order = await orderStore.get(orderId);
+  if (!order) return null;
+
+  if (order.deliveryOtp) {
+    return { otp: order.deliveryOtp, order };
+  }
+
+  const newOtp = generateDeliveryOtp();
+  const updated = await orderStore.update(orderId, {
+    deliveryOtp: newOtp,
+    deliveryOtpVerified: false,
+  });
+
+  return { otp: newOtp, order: updated || order };
+}
+
+export async function verifyAndDeliverOrder(
+  orderId: string,
+  options: {
+    otp?: string;
+    partnerName?: string;
+    partnerPhone?: string;
+    bypassOtp?: boolean;
+  } = {}
+): Promise<{ success: boolean; error?: string; order?: Order | null }> {
+  const order = await orderStore.get(orderId);
+  if (!order) {
+    return { success: false, error: "Order not found" };
+  }
+
+  if (order.orderStatus === "DELIVERED") {
+    return { success: true, order, error: "Order is already marked as DELIVERED" };
+  }
+
+  if (order.orderStatus === "CANCELLED") {
+    return { success: false, error: "Cannot deliver a cancelled order" };
+  }
+
+  // OTP check
+  if (!options.bypassOtp) {
+    if (!options.otp) {
+      return { success: false, error: "Delivery OTP is required for confirmation" };
+    }
+    const cleanInput = options.otp.trim();
+    if (!order.deliveryOtp || order.deliveryOtp !== cleanInput) {
+      return { success: false, error: "Invalid delivery OTP. Please verify with the customer." };
+    }
+  }
+
+  // Update order to DELIVERED
+  const patch: Partial<Order> = {
+    orderStatus: "DELIVERED",
+    deliveryOtpVerified: true,
+    deliveredAt: new Date().toISOString(),
+    ...(options.partnerName && { deliveryPartnerName: options.partnerName }),
+    ...(options.partnerPhone && { deliveryPartnerPhone: options.partnerPhone }),
+  };
+
+  // If COD, mark payment as completed upon cash delivery
+  if (order.paymentMethod === "COD" || order.paymentStatus !== "PAID") {
+    patch.paymentStatus = "PAID";
+  }
+
+  const updated = await orderStore.update(orderId, patch);
+  return { success: true, order: updated };
+}
+
+export async function cancelDeliveryOrder(
+  orderId: string,
+  reason: string,
+  partnerName?: string
+): Promise<{ success: boolean; error?: string; order?: Order | null }> {
+  const order = await orderStore.get(orderId);
+  if (!order) {
+    return { success: false, error: "Order not found" };
+  }
+
+  if (order.orderStatus === "DELIVERED") {
+    return { success: false, error: "Cannot cancel an already delivered order" };
+  }
+
+  const updated = await orderStore.update(orderId, {
+    orderStatus: "CANCELLED",
+    cancellationReason: reason || "Cancelled by delivery partner",
+    cancelledAt: new Date().toISOString(),
+    ...(partnerName && { deliveryPartnerName: partnerName }),
+  });
+
+  return { success: true, order: updated };
+}
+

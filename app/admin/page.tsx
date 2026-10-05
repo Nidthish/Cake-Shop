@@ -892,13 +892,13 @@ export default function AdminPage() {
   // 🔒 LOGIN SCREEN (UNAUTHENTICATED VIEW)
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#1C061E] flex items-center justify-center px-4 py-12">
-        <div className="max-w-md w-full bg-[#2A082C] rounded-3xl border border-[#962854]/40 p-8 shadow-2xl space-y-8">
+      <div className="min-h-screen bg-[#1C061E] flex items-center justify-center px-4 py-8 sm:py-12">
+        <div className="max-w-md w-full bg-[#2A082C] rounded-2xl sm:rounded-3xl border border-[#962854]/40 p-5 sm:p-8 shadow-2xl space-y-6 sm:space-y-8">
           <div className="text-center space-y-2">
-            <div className="w-16 h-16 rounded-2xl bg-[#802B52]/40 border border-[#E6C184]/40 flex items-center justify-center mx-auto text-3xl shadow-lg">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#802B52]/40 border border-[#E6C184]/40 flex items-center justify-center mx-auto text-2xl sm:text-3xl shadow-lg">
               🔐
             </div>
-            <h1 className="font-serif text-2xl font-bold text-white tracking-wide">
+            <h1 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide">
               Lollipop Admin Portal
             </h1>
             <p className="text-xs text-[#D8C3B3]">
@@ -912,9 +912,9 @@ export default function AdminPage() {
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
             <div>
-              <label className="block text-xs font-bold uppercase text-[#E6C184] mb-2 tracking-wider">
+              <label className="block text-xs font-bold uppercase text-[#E6C184] mb-1.5 tracking-wider">
                 Admin Email
               </label>
 
@@ -929,7 +929,7 @@ export default function AdminPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase text-[#E6C184] mb-2 tracking-wider">
+              <label className="block text-xs font-bold uppercase text-[#E6C184] mb-1.5 tracking-wider">
                 Password
               </label>
               <input
@@ -945,7 +945,7 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={loggingIn}
-              className="w-full bg-[#802B52] hover:bg-[#962854] text-white py-3.5 rounded-xl font-bold text-sm tracking-wider uppercase transition-all shadow-lg hover:shadow-pink-900/30 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full bg-[#802B52] hover:bg-[#962854] text-white py-3.5 rounded-xl font-bold text-sm tracking-wider uppercase transition-all shadow-lg hover:shadow-pink-900/30 flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
             >
               {loggingIn ? (
                 <>
@@ -966,31 +966,51 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-[#FAF5EE] text-[#2D2327]">
       {/* Admin Navbar Header */}
-      <header className="bg-[#2A082C] border-b border-[#962854]/40 text-white px-4 sm:px-8 py-4 shadow-xl">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#802B52] flex items-center justify-center text-xl shadow-md border border-[#E6C184]/30">
-              🎂
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="font-serif font-bold text-xl sm:text-2xl text-white tracking-wide">
+      <header className="bg-[#2A082C] border-b border-[#962854]/40 text-white px-4 sm:px-8 py-3.5 sm:py-4 shadow-xl sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#802B52] flex items-center justify-center text-lg sm:text-xl shadow-md border border-[#E6C184]/30 shrink-0">
+                🎂
+              </div>
+              <div>
+                <h1 className="font-serif font-bold text-lg sm:text-2xl text-white tracking-wide leading-tight">
                   Lollipop Admin
                 </h1>
+                <p className="text-[11px] sm:text-xs text-[#D8C3B3]">
+                  Logged in as <strong className="text-white">{adminUser?.fullName}</strong>
+                </p>
               </div>
-              <p className="text-xs text-[#D8C3B3]">
-                Logged in as <strong className="text-white">{adminUser?.fullName}</strong>
-              </p>
+            </div>
+
+            {/* Mobile quick actions */}
+            <div className="flex md:hidden items-center gap-2">
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white/10 hover:bg-white/20 text-white text-xs p-2 rounded-lg transition-all border border-white/20"
+                title="View Storefront"
+              >
+                🌐
+              </a>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500/20 hover:bg-red-500/40 text-red-200 border border-red-500/40 text-xs px-2.5 py-1.5 rounded-lg transition-all"
+                title="Logout"
+              >
+                🚪
+              </button>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 justify-start md:justify-end border-t border-white/10 pt-2.5 md:pt-0 md:border-t-0">
             {adminUser?.role === "SUPERADMIN" && (
               <button
                 onClick={handleOpenCreateModal}
-                className="bg-[#E6C184] hover:bg-[#d8b070] text-[#2A082C] text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                className="flex-1 sm:flex-initial bg-[#E6C184] hover:bg-[#d8b070] text-[#2A082C] text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer min-h-[40px]"
               >
-                ➕ Add New Cake / Product
+                ➕ Add Product
               </button>
             )}
 
@@ -998,14 +1018,14 @@ export default function AdminPage() {
               href="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all border border-white/20 flex items-center gap-1.5"
+              className="hidden md:flex bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all border border-white/20 items-center gap-1.5"
             >
               🌐 View Storefront
             </a>
 
             <button
               onClick={handleLogout}
-              className="bg-red-500/20 hover:bg-red-500/40 text-red-200 border border-red-500/40 text-xs font-bold px-3 py-2.5 rounded-xl transition-all cursor-pointer"
+              className="hidden md:flex bg-red-500/20 hover:bg-red-500/40 text-red-200 border border-red-500/40 text-xs font-bold px-3 py-2.5 rounded-xl transition-all cursor-pointer items-center gap-1"
             >
               🚪 Logout
             </button>
@@ -1014,85 +1034,85 @@ export default function AdminPage() {
       </header>
 
       {/* Main Container */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <main className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-4 sm:space-y-6">
         {alertMessage && (
-          <div className="bg-[#802B52] text-white px-5 py-3 rounded-xl flex justify-between items-center text-sm shadow-md">
+          <div className="bg-[#802B52] text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl flex justify-between items-center text-xs sm:text-sm shadow-md">
             <span>{alertMessage}</span>
-            <button onClick={() => setAlertMessage(null)} className="font-bold text-xs hover:opacity-80">
-              ✕ Dismiss
+            <button onClick={() => setAlertMessage(null)} className="font-bold text-xs hover:opacity-80 ml-2">
+              ✕
             </button>
           </div>
         )}
 
         {/* Admin Dashboard Tabs */}
-        <div className="flex border-b border-[#E6DBCE] space-x-2 sm:space-x-4 overflow-x-auto">
+        <div className="flex border-b border-[#E6DBCE] space-x-1 sm:space-x-3 overflow-x-auto scrollbar-none no-scrollbar -mx-3.5 px-3.5 sm:mx-0 sm:px-0">
           <button
             onClick={() => setActiveTab("sales")}
-            className={`py-3 px-5 font-bold text-sm border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+            className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
               activeTab === "sales"
-                ? "border-[#802B52] text-[#802B52]"
+                ? "border-[#802B52] text-[#802B52] bg-[#FAF5EE]"
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
             }`}
           >
-            📊 Sales &amp; Overview
+            📊 <span className="inline">Sales &amp; Overview</span>
           </button>
 
           <button
             onClick={() => setActiveTab("products")}
-            className={`py-3 px-5 font-bold text-sm border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+            className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
               activeTab === "products"
-                ? "border-[#802B52] text-[#802B52]"
+                ? "border-[#802B52] text-[#802B52] bg-[#FAF5EE]"
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
             }`}
           >
-            🎂 Products &amp; Catalog ({products.length})
+            🎂 <span className="inline">Products ({products.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("orders")}
-            className={`py-3 px-5 font-bold text-sm border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+            className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
               activeTab === "orders"
-                ? "border-[#802B52] text-[#802B52]"
+                ? "border-[#802B52] text-[#802B52] bg-[#FAF5EE]"
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
             }`}
           >
-            📦 Customer Orders ({orders.length})
+            📦 <span className="inline">Orders ({orders.length})</span>
           </button>
 
           {adminUser?.role === "SUPERADMIN" && (
             <button
               onClick={() => setActiveTab("users")}
-              className={`py-3 px-5 font-bold text-sm border-b-2 transition-all cursor-pointer flex items-center gap-2 ${
+              className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
                 activeTab === "users"
-                  ? "border-[#802B52] text-[#802B52]"
+                  ? "border-[#802B52] text-[#802B52] bg-[#FAF5EE]"
                   : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
               }`}
             >
-              👥 Manage Admin Users ({adminUsersList.length})
+              👥 <span className="inline">Admins ({adminUsersList.length})</span>
             </button>
           )}
         </div>
 
         {/* TAB 1: SALES & OVERVIEW */}
         {activeTab === "sales" && (
-          <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm">
               <div>
-                <h2 className="font-serif text-2xl font-bold text-[#5B1E38]">
+                <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#5B1E38]">
                   Sales Overview
                 </h2>
                 <p className="text-xs text-[#7A6B72]">
-                  View your store sales and order summary.
+                  View your store sales and order performance metrics.
                 </p>
               </div>
 
               {/* Date Filter Bar */}
-              <div className="flex items-center gap-1.5 bg-[#FAF5EE] p-1.5 rounded-xl border border-[#E6DBCE]">
+              <div className="flex flex-wrap items-center gap-1 bg-[#FAF5EE] p-1.5 rounded-xl border border-[#E6DBCE]">
                 {(["today", "yesterday", "7days", "month", "all"] as const).map((filterKey) => (
                   <button
                     key={filterKey}
                     onClick={() => setSalesDateFilter(filterKey)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer ${
+                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all cursor-pointer flex-1 sm:flex-initial text-center ${
                       salesDateFilter === filterKey
                         ? "bg-[#802B52] text-white shadow-sm"
                         : "text-[#7A6B72] hover:bg-[#E6DBCE]/50"
@@ -1103,58 +1123,58 @@ export default function AdminPage() {
                       : filterKey === "yesterday"
                       ? "Yesterday"
                       : filterKey === "7days"
-                      ? "Last 7 Days"
+                      ? "7 Days"
                       : filterKey === "month"
-                      ? "This Month"
-                      : "All Time"}
+                      ? "Month"
+                      : "All"}
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Sales Stat Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              <div className="bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+              <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
                   Total Revenue
                 </span>
-                <div className="text-3xl font-extrabold text-[#802B52]">
-                  ₹{salesStats.totalRevenue.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+                <div className="text-xl sm:text-3xl font-extrabold text-[#802B52] truncate">
+                  ₹{salesStats.totalRevenue.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                 </div>
-                <p className="text-[11px] text-emerald-600 font-medium">
-                  💳 Total sales revenue
+                <p className="text-[10px] sm:text-[11px] text-emerald-600 font-medium">
+                  💳 Total sales
                 </p>
               </div>
 
-              <div className="bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+              <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
                   Total Orders
                 </span>
-                <div className="text-3xl font-extrabold text-[#2A082C]">
-                  {salesStats.totalCount} Orders
+                <div className="text-xl sm:text-3xl font-extrabold text-[#2A082C]">
+                  {salesStats.totalCount} <span className="text-xs sm:text-base font-normal text-gray-500">Orders</span>
                 </div>
-                <p className="text-[11px] text-[#7A6B72] font-medium">
-                  📦 Total orders placed
+                <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-medium">
+                  📦 Placed orders
                 </p>
               </div>
 
-              <div className="bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Average Order Value
+              <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+                  Avg Order Value
                 </span>
-                <div className="text-3xl font-extrabold text-[#962854]">
-                  ₹{salesStats.avgOrderValue.toFixed(2)}
+                <div className="text-xl sm:text-3xl font-extrabold text-[#962854] truncate">
+                  ₹{salesStats.avgOrderValue.toFixed(0)}
                 </div>
-                <p className="text-[11px] text-[#7A6B72] font-medium">
-                  🎂 Average spend per order
+                <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-medium">
+                  🎂 Per order avg
                 </p>
               </div>
 
-              <div className="bg-white p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+              <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
+                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
                   Paid Orders
                 </span>
-                <div className="text-3xl font-extrabold text-emerald-600">
+                <div className="text-xl sm:text-3xl font-extrabold text-emerald-600">
                   {salesStats.paidOrders} / {salesStats.totalCount}
                 </div>
                 <p className="text-[11px] text-emerald-700 font-medium">
@@ -1167,23 +1187,23 @@ export default function AdminPage() {
 
         {/* TAB 2: PRODUCTS & CATALOG MANAGEMENT */}
         {activeTab === "products" && (
-          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm p-6 space-y-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-6">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <div className="w-full sm:w-auto flex-1 max-w-md">
                 <input
                   type="text"
                   placeholder="Search products by name or code..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl border border-[#E6DBCE] text-sm focus:outline-none focus:border-[#802B52]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
                 />
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <select
                   value={selectedCategoryFilter}
                   onChange={(e) => setSelectedCategoryFilter(e.target.value)}
-                  className="px-4 py-2.5 rounded-xl border border-[#E6DBCE] text-sm bg-white font-medium focus:outline-none focus:border-[#802B52]"
+                  className="flex-1 sm:flex-initial px-3 sm:px-4 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm bg-white font-medium focus:outline-none focus:border-[#802B52]"
                 >
                   <option value="all">All Categories ({products.length})</option>
                   {PRIMARY_CATEGORIES.map((c) => (
@@ -1194,9 +1214,9 @@ export default function AdminPage() {
                 </select>
                 <button
                   onClick={fetchProducts}
-                  className="px-4 py-2.5 rounded-xl border border-[#E6DBCE] bg-[#FAF5EE] hover:bg-[#f2e7d8] text-xs font-bold text-[#802B52] transition-all cursor-pointer"
+                  className="px-3 py-2.5 rounded-xl border border-[#E6DBCE] bg-[#FAF5EE] hover:bg-[#f2e7d8] text-xs font-bold text-[#802B52] transition-all cursor-pointer shrink-0"
                 >
-                  🔄 Refresh
+                  🔄 <span className="hidden sm:inline">Refresh</span>
                 </button>
               </div>
             </div>
@@ -1206,98 +1226,198 @@ export default function AdminPage() {
                 No products found matching your filter.
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
-                    <tr>
-                      <th className="py-3 px-4">Code</th>
-                      <th className="py-3 px-4">Product Name</th>
-                      <th className="py-3 px-4">Category</th>
-                      <th className="py-3 px-4">Variants &amp; Pricing</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#E6DBCE]">
-                    {filteredProducts.map((p) => (
-                      <tr key={p.id} className="hover:bg-[#FDFBF7]">
-                        <td className="py-4 px-4 font-mono font-bold text-[#802B52]">{p.productCode}</td>
-                        <td className="py-4 px-4">
-                          <div className="flex items-center gap-2.5">
-                            {p.image && (
-                              /* eslint-disable-next-line @next/next/no-img-element */
-                              <img
-                                src={p.image}
-                                alt={p.name || "Cake"}
-                                className="w-8 h-8 rounded-lg object-cover border border-[#E6DBCE] flex-shrink-0"
-                                onError={(e) => {
-                                  (e.target as HTMLElement).style.display = "none";
-                                }}
-                              />
-                            )}
-                            <div className="font-bold text-sm text-[#2D2327]">{p.name}</div>
-                          </div>
-                        </td>
-                        <td className="py-4 px-4 font-medium text-[#5B1E38]">{p.categoryName || p.category || "Cakes"}</td>
-                        <td className="py-4 px-4">
-                          {(p.variants || []).map((v, i) => (
-                            <span key={i} className="inline-block bg-[#FAF5EE] border border-[#E6DBCE] text-[#2D2327] font-semibold px-2 py-0.5 rounded text-[11px] mr-1.5 mb-1">
-                              {v.name}: ₹{v.price}
+              <>
+                {/* 📱 MOBILE CARD VIEW FOR PRODUCTS (Visible on screens < 768px) */}
+                <div className="block md:hidden space-y-3">
+                  {filteredProducts.map((p) => (
+                    <div
+                      key={p.id}
+                      className="bg-[#FAF5EE]/60 border border-[#E6DBCE] rounded-xl p-3.5 space-y-3 transition-all hover:bg-white hover:shadow-md"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="w-14 h-14 rounded-lg overflow-hidden border border-[#E6DBCE] bg-white shrink-0">
+                          {p.image ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
+                            <img
+                              src={p.image}
+                              alt={p.name || "Cake"}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = "none";
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-xl">🎂</div>
+                          )}
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-1 mb-0.5">
+                            <span className="font-mono text-[11px] font-bold text-[#802B52] bg-[#802B52]/10 px-1.5 py-0.5 rounded">
+                              {p.productCode}
                             </span>
-                          ))}
-                        </td>
-                        <td className="py-4 px-4">
-                          <span className={`inline-block px-2.5 py-1 rounded text-[11px] font-bold ${p.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-                            {p.isActive ? "🟢 Active for Sales" : "🔴 Sales Paused"}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <button
-                              onClick={() => handleToggleSales(p.id, p.isActive)}
-                              className={`px-3 py-1.5 rounded text-[11px] font-semibold border cursor-pointer ${p.isActive ? "border-amber-400 text-amber-800 bg-amber-50 hover:bg-amber-100" : "border-green-500 text-green-700 bg-green-50 hover:bg-green-100"}`}
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                                p.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                              }`}
                             >
-                              {p.isActive ? "Pause Sales" : "Resume Sales"}
-                            </button>
-                            {adminUser?.role === "SUPERADMIN" && (
-                              <>
-                                <button
-                                  onClick={() => handleEditClick(p)}
-                                  className="px-3 py-1.5 rounded text-[11px] font-semibold bg-[#802B52] text-white hover:bg-[#682242] cursor-pointer"
-                                >
-                                  Edit Item
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteProduct(p.id, p.name)}
-                                  className="px-2.5 py-1.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 cursor-pointer"
-                                >
-                                  🗑️
-                                </button>
-                              </>
-                            )}
+                              {p.isActive ? "Active" : "Paused"}
+                            </span>
                           </div>
-                        </td>
+
+                          <h3 className="font-bold text-sm text-[#2D2327] truncate">{p.name}</h3>
+                          <p className="text-[11px] font-medium text-[#5B1E38] truncate">
+                            {p.categoryName || p.category || "Cakes"}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Variants & Prices Chips */}
+                      <div className="flex flex-wrap gap-1 pt-1 border-t border-[#E6DBCE]/60">
+                        {(p.variants || []).map((v, i) => (
+                          <span
+                            key={i}
+                            className="bg-white border border-[#E6DBCE] text-[#2D2327] font-semibold px-2 py-0.5 rounded text-[10px]"
+                          >
+                            {v.name}: ₹{v.price}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Mobile Action Controls */}
+                      <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#E6DBCE]">
+                        <button
+                          onClick={() => handleToggleSales(p.id, p.isActive)}
+                          className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-colors ${
+                            p.isActive
+                              ? "border-amber-400 text-amber-800 bg-amber-50 active:bg-amber-100"
+                              : "border-green-500 text-green-700 bg-green-50 active:bg-green-100"
+                          }`}
+                        >
+                          {p.isActive ? "Pause Sales" : "Resume Sales"}
+                        </button>
+
+                        {adminUser?.role === "SUPERADMIN" && (
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              onClick={() => handleEditClick(p)}
+                              className="px-3 py-2 rounded-lg text-xs font-bold bg-[#802B52] text-white active:bg-[#682242]"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteProduct(p.id, p.name)}
+                              className="px-2.5 py-2 rounded-lg text-xs font-bold text-red-600 bg-red-50 border border-red-200 active:bg-red-100"
+                              title="Delete"
+                            >
+                              🗑️
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 🖥️ DESKTOP TABLE VIEW FOR PRODUCTS (Visible on screens >= 768px) */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
+                      <tr>
+                        <th className="py-3 px-4">Code</th>
+                        <th className="py-3 px-4">Product Name</th>
+                        <th className="py-3 px-4">Category</th>
+                        <th className="py-3 px-4">Variants &amp; Pricing</th>
+                        <th className="py-3 px-4">Status</th>
+                        <th className="py-3 px-4 text-right">Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-[#E6DBCE]">
+                      {filteredProducts.map((p) => (
+                        <tr key={p.id} className="hover:bg-[#FDFBF7]">
+                          <td className="py-4 px-4 font-mono font-bold text-[#802B52]">{p.productCode}</td>
+                          <td className="py-4 px-4">
+                            <div className="flex items-center gap-2.5">
+                              {p.image && (
+                                /* eslint-disable-next-line @next/next/no-img-element */
+                                <img
+                                  src={p.image}
+                                  alt={p.name || "Cake"}
+                                  className="w-8 h-8 rounded-lg object-cover border border-[#E6DBCE] flex-shrink-0"
+                                  onError={(e) => {
+                                    (e.target as HTMLElement).style.display = "none";
+                                  }}
+                                />
+                              )}
+                              <div className="font-bold text-sm text-[#2D2327]">{p.name}</div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4 font-medium text-[#5B1E38]">{p.categoryName || p.category || "Cakes"}</td>
+                          <td className="py-4 px-4">
+                            {(p.variants || []).map((v, i) => (
+                              <span key={i} className="inline-block bg-[#FAF5EE] border border-[#E6DBCE] text-[#2D2327] font-semibold px-2 py-0.5 rounded text-[11px] mr-1.5 mb-1">
+                                {v.name}: ₹{v.price}
+                              </span>
+                            ))}
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className={`inline-block px-2.5 py-1 rounded text-[11px] font-bold ${p.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+                              {p.isActive ? "🟢 Active for Sales" : "🔴 Sales Paused"}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => handleToggleSales(p.id, p.isActive)}
+                                className={`px-3 py-1.5 rounded text-[11px] font-semibold border cursor-pointer ${p.isActive ? "border-amber-400 text-amber-800 bg-amber-50 hover:bg-amber-100" : "border-green-500 text-green-700 bg-green-50 hover:bg-green-100"}`}
+                              >
+                                {p.isActive ? "Pause Sales" : "Resume Sales"}
+                              </button>
+                              {adminUser?.role === "SUPERADMIN" && (
+                                <>
+                                  <button
+                                    onClick={() => handleEditClick(p)}
+                                    className="px-3 py-1.5 rounded text-[11px] font-semibold bg-[#802B52] text-white hover:bg-[#682242] cursor-pointer"
+                                  >
+                                    Edit Item
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteProduct(p.id, p.name)}
+                                    className="px-2.5 py-1.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 cursor-pointer"
+                                  >
+                                    🗑️
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
           </div>
         )}
 
         {/* TAB 3: CUSTOMER ORDERS */}
         {activeTab === "orders" && (
-          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm p-6 space-y-6">
+          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-6">
             <div className="flex justify-between items-center">
-              <h2 className="font-serif text-xl font-bold text-[#5B1E38]">
-                Recent Customer Orders
-              </h2>
+              <div>
+                <h2 className="font-serif text-lg sm:text-xl font-bold text-[#5B1E38]">
+                  Recent Customer Orders
+                </h2>
+                <p className="text-xs text-[#7A6B72] hidden sm:block">
+                  Manage customer order fulfillments and schedules.
+                </p>
+              </div>
               <button
                 onClick={fetchOrders}
-                className="px-3 py-1.5 text-xs font-semibold rounded bg-[#FAF5EE] text-[#802B52] border border-[#E6DBCE] hover:bg-[#F3E8DB] cursor-pointer"
+                className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#FAF5EE] text-[#802B52] border border-[#E6DBCE] hover:bg-[#F3E8DB] cursor-pointer flex items-center gap-1 shrink-0"
               >
-                🔄 Refresh Orders
+                🔄 <span className="hidden sm:inline">Refresh Orders</span><span className="sm:hidden">Refresh</span>
               </button>
             </div>
 
@@ -1306,90 +1426,185 @@ export default function AdminPage() {
                 No customer orders recorded yet.
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
-                    <tr>
-                      <th className="py-3 px-4">Order ID</th>
-                      <th className="py-3 px-4">Customer Details</th>
-                      <th className="py-3 px-4">Delivery Schedule</th>
-                      <th className="py-3 px-4">Items</th>
-                      <th className="py-3 px-4">Total Amount</th>
-                      <th className="py-3 px-4">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#E6DBCE]">
-                    {orders.map((o) => (
-                      <tr key={o.id} className="hover:bg-[#FDFBF7]">
-                        <td className="py-4 px-4 font-mono font-bold text-[#802B52]">{o.orderNumber}</td>
-                        <td className="py-4 px-4">
-                          <div className="font-bold text-[#2D2327]">{o.customerName}</div>
-                          <div className="text-[11px] text-[#7A6B72]">{o.customerPhone}</div>
-                          <div className="text-[11px] text-[#7A6B72]">{o.customerEmail}</div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="font-semibold text-[#5B1E38]">{o.deliveryDate}</div>
-                          <div className="text-[11px] text-[#7A6B72]">{o.deliveryTimeSlot}</div>
-                        </td>
-                        <td className="py-4 px-4">
-                          {o.items?.map((i: any, idx: number) => (
-                            <div key={idx} className="text-[11px]">
-                              {i.quantity}x {i.productName} ({i.variantName})
-                            </div>
-                          ))}
-                        </td>
-                        <td className="py-4 px-4 font-bold text-[#802B52]">₹{o.totalAmount}</td>
-                        <td className="py-4 px-4">
-                          {adminUser?.role === "SUPERADMIN" ? (
-                            <select
-                              value={o.status}
-                              onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
-                              className="px-2 py-1 rounded border border-[#E6DBCE] bg-white text-xs font-semibold focus:outline-none focus:border-[#802B52]"
-                            >
-                              <option value="PENDING">PENDING</option>
-                              <option value="CONFIRMED">CONFIRMED</option>
-                              <option value="PREPARING">PREPARING</option>
-                              <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
-                              <option value="DELIVERED">DELIVERED</option>
-                              <option value="CANCELLED">CANCELLED</option>
-                            </select>
-                          ) : (
-                            <span className="inline-block px-2.5 py-1 rounded text-[11px] font-bold bg-[#2A082C] text-[#E6C184]">
-                              {o.status}
-                            </span>
+              <>
+                {/* 📱 MOBILE CARD VIEW FOR ORDERS (Visible on screens < 768px) */}
+                <div className="block md:hidden space-y-3">
+                  {orders.map((o) => (
+                    <div
+                      key={o.id}
+                      className="bg-[#FAF5EE]/60 border border-[#E6DBCE] rounded-xl p-4 space-y-3 hover:bg-white hover:shadow-md transition-all"
+                    >
+                      <div className="flex items-center justify-between pb-2 border-b border-[#E6DBCE]">
+                        <div>
+                          <span className="font-mono text-xs font-bold text-[#802B52] bg-[#802B52]/10 px-2 py-0.5 rounded">
+                            {o.orderNumber}
+                          </span>
+                        </div>
+                        <div className="font-extrabold text-sm text-[#802B52]">
+                          ₹{o.totalAmount}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                          <p className="text-[10px] uppercase font-bold text-[#7A6B72]">Customer</p>
+                          <p className="font-bold text-[#2D2327]">{o.customerName}</p>
+                          {o.customerPhone && (
+                            <a href={`tel:${o.customerPhone}`} className="text-[#802B52] font-medium text-[11px] underline block mt-0.5">
+                              📞 {o.customerPhone}
+                            </a>
                           )}
-                        </td>
+                        </div>
+
+                        <div>
+                          <p className="text-[10px] uppercase font-bold text-[#7A6B72]">Schedule</p>
+                          <p className="font-semibold text-[#5B1E38]">{o.deliveryDate}</p>
+                          <p className="text-[11px] text-[#7A6B72]">{o.deliveryTimeSlot}</p>
+                        </div>
+                      </div>
+
+                      {/* Items */}
+                      <div className="bg-white p-2.5 rounded-lg border border-[#E6DBCE] space-y-1">
+                        <p className="text-[10px] uppercase font-bold text-[#7A6B72]">Items Ordered</p>
+                        {o.items?.map((i: any, idx: number) => (
+                          <div key={idx} className="text-xs font-medium text-[#2D2327]">
+                            <span className="font-bold text-[#802B52]">{i.quantity}x</span> {i.productName} ({i.variantName})
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Status selector or badge */}
+                      <div className="flex items-center justify-between pt-1 border-t border-[#E6DBCE]">
+                        <span className="text-xs font-bold uppercase text-[#7A6B72]">Status:</span>
+                        {adminUser?.role === "SUPERADMIN" ? (
+                          <select
+                            value={o.status}
+                            onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
+                            className="px-2.5 py-1.5 rounded-lg border border-[#E6DBCE] bg-white text-xs font-semibold focus:outline-none focus:border-[#802B52]"
+                          >
+                            <option value="PENDING">PENDING</option>
+                            <option value="CONFIRMED">CONFIRMED</option>
+                            <option value="PREPARING">PREPARING</option>
+                            <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
+                            <option value="DELIVERED">DELIVERED</option>
+                            <option value="CANCELLED">CANCELLED</option>
+                          </select>
+                        ) : (
+                          <span className="inline-block px-2.5 py-1 rounded text-xs font-bold bg-[#2A082C] text-[#E6C184]">
+                            {o.status}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 🖥️ DESKTOP TABLE VIEW FOR ORDERS */}
+                <div className="hidden md:block overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
+                      <tr>
+                        <th className="py-3 px-4">Order ID</th>
+                        <th className="py-3 px-4">Customer Details</th>
+                        <th className="py-3 px-4">Delivery Schedule</th>
+                        <th className="py-3 px-4">Items</th>
+                        <th className="py-3 px-4">Total Amount</th>
+                        <th className="py-3 px-4">Status</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-[#E6DBCE]">
+                      {orders.map((o) => (
+                        <tr key={o.id} className="hover:bg-[#FDFBF7]">
+                          <td className="py-4 px-4 font-mono font-bold text-[#802B52]">{o.orderNumber}</td>
+                          <td className="py-4 px-4">
+                            <div className="font-bold text-[#2D2327]">{o.customerName}</div>
+                            <div className="text-[11px] text-[#7A6B72]">{o.customerPhone}</div>
+                            <div className="text-[11px] text-[#7A6B72]">{o.customerEmail}</div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="font-semibold text-[#5B1E38]">{o.deliveryDate}</div>
+                            <div className="text-[11px] text-[#7A6B72]">{o.deliveryTimeSlot}</div>
+                          </td>
+                          <td className="py-4 px-4">
+                            {o.items?.map((i: any, idx: number) => (
+                              <div key={idx} className="text-[11px]">
+                                {i.quantity}x {i.productName} ({i.variantName})
+                              </div>
+                            ))}
+                          </td>
+                          <td className="py-4 px-4 font-bold text-[#802B52]">₹{o.totalAmount}</td>
+                          <td className="py-4 px-4">
+                            {adminUser?.role === "SUPERADMIN" ? (
+                              <select
+                                value={o.status}
+                                onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
+                                className="px-2 py-1 rounded border border-[#E6DBCE] bg-white text-xs font-semibold focus:outline-none focus:border-[#802B52]"
+                              >
+                                <option value="PENDING">PENDING</option>
+                                <option value="CONFIRMED">CONFIRMED</option>
+                                <option value="PREPARING">PREPARING</option>
+                                <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
+                                <option value="DELIVERED">DELIVERED</option>
+                                <option value="CANCELLED">CANCELLED</option>
+                              </select>
+                            ) : (
+                              <span className="inline-block px-2.5 py-1 rounded text-[11px] font-bold bg-[#2A082C] text-[#E6C184]">
+                                {o.status}
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
           </div>
         )}
 
         {/* TAB 4: MANAGE ADMIN USERS */}
         {adminUser?.role === "SUPERADMIN" && activeTab === "users" && (
-          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm p-6 space-y-6">
+          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-6">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="font-serif text-xl font-bold text-[#5B1E38]">
+                <h2 className="font-serif text-lg sm:text-xl font-bold text-[#5B1E38]">
                   Admin Users
                 </h2>
-                <p className="text-xs text-[#7A6B72]">
+                <p className="text-xs text-[#7A6B72] hidden sm:block">
                   Manage your admin team and staff accounts.
                 </p>
               </div>
 
               <button
                 onClick={() => setShowUserModal(true)}
-                className="bg-[#802B52] hover:bg-[#962854] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md cursor-pointer"
+                className="bg-[#802B52] hover:bg-[#962854] text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1 shrink-0"
               >
-                ➕ Create New Admin User
+                ➕ <span className="hidden sm:inline">Create New Admin User</span><span className="sm:hidden">Add User</span>
               </button>
             </div>
 
-            <div className="overflow-x-auto">
+            {/* 📱 MOBILE CARD VIEW FOR ADMIN USERS */}
+            <div className="block md:hidden space-y-3">
+              {adminUsersList.map((u) => (
+                <div key={u.id} className="bg-[#FAF5EE]/60 border border-[#E6DBCE] rounded-xl p-3.5 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-sm text-[#2D2327]">{u.fullName}</span>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${u.role === "SUPERADMIN" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"}`}>
+                      {u.role === "SUPERADMIN" ? "Super Admin" : "Admin"}
+                    </span>
+                  </div>
+                  <p className="font-mono text-xs text-[#802B52]">{u.email}</p>
+                  <div className="flex items-center justify-between text-[11px] text-[#7A6B72] pt-1 border-t border-[#E6DBCE]">
+                    <span>Status: <strong className="text-green-700">Active</strong></span>
+                    <span>Created: {new Date(u.createdAt).toLocaleDateString("en-IN")}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 🖥️ DESKTOP TABLE VIEW FOR ADMIN USERS */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
                   <tr>
@@ -1429,18 +1644,18 @@ export default function AdminPage() {
 
       {/* CREATE NEW ADMIN USER MODAL */}
       {showUserModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-2xl max-w-md w-full p-6 space-y-5 text-[#2D2327]">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-2xl max-w-md w-full p-4 sm:p-6 space-y-4 sm:space-y-5 text-[#2D2327] my-auto">
             <div className="flex justify-between items-center pb-3 border-b border-[#E6DBCE]">
-              <h3 className="font-serif text-xl font-bold text-[#5B1E38]">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#5B1E38]">
                 Add New Admin User
               </h3>
-              <button onClick={() => setShowUserModal(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setShowUserModal(false)} className="text-gray-400 hover:text-gray-600 p-1 text-base">
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleCreateAdminUser} className="space-y-4">
+            <form onSubmit={handleCreateAdminUser} className="space-y-3.5 text-xs">
               <div>
                 <label className="block text-xs font-bold uppercase text-[#5B1E38] mb-1">
                   Full Name *
@@ -1451,7 +1666,7 @@ export default function AdminPage() {
                   placeholder="e.g. Priya Sharma"
                   value={newAdminName}
                   onChange={(e) => setNewAdminName(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#E6DBCE] text-sm focus:outline-none focus:border-[#802B52]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
                 />
               </div>
 
@@ -1465,7 +1680,7 @@ export default function AdminPage() {
                   placeholder="priya@lollipopcakeshop.com"
                   value={newAdminEmail}
                   onChange={(e) => setNewAdminEmail(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#E6DBCE] text-sm focus:outline-none focus:border-[#802B52]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
                 />
               </div>
 
@@ -1480,7 +1695,7 @@ export default function AdminPage() {
                   placeholder="••••••••••••"
                   value={newAdminPassword}
                   onChange={(e) => setNewAdminPassword(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#E6DBCE] text-sm focus:outline-none focus:border-[#802B52]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
                 />
               </div>
 
@@ -1491,7 +1706,7 @@ export default function AdminPage() {
                 <select
                   value={newAdminRole}
                   onChange={(e) => setNewAdminRole(e.target.value as any)}
-                  className="w-full px-3.5 py-2 rounded-lg border border-[#E6DBCE] text-sm bg-white focus:outline-none focus:border-[#802B52]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm bg-white focus:outline-none focus:border-[#802B52]"
                 >
                   <option value="ADMIN">Admin</option>
                   <option value="SUPERADMIN">Super Admin</option>
@@ -1502,14 +1717,14 @@ export default function AdminPage() {
                 <button
                   type="button"
                   onClick={() => setShowUserModal(false)}
-                  className="px-4 py-2 rounded-lg text-xs font-bold border border-[#E6DBCE] text-[#7A6B72]"
+                  className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl text-xs font-bold border border-[#E6DBCE] text-[#7A6B72]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creatingUser}
-                  className="px-5 py-2 rounded-lg text-xs font-bold bg-[#802B52] hover:bg-[#962854] text-white"
+                  className="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl text-xs font-bold bg-[#802B52] hover:bg-[#962854] text-white shadow-md"
                 >
                   {creatingUser ? "Saving..." : "Save Admin User"}
                 </button>
@@ -1521,13 +1736,13 @@ export default function AdminPage() {
 
       {/* ADD / EDIT PRODUCT MODAL */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-2xl max-w-2xl w-full p-6 my-8 space-y-4 text-[#2D2327]">
-            <div className="flex justify-between items-center pb-3 border-b border-[#E6DBCE]">
-              <h3 className="font-serif text-xl font-bold text-[#5B1E38]">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-2xl max-w-2xl w-full p-4 sm:p-6 my-auto max-h-[90vh] overflow-y-auto space-y-4 text-[#2D2327]">
+            <div className="flex justify-between items-center pb-3 border-b border-[#E6DBCE] sticky top-0 bg-white z-10">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#5B1E38]">
                 {editingProduct ? "Edit Product" : "Add New Product"}
               </h3>
-              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setShowAddModal(false)} className="text-gray-400 hover:text-gray-600 p-1 text-base">
                 ✕
               </button>
             </div>
@@ -1541,17 +1756,17 @@ export default function AdminPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Royal Belgian Truffle Cake"
-                  className="w-full px-3 py-2 border border-[#E6DBCE] rounded-lg text-sm focus:outline-none focus:border-[#802B52]"
+                  className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block font-bold text-[#5B1E38] uppercase mb-1">Category *</label>
                   <select
                     value={categorySlug}
                     onChange={(e) => setCategorySlug(e.target.value)}
-                    className="w-full px-3 py-2 border border-[#E6DBCE] rounded-lg bg-white focus:outline-none focus:border-[#802B52]"
+                    className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl bg-white text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
                   >
                     {PRIMARY_CATEGORIES.map((cat) => (
                       <option key={cat.slug} value={cat.slug}>
@@ -1567,7 +1782,7 @@ export default function AdminPage() {
                     <select
                       value={subCategory}
                       onChange={(e) => setSubCategory(e.target.value)}
-                      className="w-full px-3 py-2 border border-[#E6DBCE] rounded-lg bg-white focus:outline-none focus:border-[#802B52]"
+                      className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl bg-white text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
                     >
                       {DEFAULT_CAKE_SUBCATEGORIES.map((s) => (
                         <option key={s} value={s}>
@@ -1589,7 +1804,7 @@ export default function AdminPage() {
                     value={customSubCategory}
                     onChange={(e) => setCustomSubCategory(e.target.value)}
                     placeholder="e.g. Cheesecake Special"
-                    className="w-full px-3 py-2 border border-[#E6DBCE] rounded-lg focus:outline-none focus:border-[#802B52]"
+                    className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl focus:outline-none focus:border-[#802B52]"
                   />
                 </div>
               )}
@@ -1599,8 +1814,8 @@ export default function AdminPage() {
                   Cake Image (Optional)
                 </label>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-3">
-                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 border border-[#E6DBCE] rounded-lg bg-[#FAF5EE] hover:bg-[#F3E8DB] text-xs font-bold text-[#802B52] transition-colors">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 border border-[#E6DBCE] rounded-xl bg-[#FAF5EE] hover:bg-[#F3E8DB] text-xs font-bold text-[#802B52] transition-colors">
                       <span>📷 {imagePreview ? "Change Image" : "Upload Cake Image"}</span>
                       <input
                         type="file"
@@ -1614,7 +1829,7 @@ export default function AdminPage() {
                       <button
                         type="button"
                         onClick={handleRemoveImage}
-                        className="px-2.5 py-1.5 text-xs font-bold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg border border-red-200 transition-colors cursor-pointer"
+                        className="px-2.5 py-1.5 text-xs font-bold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl border border-red-200 transition-colors cursor-pointer"
                       >
                         ✕ Remove Image
                       </button>
@@ -1628,7 +1843,7 @@ export default function AdminPage() {
                   )}
 
                   {imagePreview && (
-                    <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#E6DBCE] bg-[#FAF5EE]">
+                    <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-[#E6DBCE] bg-[#FAF5EE]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={imagePreview}
@@ -1647,7 +1862,7 @@ export default function AdminPage() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Rich dark chocolate sponge layers with belgian cocoa ganache..."
-                  className="w-full px-3 py-2 border border-[#E6DBCE] rounded-lg focus:outline-none focus:border-[#802B52]"
+                  className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl focus:outline-none focus:border-[#802B52]"
                 />
               </div>
 
@@ -1661,31 +1876,31 @@ export default function AdminPage() {
                 </div>
 
                 {variants.map((v, idx) => (
-                  <div key={idx} className="bg-white p-2.5 rounded-lg border border-[#E6DBCE] grid grid-cols-3 gap-2 items-center">
+                  <div key={idx} className="bg-white p-2.5 rounded-xl border border-[#E6DBCE] grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
                     <input
                       type="text"
                       value={v.name}
                       placeholder="Size (e.g. 1kg)"
                       onChange={(e) => handleVariantChange(idx, "name", e.target.value)}
-                      className="px-2 py-1 border border-[#E6DBCE] rounded"
+                      className="px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg text-xs"
                     />
                     <input
                       type="number"
                       value={v.price}
                       placeholder="Price (₹)"
                       onChange={(e) => handleVariantChange(idx, "price", parseFloat(e.target.value) || 0)}
-                      className="px-2 py-1 border border-[#E6DBCE] rounded"
+                      className="px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg text-xs"
                     />
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-1">
                       <select
                         value={v.isEggless ? "eggless" : "egg"}
                         onChange={(e) => handleVariantChange(idx, "isEggless", e.target.value === "eggless")}
-                        className="px-2 py-1 border border-[#E6DBCE] rounded bg-white"
+                        className="flex-1 px-2 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
                       >
                         <option value="eggless">🌱 Eggless</option>
-                        <option value="egg">🥚 Contains Egg</option>
+                        <option value="egg">🥚 Egg</option>
                       </select>
-                      <button type="button" onClick={() => handleRemoveVariantRow(idx)} className="text-red-500 font-bold px-1">
+                      <button type="button" onClick={() => handleRemoveVariantRow(idx)} className="text-red-500 font-bold px-2 py-1">
                         ✕
                       </button>
                     </div>
@@ -1704,7 +1919,7 @@ export default function AdminPage() {
                       onChange={(e) => setHasOffer(e.target.checked)}
                       className="w-4 h-4 text-[#802B52] rounded focus:ring-[#802B52] cursor-pointer"
                     />
-                    <label htmlFor="enable-product-offer" className="font-bold text-[#802B52] uppercase cursor-pointer">
+                    <label htmlFor="enable-product-offer" className="font-bold text-[#802B52] uppercase cursor-pointer text-xs">
                       🎁 Enable Special Offer (e.g. Buy 1kg Get 0.5kg Free)
                     </label>
                   </div>
@@ -1721,7 +1936,7 @@ export default function AdminPage() {
                         value={offerBadge}
                         onChange={(e) => setOfferBadge(e.target.value)}
                         placeholder="e.g. 1kg Free Offer"
-                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded bg-white text-xs"
+                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
                       />
                     </div>
 
@@ -1732,7 +1947,7 @@ export default function AdminPage() {
                       <select
                         value={offerBuyVariant}
                         onChange={(e) => setOfferBuyVariant(e.target.value)}
-                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded bg-white text-xs"
+                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
                       >
                         {variants.map((v, i) => (
                           <option key={i} value={v.name}>
@@ -1749,7 +1964,7 @@ export default function AdminPage() {
                       <select
                         value={offerFreeVariant}
                         onChange={(e) => setOfferFreeVariant(e.target.value)}
-                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded bg-white text-xs"
+                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
                       >
                         {variants.map((v, i) => (
                           <option key={i} value={v.name}>
@@ -1762,18 +1977,18 @@ export default function AdminPage() {
                 )}
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-2 flex justify-end gap-2 sticky bottom-0 bg-white py-2 border-t border-[#E6DBCE]">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-lg font-bold border border-[#E6DBCE] text-[#7A6B72]"
+                  className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl font-bold border border-[#E6DBCE] text-[#7A6B72]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-5 py-2 rounded-lg font-bold bg-[#802B52] hover:bg-[#962854] text-white"
+                  className="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl font-bold bg-[#802B52] hover:bg-[#962854] text-white shadow-md"
                 >
                   {saving ? "Saving..." : "Save Product"}
                 </button>

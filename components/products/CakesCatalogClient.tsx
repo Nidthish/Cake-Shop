@@ -250,6 +250,7 @@ export default function CakesCatalogClient({
                       ? "bg-[#962854] text-white border-[#962854] shadow-xs"
                       : "bg-[#FFF9F5] text-[#1C0D0A] border-[#D8C3B3] hover:border-[#962854] hover:bg-[#FAF0F2]"
                   }`}
+                  suppressHydrationWarning
                 >
                   {pill.label}{" "}
                   {pill.subcat === "all" && (

@@ -121,6 +121,7 @@ function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
               className={`add-to-cart-btn ${
                 isAdded ? "bg-[#2A082C]" : "bg-[#962854] hover:bg-[#2A082C]"
               } text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 shadow-xs hover:shadow-sm hover:scale-105 active:scale-95 font-sans`}
+              suppressHydrationWarning
             >
               {isAdded ? (
                 <>
@@ -290,6 +291,7 @@ export default function DryCakesCatalogClient({
                       ? "bg-[#962854] text-white border-[#962854] shadow-xs"
                       : "bg-[#FFF9F5] text-[#1C0D0A] border-[#D8C3B3] hover:border-[#962854] hover:bg-[#FAF0F2]"
                   }`}
+                  suppressHydrationWarning
                 >
                   {pill.label}{" "}
                   {pill.keyword === "all" && (

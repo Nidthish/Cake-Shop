@@ -117,6 +117,14 @@ export interface Order {
   specialInstructions?: string;
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
+  deliveryOtp?: string;
+  deliveryOtpVerified?: boolean;
+  deliveryPartnerName?: string;
+  deliveryPartnerPhone?: string;
+  cancellationReason?: string;
+  cancelledAt?: string;
+  deliveredAt?: string;
+  assignedAt?: string;
   createdAt: string;
   updatedAt: string;
 }
