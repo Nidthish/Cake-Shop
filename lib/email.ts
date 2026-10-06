@@ -116,9 +116,26 @@ function generateOrderConfirmationHtml(order: Order): string {
               </td>
             </tr>
 
+            <!-- Delivery Verification OTP Card -->
+            <tr>
+              <td style="padding: 24px 30px 0 30px;">
+                <div style="background-color: #FFFDF8; border: 2px dashed #D4AF37; border-radius: 14px; padding: 18px 24px; text-align: center; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.12);">
+                  <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: #802B52; letter-spacing: 2px; margin-bottom: 6px;">
+                    🔐 Delivery Verification OTP
+                  </div>
+                  <div style="font-size: 34px; font-weight: 800; letter-spacing: 8px; color: #802B52; font-family: 'Courier New', Courier, monospace; margin: 4px 0;">
+                    ${order.deliveryOtp || "----"}
+                  </div>
+                  <p style="margin: 6px 0 0 0; font-size: 12px; color: #5C524E; line-height: 1.4;">
+                    Please share this <strong>4-digit security code</strong> with your delivery partner upon cake handoff to confirm delivery.
+                  </p>
+                </div>
+              </td>
+            </tr>
+
             <!-- Content Area -->
             <tr>
-              <td style="padding: 30px;">
+              <td style="padding: 24px 30px 30px 30px;">
                 
                 <!-- Order & Customer Summary Grid -->
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 25px;">
@@ -265,7 +282,7 @@ export async function sendOrderConfirmationEmail(order: Order): Promise<{ succes
     const mailOptions = {
       from: fromAddress,
       to: toAddress,
-      subject: `🎂 Order Confirmed! Receipt & Invoice for ${order.id} - Lollipop Cake Shop`,
+      subject: `🎂 Order Confirmed! Receipt & Invoice for ${order.id} (Delivery OTP: ${order.deliveryOtp || "----"}) - Lollipop Cake Shop`,
       html: htmlContent,
     };
 

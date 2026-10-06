@@ -1,4 +1,4 @@
-import { neon, neonConfig, NeonQueryFunction } from "@neondatabase/serverless";
+import { neon, neonConfig, type NeonQueryFunction } from "@neondatabase/serverless";
 
 /**
  * Lollipop Cake Shop — Neon PostgreSQL Serverless Helper

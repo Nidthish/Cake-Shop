@@ -559,6 +559,9 @@ input[type="submit"] {
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.05em;
+  white-space: nowrap !important;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-link::after {

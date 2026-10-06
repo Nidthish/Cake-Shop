@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { priceOrder, PricingError } from "@/lib/pricing";
 import { getRazorpayClient, getRazorpayPublicKeyId, isRazorpayConfigured } from "@/lib/razorpay";
-import { orderStore, generateOrderId } from "@/lib/orders";
+import { orderStore, generateOrderId, generateDeliveryOtp } from "@/lib/orders";
 import type { CreateOrderResponse, ApiError, Order } from "@/types";
 
 export const runtime = "nodejs";
@@ -145,6 +145,8 @@ export async function POST(req: NextRequest) {
       orderStatus: "PENDING",
       paymentStatus: "PAYMENT_INITIATED",
       razorpayOrderId: razorpayOrder.id,
+      deliveryOtp: generateDeliveryOtp(),
+      deliveryOtpVerified: false,
       cakeMessage: parsed.data.cakeMessage,
       specialInstructions: parsed.data.specialInstructions,
       createdAt: now,

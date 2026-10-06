@@ -40,6 +40,7 @@ export default function Footer() {
               <li><Link href="/dry-cakes" className="hover:text-white transition-colors">Dry Cakes Collection</Link></li>
               <li><Link href="/snacks" className="hover:text-white transition-colors">Gourmet Pastries</Link></li>
               <li><Link href="/custom-cake" className="hover:text-white transition-colors">Custom Cake Studio</Link></li>
+              <li><Link href="/track-order" className="hover:text-white transition-colors text-[#E6C184] font-semibold">🔍 Track Your Order</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
             </ul>
           </div>

@@ -6,6 +6,7 @@ import type { Order, OrderLineItem } from "@/types";
 export interface OrderStore {
   create(order: Order): Promise<Order>;
   get(orderId: string): Promise<Order | null>;
+  search(query: string): Promise<Order[]>;
   getByRazorpayOrderId(razorpayOrderId: string): Promise<Order | null>;
   getByIdempotencyKey(key: string): Promise<Order | null>;
   registerIdempotencyKey(key: string, orderId: string): Promise<void>;
@@ -18,6 +19,14 @@ class HybridOrderStore implements OrderStore {
   private rzpIndex = new Map<string, string>();
 
   async create(order: Order): Promise<Order> {
+    // 0. Ensure 4-digit delivery OTP is always generated and present
+    if (!order.deliveryOtp) {
+      order.deliveryOtp = generateDeliveryOtp();
+    }
+    if (order.deliveryOtpVerified === undefined) {
+      order.deliveryOtpVerified = false;
+    }
+
     // 1. Store in memory for instant synchronous lookup
     this.memoryOrders.set(order.id, order);
     if (order.razorpayOrderId) {
@@ -62,6 +71,12 @@ class HybridOrderStore implements OrderStore {
 
           if (existingOrder.length > 0) {
             neonOrderId = existingOrder[0].id;
+            await sql`
+              UPDATE orders 
+              SET delivery_otp = COALESCE(delivery_otp, ${order.deliveryOtp || null}),
+                  delivery_otp_verified = COALESCE(delivery_otp_verified, ${Boolean(order.deliveryOtpVerified)})
+              WHERE id = ${neonOrderId}
+            `;
           } else {
             const orderRows = await sql`
               INSERT INTO orders (
@@ -69,12 +84,14 @@ class HybridOrderStore implements OrderStore {
                 street_address, city, pincode, state,
                 delivery_date, delivery_time_slot, delivery_notes, has_eggless_items,
                 subtotal, sgst, cgst, tax_amount, delivery_fee, discount_amount, total_amount, status,
+                delivery_otp, delivery_otp_verified,
                 updated_at
               ) VALUES (
                 ${order.id}, ${neonUserId}, ${order.customer.fullName}, ${order.customer.email}, ${order.customer.phone},
                 ${order.address.street}, ${order.address.city}, ${order.address.pincode}, 'Tamil Nadu',
                 ${new Date(order.schedule.date)}, ${order.schedule.timeSlot}, ${order.specialInstructions || null}, ${hasEggless},
                 ${order.subtotal}, ${order.sgst}, ${order.cgst}, ${order.tax}, ${order.deliveryFee}, 0.00, ${order.total}, ${order.orderStatus || "CONFIRMED"},
+                ${order.deliveryOtp || null}, ${Boolean(order.deliveryOtpVerified)},
                 NOW()
               )
               RETURNING id
@@ -158,6 +175,10 @@ class HybridOrderStore implements OrderStore {
 
         if (existingMySql.length > 0) {
           mysqlOrderId = existingMySql[0].id;
+          await mysqlPool.query(
+            "UPDATE lollipop_db.orders SET delivery_otp = COALESCE(delivery_otp, ?) WHERE id = ?",
+            [order.deliveryOtp || null, mysqlOrderId]
+          );
         } else {
           const [orderRes]: any = await mysqlPool.query(`
             INSERT INTO lollipop_db.orders (
@@ -165,19 +186,22 @@ class HybridOrderStore implements OrderStore {
               street_address, city, pincode, state,
               delivery_date, delivery_time_slot, delivery_notes, has_eggless_items,
               subtotal, sgst, cgst, tax_amount, delivery_fee, discount_amount, total_amount, status,
+              delivery_otp, delivery_otp_verified,
               created_at, updated_at
             ) VALUES (
               ?, ?, ?, ?, ?,
               ?, ?, ?, 'Tamil Nadu',
               ?, ?, ?, ?,
               ?, ?, ?, ?, ?, 0.00, ?, ?,
+              ?, ?,
               NOW(), NOW()
             )
           `, [
             order.id, mysqlUser?.id || null, order.customer.fullName, order.customer.email, order.customer.phone,
             order.address.street, order.address.city, order.address.pincode,
             new Date(order.schedule.date), order.schedule.timeSlot, order.specialInstructions || null, hasEggless ? 1 : 0,
-            order.subtotal, order.sgst, order.cgst, order.tax, order.deliveryFee, order.total, order.orderStatus || "CONFIRMED"
+            order.subtotal, order.sgst, order.cgst, order.tax, order.deliveryFee, order.total, order.orderStatus || "CONFIRMED",
+            order.deliveryOtp || null, order.deliveryOtpVerified ? 1 : 0
           ]);
           mysqlOrderId = orderRes.insertId;
         }
@@ -405,6 +429,108 @@ class HybridOrderStore implements OrderStore {
     } catch {}
 
     return null;
+  }
+
+  async search(query: string): Promise<Order[]> {
+    const clean = query.trim();
+    if (!clean) return [];
+
+    const resultsMap = new Map<string, Order>();
+
+    // 1. Search in-memory
+    for (const ord of this.memoryOrders.values()) {
+      if (
+        ord.id.toLowerCase().includes(clean.toLowerCase()) ||
+        ord.customer.phone.includes(clean) ||
+        ord.customer.email.toLowerCase().includes(clean.toLowerCase()) ||
+        ord.customer.fullName.toLowerCase().includes(clean.toLowerCase())
+      ) {
+        resultsMap.set(ord.id, ord);
+      }
+    }
+
+    // 2. Search Neon PostgreSQL
+    try {
+      const sql = getNeonSql();
+      if (sql) {
+        const pattern = `%${clean}%`;
+        const rows = await sql`
+          SELECT o.*, 
+                 p.payment_method, p.payment_status, p.razorpay_order_id, p.razorpay_payment_id,
+                 COALESCE(
+                   json_agg(
+                     json_build_object(
+                       'productId', i.product_code,
+                       'name', i.product_name,
+                       'weight', i.variant_name,
+                       'quantity', i.quantity,
+                       'unitPrice', i.unit_price,
+                       'lineTotal', i.line_total,
+                       'eggPreference', CASE WHEN i.is_eggless THEN 'eggless' ELSE 'egg' END,
+                       'cakeMessage', i.cake_message
+                     )
+                   ) FILTER (WHERE i.id IS NOT NULL), '[]'
+                 ) as items
+          FROM orders o
+          LEFT JOIN payments p ON p.order_id = o.id
+          LEFT JOIN order_items i ON i.order_id = o.id
+          WHERE o.order_number ILIKE ${pattern}
+             OR o.customer_phone ILIKE ${pattern}
+             OR o.customer_email ILIKE ${pattern}
+             OR o.customer_name ILIKE ${pattern}
+          GROUP BY o.id, p.id
+          ORDER BY o.created_at DESC
+          LIMIT 20
+        `;
+
+        for (const o of rows) {
+          if (!resultsMap.has(o.order_number)) {
+            resultsMap.set(o.order_number, {
+              id: o.order_number,
+              items: o.items || [],
+              customer: {
+                fullName: o.customer_name,
+                email: o.customer_email,
+                phone: o.customer_phone,
+              },
+              address: {
+                street: o.street_address,
+                city: o.city,
+                pincode: o.pincode,
+              },
+              schedule: {
+                date: new Date(o.delivery_date).toISOString().split("T")[0],
+                timeSlot: o.delivery_time_slot,
+              },
+              subtotal: Number(o.subtotal),
+              sgst: Number(o.sgst),
+              cgst: Number(o.cgst),
+              tax: Number(o.tax_amount),
+              deliveryFee: Number(o.delivery_fee),
+              total: Number(o.total_amount),
+              orderStatus: o.status,
+              paymentStatus: o.payment_status || "PENDING",
+              paymentMethod: o.payment_method || "COD",
+              razorpayOrderId: o.razorpay_order_id || undefined,
+              deliveryOtp: o.delivery_otp || undefined,
+              deliveryOtpVerified: Boolean(o.delivery_otp_verified),
+              deliveryPartnerName: o.delivery_partner_name || undefined,
+              deliveryPartnerPhone: o.delivery_partner_phone || undefined,
+              cancellationReason: o.cancellation_reason || undefined,
+              cancelledAt: o.cancelled_at ? new Date(o.cancelled_at).toISOString() : undefined,
+              deliveredAt: o.delivered_at ? new Date(o.delivered_at).toISOString() : undefined,
+              assignedAt: o.assigned_at ? new Date(o.assigned_at).toISOString() : undefined,
+              createdAt: new Date(o.created_at).toISOString(),
+              updatedAt: new Date(o.updated_at).toISOString(),
+            });
+          }
+        }
+      }
+    } catch (e: any) {
+      console.warn("⚠️ [Neon Search Notice]:", e?.message || e);
+    }
+
+    return Array.from(resultsMap.values());
   }
 
   async getByIdempotencyKey(key: string): Promise<Order | null> {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { priceOrder, PricingError } from "@/lib/pricing";
-import { orderStore, generateOrderId } from "@/lib/orders";
+import { orderStore, generateOrderId, generateDeliveryOtp } from "@/lib/orders";
 import { sendOrderConfirmationEmail } from "@/lib/email";
 import type { Order, ApiError } from "@/types";
 
@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
     // Calculate authoritative price breakdown on server
     const priced = priceOrder(items);
     const orderId = generateOrderId();
+    const deliveryOtp = generateDeliveryOtp();
     const chosenPaymentMethod = paymentMethod === "DIRECT" ? "DIRECT" : "COD";
 
     const cleanCakeMessage = sanitizeString(cakeMessage);
@@ -82,6 +83,8 @@ export async function POST(req: NextRequest) {
       orderStatus: "CONFIRMED",
       paymentStatus: chosenPaymentMethod === "DIRECT" ? "PAID" : "PENDING",
       paymentMethod: chosenPaymentMethod,
+      deliveryOtp: deliveryOtp,
+      deliveryOtpVerified: false,
       cakeMessage: cleanCakeMessage || undefined,
       specialInstructions: cleanSpecialInstructions || undefined,
       createdAt: new Date().toISOString(),

@@ -27,6 +27,7 @@ const DRAWER_LINKS = [
   { href: "/wedding-cakes", label: "Wedding Cakes", icon: "favorite" },
   { href: "/bento-cake", label: "Bento Cake", icon: "lunch_dining" },
   { href: "/snacks", label: "Snacks", icon: "cookie" },
+  { href: "/track-order", label: "Track My Order", icon: "local_shipping" },
   { href: "/about", label: "About Us", icon: "info" },
 ];
 
@@ -67,35 +68,52 @@ export default function Navbar() {
     router.push(`/products/${id}`);
   }
 
+  const isTrackActive =
+    pathname === "/track-order" || pathname?.startsWith("/search-order");
+
   return (
     <>
       <header
         id="main-header"
         className="sticky top-0 z-50 w-full glass-header border-b border-[#E6C184]/20 transition-all duration-300"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link href="/" className="flex flex-col group">
-            <span className="font-display font-bold text-2xl sm:text-[26px] text-[#1C0D0A] tracking-[0.03em] leading-tight group-hover:text-[#962854] transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
+          <Link href="/" className="flex flex-col group flex-shrink-0">
+            <span className="font-display font-bold text-xl sm:text-2xl lg:text-[24px] text-[#1C0D0A] tracking-[0.02em] leading-tight group-hover:text-[#962854] transition-colors whitespace-nowrap">
               Lollipop Cake Shop
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center space-x-5 text-[13px] uppercase tracking-wider font-semibold">
-            {NAV_LINKS.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className="nav-link text-[#5C524E] hover:text-[#1C0D0A] flex items-center gap-1"
-              >
-                {l.icon && <span className="material-symbols-outlined text-sm">{l.icon}</span>}
-                {l.label}
-              </Link>
-            ))}
+          <nav className="hidden lg:flex items-center gap-3 xl:gap-5 text-[12px] xl:text-[13px] uppercase tracking-wider font-semibold whitespace-nowrap">
+            {NAV_LINKS.map((l) => {
+              const isActive =
+                l.href === "/"
+                  ? pathname === "/"
+                  : pathname === l.href || pathname?.startsWith(l.href);
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className={`nav-link flex items-center gap-1 transition-colors whitespace-nowrap ${
+                    isActive
+                      ? "active text-[#962854]"
+                      : "text-[#5C524E] hover:text-[#1C0D0A]"
+                  }`}
+                >
+                  {l.icon && (
+                    <span className="material-symbols-outlined text-base xl:text-lg leading-none">
+                      {l.icon}
+                    </span>
+                  )}
+                  <span>{l.label}</span>
+                </Link>
+              );
+            })}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
             <button
-              className="search-toggle-btn p-2 text-[#1C0D0A] hover:text-[#962854] hover:bg-[#FAF3EC] rounded-full transition-colors"
+              className="search-toggle-btn p-2 text-[#1C0D0A] hover:text-[#962854] hover:bg-[#FAF3EC] rounded-full transition-colors flex items-center justify-center"
               aria-label="Search"
               onClick={() => setSearchOpen(true)}
               suppressHydrationWarning
@@ -104,8 +122,9 @@ export default function Navbar() {
             </button>
             <Link
               href="/cart"
-              className="relative p-2 text-[#1C0D0A] hover:text-[#962854] hover:bg-[#FAF3EC] rounded-full transition-colors"
+              className="relative p-2 text-[#1C0D0A] hover:text-[#962854] hover:bg-[#FAF3EC] rounded-full transition-colors flex items-center justify-center"
               aria-label="Cart"
+              title="View Cart"
             >
               <span className="material-symbols-outlined text-2xl">shopping_bag</span>
               {itemCount > 0 && (
@@ -114,8 +133,20 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
+            <Link
+              href="/track-order"
+              className={`p-2 rounded-full transition-colors flex items-center justify-center ${
+                isTrackActive
+                  ? "text-[#962854] bg-[#FAF3EC]"
+                  : "text-[#1C0D0A] hover:text-[#962854] hover:bg-[#FAF3EC]"
+              }`}
+              aria-label="Track My Order"
+              title="Track My Order"
+            >
+              <span className="material-symbols-outlined text-2xl">local_shipping</span>
+            </Link>
             <button
-              className="mobile-menu-toggle lg:hidden p-2 text-[#1C0D0A] hover:bg-[#FAF3EC] rounded-full transition-colors"
+              className="mobile-menu-toggle lg:hidden p-2 text-[#1C0D0A] hover:bg-[#FAF3EC] rounded-full transition-colors flex items-center justify-center"
               aria-label="Open Menu"
               onClick={() => setDrawerOpen(true)}
               suppressHydrationWarning

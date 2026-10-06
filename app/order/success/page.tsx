@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import type { Order } from "@/types";
@@ -10,6 +10,9 @@ function SuccessContent() {
   const orderId = params.get("orderId");
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+  const [autoDownloaded, setAutoDownloaded] = useState(false);
+  const downloadedRef = useRef(false);
 
   useEffect(() => {
     if (!orderId) {
@@ -25,6 +28,44 @@ function SuccessContent() {
       })
       .finally(() => setLoading(false));
   }, [orderId]);
+
+  // Auto-download invoice once order data is ready
+  useEffect(() => {
+    if (order && !downloadedRef.current) {
+      downloadedRef.current = true;
+      const timer = setTimeout(() => {
+        try {
+          const link = document.createElement("a");
+          link.href = `/api/orders/${order.id}/invoice?download=1`;
+          link.setAttribute("download", `Lollipop-Invoice-${order.id}.html`);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          setAutoDownloaded(true);
+        } catch {
+          // Handled gracefully
+        }
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, [order]);
+
+  function copyOtp() {
+    if (!order?.deliveryOtp) return;
+    navigator.clipboard.writeText(order.deliveryOtp);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  }
+
+  function handleManualDownload() {
+    if (!order) return;
+    window.location.href = `/api/orders/${order.id}/invoice?download=1`;
+  }
+
+  function handlePrintInvoice() {
+    if (!order) return;
+    window.open(`/api/orders/${order.id}/invoice?print=1`, "_blank");
+  }
 
   return (
     <div className="bg-[#FAF5EE] min-h-screen py-12 px-4 sm:px-6 lg:px-8">
@@ -50,11 +91,82 @@ function SuccessContent() {
           <div className="bg-[#FAF3EC] rounded-2xl p-4 border border-[#E6C184]/30 text-xs text-[#802B52] font-semibold flex items-center justify-center gap-2">
             <span>📬</span>
             <span>
-              An official HTML invoice receipt with delivery timing details has been emailed to{" "}
+              An official HTML invoice receipt with delivery timing details and OTP has been emailed to{" "}
               <strong>{order?.customer?.email || "your email address"}</strong>.
             </span>
           </div>
+
+          {autoDownloaded && (
+            <div className="bg-emerald-50 text-emerald-800 rounded-xl p-3 border border-emerald-200 text-xs font-medium flex items-center justify-center gap-2 animate-fade-in">
+              <span>📥</span>
+              <span>Your invoice has been automatically downloaded to your device!</span>
+            </div>
+          )}
         </div>
+
+        {/* Prominent Delivery OTP Card */}
+        {order && (
+          <div className="bg-gradient-to-r from-[#FFFDF9] via-[#FFF8EE] to-[#FFFDF9] border-2 border-dashed border-[#D4AF37] rounded-3xl p-6 sm:p-8 shadow-sm text-center relative overflow-hidden">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-lg">🔐</span>
+              <span className="text-xs uppercase font-extrabold tracking-widest text-[#802B52]">
+                Delivery Verification OTP
+              </span>
+            </div>
+            
+            <div className="my-2">
+              <span className="font-mono text-4xl sm:text-5xl font-black tracking-[8px] text-[#250527] bg-white/90 border border-[#E6DBCE] px-6 py-2.5 rounded-2xl shadow-inner inline-block">
+                {order.deliveryOtp || "----"}
+              </span>
+            </div>
+
+            <p className="text-xs text-[#5C524E] max-w-md mx-auto mt-2 leading-relaxed">
+              Please share this <strong>4-digit security code</strong> with your delivery partner upon arrival to confirm handoff.
+            </p>
+
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={copyOtp}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#802B52] text-white hover:bg-[#601F3E] transition-colors shadow-sm"
+              >
+                <span>📋</span> {copied ? "Copied to Clipboard!" : "Copy OTP Code"}
+              </button>
+
+              {order.deliveryOtpVerified && (
+                <span className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  ✓ Verified &amp; Delivered
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Quick Action Buttons: Download & Print Invoice */}
+        {order && (
+          <div className="bg-white rounded-2xl border border-[#E6C184]/40 p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="text-xs text-[#5C524E] text-center sm:text-left">
+              <strong className="text-[#1C0D0A] block">Official Tax Invoice Receipt</strong>
+              Includes all pricing breakdowns, GST tax details, and verification OTP.
+            </div>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={handleManualDownload}
+                className="flex-1 sm:flex-initial bg-[#250527] hover:bg-[#4A0E4E] text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+              >
+                <span>📥</span> Download Invoice
+              </button>
+              <button
+                type="button"
+                onClick={handlePrintInvoice}
+                className="flex-1 sm:flex-initial bg-[#D4AF37] hover:bg-[#C29D26] text-[#250527] text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+              >
+                <span>🖨️</span> Print / PDF
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Order Details Card */}
         {loading ? (
@@ -172,6 +284,12 @@ function SuccessContent() {
 
         {/* Bottom Actions */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/track-order"
+            className="w-full sm:w-auto bg-[#250527] hover:bg-[#4A0E4E] text-white text-xs font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 uppercase tracking-wider transition-colors shadow-md text-center"
+          >
+            <span>🔍</span> Track Order Live
+          </Link>
           <Link
             href="/"
             className="btn-primary w-full sm:w-auto py-3.5 px-8 text-xs font-bold uppercase tracking-wider text-center"
