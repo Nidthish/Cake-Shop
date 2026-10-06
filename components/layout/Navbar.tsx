@@ -135,7 +135,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/track-order"
-              className={`p-2 rounded-full transition-colors flex items-center justify-center ${
+              className={`hidden sm:flex p-2 rounded-full transition-colors items-center justify-center ${
                 isTrackActive
                   ? "text-[#962854] bg-[#FAF3EC]"
                   : "text-[#1C0D0A] hover:text-[#962854] hover:bg-[#FAF3EC]"

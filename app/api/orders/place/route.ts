@@ -94,10 +94,15 @@ export async function POST(req: NextRequest) {
     // Store in OrderStore (Memory & Neon Database)
     await orderStore.create(order);
 
-    // Trigger real-time customer email confirmation
-    sendOrderConfirmationEmail(order).catch((err) => {
+    // Trigger real-time customer email confirmation (awaited with timeout to prevent serverless freeze)
+    try {
+      await Promise.race([
+        sendOrderConfirmationEmail(order),
+        new Promise((resolve) => setTimeout(resolve, 5000)),
+      ]);
+    } catch (err) {
       console.error("❌ Failed to send order confirmation email:", err);
-    });
+    }
 
     console.log(`✅ [Direct Order API] Order ${order.id} placed successfully for ${customer.email}`);
 

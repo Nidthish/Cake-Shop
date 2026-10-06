@@ -93,10 +93,15 @@ export async function POST(req: NextRequest) {
     });
 
     if (updated) {
-      // Trigger automatic receipt & invoice email
-      sendOrderConfirmationEmail(updated).catch((emailErr) => {
+      // Trigger automatic receipt & invoice email (awaited with timeout to prevent serverless freeze)
+      try {
+        await Promise.race([
+          sendOrderConfirmationEmail(updated),
+          new Promise((resolve) => setTimeout(resolve, 5000)),
+        ]);
+      } catch (emailErr) {
         console.error("⚠️ [Email Trigger Notice] Failed to send order receipt:", emailErr);
-      });
+      }
     }
 
     return NextResponse.json({

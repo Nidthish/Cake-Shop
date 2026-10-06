@@ -8,7 +8,7 @@ import type { Order } from "@/types";
 function getTransporter() {
   const host = process.env.SMTP_HOST || "smtp.gmail.com";
   const port = parseInt(process.env.SMTP_PORT || "465", 10);
-  const user = process.env.SMTP_USER || "";
+  const user = (process.env.SMTP_USER || "").trim();
   const pass = (process.env.SMTP_PASS || "").replace(/\s+/g, "");
 
   if (!user || !pass) {
@@ -25,6 +25,12 @@ function getTransporter() {
       user,
       pass,
     },
+    tls: {
+      rejectUnauthorized: false,
+    },
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000,
   });
 }
 
@@ -273,15 +279,24 @@ function generateOrderConfirmationHtml(order: Order): string {
  */
 export async function sendOrderConfirmationEmail(order: Order): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
-    const transporter = getTransporter();
-    const fromAddress = process.env.EMAIL_FROM || `"Lollipop Cake Shop" <${process.env.SMTP_USER || "no-reply@lollipopcakeshop.com"}>`;
-    const toAddress = order.customer.email;
+    const toAddress = order.customer?.email?.trim();
+    if (!toAddress || !toAddress.includes("@")) {
+      console.warn(`⚠️ [Email Service] Skipping email: invalid customer email "${toAddress}" for Order ${order.id}`);
+      return { success: false, error: "Invalid recipient email address" };
+    }
+
+    const smtpUser = (process.env.SMTP_USER || "").trim();
+    let fromAddress = process.env.EMAIL_FROM?.trim();
+    if (!fromAddress || !fromAddress.includes("@")) {
+      fromAddress = `"Lollipop Cake Shop" <${smtpUser || "no-reply@lollipopcakeshop.com"}>`;
+    }
 
     const htmlContent = generateOrderConfirmationHtml(order);
 
     const mailOptions = {
       from: fromAddress,
       to: toAddress,
+      replyTo: smtpUser || undefined,
       subject: `🎂 Order Confirmed! Receipt & Invoice for ${order.id} (Delivery OTP: ${order.deliveryOtp || "----"}) - Lollipop Cake Shop`,
       html: htmlContent,
     };
@@ -294,6 +309,7 @@ export async function sendOrderConfirmationEmail(order: Order): Promise<{ succes
       return { success: true, messageId: `test-simulated-${order.id}` };
     }
 
+    const transporter = getTransporter();
     const info = await transporter.sendMail(mailOptions);
     console.log(`✅ [Email Service] Sent email successfully! Message ID: ${info.messageId}`);
     return { success: true, messageId: info.messageId };

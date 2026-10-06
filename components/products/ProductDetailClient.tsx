@@ -50,7 +50,26 @@ export default function ProductDetailClient({
 
   const rating = useMemo(() => Math.round(product.rating * 10) / 10, [product.rating]);
 
-  function handleAddToCart() {
+  function handleAddToCart(e?: React.MouseEvent) {
+    if (typeof window !== "undefined") {
+      let x = window.innerWidth / 2;
+      let y = window.innerHeight / 2;
+      if (e?.currentTarget) {
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        x = rect.left + rect.width / 2;
+        y = rect.top + rect.height / 2;
+      }
+      window.dispatchEvent(
+        new CustomEvent("lollipop:fly-to-cart", {
+          detail: {
+            x,
+            y,
+            image: product.image,
+          },
+        })
+      );
+    }
+
     addItem({
       id: `${product.id}${product.egglessAvailable && eggless ? "-eggless" : ""}`,
       name: product.name,
