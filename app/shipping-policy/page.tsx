@@ -140,7 +140,7 @@ export default function ShippingPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <div className="flex items-start gap-3">
-              <span className="p-2 rounded-lg bg-[#FAF0F2] text-[#962854] font-bold text-lg mt-0.5">🎂</span>
+              <span className="material-symbols-outlined p-2 rounded-lg bg-[#FAF0F2] text-[#962854] text-xl mt-0.5">cake</span>
               <div>
                 <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-2">
                   5. Perishable Cake Handling &amp; Safe Transit Protocol
@@ -197,15 +197,15 @@ export default function ShippingPolicyPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div className="p-4 rounded-xl bg-[#FAF0F2] border border-[#962854]/20 space-y-1">
                 <span className="font-bold text-[#962854] block">Branch 1 — Sanjeevi Nagar</span>
-                <p>📍 Sanjeevi Nagar, Tiruchirappalli, Tamil Nadu</p>
-                <p>⏰ 8:00 AM – 10:00 PM (Mon – Sun)</p>
-                <p>📞 +91 96558 88829</p>
+                <p>Sanjeevi Nagar, Tiruchirappalli, Tamil Nadu</p>
+                <p>Hours: 8:00 AM – 10:00 PM (Mon – Sun)</p>
+                <p>Phone: +91 96558 88829</p>
               </div>
               <div className="p-4 rounded-xl bg-[#FAF3EC] border border-[#E6C184]/40 space-y-1">
                 <span className="font-bold text-[#1C0D0A] block">Branch 2 — Andar Veedhi</span>
-                <p>📍 150, N Andar St, Tiruchirappalli, Tamil Nadu 620002</p>
-                <p>⏰ 8:00 AM – 10:00 PM (Mon – Sun)</p>
-                <p>📞 +91 84893 24697</p>
+                <p>150, N Andar St, Tiruchirappalli, Tamil Nadu 620002</p>
+                <p>Hours: 8:00 AM – 10:00 PM (Mon – Sun)</p>
+                <p>Phone: +91 84893 24697</p>
               </div>
             </div>
           </section>

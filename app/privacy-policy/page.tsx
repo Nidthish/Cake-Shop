@@ -69,7 +69,7 @@ export default function PrivacyPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <div className="flex items-start gap-3">
-              <span className="p-2 rounded-lg bg-[#FAF0F2] text-[#962854] font-bold text-lg mt-0.5">🔒</span>
+              <span className="material-symbols-outlined p-2 rounded-lg bg-[#FAF0F2] text-[#962854] text-xl mt-0.5">security</span>
               <div>
                 <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-2">
                   3. Payment Security &amp; Razorpay Compliance

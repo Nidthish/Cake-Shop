@@ -91,7 +91,7 @@ export default function CategoryPageClient({
                     className="w-full appearance-none bg-white border border-[#E6C184]/50 focus:border-[#962854] focus:ring-2 focus:ring-[#962854]/20 rounded-xl px-4 py-2.5 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer pr-10 shadow-xs transition-all"
                     suppressHydrationWarning
                   >
-                    <option value="all">✨ All Items</option>
+                    <option value="all">All Items</option>
                     {pills.map((p) => (
                       <option key={p.keyword} value={p.keyword}>
                         {p.label}
@@ -138,7 +138,7 @@ export default function CategoryPageClient({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {filtered.length === 0 ? (
           <div className="text-center py-16 px-6 bg-[#FAF5EE] rounded-3xl border border-[#E6DBCE] max-w-lg mx-auto shadow-sm">
-            <span className="text-4xl mb-3 block">🎂</span>
+            <span className="material-symbols-outlined text-4xl text-[#962854] mb-3 block">cake</span>
             <h3 className="font-serif font-bold text-xl text-[#5B1E38] mb-2">
               No Items Currently in This Collection
             </h3>
@@ -151,7 +151,7 @@ export default function CategoryPageClient({
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#25D366] text-white font-bold text-xs sm:text-sm hover:bg-[#20ba5a] transition-all shadow-md"
             >
-              <span>💬 Custom Order via WhatsApp</span>
+              <span>Custom Order via WhatsApp</span>
             </a>
           </div>
         ) : (

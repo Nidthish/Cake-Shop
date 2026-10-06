@@ -100,7 +100,7 @@ export default function TermsAndConditionsPage() {
                 <li>Authorized Digital Wallets</li>
               </ul>
               <div className="p-4 rounded-xl bg-[#FAF0F2] border border-[#962854]/20 text-xs text-[#7A1E43] mt-2">
-                🔒 <strong>Payment Security:</strong> We do NOT collect, view, or store your sensitive banking credentials, CVV, or card passwords. All transaction information is transmitted via industry-standard 256-bit SSL encryption directly to Razorpay, which is certified compliant with PCI-DSS Level 1 standards.
+                <strong>Payment Security:</strong> We do NOT collect, view, or store your sensitive banking credentials, CVV, or card passwords. All transaction information is transmitted via industry-standard 256-bit SSL encryption directly to Razorpay, which is certified compliant with PCI-DSS Level 1 standards.
               </div>
             </div>
           </section>

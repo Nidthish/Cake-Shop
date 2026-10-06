@@ -160,7 +160,7 @@ export default function CartPage() {
                       {item.name}
                     </h3>
                     <span className="bg-[#FAF0F2] text-[#962854] text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                      ✨ Fresh Daily
+                      Fresh Daily
                     </span>
                   </div>
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-xs text-[#5C524E]">
@@ -171,7 +171,7 @@ export default function CartPage() {
                           ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
                           : "bg-[#FAF3EC] text-[#1C0D0A] border border-[#D8C3B3]"
                       }`}>
-                        {item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}
+                        {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
                       </span>
                     )}
                   </div>
@@ -244,13 +244,13 @@ export default function CartPage() {
 
             {hasEggless && (
               <p className="text-[10.5px] text-[#962854] font-semibold flex items-center gap-1">
-                <span>🌱 Minimum date for Eggless: Tomorrow ({tomorrowStr})</span>
+                <span>Minimum date for Eggless: Tomorrow ({tomorrowStr})</span>
               </p>
             )}
 
             {showTodayError && hasEggless && (
               <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-800 text-[11px] font-semibold space-y-1">
-                <p>⚠️ You selected eggless cake(s):</p>
+                <p>You selected eggless cake(s):</p>
                 <p className="font-bold underline">
                   {egglessItems.map((i) => i.name).join(", ")}
                 </p>

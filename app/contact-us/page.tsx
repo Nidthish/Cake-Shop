@@ -68,7 +68,7 @@ export default function ContactUsPage() {
 
               <div className="space-y-3 text-xs sm:text-sm text-[#4A3E39] pt-2 border-t border-[#F1E6DF]">
                 <div className="flex items-start gap-3">
-                  <span className="text-[#962854] text-lg mt-0.5">📍</span>
+                  <span className="material-symbols-outlined text-[#962854] text-lg mt-0.5">location_on</span>
                   <div>
                     <strong className="text-[#1C0D0A] block text-xs">Registered &amp; Operating Headquarters:</strong>
                     <p className="text-xs text-[#5C524E]">
@@ -78,7 +78,7 @@ export default function ContactUsPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <span className="text-[#962854] text-lg mt-0.5">📞</span>
+                  <span className="material-symbols-outlined text-[#962854] text-lg mt-0.5">call</span>
                   <div>
                     <strong className="text-[#1C0D0A] block text-xs">Direct Support Helplines:</strong>
                     <p className="text-xs text-[#5C524E] space-y-0.5">
@@ -90,7 +90,7 @@ export default function ContactUsPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <span className="text-[#962854] text-lg mt-0.5">✉️</span>
+                  <span className="material-symbols-outlined text-[#962854] text-lg mt-0.5">mail</span>
                   <div>
                     <strong className="text-[#1C0D0A] block text-xs">Official Support Email:</strong>
                     <a href="mailto:trichylollipop@gmail.com" className="text-xs text-[#962854] hover:underline font-medium">
@@ -100,7 +100,7 @@ export default function ContactUsPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <span className="text-[#962854] text-lg mt-0.5">⏰</span>
+                  <span className="material-symbols-outlined text-[#962854] text-lg mt-0.5">schedule</span>
                   <div>
                     <strong className="text-[#1C0D0A] block text-xs">Operating Hours:</strong>
                     <p className="text-xs text-[#5C524E]">
@@ -138,7 +138,7 @@ export default function ContactUsPage() {
                     Branch 1: Sanjeevi Nagar
                   </strong>
                   <p className="text-[#5C524E]">Sanjeevi Nagar, Tiruchirappalli, Tamil Nadu</p>
-                  <p className="text-[#1C0D0A] font-medium mt-1">📞 +91 96558 88829</p>
+                  <p className="text-[#1C0D0A] font-medium mt-1">Phone: +91 96558 88829</p>
                 </div>
 
                 <div className="p-3 rounded-xl bg-[#FAF3EC] border border-[#E6C184]/40">
@@ -146,7 +146,7 @@ export default function ContactUsPage() {
                     Branch 2: Andar Veedhi
                   </strong>
                   <p className="text-[#5C524E]">150, N Andar St, Tiruchirappalli, Tamil Nadu 620002</p>
-                  <p className="text-[#1C0D0A] font-medium mt-1">📞 +91 84893 24697</p>
+                  <p className="text-[#1C0D0A] font-medium mt-1">Phone: +91 84893 24697</p>
                 </div>
               </div>
             </div>
@@ -183,7 +183,7 @@ export default function ContactUsPage() {
 
               {submitted ? (
                 <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
-                  <span className="text-3xl block">🎉</span>
+                  <span className="material-symbols-outlined text-3xl text-emerald-600 block">verified</span>
                   <h3 className="font-bold text-emerald-800 text-lg">Thank You! Message Received</h3>
                   <p className="text-xs text-emerald-700 max-w-md mx-auto">
                     We have received your enquiry. Our cake studio coordinator will get in touch with you via phone or WhatsApp within 2 hours.
@@ -284,7 +284,7 @@ export default function ContactUsPage() {
                   </button>
 
                   <p className="text-[11px] text-[#7A6B63] text-center pt-2">
-                    🔒 By submitting this form, you agree to our{" "}
+                    By submitting this form, you agree to our{" "}
                     <Link href="/privacy-policy" className="text-[#962854] underline">
                       Privacy Policy
                     </Link>

@@ -68,7 +68,7 @@ export default function BranchSection() {
 
         const customIcon = L.divIcon({
           className: "",
-          html: '<div style="width:34px;height:34px;border-radius:50% 50% 50% 0;background:#962854;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 6px 14px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);font-size:15px;">🎂</span></div>',
+          html: '<div style="width:34px;height:34px;border-radius:50% 50% 50% 0;background:#962854;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 6px 14px rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);font-size:14px;color:#fff;" class="material-symbols-outlined">cake</span></div>',
           iconSize: [34, 34],
           iconAnchor: [17, 34],
           popupAnchor: [0, -32],
@@ -154,7 +154,7 @@ export default function BranchSection() {
                     </h3>
                   </div>
                   <p className="text-xs sm:text-sm text-[#D8C3B3] mt-2 leading-relaxed">
-                    📍 {b.address}
+                    {b.address}
                   </p>
 
                   <dl className="mt-4 text-xs sm:text-sm space-y-1.5 text-[#E5D2E7] pt-3 border-t border-white/10">
@@ -182,7 +182,7 @@ export default function BranchSection() {
                     onClick={(e) => e.stopPropagation()}
                     className="mt-5 inline-flex items-center gap-2 py-2.5 px-5 rounded-xl bg-white text-[#2A082C] font-bold text-xs hover:bg-[#E6C184] transition-colors shadow-md"
                   >
-                    <span>📍 Open in Google Maps</span>
+                    <span>Open in Google Maps</span>
                     <span className="material-symbols-outlined text-sm">east</span>
                   </a>
                 </div>
@@ -208,7 +208,7 @@ export default function BranchSection() {
                     rel="noopener noreferrer"
                     className="py-2.5 px-6 rounded-xl bg-[#E6C184] text-[#1C0D0A] font-bold text-xs"
                   >
-                    📍 Open Directions in Google Maps
+                    Open Directions in Google Maps
                   </a>
                 </div>
               )}

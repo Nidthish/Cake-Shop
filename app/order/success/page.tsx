@@ -89,7 +89,6 @@ function SuccessContent() {
           </div>
 
           <div className="bg-[#FAF3EC] rounded-2xl p-4 border border-[#E6C184]/30 text-xs text-[#802B52] font-semibold flex items-center justify-center gap-2">
-            <span>📬</span>
             <span>
               An official HTML invoice receipt with delivery timing details and OTP has been emailed to{" "}
               <strong>{order?.customer?.email || "your email address"}</strong>.
@@ -98,7 +97,6 @@ function SuccessContent() {
 
           {autoDownloaded && (
             <div className="bg-emerald-50 text-emerald-800 rounded-xl p-3 border border-emerald-200 text-xs font-medium flex items-center justify-center gap-2 animate-fade-in">
-              <span>📥</span>
               <span>Your invoice has been automatically downloaded to your device!</span>
             </div>
           )}
@@ -108,7 +106,6 @@ function SuccessContent() {
         {order && (
           <div className="bg-gradient-to-r from-[#FFFDF9] via-[#FFF8EE] to-[#FFFDF9] border-2 border-dashed border-[#D4AF37] rounded-3xl p-6 sm:p-8 shadow-sm text-center relative overflow-hidden">
             <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="text-lg">🔐</span>
               <span className="text-xs uppercase font-extrabold tracking-widest text-[#802B52]">
                 Delivery Verification OTP
               </span>
@@ -130,7 +127,7 @@ function SuccessContent() {
                 onClick={copyOtp}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-[#802B52] text-white hover:bg-[#601F3E] transition-colors shadow-sm"
               >
-                <span>📋</span> {copied ? "Copied to Clipboard!" : "Copy OTP Code"}
+                {copied ? "Copied to Clipboard!" : "Copy OTP Code"}
               </button>
 
               {order.deliveryOtpVerified && (
@@ -155,14 +152,14 @@ function SuccessContent() {
                 onClick={handleManualDownload}
                 className="flex-1 sm:flex-initial bg-[#250527] hover:bg-[#4A0E4E] text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
               >
-                <span>📥</span> Download Invoice
+                Download Invoice
               </button>
               <button
                 type="button"
                 onClick={handlePrintInvoice}
                 className="flex-1 sm:flex-initial bg-[#D4AF37] hover:bg-[#C29D26] text-[#250527] text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
               >
-                <span>🖨️</span> Print / PDF
+                Print / PDF
               </button>
             </div>
           </div>
@@ -181,7 +178,7 @@ function SuccessContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-6 border-b border-[#E6C184]/30">
               <div className="bg-[#FAF5EE] p-4 rounded-2xl border border-[#E6DBCE] space-y-1 text-xs">
                 <span className="font-bold text-[#802B52] uppercase tracking-wider block text-[10px] mb-1">
-                  📋 Order Information
+                  Order Information
                 </span>
                 <div><strong>Order ID:</strong> <span className="font-mono text-[#802B52]">{order.id}</span></div>
                 <div><strong>Payment Method:</strong> {order.paymentMethod === "COD" ? "Cash / Pay on Delivery" : "Prepaid Online (Razorpay)"}</div>
@@ -195,7 +192,7 @@ function SuccessContent() {
 
               <div className="bg-[#FAF5EE] p-4 rounded-2xl border border-[#E6DBCE] space-y-1 text-xs">
                 <span className="font-bold text-[#802B52] uppercase tracking-wider block text-[10px] mb-1">
-                  ⏰ Delivery Schedule &amp; Contact
+                  Delivery Schedule &amp; Contact
                 </span>
                 <div><strong>Recipient:</strong> {order.customer.fullName} ({order.customer.phone})</div>
                 <div><strong>Delivery Date:</strong> {new Date(order.schedule.date).toLocaleDateString("en-IN", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}</div>
@@ -209,13 +206,13 @@ function SuccessContent() {
               <div className="bg-[#FFF8E7] p-4 rounded-2xl border border-[#E6C184]/50 space-y-2 text-xs">
                 {order.cakeMessage && (
                   <div>
-                    <strong className="text-[#802B52]">🎂 Custom Message on Cake:</strong>{" "}
+                    <strong className="text-[#802B52]">Custom Message on Cake:</strong>{" "}
                     <span className="italic font-medium text-[#1C0D0A]">&quot;{order.cakeMessage}&quot;</span>
                   </div>
                 )}
                 {order.specialInstructions && (
                   <div>
-                    <strong className="text-[#5B1E38]">📝 Bakery Instructions:</strong>{" "}
+                    <strong className="text-[#5B1E38]">Bakery Instructions:</strong>{" "}
                     <span className="text-[#1C0D0A]">{order.specialInstructions}</span>
                   </div>
                 )}
@@ -225,7 +222,7 @@ function SuccessContent() {
             {/* Items Table */}
             <div>
               <h3 className="font-display font-bold text-base text-[#1C0D0A] mb-3">
-                🎂 Handcrafted Items Ordered
+                Handcrafted Items Ordered
               </h3>
               <div className="space-y-3">
                 {order.items.map((item, idx) => (
@@ -239,7 +236,7 @@ function SuccessContent() {
                         <span>Variant: <strong>{item.weight}</strong></span>
                         <span>•</span>
                         <span className={item.eggPreference === "eggless" ? "text-emerald-700 font-bold" : "text-amber-700"}>
-                          {item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}
+                          {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
                         </span>
                       </div>
                       {item.cakeMessage && (
@@ -288,7 +285,7 @@ function SuccessContent() {
             href="/track-order"
             className="w-full sm:w-auto bg-[#250527] hover:bg-[#4A0E4E] text-white text-xs font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 uppercase tracking-wider transition-colors shadow-md text-center"
           >
-            <span>🔍</span> Track Order Live
+            Track Order Live
           </Link>
           <Link
             href="/"
@@ -302,7 +299,7 @@ function SuccessContent() {
             rel="noopener noreferrer"
             className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 uppercase tracking-wider shadow-md"
           >
-            <span>💬</span> WhatsApp Store Chef (+91 9489569661)
+            WhatsApp Store Chef (+91 9489569661)
           </a>
         </div>
 

@@ -122,7 +122,7 @@ export default function CheckoutPage() {
         const data = await res.json();
         if (data.success && data.orderId) {
           clearCart();
-          showToast("🎉 Order placed successfully! Order confirmation email sent.", "success");
+          showToast("Order placed successfully! Order confirmation email sent.", "success");
           router.push(`/order/success?orderId=${data.orderId}`);
         } else {
           showToast(data.error || "Could not place order. Please try again.", "error");
@@ -195,7 +195,7 @@ export default function CheckoutPage() {
             const verifyData = await verifyRes.json();
             if (verifyData.success) {
               clearCart();
-              showToast("🎉 Payment verified & order confirmed!", "success");
+              showToast("Payment verified & order confirmed!", "success");
               router.push(`/order/success?orderId=${data.orderId}`);
             } else {
               router.push(`/order/failed?orderId=${data.orderId}`);
@@ -227,8 +227,8 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-        <div className="w-20 h-20 bg-[#802B52]/10 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl">
-          🎂
+        <div className="w-20 h-20 bg-[#802B52]/10 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl text-[#802B52]">
+          <span className="material-symbols-outlined text-4xl">cake</span>
         </div>
         <h1 className="font-display font-bold text-3xl text-[#1C0D0A] mb-3">Your Cart is Empty</h1>
         <p className="text-[#5C524E] mb-8">Add something delicious to your cart to proceed with ordering.</p>
@@ -249,7 +249,7 @@ export default function CheckoutPage() {
       <div className="bg-[#FAF5EE] min-h-screen py-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-8">
-            <span className="text-3xl">🛍️</span>
+            <span className="material-symbols-outlined text-3xl text-[#802B52]">shopping_bag</span>
             <div>
               <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#1C0D0A]">
                 Checkout &amp; Order Placement
@@ -267,7 +267,7 @@ export default function CheckoutPage() {
               {/* SECTION 1: Customer Contact Details */}
               <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm">
                 <div className="flex items-center gap-2.5 mb-4 text-[#802B52]">
-                  <span className="text-xl">👤</span>
+                  <span className="material-symbols-outlined text-xl">person</span>
                   <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
                     Customer Contact Details
                   </h2>
@@ -319,7 +319,7 @@ export default function CheckoutPage() {
               {/* SECTION 2: Delivery Address */}
               <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm">
                 <div className="flex items-center gap-2.5 mb-4 text-[#802B52]">
-                  <span className="text-xl">📍</span>
+                  <span className="material-symbols-outlined text-xl">location_on</span>
                   <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
                     Delivery Address
                   </h2>
@@ -369,7 +369,7 @@ export default function CheckoutPage() {
               {/* SECTION 3: Delivery Schedule & Time Slot */}
               <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm">
                 <div className="flex items-center gap-2.5 mb-4 text-[#802B52]">
-                  <span className="text-xl">⏰</span>
+                  <span className="material-symbols-outlined text-xl">schedule</span>
                   <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
                     Delivery Date &amp; Time Slot
                   </h2>
@@ -389,7 +389,7 @@ export default function CheckoutPage() {
                     {errors.date && <p className="text-xs text-red-600 mt-1">{errors.date}</p>}
                     {hasEggless && (
                       <p className="text-[11px] text-[#802B52] font-semibold mt-1.5 flex items-center gap-1">
-                        🌱 Eggless items require 1 day prior notice.
+                        Eggless items require 1 day prior notice.
                       </p>
                     )}
                   </div>
@@ -416,7 +416,7 @@ export default function CheckoutPage() {
               {/* SECTION 4: Cake Customization & Bakery Instructions */}
               <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm space-y-4">
                 <div className="flex items-center gap-2.5 text-[#802B52]">
-                  <span className="text-xl">✍️</span>
+                  <span className="material-symbols-outlined text-xl">edit_note</span>
                   <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
                     Cake Personalization &amp; Special Notes
                   </h2>
@@ -427,7 +427,7 @@ export default function CheckoutPage() {
                     Message to Write on Cake (Optional)
                   </label>
                   <input
-                    placeholder='e.g. "Happy 25th Birthday Ananya! 🎂"'
+                    placeholder='e.g. "Happy 25th Birthday Ananya!"'
                     value={cakeMessage}
                     onChange={(e) => setCakeMessage(e.target.value)}
                     maxLength={60}
@@ -455,7 +455,7 @@ export default function CheckoutPage() {
               {/* SECTION 5: Payment Method Selection */}
               <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm space-y-4">
                 <div className="flex items-center gap-2.5 text-[#802B52]">
-                  <span className="text-xl">💳</span>
+                  <span className="material-symbols-outlined text-xl">credit_card</span>
                   <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
                     Select Payment Method
                   </h2>
@@ -480,7 +480,7 @@ export default function CheckoutPage() {
                     />
                     <div>
                       <div className="font-bold text-sm text-[#1C0D0A] flex items-center gap-2">
-                        🚚 Direct Order / Cash on Delivery
+                        Direct Order / Cash on Delivery
                         <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-extrabold uppercase">
                           Instant
                         </span>
@@ -509,7 +509,7 @@ export default function CheckoutPage() {
                     />
                     <div>
                       <div className="font-bold text-sm text-[#1C0D0A] flex items-center gap-2">
-                        💳 Pay Online (Razorpay)
+                        Pay Online (Razorpay)
                       </div>
                       <p className="text-xs text-[#7A6B72] mt-1 leading-relaxed">
                         Pay securely using GPay, PhonePe, Paytm, Credit/Debit Cards, or NetBanking.
@@ -544,7 +544,7 @@ export default function CheckoutPage() {
                           <span>Variant: <strong>{item.weight}</strong></span>
                           <span>•</span>
                           <span className={item.eggPreference === "eggless" ? "text-emerald-700 font-bold" : "text-amber-700"}>
-                            {item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}
+                            {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
                           </span>
                         </div>
                         {item.cakeMessage && (
@@ -603,7 +603,7 @@ export default function CheckoutPage() {
                     </>
                   ) : paymentOption === "COD" ? (
                     <>
-                      <span className="text-base">🚚</span> Place Order Instantly (COD)
+                      Place Order Instantly (COD)
                     </>
                   ) : (
                     <>
@@ -614,7 +614,7 @@ export default function CheckoutPage() {
 
                 <div className="p-3 bg-[#FAF5EE] rounded-xl border border-[#E6DBCE] text-[11px] text-[#7A6B72] text-center space-y-1">
                   <p className="font-bold text-[#802B52]">
-                    📬 Instant Email Confirmation
+                    Instant Email Confirmation
                   </p>
                   <p>
                     An official HTML invoice receipt with product delivery time slot will be dispatched to <strong>{email || "your email"}</strong> immediately upon order placement.

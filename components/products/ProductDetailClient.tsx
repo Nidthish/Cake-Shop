@@ -115,7 +115,7 @@ export default function ProductDetailClient({
             {hasDiscount && <span className="text-base text-[#9C8B84] line-through">₹{originalPrice}</span>}
             {!eggless && (variant.offer || isKgOffer) && (
               <span className="bg-[#FAF0F2] text-[#962854] border border-[#962854]/30 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs flex items-center gap-1.5 animate-pulse">
-                <span>🎁</span>
+                <span className="material-symbols-outlined text-sm">card_giftcard</span>
                 <span>{variant.offer || "1kg + 1/2kg Free"} (With Egg Only)</span>
               </span>
             )}
@@ -164,8 +164,8 @@ export default function ProductDetailClient({
                   onChange={(e) => setEggless(e.target.value === "eggless")}
                   className="w-full appearance-none bg-white border-2 border-[#E6C184]/50 hover:border-[#962854] text-[#1C0D0A] font-bold text-sm px-4 py-3 pr-10 rounded-2xl shadow-sm focus:outline-none focus:border-[#962854] focus:ring-4 focus:ring-[#962854]/15 transition-all cursor-pointer"
                 >
-                  <option value="egg">🥚 With Egg (Default)</option>
-                  <option value="eggless">🌱 Eggless (No Egg)</option>
+                  <option value="egg">With Egg (Default)</option>
+                  <option value="eggless">Eggless (No Egg)</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-[#962854]">
                   <span className="material-symbols-outlined text-xl">expand_more</span>

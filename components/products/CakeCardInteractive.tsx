@@ -112,7 +112,7 @@ export default function CakeCardInteractive({
           </span>
           {showOfferTag && (
             <span className="text-[9.5px] font-extrabold text-white bg-[#962854] px-2 py-0.5 rounded-full shadow-xs animate-pulse font-sans">
-              🎁 1kg + 1/2kg Free
+              1kg + 1/2kg Free
             </span>
           )}
         </div>
@@ -141,7 +141,7 @@ export default function CakeCardInteractive({
               </span>
             ) : eggPreference === "eggless" ? (
               <span className="text-[#962854] bg-[#FAF0F2] border border-[#962854]/30 px-2 py-0.5 rounded-md inline-flex items-center gap-0.5 font-sans">
-                🕒 Order 1 Day Prior
+                Order 1 Day Prior
               </span>
             ) : null}
           </div>
@@ -204,7 +204,7 @@ export default function CakeCardInteractive({
             </div>
             {eggPreference === "eggless" && (
               <p className="text-[10px] text-[#962854] font-semibold mt-1.5 flex items-center gap-1 font-sans">
-                <span>ℹ️ For eggless cakes, you need to order 1 day prior.</span>
+                <span>For eggless cakes, you need to order 1 day prior.</span>
               </p>
             )}
           </div>

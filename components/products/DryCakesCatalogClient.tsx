@@ -241,9 +241,9 @@ export default function DryCakesCatalogClient({
                 className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 sm:flex-none"
                 suppressHydrationWarning
               >
-                <option value="default">✨ Featured</option>
-                <option value="price-low">💰 Price: Low→High</option>
-                <option value="price-high">💎 Price: High→Low</option>
+                <option value="default">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
               </select>
               <button
                 type="button"
@@ -267,7 +267,7 @@ export default function DryCakesCatalogClient({
               >
                 {SUB_PILLS.map((pill) => (
                   <option key={pill.keyword} value={pill.keyword}>
-                    🥮 {pill.label} {pill.keyword === "all" ? `(${allDryCakes.length})` : ""}
+                    {pill.label} {pill.keyword === "all" ? `(${allDryCakes.length})` : ""}
                   </option>
                 ))}
               </select>
@@ -312,7 +312,7 @@ export default function DryCakesCatalogClient({
             {filteredDryCakes.length === 1 ? "" : "s"}
           </span>
           <span className="text-xs font-bold text-[#962854] bg-[#FAF0F2] px-3 py-1 rounded-full border border-[#E6C184]/40">
-            ✨ Baked Fresh Daily
+            Baked Fresh Daily
           </span>
         </div>
 

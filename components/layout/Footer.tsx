@@ -40,7 +40,7 @@ export default function Footer() {
               <li><Link href="/dry-cakes" className="hover:text-white transition-colors">Dry Cakes Collection</Link></li>
               <li><Link href="/snacks" className="hover:text-white transition-colors">Gourmet Pastries</Link></li>
               <li><Link href="/custom-cake" className="hover:text-white transition-colors">Custom Cake Studio</Link></li>
-              <li><Link href="/track-order" className="hover:text-white transition-colors text-[#E6C184] font-semibold">🔍 Track Your Order</Link></li>
+              <li><Link href="/track-order" className="hover:text-white transition-colors text-[#E6C184] font-semibold">Track Your Order</Link></li>
               <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
             </ul>
           </div>
@@ -97,16 +97,16 @@ export default function Footer() {
               Reach Our Bakery
             </h4>
             <p className="leading-snug">
-              📍 150, N Andar St, Tiruchirappalli, Tamil Nadu 620002
+              150, N Andar St, Tiruchirappalli, Tamil Nadu 620002
             </p>
             <div className="space-y-1 pt-1">
-              <p>📞 <a href="tel:+918489324697" className="hover:text-white">+91 84893 24697</a></p>
-              <p>📞 <a href="tel:+919655888829" className="hover:text-white">+91 96558 88829</a></p>
-              <p>📞 <a href="tel:+917373737810" className="hover:text-white">+91 73737 37810</a></p>
-              <p>✉️ <a href="mailto:trichylollipop@gmail.com" className="hover:text-white">trichylollipop@gmail.com</a></p>
+              <p><a href="tel:+918489324697" className="hover:text-white">Phone: +91 84893 24697</a></p>
+              <p><a href="tel:+919655888829" className="hover:text-white">Phone: +91 96558 88829</a></p>
+              <p><a href="tel:+917373737810" className="hover:text-white">Phone: +91 73737 37810</a></p>
+              <p><a href="mailto:trichylollipop@gmail.com" className="hover:text-white">Email: trichylollipop@gmail.com</a></p>
             </div>
             <p className="text-[11px] text-[#A892A8] pt-1">
-              ⏰ Open Mon–Sun: 8:00 AM – 10:00 PM
+              Open Mon–Sun: 8:00 AM – 10:00 PM
             </p>
           </div>
         </div>

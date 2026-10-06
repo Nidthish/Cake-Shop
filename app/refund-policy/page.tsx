@@ -125,7 +125,7 @@ export default function RefundPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <div className="flex items-start gap-3">
-              <span className="p-2 rounded-lg bg-[#FAF0F2] text-[#962854] font-bold text-lg mt-0.5">💳</span>
+              <span className="material-symbols-outlined p-2 rounded-lg bg-[#FAF0F2] text-[#962854] text-xl mt-0.5">credit_card</span>
               <div>
                 <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-1">
                   5. Refund Mode &amp; Razorpay Processing Timelines
@@ -203,11 +203,11 @@ export default function RefundPolicyPage() {
             </p>
             <div className="bg-[#FAF0F2] rounded-xl p-4 sm:p-5 border border-[#962854]/20 space-y-1 text-xs sm:text-sm">
               <p><strong>Lollipop The Cake Shop — Customer Care</strong></p>
-              <p>📍 150, N Andar St, Tiruchirappalli, Tamil Nadu 620002</p>
-              <p>📞 Phone: +91 96558 88829 / +91 84893 24697 / +91 73737 37810</p>
-              <p>💬 WhatsApp Support: +91 96558 88829</p>
-              <p>✉️ Email: <a href="mailto:trichylollipop@gmail.com" className="text-[#962854] font-semibold underline">trichylollipop@gmail.com</a></p>
-              <p>⏰ Support Hours: Monday to Sunday, 8:00 AM – 10:00 PM IST</p>
+              <p>150, N Andar St, Tiruchirappalli, Tamil Nadu 620002</p>
+              <p>Phone: +91 96558 88829 / +91 84893 24697 / +91 73737 37810</p>
+              <p>WhatsApp Support: +91 96558 88829</p>
+              <p>Email: <a href="mailto:trichylollipop@gmail.com" className="text-[#962854] font-semibold underline">trichylollipop@gmail.com</a></p>
+              <p>Support Hours: Monday to Sunday, 8:00 AM – 10:00 PM IST</p>
             </div>
           </section>
 

@@ -188,10 +188,10 @@ export default function CakesCatalogClient({
                 className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 sm:flex-none"
                 suppressHydrationWarning
               >
-                <option value="all">⚡ All Weights</option>
-                <option value="0.5kg">🍰 0.5 kg</option>
-                <option value="1kg">🎂 1 kg</option>
-                <option value="step 2">⭐ Step 2</option>
+                <option value="all">All Weights</option>
+                <option value="0.5kg">0.5 kg</option>
+                <option value="1kg">1 kg</option>
+                <option value="step 2">Step 2</option>
               </select>
               <select
                 value={currentSort}
@@ -199,10 +199,10 @@ export default function CakesCatalogClient({
                 className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 sm:flex-none"
                 suppressHydrationWarning
               >
-                <option value="default">✨ Featured</option>
-                <option value="price-low">💰 Price: Low→High</option>
-                <option value="price-high">💎 Price: High→Low</option>
-                <option value="rating">⭐ Top Rated</option>
+                <option value="default">Featured</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="rating">Top Rated</option>
               </select>
               <button
                 type="button"
@@ -226,7 +226,7 @@ export default function CakesCatalogClient({
               >
                 {categoryPills.map((pill) => (
                   <option key={pill.subcat} value={pill.subcat}>
-                    🎂 {pill.label} {pill.subcat === "all" ? `(${allCakes.length})` : ""}
+                    {pill.label} {pill.subcat === "all" ? `(${allCakes.length})` : ""}
                   </option>
                 ))}
               </select>
@@ -282,7 +282,7 @@ export default function CakesCatalogClient({
               Advance Order Available
             </span>
             <span className="text-xs font-bold text-[#962854] bg-[#FAF0F2] px-3 py-1.5 rounded-lg border border-[#962854]/20">
-              ✨ 100% Artisanal Quality
+              100% Artisanal Quality
             </span>
           </div>
         </div>

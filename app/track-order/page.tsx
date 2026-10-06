@@ -81,7 +81,7 @@ function TrackOrderContent() {
         {/* Header Hero */}
         <div className="text-center space-y-3">
           <div className="inline-block bg-[#802B52]/10 text-[#802B52] border border-[#802B52]/20 font-mono text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest">
-            🔍 Live Order Status &amp; Tracking
+            Live Order Status &amp; Tracking
           </div>
           <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#1C0D0A]">
             Track Your Cake Order Status
@@ -127,7 +127,7 @@ function TrackOrderContent() {
 
           {/* Quick Help Hints */}
           <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-[#7A6B72]">
-            <span>💡 Tip: You can search by your 10-digit mobile number to track active orders.</span>
+            <span>Tip: You can search by your 10-digit mobile number to track active orders.</span>
           </div>
         </div>
 
@@ -196,8 +196,8 @@ function TrackOrderContent() {
                   {isDelivered && (
                     <div className="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-5 text-emerald-950 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
                       <div className="flex items-center gap-3 text-center sm:text-left">
-                        <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 text-2xl">
-                          🎉
+                        <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                          <span className="material-symbols-outlined text-2xl text-emerald-700">verified</span>
                         </div>
                         <div>
                           <h3 className="font-extrabold text-base text-emerald-950">
@@ -221,8 +221,8 @@ function TrackOrderContent() {
                   {isOutForDelivery && (
                     <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 text-amber-950 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
                       <div className="flex items-center gap-3 text-center sm:text-left">
-                        <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0 text-2xl animate-bounce">
-                          🚚
+                        <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+                          <span className="material-symbols-outlined text-2xl text-amber-700">local_shipping</span>
                         </div>
                         <div>
                           <h3 className="font-extrabold text-base text-amber-950">
@@ -245,8 +245,8 @@ function TrackOrderContent() {
                   {isCancelled && (
                     <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-5 text-red-950 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
                       <div className="flex items-center gap-3 text-center sm:text-left">
-                        <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 text-2xl">
-                          ❌
+                        <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                          <span className="material-symbols-outlined text-2xl text-red-700">cancel</span>
                         </div>
                         <div>
                           <h3 className="font-extrabold text-base text-red-950">
@@ -264,7 +264,7 @@ function TrackOrderContent() {
                   {!isCancelled && (
                     <div className="bg-[#FAF5EE] rounded-2xl p-4 sm:p-6 border border-[#E6DBCE]">
                       <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#802B52] mb-4 text-center sm:text-left">
-                        🚚 Live Delivery Progress
+                        Live Delivery Progress
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
                         {[
@@ -302,7 +302,7 @@ function TrackOrderContent() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                     <div className="bg-[#FAF5EE] p-4 rounded-2xl border border-[#E6DBCE] space-y-1.5">
                       <span className="font-bold text-[#802B52] uppercase tracking-wider block text-[10px] mb-1">
-                        📍 Delivery Information
+                        Delivery Information
                       </span>
                       <div><strong>Recipient:</strong> {order.customer?.fullName || "Customer"} ({order.customer?.phone || ""})</div>
                       <div>
@@ -319,7 +319,7 @@ function TrackOrderContent() {
 
                     <div className="bg-[#FAF5EE] p-4 rounded-2xl border border-[#E6DBCE] space-y-1.5">
                       <span className="font-bold text-[#802B52] uppercase tracking-wider block text-[10px] mb-1">
-                        💳 Payment Information
+                        Payment Information
                       </span>
                       <div><strong>Payment Mode:</strong> {order.paymentMethod === "COD" ? "Cash on Delivery" : "Prepaid Online (Razorpay)"}</div>
                       <div>
@@ -344,7 +344,7 @@ function TrackOrderContent() {
                   {/* Item List */}
                   <div>
                     <h4 className="font-display font-bold text-sm text-[#1C0D0A] mb-2.5">
-                      🎂 Ordered Items ({order.items.length})
+                      Ordered Items ({order.items.length})
                     </h4>
                     <div className="space-y-2">
                       {order.items.map((item, idx) => (
@@ -356,7 +356,7 @@ function TrackOrderContent() {
                             <div className="font-bold text-[#1C0D0A]">{item.name}</div>
                             <div className="text-[11px] text-[#7A6B72]">
                               Variant: {item.weight} &bull; Qty: {item.quantity}
-                              {item.eggPreference && ` • ${item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}`}
+                              {item.eggPreference && ` • ${item.eggPreference === "eggless" ? "Eggless" : "With Egg"}`}
                             </div>
                             {item.cakeMessage && (
                               <div className="text-[11px] text-[#802B52] italic mt-0.5">
@@ -384,7 +384,7 @@ function TrackOrderContent() {
                       rel="noopener noreferrer"
                       className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-sm"
                     >
-                      <span>💬</span> WhatsApp Bakery Help
+                      WhatsApp Bakery Help
                     </a>
                   </div>
 
