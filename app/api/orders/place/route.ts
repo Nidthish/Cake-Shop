@@ -57,7 +57,9 @@ export async function POST(req: NextRequest) {
       id: orderId,
       items: priced.lineItems.map((item, idx) => ({
         ...item,
-        eggPreference: items[idx]?.eggPreference || "eggless",
+        isEggless: items[idx]?.eggPreference === "eggless" || Boolean(item.isEggless),
+        eggPreference: items[idx]?.eggPreference || item.eggPreference || "eggless",
+        offer: items[idx]?.offer || item.offer || undefined,
         cakeMessage: sanitizeString(items[idx]?.cakeMessage || cleanCakeMessage),
       })),
       customer: {

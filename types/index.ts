@@ -37,6 +37,8 @@ export interface CartItem {
   image: string;
   weight: string;
   price: number;
+  originalPrice?: number;
+  offer?: string;
   quantity: number;
   eggPreference?: "eggless" | "egg";
   cakeMessage?: string;
@@ -70,6 +72,10 @@ export interface DeliverySchedule {
   timeSlot: string;
 }
 
+// ── Roles ───────────────────────────────────────────────────────────────
+
+export type UserRole = "SUPERADMIN" | "ADMIN" | "STAFF" | "CUSTOMER" | "RIDER";
+
 // ── Orders ──────────────────────────────────────────────────────────────
 
 export type OrderStatus =
@@ -94,7 +100,9 @@ export interface OrderLineItem {
   quantity: number;
   unitPrice: number;
   lineTotal: number;
+  isEggless?: boolean;
   eggPreference?: "eggless" | "egg";
+  offer?: string;
   cakeMessage?: string;
 }
 
@@ -135,6 +143,9 @@ export interface CreateOrderRequestItem {
   productId: string;
   weight: string;
   quantity: number;
+  eggPreference?: "eggless" | "egg";
+  cakeMessage?: string;
+  offer?: string;
 }
 
 export interface CreateOrderRequest {

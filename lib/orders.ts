@@ -1,6 +1,7 @@
 import { getNeonSql } from "./neon";
 import { getMySqlPool } from "./mysql";
 import { prisma } from "./prisma";
+import { sendOrderDeliveredEmail } from "./email";
 import type { Order, OrderLineItem } from "@/types";
 
 export interface OrderStore {
@@ -114,10 +115,10 @@ class HybridOrderStore implements OrderStore {
               await sql`
                 INSERT INTO order_items (
                   order_id, product_id, product_code, product_name, variant_name,
-                  is_eggless, quantity, unit_price, line_total, cake_message
+                  is_eggless, quantity, unit_price, line_total, cake_message, offer
                 ) VALUES (
                   ${neonOrderId}, ${prodId}, ${prodCode}, ${item.name}, ${item.weight},
-                  ${isEgglessItem}, ${item.quantity}, ${item.unitPrice}, ${item.lineTotal}, ${item.cakeMessage || null}
+                  ${isEgglessItem}, ${item.quantity}, ${item.unitPrice}, ${item.lineTotal}, ${item.cakeMessage || null}, ${item.offer || null}
                 )
               `;
             }
@@ -219,11 +220,11 @@ class HybridOrderStore implements OrderStore {
             await mysqlPool.query(`
               INSERT INTO lollipop_db.order_items (
                 order_id, product_id, product_code, product_name, variant_name,
-                is_eggless, quantity, unit_price, line_total, cake_message, created_at
-              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+                is_eggless, quantity, unit_price, line_total, cake_message, offer, created_at
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
             `, [
               mysqlOrderId, prodId, prodCode, item.name, item.weight,
-              isEgglessItem, item.quantity, item.unitPrice, item.lineTotal, item.cakeMessage || null
+              isEgglessItem, item.quantity, item.unitPrice, item.lineTotal, item.cakeMessage || null, item.offer || null
             ]);
           }
 
@@ -270,7 +271,9 @@ class HybridOrderStore implements OrderStore {
                        'quantity', i.quantity,
                        'unitPrice', i.unit_price,
                        'lineTotal', i.line_total,
+                       'isEggless', i.is_eggless,
                        'eggPreference', CASE WHEN i.is_eggless THEN 'eggless' ELSE 'egg' END,
+                       'offer', i.offer,
                        'cakeMessage', i.cake_message
                      )
                    ) FILTER (WHERE i.id IS NOT NULL), '[]'
@@ -350,8 +353,9 @@ class HybridOrderStore implements OrderStore {
               weight: i.variant_name,
               quantity: i.quantity,
               unitPrice: Number(i.unit_price),
-              lineTotal: Number(i.line_total),
+              isEggless: Boolean(i.is_eggless),
               eggPreference: i.is_eggless ? "eggless" : "egg",
+              offer: i.offer || undefined,
               cakeMessage: i.cake_message || undefined,
             })),
             customer: {
@@ -800,6 +804,18 @@ export async function verifyAndDeliverOrder(
   }
 
   const updated = await orderStore.update(orderId, patch);
+  const finalDeliveredOrder = updated || { ...order, ...patch };
+
+  // Trigger customer delivery success email confirmation
+  try {
+    await Promise.race([
+      sendOrderDeliveredEmail(finalDeliveredOrder as Order),
+      new Promise((resolve) => setTimeout(resolve, 5000)),
+    ]);
+  } catch (emailErr) {
+    console.error("❌ [Email Service] Failed to send order delivered email:", emailErr);
+  }
+
   return { success: true, order: updated };
 }
 

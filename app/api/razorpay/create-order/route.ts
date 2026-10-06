@@ -15,8 +15,9 @@ const requestSchema = z.object({
         productId: z.string().min(1),
         weight: z.string().min(1),
         quantity: z.number().int().min(1).max(50),
-        eggPreference: z.string().optional(),
+        eggPreference: z.enum(["eggless", "egg"]).optional(),
         cakeMessage: z.string().optional(),
+        offer: z.string().optional(),
       })
     )
     .min(1, "Cart cannot be empty."),
@@ -130,7 +131,9 @@ export async function POST(req: NextRequest) {
       id: orderId,
       items: priced.lineItems.map((item, idx) => ({
         ...item,
+        isEggless: items[idx]?.eggPreference === "eggless" || Boolean(item.isEggless),
         eggPreference: (items[idx]?.eggPreference === "egg" ? "egg" : "eggless") as "eggless" | "egg",
+        offer: items[idx]?.offer || item.offer || undefined,
         cakeMessage: items[idx]?.cakeMessage || parsed.data.cakeMessage,
       })),
       customer,

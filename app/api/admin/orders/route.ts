@@ -3,6 +3,8 @@ import { getAuthenticatedAdmin } from "@/lib/auth";
 import { getNeonSql } from "@/lib/neon";
 import { getMySqlPool } from "@/lib/mysql";
 import { prisma } from "@/lib/prisma";
+import { orderStore } from "@/lib/orders";
+import { sendOrderDeliveredEmail } from "@/lib/email";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -59,7 +61,9 @@ export async function GET(req: NextRequest) {
                   'isEggless', i.is_eggless,
                   'quantity', i.quantity,
                   'unitPrice', i.unit_price,
-                  'lineTotal', i.line_total
+                  'lineTotal', i.line_total,
+                  'cakeMessage', i.cake_message,
+                  'offer', i.offer
                 )
               ) FILTER (WHERE i.id IS NOT NULL),
               '[]'
@@ -110,6 +114,8 @@ export async function GET(req: NextRequest) {
                 quantity: Number(i.quantity),
                 unitPrice: Number(i.unitPrice),
                 lineTotal: Number(i.lineTotal),
+                cakeMessage: i.cakeMessage || null,
+                offer: i.offer || null,
               }))
             : [],
         }));
@@ -168,7 +174,8 @@ export async function GET(req: NextRequest) {
         if (orderIds.length > 0) {
           const [items]: any = await pool.query(
             `SELECT id, order_id, product_code as productCode, product_name as productName,
-                    variant_name as variantName, is_eggless as isEggless, quantity, unit_price as unitPrice, line_total as lineTotal
+                    variant_name as variantName, is_eggless as isEggless, quantity, unit_price as unitPrice, line_total as lineTotal,
+                    cake_message as cakeMessage, offer
              FROM lollipop_db.order_items WHERE order_id IN (?)`,
             [orderIds]
           );
@@ -183,6 +190,8 @@ export async function GET(req: NextRequest) {
               quantity: Number(item.quantity),
               unitPrice: Number(item.unitPrice),
               lineTotal: Number(item.lineTotal),
+              cakeMessage: item.cakeMessage || null,
+              offer: item.offer || null,
             });
           }
         }
@@ -279,6 +288,8 @@ export async function GET(req: NextRequest) {
           quantity: i.quantity,
           unitPrice: Number(i.unitPrice),
           lineTotal: Number(i.lineTotal),
+          cakeMessage: i.cakeMessage || null,
+          offer: (i as any).offer || null,
         })),
       })),
     });
@@ -300,7 +311,7 @@ export async function PUT(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { orderId, status, paymentStatus } = body;
+    const { orderId, status, paymentStatus, deliveryPartnerName, deliveryPartnerPhone } = body;
 
     if (!orderId) {
       return NextResponse.json({ success: false, error: "orderId is required" }, { status: 400 });
@@ -308,18 +319,51 @@ export async function PUT(req: NextRequest) {
 
     let updatedAny = false;
     const strOrderId = String(orderId);
+    const isDelivered = status === "DELIVERED";
 
     // 1. Update Neon PostgreSQL
     try {
       const sql = getNeonSql();
       if (sql) {
         if (status) {
+          if (isDelivered) {
+            await sql`
+              UPDATE orders 
+              SET status = 'DELIVERED',
+                  delivered_at = NOW(),
+                  delivery_otp_verified = true,
+                  delivery_partner_name = COALESCE(${deliveryPartnerName || null}, delivery_partner_name),
+                  delivery_partner_phone = COALESCE(${deliveryPartnerPhone || null}, delivery_partner_phone),
+                  updated_at = NOW() 
+              WHERE id::text = ${strOrderId} OR order_number = ${strOrderId}
+            `;
+            await sql`
+              UPDATE payments 
+              SET payment_status = 'PAID', updated_at = NOW()
+              WHERE order_id = (SELECT id FROM orders WHERE id::text = ${strOrderId} OR order_number = ${strOrderId} LIMIT 1)
+            `;
+          } else {
+            await sql`
+              UPDATE orders 
+              SET status = ${status},
+                  delivery_partner_name = COALESCE(${deliveryPartnerName || null}, delivery_partner_name),
+                  delivery_partner_phone = COALESCE(${deliveryPartnerPhone || null}, delivery_partner_phone),
+                  assigned_at = CASE WHEN ${deliveryPartnerName || null} IS NOT NULL THEN NOW() ELSE assigned_at END,
+                  updated_at = NOW() 
+              WHERE id::text = ${strOrderId} OR order_number = ${strOrderId}
+            `;
+          }
+        } else if (deliveryPartnerName) {
           await sql`
             UPDATE orders 
-            SET status = ${status}, updated_at = NOW() 
+            SET delivery_partner_name = ${deliveryPartnerName},
+                delivery_partner_phone = ${deliveryPartnerPhone || null},
+                assigned_at = NOW(),
+                updated_at = NOW() 
             WHERE id::text = ${strOrderId} OR order_number = ${strOrderId}
           `;
         }
+
         if (paymentStatus) {
           await sql`
             UPDATE payments 
@@ -338,9 +382,28 @@ export async function PUT(req: NextRequest) {
       const pool = getMySqlPool();
       if (pool) {
         if (status) {
+          if (isDelivered) {
+            await pool.query(
+              "UPDATE lollipop_db.orders SET status = 'DELIVERED', delivered_at = NOW(), delivery_otp_verified = 1, updated_at = NOW() WHERE id = ? OR order_number = ?",
+              [strOrderId, strOrderId]
+            );
+            await pool.query(
+              `UPDATE lollipop_db.payments 
+               SET payment_status = 'PAID', updated_at = NOW() 
+               WHERE order_id = (SELECT id FROM lollipop_db.orders WHERE id = ? OR order_number = ? LIMIT 1)`,
+              [strOrderId, strOrderId]
+            );
+          } else {
+            await pool.query(
+              "UPDATE lollipop_db.orders SET status = ?, updated_at = NOW() WHERE id = ? OR order_number = ?",
+              [status, strOrderId, strOrderId]
+            );
+          }
+        }
+        if (deliveryPartnerName) {
           await pool.query(
-            "UPDATE lollipop_db.orders SET status = ?, updated_at = NOW() WHERE id = ? OR order_number = ?",
-            [status, strOrderId, strOrderId]
+            "UPDATE lollipop_db.orders SET delivery_partner_name = ?, delivery_partner_phone = ?, assigned_at = NOW(), updated_at = NOW() WHERE id = ? OR order_number = ?",
+            [deliveryPartnerName, deliveryPartnerPhone || null, strOrderId, strOrderId]
           );
         }
         if (paymentStatus) {
@@ -357,30 +420,39 @@ export async function PUT(req: NextRequest) {
       console.warn("⚠️ [Admin PUT /orders] MySQL update error:", mysqlErr?.message || mysqlErr);
     }
 
-    // 3. Fallback to Prisma if both failed
-    if (!updatedAny) {
+    // 3. Update memory store
+    const patch: any = {};
+    if (status) patch.orderStatus = status;
+    if (paymentStatus) patch.paymentStatus = paymentStatus;
+    if (deliveryPartnerName) patch.deliveryPartnerName = deliveryPartnerName;
+    if (deliveryPartnerPhone) patch.deliveryPartnerPhone = deliveryPartnerPhone;
+    if (isDelivered) {
+      patch.deliveredAt = new Date().toISOString();
+      patch.deliveryOtpVerified = true;
+      patch.paymentStatus = "PAID";
+    }
+    const updatedOrder = await orderStore.update(strOrderId, patch);
+
+    // If order was marked as DELIVERED, trigger real-time delivery confirmation email!
+    if (isDelivered) {
       try {
-        const orderIdBigInt = BigInt(strOrderId);
-        if (status) {
-          await prisma.order.update({
-            where: { id: orderIdBigInt },
-            data: { status },
-          });
+        const fullOrder = updatedOrder || (await orderStore.get(strOrderId));
+        if (fullOrder) {
+          console.log(`📧 [Admin Order Update] Triggering delivery success email for Order ${strOrderId}...`);
+          await Promise.race([
+            sendOrderDeliveredEmail(fullOrder),
+            new Promise((resolve) => setTimeout(resolve, 5000)),
+          ]);
         }
-        if (paymentStatus) {
-          await prisma.payment.updateMany({
-            where: { orderId: orderIdBigInt },
-            data: { paymentStatus },
-          });
-        }
-      } catch (prismaErr: any) {
-        console.warn("⚠️ [Admin PUT /orders] Prisma update error:", prismaErr?.message || prismaErr);
+      } catch (emailErr) {
+        console.error("❌ Failed to send order delivered email from admin:", emailErr);
       }
     }
 
     return NextResponse.json({
       success: true,
       message: "Order status updated successfully across databases!",
+      order: updatedOrder,
     });
   } catch (error: any) {
     console.error("[PUT /api/admin/orders] Error:", error);

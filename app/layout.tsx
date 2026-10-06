@@ -5,8 +5,7 @@ import { CartProvider } from "@/components/cart/CartProvider";
 import { ToastProvider } from "@/components/common/ToastProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import WhatsAppFloat from "@/components/layout/WhatsAppFloat";
-import MobileCartFloat from "@/components/layout/MobileCartFloat";
+import FloatingActions from "@/components/layout/FloatingActions";
 import BakeryBackground from "@/components/layout/BakeryBackground";
 
 const cormorant = Cormorant_Garamond({
@@ -68,8 +67,7 @@ export default function RootLayout({
             <Navbar />
             <main className="relative z-10">{children}</main>
             <Footer />
-            <MobileCartFloat />
-            <WhatsAppFloat />
+            <FloatingActions />
           </CartProvider>
         </ToastProvider>
       </body>

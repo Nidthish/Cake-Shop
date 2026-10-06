@@ -18,13 +18,38 @@ export default function CartLineItem({ item }: { item: CartItem }) {
           }}
         />
       </div>
-      <div className="flex-grow min-w-0">
+      <div className="flex-grow min-w-0 space-y-1">
         <p className="font-display font-bold text-base text-[#1C0D0A] truncate">{item.name}</p>
-        <p className="text-xs text-[#5C524E]">
-          {item.weight}
-          {item.eggPreference ? ` · ${item.eggPreference === "eggless" ? "Eggless" : "With Egg"}` : ""}
-        </p>
-        <p className="font-bold text-sm text-[#1C0D0A] mt-1">₹{item.price}</p>
+        <div className="flex flex-wrap items-center gap-1.5 text-xs text-[#5C524E]">
+          <span>Weight: <strong>{item.weight}</strong></span>
+          {item.eggPreference && (
+            <span
+              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                item.eggPreference === "eggless"
+                  ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                  : "bg-amber-100 text-amber-900 border border-amber-200"
+              }`}
+            >
+              {item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}
+            </span>
+          )}
+        </div>
+        {item.offer && (
+          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-amber-800 text-[10px] font-bold">
+            <span>🎁</span> {item.offer}
+          </div>
+        )}
+        {item.cakeMessage && (
+          <p className="text-[11px] text-[#802B52] italic">
+            🎂 Message: &quot;{item.cakeMessage}&quot;
+          </p>
+        )}
+        <div className="flex items-baseline gap-2 pt-0.5">
+          <span className="font-bold text-sm text-[#962854]">₹{item.price}</span>
+          {item.originalPrice && item.originalPrice > item.price && (
+            <span className="text-xs text-[#9C8B84] line-through">₹{item.originalPrice}</span>
+          )}
+        </div>
       </div>
       <div className="flex items-center border border-[#E6C184]/40 rounded-xl overflow-hidden flex-shrink-0">
         <button

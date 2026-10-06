@@ -37,7 +37,7 @@ function getTransporter() {
 /**
  * Generate a luxury HTML invoice receipt for Lollipop Cake Shop
  */
-function generateOrderConfirmationHtml(order: Order): string {
+export function generateOrderConfirmationHtml(order: Order): string {
   const formattedDate = new Date(order.createdAt).toLocaleDateString("en-IN", {
     weekday: "long",
     year: "numeric",
@@ -61,8 +61,9 @@ function generateOrderConfirmationHtml(order: Order): string {
           <span style="font-size: 12px; color: #7A6B72;">
             Weight / Variant: <strong>${item.weight}</strong>
             ${item.eggPreference ? ` | <span style="color: ${item.eggPreference === "eggless" ? "#2E7D32" : "#D97706"}; font-weight: bold;">${item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}</span>` : ""}
+            ${item.offer ? ` | <span style="color: #802B52; font-weight: bold;">🎁 Offer: ${item.offer}</span>` : ""}
           </span>
-          ${item.cakeMessage ? `<br/><span style="font-size: 12px; color: #802B52; font-style: italic;">🎂 Message: "${item.cakeMessage}"</span>` : ""}
+          ${item.cakeMessage ? `<br/><span style="font-size: 12px; color: #802B52; font-style: italic;">🎂 Name / Message on Cake: "${item.cakeMessage}"</span>` : ""}
         </td>
         <td style="padding: 14px 16px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; color: #1C0D0A; text-align: center; font-weight: bold;">
           ${item.quantity}
@@ -318,3 +319,236 @@ export async function sendOrderConfirmationEmail(order: Order): Promise<{ succes
     return { success: false, error: error?.message || "Email sending failed" };
   }
 }
+
+/**
+ * Generate a luxury HTML delivery receipt for Lollipop Cake Shop
+ */
+export function generateOrderDeliveredHtml(order: Order): string {
+  const formattedDeliveryDate = order.deliveredAt
+    ? new Date(order.deliveredAt).toLocaleDateString("en-IN", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : new Date().toLocaleDateString("en-IN", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+
+  const itemsHtml = order.items
+    .map(
+      (item) => `
+      <tr>
+        <td style="padding: 14px 16px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; color: #1C0D0A;">
+          <strong style="color: #802B52; font-size: 15px;">${item.name}</strong><br />
+          <span style="font-size: 12px; color: #7A6B72;">
+            Weight / Variant: <strong>${item.weight}</strong>
+            ${item.eggPreference ? ` | <span style="color: ${item.eggPreference === "eggless" ? "#2E7D32" : "#D97706"}; font-weight: bold;">${item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}</span>` : ""}
+            ${item.offer ? ` | <span style="color: #802B52; font-weight: bold;">🎁 Offer: ${item.offer}</span>` : ""}
+          </span>
+          ${item.cakeMessage ? `<br/><span style="font-size: 12px; color: #802B52; font-style: italic;">🎂 Name / Message on Cake: "${item.cakeMessage}"</span>` : ""}
+        </td>
+        <td style="padding: 14px 16px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; color: #1C0D0A; text-align: center; font-weight: bold;">
+          ${item.quantity}
+        </td>
+        <td style="padding: 14px 16px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; color: #1C0D0A; text-align: right;">
+          ₹${item.unitPrice.toFixed(2)}
+        </td>
+        <td style="padding: 14px 16px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; color: #802B52; text-align: right; font-weight: bold;">
+          ₹${item.lineTotal.toFixed(2)}
+        </td>
+      </tr>
+    `
+    )
+    .join("");
+
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Delivered - Lollipop Cake Shop</title>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #FAF5EE; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF5EE; padding: 30px 10px;">
+      <tr>
+        <td align="center">
+          <!-- Main Container -->
+          <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 650px; background-color: #FFFFFF; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(128, 43, 82, 0.08); border: 1px solid #E6DBCE;">
+            
+            <!-- Brand Header -->
+            <tr>
+              <td style="background-color: #802B52; padding: 32px 30px; text-align: center; color: #FFFFFF;">
+                <div style="display: inline-block; background-color: rgba(255,255,255,0.15); padding: 8px 18px; border-radius: 50px; font-size: 11px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.3);">
+                  ✨ Delivery Complete
+                </div>
+                <h1 style="margin: 0; font-size: 30px; font-weight: bold; letter-spacing: -0.5px; color: #FFFFFF; font-family: Georgia, serif;">
+                  Lollipop Cake Shop
+                </h1>
+                <p style="margin: 6px 0 0 0; font-size: 13px; color: #F1E6DF; font-style: italic;">
+                  Handcrafted Luxury Artisanal Cakes & Pastries
+                </p>
+              </td>
+            </tr>
+
+            <!-- Status Banner -->
+            <tr>
+              <td style="background-color: #E8F5E9; padding: 24px 30px; border-bottom: 1px solid #A5D6A7; text-align: center;">
+                <div style="font-size: 22px; font-weight: bold; color: #1B5E20; margin-bottom: 6px;">
+                  🎉 Your Order is Delivered Successfully!
+                </div>
+                <div style="font-size: 14px; color: #2E7D32; line-height: 1.5;">
+                  We hope our handcrafted treats make your special moments even sweeter and more memorable!
+                </div>
+              </td>
+            </tr>
+
+            <!-- Delivered Details Summary -->
+            <tr>
+              <td style="padding: 24px 30px 0 30px;">
+                <div style="background-color: #FFFDF8; border: 1px solid #E6DBCE; border-radius: 14px; padding: 18px 24px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.08);">
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td style="font-size: 13px; color: #1C0D0A; line-height: 1.8;">
+                        <strong>Order Number:</strong> <span style="color: #802B52; font-weight: bold;">${order.id}</span><br />
+                        <strong>Delivered At:</strong> ${formattedDeliveryDate}<br />
+                        ${order.schedule?.timeSlot ? `<strong>Scheduled Delivery Time:</strong> <span style="color: #802B52; font-weight: bold;">${order.schedule.timeSlot}</span><br />` : ""}
+                        <strong>Delivered To:</strong> ${order.customer.fullName} (${order.customer.phone})<br />
+                        <strong>Address:</strong> ${order.address.street}, ${order.address.city} - ${order.address.pincode}<br />
+                        ${order.deliveryPartnerName ? `<strong>Delivery Partner:</strong> ${order.deliveryPartnerName} ${order.deliveryPartnerPhone ? `(${order.deliveryPartnerPhone})` : ""}<br />` : ""}
+                        <strong>Status:</strong> <span style="background-color: #E8F5E9; color: #2E7D32; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 11px;">DELIVERED</span>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Content Area -->
+            <tr>
+              <td style="padding: 20px 30px 30px 30px;">
+                ${order.cakeMessage ? `
+                <div style="background-color: #FFF8E7; border: 1px solid #E6C184; border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; font-size: 13px;">
+                  <strong style="color: #802B52;">🎂 Message on Cake:</strong> "${order.cakeMessage}"
+                </div>
+                ` : ""}
+
+                <!-- Items Table Header -->
+                <h3 style="margin: 0 0 12px 0; font-size: 16px; font-weight: bold; color: #5B1E38; font-family: Georgia, serif;">
+                  🎂 Delivered Delicacies
+                </h3>
+
+                <!-- Items Table -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: 1px solid #E6DBCE; border-radius: 12px; overflow: hidden; margin-bottom: 25px;">
+                  <thead>
+                    <tr style="background-color: #802B52; color: #FFFFFF;">
+                      <th align="left" style="padding: 12px 16px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Item Description</th>
+                      <th align="center" style="padding: 12px 16px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Qty</th>
+                      <th align="right" style="padding: 12px 16px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Price</th>
+                      <th align="right" style="padding: 12px 16px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${itemsHtml}
+                  </tbody>
+                </table>
+
+                <!-- Total Amount Summary -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 25px;">
+                  <tr>
+                    <td width="55%"></td>
+                    <td width="45%">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF5EE; padding: 16px; border-radius: 12px; border: 1px solid #E6DBCE;">
+                        <tr>
+                          <td style="font-size: 15px; font-weight: bold; color: #802B52;">Total Paid:</td>
+                          <td style="font-size: 17px; font-weight: bold; color: #802B52; text-align: right;">₹${order.total.toFixed(2)}</td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- WhatsApp Feedback Banner -->
+                <div style="background-color: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 12px; padding: 16px; text-align: center;">
+                  <span style="font-size: 14px; font-weight: bold; color: #2E7D32;">
+                    ✨ How was your cake experience?
+                  </span>
+                  <p style="margin: 4px 0 0 0; font-size: 12px; color: #1B5E20;">
+                    We would love to hear your feedback! Share your photos &amp; reviews on WhatsApp at <strong>+91 9489569661</strong>.
+                  </p>
+                </div>
+
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="background-color: #1C0D0A; padding: 24px 30px; text-align: center; color: #D8C3B3; font-size: 12px;">
+                <p style="margin: 0 0 6px 0; font-weight: bold; color: #FFFFFF; font-size: 13px;">
+                  Lollipop Cake Shop · Handcrafted Fresh Daily
+                </p>
+                <p style="margin: 0;">
+                  Thank you for letting us be a part of your celebrations!
+                </p>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+  `;
+}
+
+/**
+ * Send Order Delivered Email to customer
+ */
+export async function sendOrderDeliveredEmail(order: Order): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  try {
+    const toAddress = order.customer?.email?.trim();
+    if (!toAddress || !toAddress.includes("@")) {
+      console.warn(`⚠️ [Email Service] Skipping delivery email: invalid customer email "${toAddress}" for Order ${order.id}`);
+      return { success: false, error: "Invalid recipient email address" };
+    }
+
+    const smtpUser = (process.env.SMTP_USER || "").trim();
+    let fromAddress = process.env.EMAIL_FROM?.trim();
+    if (!fromAddress || !fromAddress.includes("@")) {
+      fromAddress = `"Lollipop Cake Shop" <${smtpUser || "no-reply@lollipopcakeshop.com"}>`;
+    }
+
+    const htmlContent = generateOrderDeliveredHtml(order);
+
+    const mailOptions = {
+      from: fromAddress,
+      to: toAddress,
+      replyTo: smtpUser || undefined,
+      subject: `🎉 Your Order is Delivered Successfully! - Order ${order.id} | Lollipop Cake Shop`,
+      html: htmlContent,
+    };
+
+    console.log(`📧 [Email Service] Sending delivery confirmation email to ${toAddress} for Order ${order.id}...`);
+
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.log(`ℹ️ [Email Test Mode] SMTP credentials not set. Simulated delivery email to ${toAddress}.`);
+      return { success: true, messageId: `test-delivered-simulated-${order.id}` };
+    }
+
+    const transporter = getTransporter();
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ [Email Service] Sent delivery email successfully! Message ID: ${info.messageId}`);
+    return { success: true, messageId: info.messageId };
+  } catch (error: any) {
+    console.error("❌ [Email Service Error] Failed to send delivery email:", error?.message || error);
+    return { success: false, error: error?.message || "Email sending failed" };
+  }
+}
+

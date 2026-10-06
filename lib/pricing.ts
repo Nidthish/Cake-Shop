@@ -61,15 +61,16 @@ export function priceOrder(items: CreateOrderRequestItem[]): PricedOrder {
     let unitPrice: number | undefined;
     let resolvedWeight = item.weight;
 
+    let matchedVariant = product.variants?.find((v) => v.weight === item.weight);
     if (product.variants && product.variants.length > 0) {
-      const variant = product.variants.find((v) => v.weight === item.weight);
-      if (variant) {
-        unitPrice = variant.price;
+      if (matchedVariant) {
+        unitPrice = matchedVariant.price;
       } else {
         // Unknown/missing weight from the client — fall back to the first
         // variant rather than trusting an arbitrary client-supplied price.
         unitPrice = product.variants[0].price;
         resolvedWeight = product.variants[0].weight;
+        matchedVariant = product.variants[0];
       }
     } else {
       unitPrice = product.price ?? product.minPrice;
@@ -83,6 +84,7 @@ export function priceOrder(items: CreateOrderRequestItem[]): PricedOrder {
     }
 
     const lineTotal = Math.round(unitPrice * item.quantity * 100) / 100;
+    const isEggless = item.eggPreference === "eggless" || Boolean(matchedVariant?.isEggless);
 
     return {
       productId: product.id,
@@ -91,6 +93,10 @@ export function priceOrder(items: CreateOrderRequestItem[]): PricedOrder {
       quantity: item.quantity,
       unitPrice,
       lineTotal,
+      isEggless,
+      eggPreference: item.eggPreference || (isEggless ? "eggless" : "egg"),
+      offer: item.offer || matchedVariant?.offer || undefined,
+      cakeMessage: item.cakeMessage || undefined,
     };
   });
 

@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
     const users = await prisma.user.findMany({
       where: {
-        role: { in: ["ADMIN", "SUPERADMIN", "STAFF"] },
+        role: { in: ["ADMIN", "SUPERADMIN", "STAFF", "RIDER"] },
       },
       select: {
         id: true,
@@ -49,16 +49,16 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST /api/admin/users — Create a new Admin user (SUPERADMIN only)
+// POST /api/admin/users — Create a new Admin or Delivery Rider user (SUPERADMIN only)
 export async function POST(req: NextRequest) {
   try {
     const admin = await getAuthenticatedAdmin(req);
     if (!admin || admin.role !== "SUPERADMIN") {
-      return NextResponse.json({ success: false, error: "Access denied. Only Super Admins can create new admin accounts." }, { status: 403 });
+      return NextResponse.json({ success: false, error: "Access denied. Only Super Admins can create user accounts." }, { status: 403 });
     }
 
     const body = await req.json();
-    const { fullName, email, password, role } = body;
+    const { fullName, email, password, role, phone } = body;
 
     if (!fullName || !email || !password) {
       return NextResponse.json(
@@ -89,13 +89,17 @@ export async function POST(req: NextRequest) {
     }
 
     const passwordHash = hashPassword(password);
-    const assignedRole = role === "SUPERADMIN" ? "SUPERADMIN" : "ADMIN";
+    let assignedRole: "SUPERADMIN" | "ADMIN" | "STAFF" | "RIDER" = "ADMIN";
+    if (role === "SUPERADMIN") assignedRole = "SUPERADMIN";
+    else if (role === "RIDER") assignedRole = "RIDER";
+    else if (role === "STAFF") assignedRole = "STAFF";
 
     const newUser = await prisma.user.create({
       data: {
         fullName: fullName.trim(),
         email: cleanEmail,
         passwordHash,
+        phone: phone ? phone.trim() : null,
         role: assignedRole,
         isActive: true,
       },
@@ -103,11 +107,15 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `New Admin user "${newUser.fullName}" created successfully!`,
+      message:
+        newUser.role === "RIDER"
+          ? `New Delivery Rider "${newUser.fullName}" created successfully! They can now log in directly to the mobile app.`
+          : `New Admin user "${newUser.fullName}" created successfully!`,
       user: {
         id: newUser.id.toString(),
         fullName: newUser.fullName,
         email: newUser.email,
+        phone: newUser.phone,
         role: newUser.role,
       },
     });

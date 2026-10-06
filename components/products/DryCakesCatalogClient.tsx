@@ -32,6 +32,19 @@ function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
     e.preventDefault();
     e.stopPropagation();
 
+    if (typeof window !== "undefined") {
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      window.dispatchEvent(
+        new CustomEvent("lollipop:fly-to-cart", {
+          detail: {
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2,
+            image: cardImage,
+          },
+        })
+      );
+    }
+
     addItem({
       id: p.id,
       name: p.name,

@@ -53,7 +53,8 @@ export async function GET(
                   'quantity', i.quantity,
                   'unitPrice', i.unit_price,
                   'lineTotal', i.line_total,
-                  'cakeMessage', i.cake_message
+                  'cakeMessage', i.cake_message,
+                  'offer', i.offer
                 )
               ) FILTER (WHERE i.id IS NOT NULL),
               '[]'

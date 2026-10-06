@@ -6,6 +6,7 @@ interface AdminUser {
   id: string;
   fullName: string;
   email: string;
+  phone?: string | null;
   role: string;
   isActive: boolean;
   createdAt: string;
@@ -64,6 +65,10 @@ interface OrderAdmin {
   status: string;
   paymentStatus: string;
   paymentMethod: string;
+  deliveryPartnerName?: string | null;
+  deliveryPartnerPhone?: string | null;
+  deliveryOtp?: string | null;
+  deliveryOtpVerified?: boolean;
   createdAt: string;
   items: any[];
 }
@@ -284,12 +289,13 @@ export default function AdminPage() {
   const [offerBuyVariant, setOfferBuyVariant] = useState<string>("1kg");
   const [offerFreeVariant, setOfferFreeVariant] = useState<string>("0.5kg");
 
-  // Create Admin User Modal State
+  // Create Admin / Rider User Modal State
   const [showUserModal, setShowUserModal] = useState<boolean>(false);
   const [newAdminName, setNewAdminName] = useState<string>("");
   const [newAdminEmail, setNewAdminEmail] = useState<string>("");
+  const [newAdminPhone, setNewAdminPhone] = useState<string>("");
   const [newAdminPassword, setNewAdminPassword] = useState<string>("");
-  const [newAdminRole, setNewAdminRole] = useState<"ADMIN" | "SUPERADMIN">("ADMIN");
+  const [newAdminRole, setNewAdminRole] = useState<"ADMIN" | "SUPERADMIN" | "RIDER">("ADMIN");
   const [creatingUser, setCreatingUser] = useState<boolean>(false);
 
   // Check auth session on mount
@@ -433,7 +439,7 @@ export default function AdminPage() {
     }
   }
 
-  // Create Admin User Handler
+  // Create Admin or Rider User Handler
   async function handleCreateAdminUser(e: React.FormEvent) {
     e.preventDefault();
     setCreatingUser(true);
@@ -444,20 +450,22 @@ export default function AdminPage() {
         body: JSON.stringify({
           fullName: newAdminName,
           email: newAdminEmail,
+          phone: newAdminPhone,
           password: newAdminPassword,
           role: newAdminRole,
         }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setAlertMessage(`Admin user "${newAdminName}" created successfully.`);
+        setAlertMessage(data.message || `User "${newAdminName}" created successfully.`);
         setShowUserModal(false);
         setNewAdminName("");
         setNewAdminEmail("");
+        setNewAdminPhone("");
         setNewAdminPassword("");
         fetchAdminUsers();
       } else {
-        alert(data.error || "Failed to create admin user.");
+        alert(data.error || "Failed to create user.");
       }
     } catch (err: any) {
       alert("Error: " + err.message);
@@ -465,6 +473,35 @@ export default function AdminPage() {
       setCreatingUser(false);
     }
   }
+
+  // Assign Delivery Rider to Order
+  async function handleAssignRider(orderId: string, riderName: string, riderPhone: string) {
+    try {
+      const res = await fetch("/api/admin/orders", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId,
+          deliveryPartnerName: riderName,
+          deliveryPartnerPhone: riderPhone,
+          status: "OUT_FOR_DELIVERY",
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setAlertMessage(`Order assigned to delivery rider ${riderName} and marked OUT FOR DELIVERY.`);
+        fetchOrders();
+      } else {
+        alert(data.error || "Failed to assign delivery rider.");
+      }
+    } catch (err: any) {
+      alert("Failed to assign delivery rider: " + err.message);
+    }
+  }
+
+  const availableRiders = useMemo(() => {
+    return adminUsersList.filter((u) => u.role === "RIDER" && u.isActive);
+  }, [adminUsersList]);
 
   // Sales Analytics Computation with Date Filter
   const filteredOrders = useMemo(() => {
@@ -1454,23 +1491,87 @@ export default function AdminPage() {
                               📞 {o.customerPhone}
                             </a>
                           )}
+                          <p className="text-[10px] text-[#7A6B72] mt-1">{o.streetAddress}, {o.city} - {o.pincode}</p>
                         </div>
 
                         <div>
                           <p className="text-[10px] uppercase font-bold text-[#7A6B72]">Schedule</p>
                           <p className="font-semibold text-[#5B1E38]">{o.deliveryDate}</p>
-                          <p className="text-[11px] text-[#7A6B72]">{o.deliveryTimeSlot}</p>
+                          <p className="text-[11px] font-bold text-[#802B52] mt-0.5">⏰ {o.deliveryTimeSlot}</p>
                         </div>
                       </div>
 
-                      {/* Items */}
-                      <div className="bg-white p-2.5 rounded-lg border border-[#E6DBCE] space-y-1">
-                        <p className="text-[10px] uppercase font-bold text-[#7A6B72]">Items Ordered</p>
+                      {/* Items with Egg status, Offers & Cake Messages */}
+                      <div className="bg-white p-2.5 rounded-lg border border-[#E6DBCE] space-y-2">
+                        <p className="text-[10px] uppercase font-bold text-[#7A6B72]">Items Ordered ({o.items?.length || 0})</p>
                         {o.items?.map((i: any, idx: number) => (
-                          <div key={idx} className="text-xs font-medium text-[#2D2327]">
-                            <span className="font-bold text-[#802B52]">{i.quantity}x</span> {i.productName} ({i.variantName})
+                          <div key={idx} className="p-2 bg-[#FAF5EE] rounded-lg border border-[#E6DBCE]/80 space-y-1 text-xs">
+                            <div className="font-bold text-[#2D2327] flex justify-between">
+                              <span><span className="text-[#802B52]">{i.quantity}x</span> {i.productName} ({i.variantName})</span>
+                              <span className="text-[#802B52] font-semibold">₹{i.lineTotal || (i.unitPrice * i.quantity)}</span>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                              <span className={`px-1.5 py-0.5 rounded font-bold ${i.isEggless ? "bg-emerald-100 text-emerald-800 border border-emerald-300" : "bg-amber-100 text-amber-900 border border-amber-200"}`}>
+                                {i.isEggless ? "🌱 Eggless" : "🥚 With Egg"}
+                              </span>
+                              {i.offer && (
+                                <span className="px-1.5 py-0.5 rounded bg-amber-50 border border-amber-300 text-amber-900 font-bold">
+                                  🎁 {i.offer}
+                                </span>
+                              )}
+                            </div>
+                            {i.cakeMessage && (
+                              <div className="text-[11px] text-[#802B52] italic font-medium">
+                                🎂 Message: &quot;{i.cakeMessage}&quot;
+                              </div>
+                            )}
                           </div>
                         ))}
+                      </div>
+
+                      {/* Delivery Rider & OTP Details */}
+                      <div className="p-2.5 bg-white rounded-lg border border-[#E6DBCE] space-y-2 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-[#7A6B72]">Delivery Rider:</span>
+                          {o.deliveryPartnerName ? (
+                            <span className="text-xs font-bold text-[#5B1E38] bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+                              🛵 {o.deliveryPartnerName} {o.deliveryPartnerPhone ? `(${o.deliveryPartnerPhone})` : ""}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-gray-400 italic">Not Assigned</span>
+                          )}
+                        </div>
+
+                        {adminUser?.role === "SUPERADMIN" && availableRiders.length > 0 && o.status !== "DELIVERED" && o.status !== "CANCELLED" && (
+                          <div className="flex items-center gap-2 pt-1">
+                            <select
+                              defaultValue=""
+                              onChange={(e) => {
+                                const selectedRider = availableRiders.find((r) => r.id === e.target.value);
+                                if (selectedRider) {
+                                  handleAssignRider(o.id, selectedRider.fullName, selectedRider.phone || "");
+                                }
+                              }}
+                              className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-[#E6DBCE] bg-white text-[#2D2327] font-medium"
+                            >
+                              <option value="">🛵 Assign Rider to Order...</option>
+                              {availableRiders.map((r) => (
+                                <option key={r.id} value={r.id}>
+                                  {r.fullName} ({r.phone || r.email})
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
+
+                        {o.deliveryOtp && (
+                          <div className="flex items-center justify-between text-xs pt-1 border-t border-[#E6DBCE]/60">
+                            <span className="text-[#7A6B72]">Delivery OTP:</span>
+                            <span className="font-mono font-bold text-[#802B52] bg-[#FAF5EE] border border-[#E6DBCE] px-2 py-0.5 rounded">
+                              {o.deliveryOtp} {o.deliveryOtpVerified && "✓"}
+                            </span>
+                          </div>
+                        )}
                       </div>
 
                       {/* Status selector or badge */}
@@ -1507,7 +1608,8 @@ export default function AdminPage() {
                         <th className="py-3 px-4">Order ID</th>
                         <th className="py-3 px-4">Customer Details</th>
                         <th className="py-3 px-4">Delivery Schedule</th>
-                        <th className="py-3 px-4">Items</th>
+                        <th className="py-3 px-4">Items &amp; Details</th>
+                        <th className="py-3 px-4">Delivery Rider</th>
                         <th className="py-3 px-4">Total Amount</th>
                         <th className="py-3 px-4">Status</th>
                       </tr>
@@ -1515,22 +1617,83 @@ export default function AdminPage() {
                     <tbody className="divide-y divide-[#E6DBCE]">
                       {orders.map((o) => (
                         <tr key={o.id} className="hover:bg-[#FDFBF7]">
-                          <td className="py-4 px-4 font-mono font-bold text-[#802B52]">{o.orderNumber}</td>
+                          <td className="py-4 px-4 font-mono font-bold text-[#802B52]">
+                            {o.orderNumber}
+                            {o.deliveryOtp && (
+                              <div className="mt-1 font-mono text-[10px] text-amber-800 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded inline-block">
+                                OTP: {o.deliveryOtp}
+                              </div>
+                            )}
+                          </td>
                           <td className="py-4 px-4">
                             <div className="font-bold text-[#2D2327]">{o.customerName}</div>
                             <div className="text-[11px] text-[#7A6B72]">{o.customerPhone}</div>
                             <div className="text-[11px] text-[#7A6B72]">{o.customerEmail}</div>
+                            <div className="text-[10px] text-[#7A6B72] mt-1 line-clamp-1">{o.streetAddress}, {o.city}</div>
                           </td>
                           <td className="py-4 px-4">
                             <div className="font-semibold text-[#5B1E38]">{o.deliveryDate}</div>
-                            <div className="text-[11px] text-[#7A6B72]">{o.deliveryTimeSlot}</div>
+                            <div className="text-[11px] font-bold text-[#802B52] mt-0.5">⏰ {o.deliveryTimeSlot}</div>
                           </td>
-                          <td className="py-4 px-4">
+                          <td className="py-4 px-4 max-w-xs space-y-2">
                             {o.items?.map((i: any, idx: number) => (
-                              <div key={idx} className="text-[11px]">
-                                {i.quantity}x {i.productName} ({i.variantName})
+                              <div key={idx} className="p-2 bg-[#FAF5EE] rounded-lg border border-[#E6DBCE]/70 text-[11px] space-y-0.5">
+                                <div className="font-bold text-[#2D2327]">
+                                  {i.quantity}x {i.productName} ({i.variantName})
+                                </div>
+                                <div className="flex flex-wrap items-center gap-1">
+                                  <span className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${i.isEggless ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-900"}`}>
+                                    {i.isEggless ? "🌱 Eggless" : "🥚 With Egg"}
+                                  </span>
+                                  {i.offer && (
+                                    <span className="px-1.5 py-0.2 rounded bg-amber-50 border border-amber-300 text-amber-900 text-[10px] font-bold">
+                                      🎁 {i.offer}
+                                    </span>
+                                  )}
+                                </div>
+                                {i.cakeMessage && (
+                                  <div className="text-[10px] text-[#802B52] italic font-medium">
+                                    🎂 &quot;{i.cakeMessage}&quot;
+                                  </div>
+                                )}
                               </div>
                             ))}
+                          </td>
+                          <td className="py-4 px-4">
+                            {o.deliveryPartnerName ? (
+                              <div className="space-y-1">
+                                <div className="font-bold text-[#5B1E38] text-[11px] bg-amber-50 border border-amber-200 px-2 py-0.5 rounded inline-block">
+                                  🛵 {o.deliveryPartnerName}
+                                </div>
+                                {o.deliveryPartnerPhone && (
+                                  <div className="text-[10px] text-[#7A6B72]">{o.deliveryPartnerPhone}</div>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-[11px] text-gray-400 italic">Unassigned</span>
+                            )}
+
+                            {adminUser?.role === "SUPERADMIN" && availableRiders.length > 0 && o.status !== "DELIVERED" && o.status !== "CANCELLED" && (
+                              <div className="mt-1.5">
+                                <select
+                                  defaultValue=""
+                                  onChange={(e) => {
+                                    const selectedRider = availableRiders.find((r) => r.id === e.target.value);
+                                    if (selectedRider) {
+                                      handleAssignRider(o.id, selectedRider.fullName, selectedRider.phone || "");
+                                    }
+                                  }}
+                                  className="text-[10px] px-2 py-1 rounded border border-[#E6DBCE] bg-white text-[#2D2327]"
+                                >
+                                  <option value="">Assign Rider...</option>
+                                  {availableRiders.map((r) => (
+                                    <option key={r.id} value={r.id}>
+                                      {r.fullName} ({r.phone || r.email})
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
                           </td>
                           <td className="py-4 px-4 font-bold text-[#802B52]">₹{o.totalAmount}</td>
                           <td className="py-4 px-4">
@@ -1584,17 +1747,30 @@ export default function AdminPage() {
               </button>
             </div>
 
-            {/* 📱 MOBILE CARD VIEW FOR ADMIN USERS */}
+            {/* 📱 MOBILE CARD VIEW FOR ADMIN & RIDER USERS */}
             <div className="block md:hidden space-y-3">
               {adminUsersList.map((u) => (
                 <div key={u.id} className="bg-[#FAF5EE]/60 border border-[#E6DBCE] rounded-xl p-3.5 space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-sm text-[#2D2327]">{u.fullName}</span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${u.role === "SUPERADMIN" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"}`}>
-                      {u.role === "SUPERADMIN" ? "Super Admin" : "Admin"}
+                    <span
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        u.role === "SUPERADMIN"
+                          ? "bg-purple-100 text-purple-800"
+                          : u.role === "RIDER"
+                          ? "bg-amber-100 text-amber-900 border border-amber-300"
+                          : "bg-blue-100 text-blue-800"
+                      }`}
+                    >
+                      {u.role === "SUPERADMIN" ? "👑 Super Admin" : u.role === "RIDER" ? "🛵 Delivery Rider" : "🛡️ Admin"}
                     </span>
                   </div>
                   <p className="font-mono text-xs text-[#802B52]">{u.email}</p>
+                  {u.phone && (
+                    <p className="text-xs text-[#5C524E]">
+                      📞 Phone: <span className="font-semibold text-[#1C0D0A]">{u.phone}</span>
+                    </p>
+                  )}
                   <div className="flex items-center justify-between text-[11px] text-[#7A6B72] pt-1 border-t border-[#E6DBCE]">
                     <span>Status: <strong className="text-green-700">Active</strong></span>
                     <span>Created: {new Date(u.createdAt).toLocaleDateString("en-IN")}</span>
@@ -1603,13 +1779,14 @@ export default function AdminPage() {
               ))}
             </div>
 
-            {/* 🖥️ DESKTOP TABLE VIEW FOR ADMIN USERS */}
+            {/* 🖥️ DESKTOP TABLE VIEW FOR ADMIN & RIDER USERS */}
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
                   <tr>
                     <th className="py-3 px-4">Full Name</th>
                     <th className="py-3 px-4">Email Address</th>
+                    <th className="py-3 px-4">Phone</th>
                     <th className="py-3 px-4">Role</th>
                     <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4">Created Date</th>
@@ -1620,9 +1797,18 @@ export default function AdminPage() {
                     <tr key={u.id} className="hover:bg-[#FDFBF7]">
                       <td className="py-4 px-4 font-bold text-[#2D2327]">{u.fullName}</td>
                       <td className="py-4 px-4 font-mono text-[#802B52]">{u.email}</td>
+                      <td className="py-4 px-4 text-[#5C524E]">{u.phone || "—"}</td>
                       <td className="py-4 px-4">
-                        <span className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold ${u.role === "SUPERADMIN" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"}`}>
-                          {u.role === "SUPERADMIN" ? "Super Admin" : "Admin"}
+                        <span
+                          className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold ${
+                            u.role === "SUPERADMIN"
+                              ? "bg-purple-100 text-purple-800"
+                              : u.role === "RIDER"
+                              ? "bg-amber-100 text-amber-900 border border-amber-300"
+                              : "bg-blue-100 text-blue-800"
+                          }`}
+                        >
+                          {u.role === "SUPERADMIN" ? "👑 Super Admin" : u.role === "RIDER" ? "🛵 Delivery Rider (Mobile App Only)" : "🛡️ Admin"}
                         </span>
                       </td>
                       <td className="py-4 px-4">
@@ -1642,13 +1828,13 @@ export default function AdminPage() {
         )}
       </main>
 
-      {/* CREATE NEW ADMIN USER MODAL */}
+      {/* CREATE NEW ADMIN / RIDER USER MODAL */}
       {showUserModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
           <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-2xl max-w-md w-full p-4 sm:p-6 space-y-4 sm:space-y-5 text-[#2D2327] my-auto">
             <div className="flex justify-between items-center pb-3 border-b border-[#E6DBCE]">
               <h3 className="font-serif text-lg sm:text-xl font-bold text-[#5B1E38]">
-                Add New Admin User
+                Add User / Delivery Rider
               </h3>
               <button onClick={() => setShowUserModal(false)} className="text-gray-400 hover:text-gray-600 p-1 text-base">
                 ✕
@@ -1663,7 +1849,7 @@ export default function AdminPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Priya Sharma"
+                  placeholder="e.g. Arun Kumar"
                   value={newAdminName}
                   onChange={(e) => setNewAdminName(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
@@ -1677,9 +1863,22 @@ export default function AdminPage() {
                 <input
                   type="email"
                   required
-                  placeholder="priya@lollipopcakeshop.com"
+                  placeholder="arun.rider@lollipopcakeshop.com"
                   value={newAdminEmail}
                   onChange={(e) => setNewAdminEmail(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase text-[#5B1E38] mb-1">
+                  Mobile Phone Number (Optional)
+                </label>
+                <input
+                  type="tel"
+                  placeholder="e.g. 9876543210"
+                  value={newAdminPhone}
+                  onChange={(e) => setNewAdminPhone(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
                 />
               </div>
@@ -1701,16 +1900,22 @@ export default function AdminPage() {
 
               <div>
                 <label className="block text-xs font-bold uppercase text-[#5B1E38] mb-1">
-                  Role *
+                  Role &amp; Access Level *
                 </label>
                 <select
                   value={newAdminRole}
                   onChange={(e) => setNewAdminRole(e.target.value as any)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm bg-white focus:outline-none focus:border-[#802B52]"
                 >
-                  <option value="ADMIN">Admin</option>
-                  <option value="SUPERADMIN">Super Admin</option>
+                  <option value="RIDER">🛵 Delivery Rider (Mobile App Only)</option>
+                  <option value="ADMIN">🛡️ Admin (Dashboard Access)</option>
+                  <option value="SUPERADMIN">👑 Super Admin (Full Access)</option>
                 </select>
+                {newAdminRole === "RIDER" && (
+                  <p className="text-[11px] text-[#802B52] mt-1 bg-[#FAF0F2] p-2 rounded-lg border border-[#802B52]/20">
+                    ℹ️ Delivery Riders are strictly restricted to the mobile app and cannot access this admin dashboard.
+                  </p>
+                )}
               </div>
 
               <div className="pt-2 flex justify-end gap-2">
@@ -1726,7 +1931,7 @@ export default function AdminPage() {
                   disabled={creatingUser}
                   className="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl text-xs font-bold bg-[#802B52] hover:bg-[#962854] text-white shadow-md"
                 >
-                  {creatingUser ? "Saving..." : "Save Admin User"}
+                  {creatingUser ? "Saving..." : newAdminRole === "RIDER" ? "Create Delivery Rider" : "Save Admin User"}
                 </button>
               </div>
             </form>

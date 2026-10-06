@@ -239,6 +239,11 @@ function SuccessContent() {
                           {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
                         </span>
                       </div>
+                      {item.offer && (
+                        <div className="text-[11px] text-amber-800 font-bold mt-0.5 inline-flex items-center gap-1">
+                          <span>🎁</span> Offer: {item.offer}
+                        </div>
+                      )}
                       {item.cakeMessage && (
                         <div className="text-[11px] text-[#802B52] italic mt-0.5">
                           Message: &quot;{item.cakeMessage}&quot;

@@ -80,6 +80,7 @@ function formatDeliveryOrder(o: any, items: any[] = []) {
       unitPrice: Number(i.unitPrice || i.unit_price || 0),
       lineTotal: Number(i.lineTotal || i.line_total || 0),
       cakeMessage: i.cakeMessage || i.cake_message || null,
+      offer: i.offer || null,
     })),
     createdAt: o.createdAt || (o.created_at ? new Date(o.created_at).toISOString() : new Date().toISOString()),
     updatedAt: o.updatedAt || (o.updated_at ? new Date(o.updated_at).toISOString() : new Date().toISOString()),
@@ -124,7 +125,8 @@ export async function GET(req: NextRequest) {
                     'quantity', i.quantity,
                     'unit_price', i.unit_price,
                     'line_total', i.line_total,
-                    'cake_message', i.cake_message
+                    'cake_message', i.cake_message,
+                    'offer', i.offer
                   )
                 ) FILTER (WHERE i.id IS NOT NULL),
                 '[]'
@@ -155,7 +157,8 @@ export async function GET(req: NextRequest) {
                     'quantity', i.quantity,
                     'unit_price', i.unit_price,
                     'line_total', i.line_total,
-                    'cake_message', i.cake_message
+                    'cake_message', i.cake_message,
+                    'offer', i.offer
                   )
                 ) FILTER (WHERE i.id IS NOT NULL),
                 '[]'
@@ -189,7 +192,8 @@ export async function GET(req: NextRequest) {
                     'quantity', i.quantity,
                     'unit_price', i.unit_price,
                     'line_total', i.line_total,
-                    'cake_message', i.cake_message
+                    'cake_message', i.cake_message,
+                    'offer', i.offer
                   )
                 ) FILTER (WHERE i.id IS NOT NULL),
                 '[]'

@@ -88,6 +88,8 @@ export default function CakeCardInteractive({
       image: cardImage,
       weight: currentVariant.weight,
       price: price,
+      originalPrice: currentVariant.originalPrice,
+      offer: showOfferTag ? (rawOffer || "1kg + 1/2kg Free") : undefined,
       quantity: 1,
       eggPreference: eggPreference,
     });

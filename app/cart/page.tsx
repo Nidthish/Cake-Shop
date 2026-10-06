@@ -171,13 +171,28 @@ export default function CartPage() {
                           ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
                           : "bg-[#FAF3EC] text-[#1C0D0A] border border-[#D8C3B3]"
                       }`}>
-                        {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
+                        {item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}
                       </span>
                     )}
                   </div>
-                  <p className="font-sans font-semibold text-lg text-[#962854]">
-                    ₹{item.price}
-                  </p>
+                  {item.offer && (
+                    <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-amber-50 border border-amber-300 text-amber-900 text-[11px] font-bold">
+                      <span>🎁</span> {item.offer}
+                    </div>
+                  )}
+                  {item.cakeMessage && (
+                    <p className="text-xs text-[#802B52] italic">
+                      🎂 Message: &quot;{item.cakeMessage}&quot;
+                    </p>
+                  )}
+                  <div className="flex items-baseline gap-2">
+                    <p className="font-sans font-semibold text-lg text-[#962854]">
+                      ₹{item.price}
+                    </p>
+                    {item.originalPrice && item.originalPrice > item.price && (
+                      <span className="text-xs text-[#9C8B84] line-through">₹{item.originalPrice}</span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center border border-[#1C0D0A]/20 rounded-lg bg-white px-2 py-1">

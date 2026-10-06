@@ -7,11 +7,33 @@ import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
 import { useToast } from "@/components/common/ToastProvider";
 
-const TIME_SLOTS = [
-  "09:00 AM - 12:00 PM (Morning Slot)",
-  "12:00 PM - 03:00 PM (Afternoon Slot)",
-  "03:00 PM - 06:00 PM (Evening Express Slot)",
-  "06:00 PM - 09:00 PM (Night Special Slot)",
+const SPECIFIC_DELIVERY_TIMES = [
+  "09:00 AM",
+  "09:30 AM",
+  "10:00 AM",
+  "10:30 AM",
+  "11:00 AM",
+  "11:30 AM",
+  "12:00 PM",
+  "12:30 PM",
+  "01:00 PM",
+  "01:30 PM",
+  "02:00 PM",
+  "02:30 PM",
+  "03:00 PM",
+  "03:30 PM",
+  "04:00 PM",
+  "04:30 PM",
+  "05:00 PM",
+  "05:30 PM",
+  "06:00 PM",
+  "06:30 PM",
+  "07:00 PM",
+  "07:30 PM",
+  "08:00 PM",
+  "08:30 PM",
+  "09:00 PM",
+  "09:30 PM",
 ];
 
 function tomorrow(): string {
@@ -35,9 +57,10 @@ export default function CheckoutPage() {
   const [city, setCity] = useState("Tiruchirappalli");
   const [pincode, setPincode] = useState("");
 
-  // Schedule State
+  // Schedule State: Specific Delivery Time
   const [date, setDate] = useState(tomorrow());
-  const [timeSlot, setTimeSlot] = useState(TIME_SLOTS[2]);
+  const [timeSlot, setTimeSlot] = useState(SPECIFIC_DELIVERY_TIMES[14]); // Default to 04:00 PM
+  const [customTime, setCustomTime] = useState("");
 
   // Cake Customization State
   const [cakeMessage, setCakeMessage] = useState("");
@@ -96,6 +119,8 @@ export default function CheckoutPage() {
 
     setSubmitting(true);
 
+    const finalDeliveryTime = timeSlot === "CUSTOM" && customTime.trim() ? customTime.trim() : timeSlot;
+
     // OPTION 1: DIRECT ORDER / CASH ON DELIVERY (No Razorpay gateway required)
     if (paymentOption === "COD") {
       try {
@@ -109,10 +134,11 @@ export default function CheckoutPage() {
               quantity: i.quantity,
               eggPreference: i.eggPreference,
               cakeMessage: i.cakeMessage || cakeMessage,
+              offer: i.offer,
             })),
             customer: { fullName, phone, email },
             address: { street, city, pincode },
-            schedule: { date, timeSlot },
+            schedule: { date, timeSlot: finalDeliveryTime },
             cakeMessage,
             specialInstructions,
             paymentMethod: "COD",
@@ -153,10 +179,11 @@ export default function CheckoutPage() {
             quantity: i.quantity,
             eggPreference: i.eggPreference,
             cakeMessage: i.cakeMessage || cakeMessage,
+            offer: i.offer,
           })),
           customer: { fullName, phone, email },
           address: { street, city, pincode },
-          schedule: { date, timeSlot },
+          schedule: { date, timeSlot: finalDeliveryTime },
           cakeMessage,
           specialInstructions,
           idempotencyKey: idempotencyKey.current ?? undefined,
@@ -396,19 +423,37 @@ export default function CheckoutPage() {
 
                   <div>
                     <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Preferred Time Slot *
+                      Specific Delivery Time *
                     </label>
                     <select
                       value={timeSlot}
                       onChange={(e) => setTimeSlot(e.target.value)}
                       className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30 bg-white font-medium text-[#1C0D0A]"
                     >
-                      {TIME_SLOTS.map((t) => (
+                      {SPECIFIC_DELIVERY_TIMES.map((t) => (
                         <option key={t} value={t}>
                           {t}
                         </option>
                       ))}
+                      <option value="CUSTOM">Custom Exact Time...</option>
                     </select>
+                    {timeSlot === "CUSTOM" && (
+                      <div className="mt-2">
+                        <label className="text-[11px] font-bold text-[#802B52] block mb-1">
+                          Enter Specific Delivery Time:
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. 05:45 PM"
+                          value={customTime}
+                          onChange={(e) => setCustomTime(e.target.value)}
+                          className="w-full px-3.5 py-2 rounded-xl border border-[#802B52]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30 bg-white"
+                        />
+                      </div>
+                    )}
+                    <p className="text-[11px] text-[#7A6B72] mt-1">
+                      Choose an exact delivery time for your fresh cake delivery.
+                    </p>
                   </div>
                 </div>
               </section>
@@ -547,6 +592,11 @@ export default function CheckoutPage() {
                             {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
                           </span>
                         </div>
+                        {item.offer && (
+                          <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-900 text-[10px] font-bold">
+                            <span>🎁</span> {item.offer}
+                          </div>
+                        )}
                         {item.cakeMessage && (
                           <div className="text-[10px] text-[#802B52] italic">
                             Message: &quot;{item.cakeMessage}&quot;

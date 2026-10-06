@@ -61,7 +61,20 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
     return list;
   }, [products, subCat, query, sort]);
 
-  function handleAddToCart(p: Product) {
+  function handleAddToCart(p: Product, e?: React.MouseEvent) {
+    if (typeof window !== "undefined" && e?.currentTarget) {
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      window.dispatchEvent(
+        new CustomEvent("lollipop:fly-to-cart", {
+          detail: {
+            x: rect.left + rect.width / 2,
+            y: rect.top + rect.height / 2,
+            image: getProductCardImage(p),
+          },
+        })
+      );
+    }
+
     const price = p.price ?? p.minPrice ?? (p.variants && p.variants[0] ? p.variants[0].price : 20);
     const weight = p.variants && p.variants[0] ? p.variants[0].weight : "1 pc";
 
@@ -272,7 +285,7 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
                         </Link>
                         <button
                           type="button"
-                          onClick={() => handleAddToCart(p)}
+                          onClick={(e) => handleAddToCart(p, e)}
                           className={`add-to-cart-btn ${
                             isAdded ? "bg-[#2A082C]" : "bg-[#962854] hover:bg-[#2A082C]"
                           } text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-1 shadow-xs hover:shadow-sm hover:scale-105 active:scale-95 font-sans`}

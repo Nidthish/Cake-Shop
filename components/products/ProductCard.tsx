@@ -44,12 +44,16 @@ export default function ProductCard({ product }: { product: Product }) {
       );
     }
 
+    const cardOffer = halfKgVariant?.offer || product.badge;
+
     addItem({
       id: product.id,
       name: product.name,
       image: cardImage,
       weight: weight,
       price: price,
+      originalPrice: halfKgVariant?.originalPrice,
+      offer: cardOffer || undefined,
       quantity: 1,
       eggPreference: "egg",
     });

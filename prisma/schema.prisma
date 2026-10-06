@@ -192,6 +192,7 @@ model OrderItem {
   unitPrice   Decimal         @map("unit_price") @db.Decimal(10, 2)
   lineTotal   Decimal         @map("line_total") @db.Decimal(10, 2)
   cakeMessage String?         @map("cake_message") @db.VarChar(150)
+  offer       String?         @db.VarChar(150)
   createdAt   DateTime        @default(now()) @map("created_at")
   order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product     Product         @relation(fields: [productId], references: [id])
@@ -246,6 +247,7 @@ enum Role {
   ADMIN
   STAFF
   CUSTOMER
+  RIDER
 }
 
 enum OrderStatus {
