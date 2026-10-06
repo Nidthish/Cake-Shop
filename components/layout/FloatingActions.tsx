@@ -275,32 +275,42 @@ export default function FloatingActions() {
   if (pathname?.startsWith("/admin")) return null;
 
   return (
-    <div
-      ref={containerRef}
-      id="floating-actions-dock"
-      className="fixed bottom-5 right-4 sm:right-6 z-40 flex flex-col items-center gap-3.5 select-none pointer-events-auto"
-      style={{
-        filter: "drop-shadow(0 6px 14px rgba(0, 0, 0, 0.12))",
-      }}
-    >
-      {/* =========================================================================
-          1. TOP BUTTON: PINK CANDY SHOPPING CART
-          ========================================================================= */}
-      <div className="relative group flex items-center justify-center">
-        {/* Subtle Hover Tooltip on Desktop */}
-        <span className="hidden md:block absolute right-[calc(100%+14px)] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap bg-[#1C0D0A]/95 text-white text-xs font-bold py-1.5 px-3 rounded-full shadow-lg border border-[#E6C184]/40 z-30">
-          Cart ({itemCount})
-        </span>
+    <>
+      {/* Mobile Backdrop Overlay to dismiss on tap */}
+      {(cartOpen || waOpen) && (
+        <div
+          className="fixed inset-0 bg-black/25 backdrop-blur-[1px] z-40 sm:hidden transition-opacity"
+          onClick={() => {
+            setCartOpen(false);
+            setWaOpen(false);
+          }}
+          aria-hidden="true"
+        />
+      )}
 
-        {/* Mini Cart Popup Drawer */}
-        {cartOpen && (
-          <div
-            id="cart-floating-popup"
-            className="absolute bottom-0 right-[calc(100%+14px)] sm:bottom-0 w-[calc(100vw-2.5rem)] sm:w-96 max-h-[80vh] flex flex-col bg-white rounded-2xl p-4 border border-[#E6C184] shadow-2xl z-50 transition-all duration-300"
-            style={{
-              boxShadow: "0 18px 45px rgba(42, 8, 44, 0.24), 0 0 25px rgba(212, 175, 55, 0.18)",
-            }}
-          >
+      <div
+        ref={containerRef}
+        id="floating-actions-dock"
+        className="fixed bottom-5 right-3.5 sm:right-6 sm:bottom-6 z-50 flex flex-col items-center gap-3.5 select-none pointer-events-auto"
+      >
+        {/* =========================================================================
+            1. TOP BUTTON: PINK CANDY SHOPPING CART
+            ========================================================================= */}
+        <div className="relative group flex items-center justify-center">
+          {/* Subtle Hover Tooltip on Desktop */}
+          <span className="hidden md:block absolute right-[calc(100%+14px)] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap bg-[#1C0D0A]/95 text-white text-xs font-bold py-1.5 px-3 rounded-full shadow-lg border border-[#E6C184]/40 z-30">
+            Cart ({itemCount})
+          </span>
+
+          {/* Mini Cart Popup Drawer */}
+          {cartOpen && (
+            <div
+              id="cart-floating-popup"
+              className="fixed inset-x-3 bottom-24 sm:absolute sm:inset-x-auto sm:right-[calc(100%+16px)] sm:bottom-0 w-auto sm:w-96 max-w-sm sm:max-w-none mx-auto sm:mx-0 max-h-[75vh] flex flex-col bg-white rounded-2xl p-4 border border-[#E6C184] shadow-2xl z-50 transition-all duration-300"
+              style={{
+                boxShadow: "0 18px 45px rgba(42, 8, 44, 0.24), 0 0 25px rgba(212, 175, 55, 0.18)",
+              }}
+            >
             {/* Header */}
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#F1E6DF]">
               <div className="flex items-center gap-2">
@@ -447,16 +457,16 @@ export default function FloatingActions() {
             setCartOpen((prev) => !prev);
             setWaOpen(false);
           }}
-          className={`relative w-[62px] h-[62px] sm:w-[68px] sm:h-[68px] cursor-pointer transition-transform duration-200 active:scale-95 group focus:outline-none flex items-center justify-center ${
-            cartChomp ? "candy-cart-chomp" : "candy-float-a"
-          }`}
+          className="relative w-[58px] h-[58px] sm:w-[66px] sm:h-[66px] cursor-pointer transition-transform duration-200 active:scale-95 group focus:outline-none flex items-center justify-center"
           aria-label="View Cart"
         >
           {/* High-res Candy Cart PNG */}
           <img
             src="/images/floating-cart-candy.png"
             alt="Shopping Cart"
-            className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(233,30,99,0.35)] transition-transform duration-300 group-hover:scale-108"
+            className={`w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(233,30,99,0.35)] transition-transform duration-300 group-hover:scale-108 ${
+              cartChomp ? "candy-cart-chomp" : "candy-float-a"
+            }`}
           />
 
           {/* Red Circular Notification Badge with Item Count */}
@@ -485,7 +495,7 @@ export default function FloatingActions() {
         {waOpen && (
           <div
             id="wa-contact-popup"
-            className="absolute bottom-0 right-[calc(100%+14px)] w-[calc(100vw-2.5rem)] sm:w-80 bg-white rounded-2xl p-4 border border-[#E6C184] shadow-2xl z-50 transition-all duration-300"
+            className="fixed inset-x-3 bottom-24 sm:absolute sm:inset-x-auto sm:right-[calc(100%+16px)] sm:bottom-0 w-auto sm:w-80 max-w-sm sm:max-w-none mx-auto sm:mx-0 bg-white rounded-2xl p-4 border border-[#E6C184] shadow-2xl z-50 transition-all duration-300"
             style={{
               boxShadow: "0 18px 45px rgba(27, 94, 32, 0.22), 0 0 25px rgba(212, 175, 55, 0.18)",
             }}
@@ -541,17 +551,18 @@ export default function FloatingActions() {
             setWaOpen((prev) => !prev);
             setCartOpen(false);
           }}
-          className="relative w-[62px] h-[62px] sm:w-[68px] sm:h-[68px] cursor-pointer transition-transform duration-200 active:scale-95 group focus:outline-none flex items-center justify-center candy-float-b"
+          className="relative w-[58px] h-[58px] sm:w-[66px] sm:h-[66px] cursor-pointer transition-transform duration-200 active:scale-95 group focus:outline-none flex items-center justify-center"
           aria-label="Order on WhatsApp"
         >
           {/* High-res Candy WhatsApp PNG */}
           <img
             src="/images/floating-whatsapp-candy.png"
             alt="WhatsApp Support"
-            className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(37,211,102,0.35)] transition-transform duration-300 group-hover:scale-108"
+            className="w-full h-full object-contain filter drop-shadow-[0_8px_16px_rgba(37,211,102,0.35)] transition-transform duration-300 group-hover:scale-108 candy-float-b"
           />
         </button>
       </div>
     </div>
+  </>
   );
 }
