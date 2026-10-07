@@ -44,9 +44,26 @@ export default function Navbar() {
   }
 
   useEffect(() => {
-    document.body.style.overflow = drawerOpen || searchOpen ? "hidden" : "";
+    const isPanelOpen = drawerOpen || searchOpen;
+    document.body.style.overflow = isPanelOpen ? "hidden" : "";
+    document.body.classList.toggle("slide-panel-open", isPanelOpen);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("lollipop:slide-panel", {
+          detail: { open: isPanelOpen },
+        })
+      );
+    }
     return () => {
       document.body.style.overflow = "";
+      document.body.classList.remove("slide-panel-open");
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("lollipop:slide-panel", {
+            detail: { open: false },
+          })
+        );
+      }
     };
   }, [drawerOpen, searchOpen]);
 
@@ -94,11 +111,10 @@ export default function Navbar() {
                 <Link
                   key={l.href}
                   href={l.href}
-                  className={`nav-link flex items-center gap-1 transition-colors whitespace-nowrap ${
-                    isActive
+                  className={`nav-link flex items-center gap-1 transition-colors whitespace-nowrap ${isActive
                       ? "active text-[#962854]"
                       : "text-[#5C524E] hover:text-[#1C0D0A]"
-                  }`}
+                    }`}
                 >
                   {l.icon && (
                     <span className="material-symbols-outlined text-base xl:text-lg leading-none">
@@ -135,11 +151,10 @@ export default function Navbar() {
             </Link>
             <Link
               href="/track-order"
-              className={`hidden sm:flex p-2 rounded-full transition-colors items-center justify-center ${
-                isTrackActive
+              className={`hidden sm:flex p-2 rounded-full transition-colors items-center justify-center ${isTrackActive
                   ? "text-[#962854] bg-[#FAF3EC]"
                   : "text-[#1C0D0A] hover:text-[#962854] hover:bg-[#FAF3EC]"
-              }`}
+                }`}
               aria-label="Track My Order"
               title="Track My Order"
             >
@@ -159,15 +174,13 @@ export default function Navbar() {
 
       {/* Mobile Drawer Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/50 z-50 transition-opacity ${
-          drawerOpen ? "opacity-100" : "opacity-0 pointer-events-none hidden"
-        }`}
+        className={`fixed inset-0 bg-black/50 z-50 transition-opacity ${drawerOpen ? "opacity-100" : "opacity-0 pointer-events-none hidden"
+          }`}
         onClick={() => setDrawerOpen(false)}
       />
       <aside
-        className={`fixed top-0 right-0 w-80 max-w-full h-full bg-[#FFF9F5] z-50 shadow-2xl flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 ${
-          drawerOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 w-80 max-w-full h-full bg-[#FFF9F5] z-50 shadow-2xl flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 ${drawerOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         <div>
           <div className="flex items-center justify-between border-b border-[#E6C184]/30 pb-4 mb-6">

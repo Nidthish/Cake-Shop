@@ -225,6 +225,16 @@ h6,
   visibility: hidden !important;
 }
 
+/* Completely hide floating dock when slide panel / mobile drawer is open */
+body.slide-panel-open #floating-actions-dock,
+html.slide-panel-open #floating-actions-dock,
+.slide-panel-open #floating-actions-dock {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
 .whatsapp-float-btn {
   position: relative;
   width: 3.8rem;

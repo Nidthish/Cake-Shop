@@ -22,10 +22,29 @@ export default function FloatingActions() {
   const [waOpen, setWaOpen] = useState(false);
   const [cartChomp, setCartChomp] = useState(false);
   const [badgeBouncing, setBadgeBouncing] = useState(false);
+  const [slidePanelOpen, setSlidePanelOpen] = useState(false);
 
   const cartBtnRef = useRef<HTMLButtonElement | null>(null);
   const waBtnRef = useRef<HTMLButtonElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // Listen for mobile slide panel (drawer / search modal) events
+  useEffect(() => {
+    const handleSlide = (e: Event) => {
+      const customEvent = e as CustomEvent<{ open: boolean }>;
+      if (customEvent.detail) {
+        setSlidePanelOpen(customEvent.detail.open);
+        if (customEvent.detail.open) {
+          setCartOpen(false);
+          setWaOpen(false);
+        }
+      }
+    };
+    window.addEventListener("lollipop:slide-panel", handleSlide);
+    return () => {
+      window.removeEventListener("lollipop:slide-panel", handleSlide);
+    };
+  }, []);
 
   // Close popups on navigation
   useEffect(() => {
@@ -272,7 +291,21 @@ export default function FloatingActions() {
     };
   }, [triggerFlyAnimation]);
 
-  if (pathname?.startsWith("/admin")) return null;
+  // Hide on Admin, Cart, Checkout, Order, Track pages, or when the slide panel is open
+  const HIDDEN_PREFIXES = [
+    "/admin",
+    "/cart",
+    "/checkout",
+    "/order",
+    "/track-order",
+    "/search-order",
+  ];
+
+  const isHiddenRoute = HIDDEN_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname?.startsWith(prefix)
+  );
+
+  if (isHiddenRoute || slidePanelOpen) return null;
 
   return (
     <>
