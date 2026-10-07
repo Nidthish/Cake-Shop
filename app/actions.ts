@@ -30,8 +30,13 @@ export async function getData() {
             ORDER BY p.id ASC`,
         sql`SELECT * FROM categories ORDER BY name ASC`,
         sql`SELECT COUNT(*)::int as total_orders, 
-                   COALESCE(SUM(total_amount), 0)::float as total_revenue 
-            FROM orders`,
+                   COALESCE(SUM(CASE 
+                     WHEN o.status = 'DELIVERED' OR p.payment_status = 'PAID' THEN o.total_amount 
+                     ELSE 0 
+                   END), 0)::float as total_revenue 
+            FROM orders o
+            LEFT JOIN payments p ON p.order_id = o.id
+            WHERE o.status != 'CANCELLED'`,
         sql`SELECT COUNT(*)::int as total_categories FROM categories`
       ]);
 

@@ -1,7 +1,8 @@
+import { jsPDF } from "jspdf";
 import type { Order } from "@/types";
 
 /**
- * Generate a luxury, printable Tax Invoice HTML for Lollipop Cake Shop
+ * Generate a clean, professional, Black & White printable Tax Invoice HTML for Lollipop Cake Shop
  */
 export function generateInvoiceHtml(order: Order, options: { autoPrint?: boolean } = {}): string {
   const formattedOrderDate = new Date(order.createdAt).toLocaleDateString("en-IN", {
@@ -21,7 +22,7 @@ export function generateInvoiceHtml(order: Order, options: { autoPrint?: boolean
 
   const paymentModeLabel =
     order.paymentMethod === "COD"
-      ? "Cash on Delivery (Pay to Delivery Partner)"
+      ? "Cash on Delivery"
       : order.paymentMethod === "DIRECT"
       ? "Direct Bakery Order"
       : "Prepaid Online (Razorpay / UPI / Card)";
@@ -31,19 +32,17 @@ export function generateInvoiceHtml(order: Order, options: { autoPrint?: boolean
   const itemsRows = order.items
     .map(
       (item, idx) => `
-      <tr style="border-bottom: 1px solid #F1E6DF;">
-        <td style="padding: 12px 10px; text-align: center; color: #5C524E; font-size: 13px;">${idx + 1}</td>
-        <td style="padding: 12px 10px; color: #1C0D0A;">
-          <div style="font-weight: 700; font-size: 14px; color: #802B52;">${item.name}</div>
-          <div style="font-size: 12px; color: #7A6B72; margin-top: 2px;">
-            Variant: <strong>${item.weight}</strong>
-            ${item.eggPreference ? ` &bull; <span style="font-weight: 600; color: ${item.eggPreference === "eggless" ? "#2E7D32" : "#D97706"};">${item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}</span>` : ""}
-          </div>
-          ${item.cakeMessage ? `<div style="font-size: 11px; color: #802B52; font-style: italic; margin-top: 3px;">🎂 Custom Message: "${item.cakeMessage}"</div>` : ""}
+      <tr style="border-bottom: 1px solid #E5E7EB; ${idx % 2 === 1 ? "background-color: #F9FAFB;" : ""}">
+        <td style="padding: 10px 8px; text-align: center; color: #4B5563; font-size: 12px;">${idx + 1}</td>
+        <td style="padding: 10px 8px; color: #111827;">
+          <div style="font-weight: 700; font-size: 13px; color: #111827;">${item.name}</div>
         </td>
-        <td style="padding: 12px 10px; text-align: center; font-weight: 700; color: #1C0D0A; font-size: 13px;">${item.quantity}</td>
-        <td style="padding: 12px 10px; text-align: right; color: #5C524E; font-size: 13px;">₹${item.unitPrice.toFixed(2)}</td>
-        <td style="padding: 12px 10px; text-align: right; font-weight: 700; color: #802B52; font-size: 14px;">₹${item.lineTotal.toFixed(2)}</td>
+        <td style="padding: 10px 8px; color: #374151; font-size: 12px;">
+          ${item.weight} ${item.eggPreference === "eggless" ? "[Eggless]" : "[With Egg]"}
+        </td>
+        <td style="padding: 10px 8px; text-align: center; font-weight: 700; color: #111827; font-size: 12px;">${item.quantity}</td>
+        <td style="padding: 10px 8px; text-align: right; color: #374151; font-size: 12px;">Rs. ${item.unitPrice.toFixed(2)}</td>
+        <td style="padding: 10px 8px; text-align: right; font-weight: 700; color: #111827; font-size: 13px;">Rs. ${item.lineTotal.toFixed(2)}</td>
       </tr>
     `
     )
@@ -59,8 +58,8 @@ export function generateInvoiceHtml(order: Order, options: { autoPrint?: boolean
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: #FAF5EE;
-      color: #1C0D0A;
+      background-color: #FFFFFF;
+      color: #111827;
       line-height: 1.5;
       padding: 24px 12px;
     }
@@ -68,318 +67,318 @@ export function generateInvoiceHtml(order: Order, options: { autoPrint?: boolean
       max-width: 800px;
       margin: 0 auto;
       background: #FFFFFF;
-      border: 1px solid #E6DBCE;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(128, 43, 82, 0.08);
+      border: 1px solid #111827;
+      border-radius: 8px;
       overflow: hidden;
     }
     .top-actions {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 24px;
-      background: #250527;
+      padding: 10px 20px;
+      background: #111827;
       color: #FFFFFF;
     }
     .top-actions a, .top-actions button {
-      background: #D4AF37;
-      color: #250527;
-      border: none;
-      padding: 8px 18px;
-      font-size: 13px;
+      background: #FFFFFF;
+      color: #111827;
+      border: 1px solid #FFFFFF;
+      padding: 6px 14px;
+      font-size: 12px;
       font-weight: 700;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: opacity 0.2s;
     }
     .top-actions a:hover, .top-actions button:hover { opacity: 0.9; }
     .header-band {
-      background: linear-gradient(135deg, #250527 0%, #4A0E4E 100%);
-      color: #FFFFFF;
-      padding: 32px 36px;
+      background: #FFFFFF;
+      color: #111827;
+      padding: 24px 28px;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      flex-wrap: wrap;
+      border-bottom: 2px solid #111827;
       gap: 20px;
     }
     .brand-title {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 800;
       letter-spacing: -0.5px;
-      color: #FFFFFF;
+      color: #111827;
       font-family: Georgia, serif;
     }
     .brand-subtitle {
-      font-size: 12px;
-      color: #E6C184;
+      font-size: 11px;
+      color: #4B5563;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: 600;
-      margin-top: 4px;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+      margin-top: 3px;
     }
     .brand-contact {
-      font-size: 12px;
-      color: #F1E6DF;
-      margin-top: 8px;
-      line-height: 1.5;
+      font-size: 11px;
+      color: #4B5563;
+      margin-top: 6px;
+      line-height: 1.4;
     }
     .invoice-badge-box {
       text-align: right;
     }
     .invoice-badge {
-      display: inline-block;
-      background: rgba(212, 175, 55, 0.2);
-      border: 1px solid #D4AF37;
-      color: #E6C184;
-      padding: 4px 12px;
-      border-radius: 50px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: 1px;
       text-transform: uppercase;
-      margin-bottom: 8px;
     }
     .invoice-number {
-      font-size: 20px;
-      font-weight: 800;
-      color: #FFFFFF;
-      font-family: monospace;
-    }
-    .invoice-dates {
-      font-size: 12px;
-      color: #F1E6DF;
+      font-size: 13px;
+      font-weight: 700;
+      color: #111827;
       margin-top: 4px;
     }
+    .invoice-dates {
+      font-size: 11px;
+      color: #4B5563;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
     .body-content {
-      padding: 32px 36px;
+      padding: 20px 24px;
     }
     .otp-card {
-      background: #FFFDF8;
-      border: 2px dashed #D4AF37;
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 28px;
-      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.12);
+      background: #FFFFFF;
+      border: 1px solid #111827;
+      border-radius: 6px;
+      padding: 10px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
     }
     .otp-label {
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 700;
       text-transform: uppercase;
-      color: #802B52;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
+      color: #111827;
     }
     .otp-code {
-      font-size: 40px;
-      font-weight: 900;
-      letter-spacing: 10px;
-      color: #250527;
-      font-family: 'Courier New', Courier, monospace;
-      margin: 6px 0;
+      font-family: monospace;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #111827;
     }
     .otp-note {
-      font-size: 12px;
-      color: #5C524E;
+      font-size: 11px;
+      color: #4B5563;
     }
     .details-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 28px;
+      gap: 16px;
+      margin-bottom: 16px;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       .details-grid { grid-template-columns: 1fr; }
     }
     .info-card {
-      background: #FAF5EE;
-      border: 1px solid #E6DBCE;
-      border-radius: 14px;
-      padding: 18px;
-      font-size: 13px;
+      background: #FFFFFF;
+      border: 1px solid #D1D5DB;
+      border-radius: 6px;
+      padding: 14px 16px;
     }
     .info-card-title {
+      display: block;
       font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
-      color: #802B52;
       letter-spacing: 1px;
-      margin-bottom: 10px;
-      display: block;
-      border-bottom: 1px solid #E6DBCE;
+      color: #111827;
+      margin-bottom: 8px;
       padding-bottom: 6px;
+      border-bottom: 1px solid #E5E7EB;
     }
     .info-line {
-      margin-bottom: 5px;
-      color: #1C0D0A;
+      font-size: 12px;
+      color: #374151;
+      margin-bottom: 4px;
       display: flex;
       justify-content: space-between;
+      gap: 8px;
     }
-    .info-line strong { color: #5C524E; font-weight: 600; }
-    .status-pill {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 11px;
-    }
-    .status-paid { background: #E8F5E9; color: #2E7D32; }
-    .status-pending { background: #FFF3E0; color: #E65100; }
     .items-table {
       width: 100%;
       border-collapse: collapse;
-      border: 1px solid #E6DBCE;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
+      border: 1px solid #111827;
     }
     .items-table th {
-      background: #802B52;
+      background: #111827;
       color: #FFFFFF;
-      padding: 12px 10px;
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
+      padding: 8px 10px;
+      border: 1px solid #111827;
+    }
+    .bottom-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 640px) {
+      .bottom-layout { grid-template-columns: 1fr; }
+    }
+    .terms-box {
+      border: 1px solid #111827;
+      border-radius: 6px;
+      padding: 12px 14px;
+      background: #FFFFFF;
+    }
+    .terms-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #111827;
+      margin-bottom: 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    .terms-text {
+      font-size: 10px;
+      color: #374151;
+      line-height: 1.45;
+    }
+    .terms-text ol {
+      padding-left: 14px;
+    }
+    .terms-text li {
+      margin-bottom: 4px;
     }
     .breakdown-table {
-      width: 100%;
-      max-width: 340px;
-      margin-left: auto;
-      border-collapse: collapse;
-      background: #FAF5EE;
-      border: 1px solid #E6DBCE;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 30px;
+      border: 1px solid #111827;
+      border-radius: 6px;
+      padding: 12px 16px;
+      background: #FFFFFF;
     }
     .breakdown-row {
       display: flex;
       justify-content: space-between;
-      padding: 5px 16px;
-      font-size: 13px;
-      color: #5C524E;
+      font-size: 12px;
+      color: #374151;
+      margin-bottom: 6px;
     }
     .breakdown-row.total {
-      border-top: 1px solid #E6DBCE;
-      padding-top: 10px;
-      margin-top: 6px;
-      font-size: 16px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #111827;
+      font-size: 14px;
       font-weight: 800;
-      color: #802B52;
+      color: #111827;
     }
     .footer-band {
-      background: #1C0D0A;
-      color: #D8C3B3;
-      padding: 24px 36px;
+      border-top: 1px solid #E5E7EB;
+      padding: 12px 24px;
       text-align: center;
-      font-size: 12px;
+      font-size: 10.5px;
+      color: #6B7280;
     }
-    .footer-band strong { color: #FFFFFF; }
     @media print {
-      body { background: #FFFFFF; padding: 0; }
-      .invoice-wrapper { box-shadow: none; border: none; max-width: 100%; }
+      body { padding: 0; background: #FFF; }
       .top-actions { display: none !important; }
-      @page { size: A4; margin: 10mm; }
+      .invoice-wrapper { border: none; box-shadow: none; max-width: 100%; border-radius: 0; }
     }
   </style>
 </head>
 <body>
-
   <div class="invoice-wrapper">
-    <!-- Top Action Bar (hidden in print) -->
     <div class="top-actions">
-      <span style="font-size: 13px; font-weight: 600;">Lollipop Cake Shop &bull; Official Tax Invoice</span>
-      <div style="display: flex; gap: 10px;">
+      <div><strong>Tax Invoice:</strong> ${order.id}</div>
+      <div style="display: flex; gap: 8px;">
+        <a href="/api/orders/${order.id}/invoice?download=1">
+          <span>⬇️</span> Download PDF
+        </a>
         <button onclick="window.print()">
-          <span>🖨️</span> Print / Save as PDF
+          <span>🖨️</span> Print Invoice
         </button>
       </div>
     </div>
 
-    <!-- Header Band -->
+    <!-- Header Band (Black & White) -->
     <div class="header-band">
       <div>
         <div class="brand-title">Lollipop Cake Shop</div>
-        <div class="brand-subtitle">Artisanal Patisserie &amp; Bakery</div>
+        <div class="brand-subtitle">Artisanal Patisserie &amp; Celebration Bakery</div>
         <div class="brand-contact">
           Tiruchirappalli, Tamil Nadu &bull; Pin: 620001<br />
           Helpline / WhatsApp: +91 9489569661<br />
-          Website: https://lollipop-kart.vercel.app
+          Website: https://lollipop-kart.vercel.app &bull; FSSAI Lic: 22423000000000
         </div>
       </div>
       <div class="invoice-badge-box">
-        <div class="invoice-badge">Tax Invoice</div>
-        <div class="invoice-number">${order.id}</div>
+        <div class="invoice-badge">TAX INVOICE</div>
+        <div class="invoice-number">Invoice No: ${order.id}</div>
         <div class="invoice-dates">
           Date: ${formattedOrderDate}<br />
-          Status: <strong>${order.orderStatus}</strong>
+          Status: <strong>${(order.orderStatus || "CONFIRMED").replace(/_/g, " ")}</strong>
         </div>
       </div>
     </div>
 
     <div class="body-content">
-      <!-- Prominent Delivery OTP Box -->
+      <!-- Delivery Verification OTP Box -->
       <div class="otp-card">
-        <div class="otp-label">🔐 Delivery Verification OTP</div>
-        <div class="otp-code">${order.deliveryOtp || "----"}</div>
+        <div>
+          <div class="otp-label">Delivery Verification OTP</div>
+          <div class="otp-code">${order.deliveryOtp || "----"}</div>
+        </div>
         <div class="otp-note">
-          Please present this <strong>4-digit security code</strong> to your delivery partner upon cake handoff to verify receipt.
-          ${order.deliveryOtpVerified ? "<br /><span style='color: #2E7D32; font-weight: bold;'>✅ This OTP has been successfully verified upon delivery.</span>" : ""}
+          Share this <strong>4-digit code</strong> with your delivery partner upon arrival to confirm handoff.
+          ${order.deliveryOtpVerified ? "<br /><strong>[VERIFIED &amp; CONFIRMED]</strong>" : ""}
         </div>
       </div>
 
       <!-- Details Grid -->
       <div class="details-grid">
-        <!-- Customer & Delivery -->
         <div class="info-card">
-          <span class="info-card-title">📍 Delivery Destination &amp; Recipient</span>
-          <div class="info-line"><strong>Recipient:</strong> <span>${order.customer.fullName}</span></div>
-          <div class="info-line"><strong>Phone:</strong> <span>${order.customer.phone}</span></div>
-          <div class="info-line"><strong>Email:</strong> <span>${order.customer.email}</span></div>
-          <div class="info-line"><strong>Address:</strong> <span>${order.address.street}, ${order.address.city} - ${order.address.pincode}</span></div>
-          <div class="info-line" style="margin-top: 8px; border-top: 1px dashed #E6DBCE; padding-top: 6px;">
-            <strong>Scheduled Delivery:</strong> <span style="font-weight: 700; color: #802B52;">${formattedDeliveryDate} (${order.schedule.timeSlot})</span>
-          </div>
+          <span class="info-card-title">Billed &amp; Delivered To</span>
+          <div class="info-line"><span>Recipient:</span> <strong>${order.customer?.fullName || "Customer"}</strong></div>
+          <div class="info-line"><span>Phone:</span> <strong>${order.customer?.phone || "-"}</strong></div>
+          <div class="info-line"><span>Email:</span> <strong>${order.customer?.email || "-"}</strong></div>
+          <div class="info-line"><span>Address:</span> <span>${order.address?.street || ""}, ${order.address?.city || ""} - ${order.address?.pincode || ""}</span></div>
         </div>
 
-        <!-- Payment & Order Info -->
         <div class="info-card">
-          <span class="info-card-title">💳 Payment &amp; Billing Details</span>
-          <div class="info-line"><strong>Payment Mode:</strong> <span>${paymentModeLabel}</span></div>
-          <div class="info-line">
-            <strong>Payment Status:</strong> 
-            <span class="status-pill ${isPaid ? "status-paid" : "status-pending"}">${order.paymentStatus}</span>
-          </div>
-          ${order.razorpayPaymentId ? `<div class="info-line"><strong>Razorpay Payment ID:</strong> <span style="font-family: monospace; font-size: 11px;">${order.razorpayPaymentId}</span></div>` : ""}
-          ${order.razorpayOrderId ? `<div class="info-line"><strong>Razorpay Order ID:</strong> <span style="font-family: monospace; font-size: 11px;">${order.razorpayOrderId}</span></div>` : ""}
-          <div class="info-line" style="margin-top: 8px; border-top: 1px dashed #E6DBCE; padding-top: 6px;">
-            <strong>Amount Payable / Paid:</strong> <span style="font-weight: 800; font-size: 15px; color: #802B52;">₹${order.total.toFixed(2)}</span>
-          </div>
+          <span class="info-card-title">Order &amp; Payment Information</span>
+          <div class="info-line"><span>Delivery Date:</span> <strong>${formattedDeliveryDate} (${order.schedule?.timeSlot || "Scheduled"})</strong></div>
+          <div class="info-line"><span>Payment Mode:</span> <strong>${paymentModeLabel}</strong></div>
+          <div class="info-line"><span>Payment Status:</span> <strong>${order.paymentStatus || "PENDING"}</strong></div>
+          ${order.deliveryPartnerName ? `<div class="info-line"><span>Delivered by:</span> <strong>${order.deliveryPartnerName}</strong></div>` : ""}
+          ${order.razorpayPaymentId ? `<div class="info-line"><span>Transaction ID:</span> <code>${order.razorpayPaymentId}</code></div>` : ""}
         </div>
       </div>
 
-      ${order.cakeMessage || order.specialInstructions ? `
-      <!-- Cake Notes -->
-      <div style="background: #FFF8E7; border: 1px solid #E6C184; border-radius: 12px; padding: 12px 16px; margin-bottom: 24px; font-size: 13px;">
-        ${order.cakeMessage ? `<div style="color: #802B52; font-weight: 600;">🎂 Message on Cake: "${order.cakeMessage}"</div>` : ""}
-        ${order.specialInstructions ? `<div style="color: #5C524E; margin-top: 4px;">📝 Baker Instructions: ${order.specialInstructions}</div>` : ""}
-      </div>
-      ` : ""}
-
-      <!-- Itemized Table -->
+      <!-- Itemized Table (Message removed, perfectly aligned) -->
       <table class="items-table">
         <thead>
           <tr>
-            <th style="width: 40px; text-align: center;">#</th>
+            <th style="width: 36px; text-align: center;">#</th>
             <th style="text-align: left;">Item Description</th>
-            <th style="width: 60px; text-align: center;">Qty</th>
-            <th style="width: 100px; text-align: right;">Unit Price</th>
-            <th style="width: 100px; text-align: right;">Total</th>
+            <th style="width: 140px; text-align: left;">Variant / Preference</th>
+            <th style="width: 50px; text-align: center;">Qty</th>
+            <th style="width: 90px; text-align: right;">Rate (INR)</th>
+            <th style="width: 90px; text-align: right;">Total (INR)</th>
           </tr>
         </thead>
         <tbody>
@@ -387,43 +386,445 @@ export function generateInvoiceHtml(order: Order, options: { autoPrint?: boolean
         </tbody>
       </table>
 
-      <!-- Price Breakdown -->
-      <div class="breakdown-table">
-        <div class="breakdown-row">
-          <span>Items Subtotal:</span>
-          <strong>₹${order.subtotal.toFixed(2)}</strong>
+      <!-- Bottom Layout: Terms & Conditions + Refund Policy & Price Breakdown -->
+      <div class="bottom-layout">
+        <div class="terms-box">
+          <div class="terms-title">Terms, Conditions &amp; Refund Policy</div>
+          <div class="terms-text">
+            <ol>
+              <li>This is a computer-generated tax invoice and requires no physical signature.</li>
+              <li>Handcrafted fresh to order using 100% pure food-grade ingredients.</li>
+              <li>Storage: Refrigerate below 4°C immediately upon receipt and consume within 24 hours.</li>
+              <li><strong>Refund &amp; Replacement Policy:</strong> As all products are freshly prepared perishable food items, returns are not accepted after handoff. If you experience transit damage or quality concerns, notify via WhatsApp (+91 9489569661) within 2 hours of delivery for an immediate replacement or full refund.</li>
+              <li>For support, contact Helpline / WhatsApp: +91 9489569661 quoting your Order ID.</li>
+            </ol>
+          </div>
         </div>
-        <div class="breakdown-row">
-          <span>SGST (2.5%):</span>
-          <span>₹${order.sgst.toFixed(2)}</span>
-        </div>
-        <div class="breakdown-row">
-          <span>CGST (2.5%):</span>
-          <span>₹${order.cgst.toFixed(2)}</span>
-        </div>
-        <div class="breakdown-row">
-          <span>Delivery Charges:</span>
-          <span style="color: #2E7D32; font-weight: 700;">${order.deliveryFee === 0 ? "FREE" : `₹${order.deliveryFee.toFixed(2)}`}</span>
-        </div>
-        <div class="breakdown-row total">
-          <span>Grand Total:</span>
-          <span>₹${order.total.toFixed(2)}</span>
-        </div>
-      </div>
 
-      <div style="font-size: 11px; color: #7A6B72; text-align: center; margin-top: 10px;">
-        This is a computer-generated tax invoice issued by Lollipop Cake Shop. No physical signature is required.
+        <div class="breakdown-table">
+          <div class="breakdown-row">
+            <span>Items Subtotal:</span>
+            <strong>Rs. ${(order.subtotal || 0).toFixed(2)}</strong>
+          </div>
+          <div class="breakdown-row">
+            <span>SGST (2.5%):</span>
+            <span>Rs. ${(order.sgst || 0).toFixed(2)}</span>
+          </div>
+          <div class="breakdown-row">
+            <span>CGST (2.5%):</span>
+            <span>Rs. ${(order.cgst || 0).toFixed(2)}</span>
+          </div>
+          <div class="breakdown-row">
+            <span>Delivery Charges:</span>
+            <strong>${(order.deliveryFee || 0) === 0 ? "FREE" : `Rs. ${(order.deliveryFee || 0).toFixed(2)}`}</strong>
+          </div>
+          <div class="breakdown-row total">
+            <span>Grand Total:</span>
+            <span>Rs. ${(order.total || 0).toFixed(2)}</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Footer Band -->
     <div class="footer-band">
-      <p style="margin-bottom: 4px;"><strong>Lollipop Cake Shop</strong> &bull; Handcrafted Fresh Daily with Pure Ingredients</p>
-      <p>Thank you for celebrating your precious moments with us! For help, contact WhatsApp: <strong>+91 9489569661</strong></p>
+      <p style="margin-bottom: 2px;"><strong>Lollipop Cake Shop</strong> &bull; Handcrafted Fresh Daily with Pure Ingredients &bull; Tiruchirappalli, Tamil Nadu</p>
+      <p>Thank you for celebrating with us! Helpline / WhatsApp: <strong>+91 9489569661</strong></p>
     </div>
   </div>
 
   ${options.autoPrint ? "<script>window.onload = function() { setTimeout(function() { window.print(); }, 400); };</script>" : ""}
 </body>
 </html>`;
+}
+
+/**
+ * Generate a clean, professional, Black & White PDF Tax Invoice for Lollipop Cake Shop
+ */
+export function generateInvoicePdf(order: Order): Uint8Array {
+  const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+  const pageWidth = doc.internal.pageSize.getWidth(); // 595.28 pt
+  const pageHeight = doc.internal.pageSize.getHeight(); // 841.89 pt
+  const margin = 36;
+  const contentWidth = pageWidth - margin * 2; // 523.28 pt
+
+  let y = 30;
+
+  // 1. Header (Black & White Professional Style)
+  doc.setTextColor(0, 0, 0);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(20);
+  doc.text("LOLLIPOP CAKE SHOP", margin, y);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(60, 60, 60);
+  doc.text("ARTISANAL PATISSERIE & CELEBRATION BAKERY", margin, y + 14);
+
+  doc.setFontSize(7.5);
+  doc.setTextColor(80, 80, 80);
+  doc.text("Tiruchirappalli, Tamil Nadu  |  Helpline / WhatsApp: +91 9489569661", margin, y + 25);
+  doc.text("Website: https://lollipop-kart.vercel.app  |  FSSAI Lic: 22423000000000", margin, y + 36);
+
+  // Right Side: TAX INVOICE
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.setTextColor(0, 0, 0);
+  doc.text("TAX INVOICE", pageWidth - margin, y, { align: "right" });
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8.5);
+  doc.setTextColor(0, 0, 0);
+  doc.text(`Invoice No: ${order.id}`, pageWidth - margin, y + 14, { align: "right" });
+
+  const formattedOrderDate = new Date(order.createdAt).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7.5);
+  doc.setTextColor(80, 80, 80);
+  doc.text(`Date: ${formattedOrderDate}`, pageWidth - margin, y + 25, { align: "right" });
+  doc.text(`Status: ${(order.orderStatus || "CONFIRMED").replace(/_/g, " ")}`, pageWidth - margin, y + 36, { align: "right" });
+
+  // Divider Rule
+  y += 44;
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1.5);
+  doc.line(margin, y, pageWidth - margin, y);
+
+  y += 10;
+
+  // 2. Delivery Verification OTP Box (Black & White)
+  const otpCardHeight = 40;
+  doc.setFillColor(255, 255, 255);
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.roundedRect(margin, y, contentWidth, otpCardHeight, 4, 4, "FD");
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(0, 0, 0);
+  doc.text("DELIVERY VERIFICATION OTP", margin + 12, y + 15);
+
+  doc.setFont("courier", "bold");
+  doc.setFontSize(16);
+  doc.setTextColor(0, 0, 0);
+  doc.text(order.deliveryOtp || "----", margin + 12, y + 31);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(70, 70, 70);
+  const otpNote = order.deliveryOtpVerified
+    ? "Status: Verified & Confirmed upon Delivery."
+    : "Share this 4-digit code with your delivery partner upon arrival to confirm handoff.";
+  doc.text(otpNote, margin + 78, y + 23);
+
+  if (order.deliveryOtpVerified) {
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "bold");
+    doc.text("[VERIFIED]", pageWidth - margin - 12, y + 23, { align: "right" });
+  }
+
+  y += otpCardHeight + 10;
+
+  // 3. Customer & Order Details Cards (Side-by-side, Black & White)
+  const cardWidth = (contentWidth - 10) / 2;
+  const cardHeight = 94;
+
+  // Card A: Customer Details
+  doc.setFillColor(255, 255, 255);
+  doc.setDrawColor(180, 180, 180);
+  doc.setLineWidth(0.75);
+  doc.roundedRect(margin, y, cardWidth, cardHeight, 4, 4, "FD");
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8.5);
+  doc.setTextColor(0, 0, 0);
+  doc.text("BILLED & DELIVERED TO", margin + 10, y + 15);
+
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(0.5);
+  doc.line(margin + 10, y + 20, margin + cardWidth - 10, y + 20);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0);
+  doc.text(order.customer?.fullName || "Customer", margin + 10, y + 32);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(70, 70, 70);
+  doc.text(`Phone: ${order.customer?.phone || "-"}`, margin + 10, y + 44);
+  doc.text(`Email: ${order.customer?.email || "-"}`, margin + 10, y + 55);
+
+  const addressStr = `${order.address?.street || ""}, ${order.address?.city || ""} - ${order.address?.pincode || ""}`;
+  const splitAddress = doc.splitTextToSize(addressStr, cardWidth - 20);
+  doc.text(splitAddress, margin + 10, y + 67);
+
+  // Card B: Order & Payment Details
+  doc.roundedRect(margin + cardWidth + 10, y, cardWidth, cardHeight, 4, 4, "FD");
+
+  const cardBX = margin + cardWidth + 20;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8.5);
+  doc.setTextColor(0, 0, 0);
+  doc.text("ORDER & PAYMENT INFORMATION", cardBX, y + 15);
+
+  doc.line(cardBX - 10, y + 20, margin + contentWidth - 10, y + 20);
+
+  const deliveryScheduleDate = order.schedule?.date
+    ? new Date(order.schedule.date).toLocaleDateString("en-IN", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "-";
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(70, 70, 70);
+  doc.text("Delivery Date:", cardBX, y + 32);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0, 0, 0);
+  doc.text(`${deliveryScheduleDate} (${order.schedule?.timeSlot || "Scheduled"})`, cardBX + 62, y + 32);
+
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(70, 70, 70);
+  doc.text("Payment Mode:", cardBX, y + 44);
+  const paymentModeText =
+    order.paymentMethod === "COD"
+      ? "Cash on Delivery"
+      : order.paymentMethod === "DIRECT"
+      ? "Direct Bakery Order"
+      : "Prepaid Online (Razorpay / UPI)";
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0, 0, 0);
+  doc.text(paymentModeText, cardBX + 62, y + 44);
+
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(70, 70, 70);
+  doc.text("Payment Status:", cardBX, y + 56);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0, 0, 0);
+  doc.text(order.paymentStatus || "PENDING", cardBX + 62, y + 56);
+
+  if (order.deliveryPartnerName) {
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(70, 70, 70);
+    doc.text("Delivered by:", cardBX, y + 68);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text(`${order.deliveryPartnerName} ${order.deliveryPartnerPhone ? `(${order.deliveryPartnerPhone})` : ""}`, cardBX + 62, y + 68);
+  } else if (order.razorpayPaymentId) {
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(70, 70, 70);
+    doc.text("Transaction ID:", cardBX, y + 68);
+    doc.setFont("courier", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(0, 0, 0);
+    doc.text(order.razorpayPaymentId, cardBX + 62, y + 68);
+  }
+
+  y += cardHeight + 12;
+
+  // 4. Items Table (Cake messages omitted as requested, perfectly aligned)
+  const colIdx = margin + 14;
+  const colName = margin + 30;
+  const colVariant = margin + 225;
+  const colQty = margin + 360;
+  const colRate = margin + 440;
+  const colTotal = pageWidth - margin - 10;
+
+  const tableHeaderHeight = 20;
+  doc.setFillColor(0, 0, 0); // Solid Black header bar
+  doc.rect(margin, y, contentWidth, tableHeaderHeight, "F");
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(255, 255, 255);
+  doc.text("#", colIdx, y + 13, { align: "center" });
+  doc.text("ITEM DESCRIPTION", colName, y + 13);
+  doc.text("VARIANT / PREFERENCE", colVariant, y + 13);
+  doc.text("QTY", colQty, y + 13, { align: "center" });
+  doc.text("RATE (INR)", colRate, y + 13, { align: "right" });
+  doc.text("TOTAL (INR)", colTotal, y + 13, { align: "right" });
+
+  y += tableHeaderHeight;
+
+  // 5. Items Rows
+  const items = order.items || [];
+  let tableTotalHeight = 0;
+  const rowHeight = 20;
+
+  items.forEach((item, index) => {
+    const isEven = index % 2 === 0;
+
+    // Check page overflow
+    if (y + rowHeight > pageHeight - 160) {
+      doc.addPage();
+      y = margin;
+      doc.setFillColor(0, 0, 0);
+      doc.rect(margin, y, contentWidth, tableHeaderHeight, "F");
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.setTextColor(255, 255, 255);
+      doc.text("#", colIdx, y + 13, { align: "center" });
+      doc.text("ITEM DESCRIPTION (CONT.)", colName, y + 13);
+      doc.text("VARIANT / PREFERENCE", colVariant, y + 13);
+      doc.text("QTY", colQty, y + 13, { align: "center" });
+      doc.text("RATE (INR)", colRate, y + 13, { align: "right" });
+      doc.text("TOTAL (INR)", colTotal, y + 13, { align: "right" });
+      y += tableHeaderHeight;
+    }
+
+    if (isEven) {
+      doc.setFillColor(255, 255, 255);
+    } else {
+      doc.setFillColor(248, 248, 248);
+    }
+    doc.rect(margin, y, contentWidth, rowHeight, "F");
+
+    doc.setDrawColor(225, 225, 225);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y + rowHeight, pageWidth - margin, y + rowHeight);
+
+    // Number
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(70, 70, 70);
+    doc.text(String(index + 1), colIdx, y + 13, { align: "center" });
+
+    // Item Name (No custom message string)
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(0, 0, 0);
+    doc.text(item.name || "Item", colName, y + 13);
+
+    // Variant & Egg Tag
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(70, 70, 70);
+    const eggTag = item.isEggless || item.eggPreference === "eggless" ? "[Eggless]" : "[With Egg]";
+    doc.text(`${item.weight || ""} ${eggTag}`, colVariant, y + 13);
+
+    // Quantity
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(0, 0, 0);
+    doc.text(String(item.quantity || 1), colQty, y + 13, { align: "center" });
+
+    // Rate
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(70, 70, 70);
+    doc.text(`Rs. ${(item.unitPrice || 0).toFixed(2)}`, colRate, y + 13, { align: "right" });
+
+    // Total
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Rs. ${(item.lineTotal || 0).toFixed(2)}`, colTotal, y + 13, { align: "right" });
+
+    y += rowHeight;
+    tableTotalHeight += rowHeight;
+  });
+
+  // Table Outer Border
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.rect(margin, y - tableHeaderHeight - tableTotalHeight, contentWidth, tableHeaderHeight + tableTotalHeight, "S");
+
+  y += 12;
+
+  // 6. Summary Breakdown Box (Right) & Terms & Conditions + Refund Policy Box (Left)
+  const summaryWidth = 215;
+  const summaryX = pageWidth - margin - summaryWidth;
+  const summaryHeight = 96;
+
+  // Summary Box (Right)
+  doc.setFillColor(255, 255, 255);
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.roundedRect(summaryX, y, summaryWidth, summaryHeight, 4, 4, "FD");
+
+  const sumLine = (label: string, value: string, curY: number, isBold = false) => {
+    doc.setFont("helvetica", isBold ? "bold" : "normal");
+    doc.setFontSize(isBold ? 9.5 : 8);
+    doc.setTextColor(0, 0, 0);
+    doc.text(label, summaryX + 12, curY);
+    doc.text(value, summaryX + summaryWidth - 12, curY, { align: "right" });
+  };
+
+  sumLine("Items Subtotal:", `Rs. ${(order.subtotal || 0).toFixed(2)}`, y + 16);
+  sumLine("SGST (2.5%):", `Rs. ${(order.sgst || 0).toFixed(2)}`, y + 30);
+  sumLine("CGST (2.5%):", `Rs. ${(order.cgst || 0).toFixed(2)}`, y + 44);
+  sumLine("Delivery Charges:", (order.deliveryFee || 0) === 0 ? "FREE" : `Rs. ${(order.deliveryFee || 0).toFixed(2)}`, y + 58);
+
+  // Total Divider line
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(0.75);
+  doc.line(summaryX + 10, y + 68, summaryX + summaryWidth - 10, y + 68);
+
+  // Grand Total Line (Black)
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10.5);
+  doc.setTextColor(0, 0, 0);
+  doc.text("Grand Total:", summaryX + 12, y + 84);
+  doc.text(`Rs. ${(order.total || 0).toFixed(2)}`, summaryX + summaryWidth - 12, y + 84, { align: "right" });
+
+  // Terms, Conditions & Refund Policy Box (Left)
+  const noteX = margin;
+  const noteWidth = contentWidth - summaryWidth - 12;
+
+  doc.setFillColor(255, 255, 255);
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(1);
+  doc.roundedRect(noteX, y, noteWidth, summaryHeight, 4, 4, "FD");
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(0, 0, 0);
+  doc.text("TERMS, CONDITIONS & REFUND POLICY", noteX + 10, y + 14);
+
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(0.5);
+  doc.line(noteX + 10, y + 18, noteX + noteWidth - 10, y + 18);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7);
+  doc.setTextColor(60, 60, 60);
+
+  const notesText = [
+    "1. Computer-generated tax invoice; requires no physical signature.",
+    "2. Handcrafted fresh to order using 100% pure food-grade ingredients.",
+    "3. Storage: Refrigerate below 4C upon receipt; consume within 24 hours.",
+    "4. Refund Policy: As bakery items are perishable, returns are not accepted after handoff. For damaged delivery or quality issues, notify via WhatsApp within 2 hours of delivery for an immediate replacement or full refund.",
+    "5. For support, contact Helpline / WhatsApp: +91 9489569661 with Order ID.",
+  ];
+
+  let noteY = y + 27;
+  notesText.forEach((t) => {
+    const wrappedT = doc.splitTextToSize(t, noteWidth - 20);
+    doc.text(wrappedT, noteX + 10, noteY);
+    noteY += Array.isArray(wrappedT) ? wrappedT.length * 9 : 9;
+  });
+
+  // 7. Footer Divider & Text
+  const footerY = pageHeight - 32;
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.5);
+  doc.line(margin, footerY - 6, pageWidth - margin, footerY - 6);
+
+  doc.setTextColor(90, 90, 90);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7.5);
+  doc.text("Lollipop Cake Shop  *  Handcrafted Fresh Daily with Pure Ingredients  *  Tiruchirappalli, Tamil Nadu", pageWidth / 2, footerY + 8, { align: "center" });
+  doc.text("Thank you for your order! Helpline / WhatsApp: +91 9489569661", pageWidth / 2, footerY + 19, { align: "center" });
+
+  return new Uint8Array(doc.output("arraybuffer"));
 }

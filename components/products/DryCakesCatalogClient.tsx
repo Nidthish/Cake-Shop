@@ -52,6 +52,7 @@ function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
       weight: "1 pc",
       price: price,
       quantity: 1,
+      eggPreference: "egg",
     });
 
     setIsAdded(true);
@@ -251,7 +252,7 @@ export default function DryCakesCatalogClient({
               <select
                 value={currentSort}
                 onChange={(e) => setCurrentSort(e.target.value)}
-                className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 sm:flex-none"
+                className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-2.5 sm:px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 min-w-0 sm:flex-none"
                 suppressHydrationWarning
               >
                 <option value="default">Featured</option>
@@ -261,10 +262,12 @@ export default function DryCakesCatalogClient({
               <button
                 type="button"
                 onClick={resetAll}
-                className="px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-[#962854] hover:bg-[#FAF0F2] border border-[#962854]/30 rounded-lg transition-all whitespace-nowrap"
+                className="flex items-center justify-center gap-1 px-3 sm:px-3.5 py-2 text-xs font-bold uppercase tracking-wider bg-[#962854] text-white hover:bg-[#2A082C] active:scale-95 shadow-xs rounded-lg transition-all whitespace-nowrap shrink-0"
                 suppressHydrationWarning
+                title="Reset all filters"
               >
-                RESET
+                <span className="material-symbols-outlined text-sm leading-none">restart_alt</span>
+                <span>Reset</span>
               </button>
             </div>
           </div>

@@ -667,7 +667,7 @@ export default function CheckoutPage() {
                     Instant Email Confirmation
                   </p>
                   <p>
-                    An official HTML invoice receipt with product delivery time slot will be dispatched to <strong>{email || "your email"}</strong> immediately upon order placement.
+                    An official PDF tax invoice receipt with product delivery time slot and OTP will be dispatched to <strong>{email || "your email"}</strong> immediately upon order placement.
                   </p>
                 </div>
 

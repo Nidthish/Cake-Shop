@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { orderStore } from "@/lib/orders";
-import { generateInvoiceHtml } from "@/lib/invoice";
+import { generateInvoiceHtml, generateInvoicePdf } from "@/lib/invoice";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -27,22 +27,38 @@ export async function GET(
 
     const { searchParams } = new URL(req.url);
     const isDownload = searchParams.get("download") === "1";
-    const isPrint = searchParams.get("print") === "1";
+    const format = searchParams.get("format");
 
-    const html = generateInvoiceHtml(order, { autoPrint: isPrint });
-
-    const headers: Record<string, string> = {
-      "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "private, no-cache, no-store, must-revalidate",
-    };
-
-    if (isDownload) {
-      headers["Content-Disposition"] = `attachment; filename="Lollipop-Invoice-${order.id}.html"`;
+    // Allow explicit HTML format only if specifically asked via ?format=html
+    if (format === "html") {
+      const isPrint = searchParams.get("print") === "1";
+      const html = generateInvoiceHtml(order, { autoPrint: isPrint });
+      const headers: Record<string, string> = {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "private, no-cache, no-store, must-revalidate",
+      };
+      if (isDownload) {
+        headers["Content-Disposition"] = `attachment; filename="Lollipop-Invoice-${order.id}.html"`;
+      }
+      return new NextResponse(html, { headers });
     }
 
-    return new NextResponse(html, { headers });
+    // Default: Professional Official PDF Tax Invoice
+    const pdfBytes = generateInvoicePdf(order);
+    const disposition = isDownload ? "attachment" : "inline";
+
+    return new NextResponse(Buffer.from(pdfBytes), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `${disposition}; filename="Lollipop-Invoice-${order.id}.pdf"`,
+        "Content-Length": String(pdfBytes.byteLength),
+        "Cache-Control": "private, no-cache, no-store, must-revalidate",
+      },
+    });
   } catch (error: any) {
     console.error("[GET /api/orders/[id]/invoice] Error:", error);
     return new NextResponse("Failed to generate invoice", { status: 500 });
   }
 }
+

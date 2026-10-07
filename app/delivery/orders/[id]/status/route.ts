@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { orderStore, getOrGenerateDeliveryOtp } from "@/lib/orders";
+import { sendOrderDeliveredEmail } from "@/lib/email";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -65,6 +66,7 @@ export async function PATCH(
     } else if (status === "DELIVERED") {
       patch.deliveredAt = new Date().toISOString();
       patch.deliveryOtpVerified = true;
+      patch.paymentStatus = "PAID";
     } else if (status === "CANCELLED") {
       patch.cancelledAt = new Date().toISOString();
     }
@@ -72,6 +74,21 @@ export async function PATCH(
     const updated = await orderStore.update(orderId, patch);
     if (!updated) {
       return NextResponse.json({ success: false, error: "Order not found or update failed" }, { status: 404, headers: corsHeaders });
+    }
+
+    if (status === "DELIVERED") {
+      try {
+        const fullOrder = updated || (await orderStore.get(orderId));
+        if (fullOrder) {
+          console.log(`📧 [Delivery Status Route] Sending order delivered email for ${orderId}...`);
+          await Promise.race([
+            sendOrderDeliveredEmail(fullOrder),
+            new Promise((resolve) => setTimeout(resolve, 5000)),
+          ]);
+        }
+      } catch (emailErr) {
+        console.error("❌ Failed to send order delivered email from delivery status route:", emailErr);
+      }
     }
 
     return NextResponse.json({

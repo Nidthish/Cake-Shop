@@ -4,18 +4,6 @@ import { useMemo, useState } from "react";
 import type { Product } from "@/types";
 import CakeCardInteractive from "@/components/products/CakeCardInteractive";
 
-const CATEGORY_PILLS = [
-  { label: "All Cakes", subcat: "all" },
-  { label: "Normal Flavors", subcat: "Normal Flavors" },
-  { label: "Choco Cakes", subcat: "Choco Cakes" },
-  { label: "Choco Special", subcat: "Choco Special" },
-  { label: "Delight Cakes", subcat: "Delight Cakes" },
-  { label: "Rich Special", subcat: "Rich Special" },
-  { label: "Premium Cakes", subcat: "Premium Cake" },
-  { label: "Fruit Cakes", subcat: "Fruit Cake" },
-  { label: "Extreme Combo", subcat: "Extreme Combo" },
-];
-
 export default function CakesCatalogClient({
   allCakes,
 }: {
@@ -129,34 +117,34 @@ export default function CakesCatalogClient({
   return (
     <>
       {/* ── HERO BANNER ────────────────────────────────────────────────────── */}
-      <section className="hero-gradient py-14 sm:py-20 text-center relative z-10 overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-10 pointer-events-none"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(45deg,rgba(255,255,255,.15) 0,rgba(255,255,255,.15) 1px,transparent 0,transparent 50%)",
-            backgroundSize: "20px 20px",
-          }}
-        />
+      <section className="bg-gradient-to-r from-[#FFF9F5] via-[#FAF3EC] to-[#FAF0F2] py-10 sm:py-14 border-b border-[#E6C184]/20 text-center relative z-10 overflow-hidden">
+        {/* Subtle decorative background glow */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-10 -left-10 w-44 h-44 bg-[#E6C184]/15 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-[#962854]/10 rounded-full blur-3xl animate-pulse" />
+        </div>
+
         <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 border border-white/30 mb-5">
-            <span className="w-2 h-2 rounded-full bg-amber-300 animate-pulse" />
-            <span className="text-xs font-bold text-white uppercase tracking-wider">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 mb-3 shadow-xs">
+            <span className="material-symbols-outlined text-sm text-[#962854]">
+              auto_awesome
+            </span>
+            <span className="text-xs font-bold text-[#1C0D0A] uppercase tracking-wider">
               {allCakes.length} Unique Signature Cakes · Fresh Daily
             </span>
           </div>
-          <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight drop-shadow-lg">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">
             Signature Cake Collection
           </h1>
-          <p className="text-white/90 mt-4 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal">
+          <p className="text-base sm:text-lg text-[#4A3E39] mt-3 max-w-2xl mx-auto leading-relaxed font-normal">
             Every cake is handcrafted fresh to order. Choose your weight, pick
             your preference, and we&apos;ll bake it fresh for you.
           </p>
-          <div className="flex items-center justify-center gap-3 mt-6 flex-wrap">
-            <span className="flex items-center gap-1.5 bg-white/15 text-white text-xs font-bold px-4 py-2 rounded-lg border border-white/25">
+          <div className="flex items-center justify-center gap-3 mt-5 flex-wrap">
+            <span className="flex items-center gap-1.5 bg-[#FAF3EC] text-[#962854] text-xs font-bold px-4 py-1.5 rounded-full border border-[#E6C184]/40 shadow-xs">
               Freshly Baked Daily
             </span>
-            <span className="flex items-center gap-1.5 bg-white/20 text-white text-xs font-bold px-4 py-2 rounded-lg border border-white/30">
+            <span className="flex items-center gap-1.5 bg-[#FAF3EC] text-[#1C0D0A] text-xs font-bold px-4 py-1.5 rounded-full border border-[#E6C184]/40 shadow-xs">
               Advance Orders Welcome
             </span>
           </div>
@@ -185,7 +173,7 @@ export default function CakesCatalogClient({
               <select
                 value={currentWeight}
                 onChange={(e) => setCurrentWeight(e.target.value)}
-                className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 sm:flex-none"
+                className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-2.5 sm:px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 min-w-0 sm:flex-none"
                 suppressHydrationWarning
               >
                 <option value="all">All Weights</option>
@@ -196,7 +184,7 @@ export default function CakesCatalogClient({
               <select
                 value={currentSort}
                 onChange={(e) => setCurrentSort(e.target.value)}
-                className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 sm:flex-none"
+                className="bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] rounded-lg px-2.5 sm:px-3.5 py-2 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer flex-1 min-w-0 sm:flex-none"
                 suppressHydrationWarning
               >
                 <option value="default">Featured</option>
@@ -207,10 +195,12 @@ export default function CakesCatalogClient({
               <button
                 type="button"
                 onClick={resetAll}
-                className="px-3.5 py-2 text-xs font-bold uppercase tracking-wider text-[#962854] hover:bg-[#FAF0F2] border border-[#962854]/30 rounded-lg transition-all whitespace-nowrap"
+                className="flex items-center justify-center gap-1 px-3 sm:px-3.5 py-2 text-xs font-bold uppercase tracking-wider bg-[#962854] text-white hover:bg-[#2A082C] active:scale-95 shadow-xs rounded-lg transition-all whitespace-nowrap shrink-0"
                 suppressHydrationWarning
+                title="Reset all filters"
               >
-                RESET
+                <span className="material-symbols-outlined text-sm leading-none">restart_alt</span>
+                <span>Reset</span>
               </button>
             </div>
           </div>

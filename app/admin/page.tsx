@@ -69,6 +69,8 @@ interface OrderAdmin {
   deliveryPartnerPhone?: string | null;
   deliveryOtp?: string | null;
   deliveryOtpVerified?: boolean;
+  deliveredAt?: string | null;
+  assignedAt?: string | null;
   createdAt: string;
   items: any[];
 }
@@ -474,35 +476,6 @@ export default function AdminPage() {
     }
   }
 
-  // Assign Delivery Rider to Order
-  async function handleAssignRider(orderId: string, riderName: string, riderPhone: string) {
-    try {
-      const res = await fetch("/api/admin/orders", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderId,
-          deliveryPartnerName: riderName,
-          deliveryPartnerPhone: riderPhone,
-          status: "OUT_FOR_DELIVERY",
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setAlertMessage(`Order assigned to delivery rider ${riderName} and marked OUT FOR DELIVERY.`);
-        fetchOrders();
-      } else {
-        alert(data.error || "Failed to assign delivery rider.");
-      }
-    } catch (err: any) {
-      alert("Failed to assign delivery rider: " + err.message);
-    }
-  }
-
-  const availableRiders = useMemo(() => {
-    return adminUsersList.filter((u) => u.role === "RIDER" && u.isActive);
-  }, [adminUsersList]);
-
   // Sales Analytics Computation with Date Filter
   const filteredOrders = useMemo(() => {
     const now = new Date();
@@ -532,14 +505,41 @@ export default function AdminPage() {
     });
   }, [orders, salesDateFilter]);
 
-  const salesStats = useMemo(() => {
-    const totalRevenue = filteredOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
-    const totalCount = filteredOrders.length;
-    const avgOrderValue = totalCount > 0 ? totalRevenue / totalCount : 0;
-    const paidOrders = filteredOrders.filter((o) => o.paymentStatus === "PAID").length;
-
-    return { totalRevenue, totalCount, avgOrderValue, paidOrders };
+  // Realized Revenue Orders:
+  // An order counts towards revenue ONLY AFTER:
+  // 1. It is DELIVERED (cash collected or completed), OR
+  // 2. Paid online via GPay / UPI / Razorpay (PAID), AND
+  // 3. Not CANCELLED
+  const revenueOrders = useMemo(() => {
+    return filteredOrders.filter((o) => {
+      if (o.status === "CANCELLED") return false;
+      const isDelivered = o.status === "DELIVERED";
+      const isPaidOnline = o.paymentStatus === "PAID";
+      return isDelivered || isPaidOnline;
+    });
   }, [filteredOrders]);
+
+  const salesStats = useMemo(() => {
+    const totalRevenue = revenueOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+    const totalCount = filteredOrders.length;
+    const avgOrderValue = revenueOrders.length > 0 ? totalRevenue / revenueOrders.length : 0;
+    const paidOrders = revenueOrders.length;
+
+    // Unfulfilled / Pending COD orders not yet delivered
+    const pendingCodOrders = filteredOrders.filter(
+      (o) => o.status !== "CANCELLED" && o.status !== "DELIVERED" && o.paymentStatus !== "PAID"
+    );
+    const pendingCodAmount = pendingCodOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+
+    return {
+      totalRevenue,
+      totalCount,
+      avgOrderValue,
+      paidOrders,
+      pendingCodCount: pendingCodOrders.length,
+      pendingCodAmount,
+    };
+  }, [filteredOrders, revenueOrders]);
 
   // Product Helpers
   function handleAddVariantRow() {
@@ -1173,13 +1173,13 @@ export default function AdminPage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
               <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
                 <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Total Revenue
+                  Realized Revenue
                 </span>
                 <div className="text-xl sm:text-3xl font-extrabold text-[#802B52] truncate">
                   ₹{salesStats.totalRevenue.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                 </div>
                 <p className="text-[10px] sm:text-[11px] text-emerald-600 font-medium">
-                  💳 Total sales
+                  ✓ Delivered or GPay / Online Paid
                 </p>
               </div>
 
@@ -1191,33 +1191,147 @@ export default function AdminPage() {
                   {salesStats.totalCount} <span className="text-xs sm:text-base font-normal text-gray-500">Orders</span>
                 </div>
                 <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-medium">
-                  📦 Placed orders
+                  📦 Placed in period
                 </p>
               </div>
 
               <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
                 <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Avg Order Value
+                  Avg Realized Value
                 </span>
                 <div className="text-xl sm:text-3xl font-extrabold text-[#962854] truncate">
                   ₹{salesStats.avgOrderValue.toFixed(0)}
                 </div>
                 <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-medium">
-                  🎂 Per order avg
+                  🎂 Per realized order
                 </p>
               </div>
 
               <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
                 <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Paid Orders
+                  Revenue Orders
                 </span>
                 <div className="text-xl sm:text-3xl font-extrabold text-emerald-600">
                   {salesStats.paidOrders} / {salesStats.totalCount}
                 </div>
                 <p className="text-[11px] text-emerald-700 font-medium">
-                  ✅ Paid online
+                  ✅ Delivered / GPay Paid
                 </p>
               </div>
+            </div>
+
+            {/* Pending COD Notice */}
+            {salesStats.pendingCodCount > 0 && (
+              <div className="bg-[#FFFDF8] border border-[#E6C184] rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-base">⏳</span>
+                  <div>
+                    <strong className="text-[#802B52]">Pending Delivery (COD Orders):</strong>{" "}
+                    <span className="text-[#5C524E]">
+                      ₹{salesStats.pendingCodAmount.toLocaleString("en-IN")} across {salesStats.pendingCodCount} orders are pending delivery handoff.
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[11px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2.5 py-1 rounded-full whitespace-nowrap">
+                  Not counted in revenue until delivered
+                </span>
+              </div>
+            )}
+
+            {/* Realized Revenue Orders Table */}
+            <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm overflow-hidden">
+              <div className="p-4 sm:p-5 border-b border-[#E6DBCE] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 className="font-serif font-bold text-base text-[#5B1E38]">
+                    Realized Revenue Orders ({revenueOrders.length})
+                  </h3>
+                  <p className="text-xs text-[#7A6B72]">
+                    Only orders that have been successfully delivered or paid online (GPay / Razorpay / UPI) are listed here.
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-xs text-[#7A6B72]">Realized Total: </span>
+                  <span className="font-extrabold text-base text-[#802B52]">
+                    ₹{salesStats.totalRevenue.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                  </span>
+                </div>
+              </div>
+
+              {revenueOrders.length === 0 ? (
+                <div className="text-center py-10 text-xs text-[#7A6B72]">
+                  No orders have been delivered or paid online for the selected date filter.
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
+                      <tr>
+                        <th className="py-3 px-4">Order ID</th>
+                        <th className="py-3 px-4">Customer</th>
+                        <th className="py-3 px-4">Revenue Qualification</th>
+                        <th className="py-3 px-4">Delivery Partner</th>
+                        <th className="py-3 px-4">Date</th>
+                        <th className="py-3 px-4 text-right">Amount</th>
+                        <th className="py-3 px-4 text-center">Invoice</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#E6DBCE]">
+                      {revenueOrders.map((o) => (
+                        <tr key={o.id} className="hover:bg-[#FDFBF7]">
+                          <td className="py-3 px-4 font-mono font-bold text-[#802B52]">
+                            {o.orderNumber}
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="font-bold text-[#2D2327]">{o.customerName}</div>
+                            <div className="text-[11px] text-[#7A6B72]">{o.customerPhone}</div>
+                          </td>
+                          <td className="py-3 px-4">
+                            {o.status === "DELIVERED" ? (
+                              <span className="inline-flex items-center gap-1 font-bold text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded">
+                                ✅ Delivered
+                              </span>
+                            ) : o.paymentStatus === "PAID" ? (
+                              <span className="inline-flex items-center gap-1 font-bold text-[11px] text-[#802B52] bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">
+                                💳 Paid Online (GPay/UPI)
+                              </span>
+                            ) : (
+                              <span className="text-[11px] text-gray-500">Realized</span>
+                            )}
+                          </td>
+                          <td className="py-3 px-4">
+                            {o.deliveryPartnerName ? (
+                              <div>
+                                <span className="font-semibold text-[#5B1E38]">🛵 {o.deliveryPartnerName}</span>
+                                {o.deliveryPartnerPhone && (
+                                  <div className="text-[10px] text-[#7A6B72]">{o.deliveryPartnerPhone}</div>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-gray-400 italic text-[11px]">Direct Bakery</span>
+                            )}
+                          </td>
+                          <td className="py-3 px-4 text-[#7A6B72]">
+                            {o.deliveryDate || new Date(o.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}
+                          </td>
+                          <td className="py-3 px-4 font-extrabold text-[#802B52] text-right">
+                            ₹{o.totalAmount}
+                          </td>
+                          <td className="py-3 px-4 text-center">
+                            <a
+                              href={`/api/orders/${o.id}/invoice?download=1`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FAF5EE] hover:bg-[#E6DBCE] text-[#802B52] border border-[#E6DBCE] rounded text-[11px] font-bold transition-colors"
+                            >
+                              📥 PDF
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -1532,35 +1646,29 @@ export default function AdminPage() {
                       {/* Delivery Rider & OTP Details */}
                       <div className="p-2.5 bg-white rounded-lg border border-[#E6DBCE] space-y-2 text-xs">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-[#7A6B72]">Delivery Rider:</span>
-                          {o.deliveryPartnerName ? (
+                          <span className="text-[11px] font-bold text-[#7A6B72]">Delivery Partner:</span>
+                          {o.status === "DELIVERED" ? (
+                            <span className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                              ✅ Delivered {o.deliveryPartnerName ? `by ${o.deliveryPartnerName}` : ""}
+                            </span>
+                          ) : o.deliveryPartnerName ? (
                             <span className="text-xs font-bold text-[#5B1E38] bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
-                              🛵 {o.deliveryPartnerName} {o.deliveryPartnerPhone ? `(${o.deliveryPartnerPhone})` : ""}
+                              🛵 {o.status === "OUT_FOR_DELIVERY" ? "Out for Delivery: " : ""}{o.deliveryPartnerName}
                             </span>
                           ) : (
-                            <span className="text-xs text-gray-400 italic">Not Assigned</span>
+                            <span className="text-xs text-gray-400 italic">Open to all delivery partners</span>
                           )}
                         </div>
 
-                        {adminUser?.role === "SUPERADMIN" && availableRiders.length > 0 && o.status !== "DELIVERED" && o.status !== "CANCELLED" && (
-                          <div className="flex items-center gap-2 pt-1">
-                            <select
-                              defaultValue=""
-                              onChange={(e) => {
-                                const selectedRider = availableRiders.find((r) => r.id === e.target.value);
-                                if (selectedRider) {
-                                  handleAssignRider(o.id, selectedRider.fullName, selectedRider.phone || "");
-                                }
-                              }}
-                              className="w-full text-xs px-2.5 py-1.5 rounded-lg border border-[#E6DBCE] bg-white text-[#2D2327] font-medium"
-                            >
-                              <option value="">🛵 Assign Rider to Order...</option>
-                              {availableRiders.map((r) => (
-                                <option key={r.id} value={r.id}>
-                                  {r.fullName} ({r.phone || r.email})
-                                </option>
-                              ))}
-                            </select>
+                        {o.deliveryPartnerPhone && (
+                          <div className="text-[11px] text-[#7A6B72]">
+                            Phone: <span className="font-semibold text-[#2D2327]">{o.deliveryPartnerPhone}</span>
+                          </div>
+                        )}
+
+                        {o.deliveredAt && (
+                          <div className="text-[10px] text-emerald-700">
+                            Delivered at: {new Date(o.deliveredAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
                           </div>
                         )}
 
@@ -1609,7 +1717,7 @@ export default function AdminPage() {
                         <th className="py-3 px-4">Customer Details</th>
                         <th className="py-3 px-4">Delivery Schedule</th>
                         <th className="py-3 px-4">Items &amp; Details</th>
-                        <th className="py-3 px-4">Delivery Rider</th>
+                        <th className="py-3 px-4">Delivery Partner</th>
                         <th className="py-3 px-4">Total Amount</th>
                         <th className="py-3 px-4">Status</th>
                       </tr>
@@ -1660,39 +1768,31 @@ export default function AdminPage() {
                             ))}
                           </td>
                           <td className="py-4 px-4">
-                            {o.deliveryPartnerName ? (
+                            {o.status === "DELIVERED" ? (
+                              <div className="space-y-1">
+                                <div className="font-bold text-emerald-800 text-[11px] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded inline-block">
+                                  ✅ Delivered {o.deliveryPartnerName ? `by ${o.deliveryPartnerName}` : ""}
+                                </div>
+                                {o.deliveryPartnerPhone && (
+                                  <div className="text-[10px] text-[#7A6B72]">{o.deliveryPartnerPhone}</div>
+                                )}
+                                {o.deliveredAt && (
+                                  <div className="text-[9px] text-gray-500">
+                                    {new Date(o.deliveredAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                                  </div>
+                                )}
+                              </div>
+                            ) : o.deliveryPartnerName ? (
                               <div className="space-y-1">
                                 <div className="font-bold text-[#5B1E38] text-[11px] bg-amber-50 border border-amber-200 px-2 py-0.5 rounded inline-block">
-                                  🛵 {o.deliveryPartnerName}
+                                  🛵 {o.status === "OUT_FOR_DELIVERY" ? "Out: " : ""}{o.deliveryPartnerName}
                                 </div>
                                 {o.deliveryPartnerPhone && (
                                   <div className="text-[10px] text-[#7A6B72]">{o.deliveryPartnerPhone}</div>
                                 )}
                               </div>
                             ) : (
-                              <span className="text-[11px] text-gray-400 italic">Unassigned</span>
-                            )}
-
-                            {adminUser?.role === "SUPERADMIN" && availableRiders.length > 0 && o.status !== "DELIVERED" && o.status !== "CANCELLED" && (
-                              <div className="mt-1.5">
-                                <select
-                                  defaultValue=""
-                                  onChange={(e) => {
-                                    const selectedRider = availableRiders.find((r) => r.id === e.target.value);
-                                    if (selectedRider) {
-                                      handleAssignRider(o.id, selectedRider.fullName, selectedRider.phone || "");
-                                    }
-                                  }}
-                                  className="text-[10px] px-2 py-1 rounded border border-[#E6DBCE] bg-white text-[#2D2327]"
-                                >
-                                  <option value="">Assign Rider...</option>
-                                  {availableRiders.map((r) => (
-                                    <option key={r.id} value={r.id}>
-                                      {r.fullName} ({r.phone || r.email})
-                                    </option>
-                                  ))}
-                                </select>
-                              </div>
+                              <span className="text-[11px] text-gray-400 italic">Open to all delivery partners</span>
                             )}
                           </td>
                           <td className="py-4 px-4 font-bold text-[#802B52]">₹{o.totalAmount}</td>

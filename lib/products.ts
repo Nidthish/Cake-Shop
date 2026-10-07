@@ -81,7 +81,8 @@ export async function getDbProducts(): Promise<Product[]> {
             mainCategory = "first-birthday";
           }
 
-          const hasEggless = mappedVariants.some((v: any) => v.isEggless);
+          const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
+          const hasEggless = isCakeCategory && mappedVariants.some((v: any) => v.isEggless);
 
           return {
             id: p.slug,
@@ -100,7 +101,7 @@ export async function getDbProducts(): Promise<Product[]> {
             description: p.description || "",
             variants: mappedVariants,
             isEggless: hasEggless,
-            egglessAvailable: true,
+            egglessAvailable: isCakeCategory,
           };
         });
       }
@@ -160,8 +161,8 @@ export async function getDbProducts(): Promise<Product[]> {
           mainCategory = "first-birthday";
         }
 
-        const hasEgglessVariant = p.variants.some((v: any) => v.isEggless);
-        const isCakeCategory = ["cakes", "dry-cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
+        const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
+        const hasEgglessVariant = isCakeCategory && p.variants.some((v: any) => v.isEggless);
 
         return {
           id: p.slug,
@@ -180,7 +181,7 @@ export async function getDbProducts(): Promise<Product[]> {
           description: p.description || "",
           variants,
           isEggless: hasEgglessVariant,
-          egglessAvailable: isCakeCategory || hasEgglessVariant,
+          egglessAvailable: isCakeCategory,
         };
       });
     }

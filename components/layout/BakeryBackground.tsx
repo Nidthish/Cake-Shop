@@ -559,12 +559,69 @@ export default function BakeryBackground() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      id="bg-3d-canvas"
-      className="fixed top-0 left-0 w-full h-full pointer-events-none z-[1]"
-      style={{ opacity: 0.16 }}
-      aria-hidden="true"
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        id="bg-3d-canvas"
+        className="fixed top-0 left-0 w-full h-full pointer-events-none z-[1]"
+        style={{ opacity: 0.18 }}
+        aria-hidden="true"
+      />
+
+      {/* Ambient Floating Bakery Confectionery Layer */}
+      <div className="bakery-bg-layer pointer-events-none" aria-hidden="true">
+        {/* Tiered Birthday Cake */}
+        <div className="bakery-bg-item tone-rose bakery-drift-1 top-[14%] left-[3%]">
+          <svg className="w-16 h-16 sm:w-20 sm:h-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <path d="M4 19h16v3H4zM6 14h12v5H6zM8 9h8v5H8zM12 4v5M12 2a1 1 0 0 1 1 1c0 .7-.5 1.2-1 2-.5-.8-1-1.3-1-2a1 1 0 0 1 1-1z" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+
+        {/* Floating Cupcake */}
+        <div className="bakery-bg-item tone-berry bakery-drift-2 top-[32%] right-[5%]">
+          <svg className="w-14 h-14 sm:w-16 sm:h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <path d="M6 10c0-3.3 2.7-6 6-6s6 2.7 6 6M5 10h14l-2 10H7L5 10zM12 1v3" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+
+        {/* Warm Croissant */}
+        <div className="bakery-bg-item tone-caramel bakery-drift-3 top-[68%] left-[6%]">
+          <svg className="w-16 h-16 sm:w-18 sm:h-18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <path d="M3 15c2-6 8-11 15-9 3 1 4 4 3 7-1 3-4 6-7 7-4 1-9-1-11-5z" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M7 11c2-3 5-5 9-4M9 14c2-2 4-3 7-2" strokeLinecap="round" />
+          </svg>
+        </div>
+
+        {/* Glazed Donut */}
+        <div className="bakery-bg-item tone-coral bakery-drift-4 top-[78%] right-[6%]">
+          <svg className="w-14 h-14 sm:w-18 sm:h-18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="12" cy="12" r="3.5" />
+            <path d="M7 9h.01M16 8h.01M17 14h.01M8 15h.01M12 6h.01M12 18h.01" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </div>
+
+        {/* Artisanal Macaron */}
+        <div className="bakery-bg-item tone-amber bakery-drift-5 top-[52%] left-[2%]">
+          <svg className="w-12 h-12 sm:w-16 sm:h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <path d="M4 10c0-2.5 3.6-4 8-4s8 1.5 8 4-3.6 4-8 4-8-1.5-8-4zM4 14c0 2.5 3.6 4 8 4s8-1.5 8-4M4 11h16M4 13h16" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+
+        {/* Bakery Sparkle Star */}
+        <div className="bakery-bg-item tone-rose bakery-drift-6 top-[20%] left-[45%]">
+          <svg className="w-8 h-8 sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <path d="M12 2l2.4 6.6L21 11l-5.6 4.4L17 22l-5-4-5 4 1.6-6.6L3 11l6.6-2.4L12 2z" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+
+        {/* Floating Sugar Particles */}
+        <span className="sugar-particle sugar-float-1 w-2.5 h-2.5 bg-[#E6C184] top-[18%] left-[12%]" />
+        <span className="sugar-particle sugar-float-2 w-3 h-3 bg-[#962854] top-[42%] right-[16%]" />
+        <span className="sugar-particle sugar-float-3 w-2 h-2 bg-[#FAF0EB] top-[65%] left-[20%]" />
+        <span className="sugar-particle sugar-float-1 w-2.5 h-2.5 bg-[#E6C184] top-[85%] right-[25%]" />
+        <span className="sugar-particle sugar-float-2 w-2 h-2 bg-[#962854] top-[55%] right-[35%]" />
+      </div>
+    </>
   );
 }

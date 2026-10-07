@@ -37,8 +37,14 @@ export default function ProductDetailClient({
     );
     return halfKgIdx !== -1 ? halfKgIdx : 0;
   });
-  // Default to product.isEggless preference if set, otherwise default to with egg (false) for cakes
-  const [eggless, setEggless] = useState<boolean>(product.isEggless !== undefined ? product.isEggless : false);
+  const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(product.category);
+  const showEggPreference = isCakeCategory && product.egglessAvailable !== false;
+
+  // Default to product.isEggless preference if set for cakes, otherwise default to with egg (false)
+  const [eggless, setEggless] = useState<boolean>(() => {
+    if (!isCakeCategory) return false;
+    return product.isEggless !== undefined ? product.isEggless : false;
+  });
   const [cakeMessage, setCakeMessage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [tab, setTab] = useState<"description" | "ingredients">("description");
@@ -75,16 +81,16 @@ export default function ProductDetailClient({
     }
 
     addItem({
-      id: `${product.id}${product.egglessAvailable && eggless ? "-eggless" : ""}`,
+      id: `${product.id}${showEggPreference && eggless ? "-eggless" : ""}`,
       name: product.name,
       image: product.image,
       weight: variant.weight,
       price,
       originalPrice,
       offer: itemOffer,
-      cakeMessage: cakeMessage.trim() || undefined,
+      cakeMessage: isCakeCategory ? (cakeMessage.trim() || undefined) : undefined,
       quantity,
-      eggPreference: product.egglessAvailable ? (eggless ? "eggless" : "egg") : undefined,
+      eggPreference: showEggPreference ? (eggless ? "eggless" : "egg") : "egg",
     });
     showToast(`${product.name} added to cart`, "success");
   }
@@ -177,8 +183,8 @@ export default function ProductDetailClient({
             </div>
           )}
 
-          {/* Egg Preference Dropdown (Available for all cake categories) */}
-          {product.egglessAvailable !== false && (
+          {/* Egg Preference Dropdown (Available only for genuine celebration cakes) */}
+          {showEggPreference && (
             <div className="mb-6 max-w-xs">
               <label htmlFor="egg-preference-select" className="block text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">
                 Cake Preference
@@ -207,24 +213,26 @@ export default function ProductDetailClient({
             </div>
           )}
 
-          {/* Cake Customization: Name / Message to write on Cake */}
-          <div className="mb-6">
-            <label htmlFor="cake-message-detail" className="block text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">
-              Name / Message to write on Cake (Optional)
-            </label>
-            <input
-              id="cake-message-detail"
-              type="text"
-              maxLength={60}
-              value={cakeMessage}
-              onChange={(e) => setCakeMessage(e.target.value)}
-              placeholder='e.g. "Happy Birthday Rahul!"'
-              className="w-full bg-white border border-[#E6C184]/50 rounded-xl px-4 py-2.5 text-sm text-[#1C0D0A] placeholder-[#9C8B84] focus:outline-none focus:border-[#962854] focus:ring-2 focus:ring-[#962854]/20"
-            />
-            <p className="text-[11px] text-[#7A6B72] mt-1">
-              Freshly piped in chocolate frosting on your cake surface.
-            </p>
-          </div>
+          {/* Cake Customization: Name / Message to write on Cake (Cakes Only) */}
+          {isCakeCategory && (
+            <div className="mb-6">
+              <label htmlFor="cake-message-detail" className="block text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">
+                Name / Message to write on Cake (Optional)
+              </label>
+              <input
+                id="cake-message-detail"
+                type="text"
+                maxLength={60}
+                value={cakeMessage}
+                onChange={(e) => setCakeMessage(e.target.value)}
+                placeholder='e.g. "Happy Birthday Rahul!"'
+                className="w-full bg-white border border-[#E6C184]/50 rounded-xl px-4 py-2.5 text-sm text-[#1C0D0A] placeholder-[#9C8B84] focus:outline-none focus:border-[#962854] focus:ring-2 focus:ring-[#962854]/20"
+              />
+              <p className="text-[11px] text-[#7A6B72] mt-1">
+                Freshly piped in chocolate frosting on your cake surface.
+              </p>
+            </div>
+          )}
 
           {/* Quantity */}
           <div className="mb-6">

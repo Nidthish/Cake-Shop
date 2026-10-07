@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import type { Order } from "@/types";
+import { generateInvoicePdf } from "./invoice";
 
 /**
  * Configure Nodemailer SMTP Transporter
@@ -294,12 +295,25 @@ export async function sendOrderConfirmationEmail(order: Order): Promise<{ succes
 
     const htmlContent = generateOrderConfirmationHtml(order);
 
+    let pdfAttachment: any = null;
+    try {
+      const pdfBytes = generateInvoicePdf(order);
+      pdfAttachment = {
+        filename: `Lollipop-Invoice-${order.id}.pdf`,
+        content: Buffer.from(pdfBytes),
+        contentType: "application/pdf",
+      };
+    } catch (pdfErr) {
+      console.warn(`⚠️ [Email Service] Could not generate PDF invoice for order ${order.id}:`, pdfErr);
+    }
+
     const mailOptions = {
       from: fromAddress,
       to: toAddress,
       replyTo: smtpUser || undefined,
-      subject: `🎂 Order Confirmed! Receipt & Invoice for ${order.id} (Delivery OTP: ${order.deliveryOtp || "----"}) - Lollipop Cake Shop`,
+      subject: `🎂 Order Confirmed! Receipt & Tax Invoice for ${order.id} (Delivery OTP: ${order.deliveryOtp || "----"}) - Lollipop Cake Shop`,
       html: htmlContent,
+      attachments: pdfAttachment ? [pdfAttachment] : [],
     };
 
     console.log(`📧 [Email Service] Sending confirmation receipt to ${toAddress} for Order ${order.id}...`);
@@ -474,6 +488,16 @@ export function generateOrderDeliveredHtml(order: Order): string {
                   </tr>
                 </table>
 
+                <!-- Official Tax Invoice PDF Attached Notice -->
+                <div style="background-color: #FFFDF8; border: 1.5px dashed #D4AF37; border-radius: 12px; padding: 14px 18px; margin-bottom: 25px; text-align: center;">
+                  <span style="font-size: 13px; font-weight: bold; color: #802B52;">
+                    📎 Official Tax Invoice (PDF) Attached
+                  </span>
+                  <p style="margin: 4px 0 0 0; font-size: 12px; color: #5C524E;">
+                    Your official tax invoice receipt has been generated and attached as a PDF document to this email for your records.
+                  </p>
+                </div>
+
                 <!-- WhatsApp Feedback Banner -->
                 <div style="background-color: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 12px; padding: 16px; text-align: center;">
                   <span style="font-size: 14px; font-weight: bold; color: #2E7D32;">
@@ -527,12 +551,25 @@ export async function sendOrderDeliveredEmail(order: Order): Promise<{ success: 
 
     const htmlContent = generateOrderDeliveredHtml(order);
 
+    let pdfAttachment: any = null;
+    try {
+      const pdfBytes = generateInvoicePdf(order);
+      pdfAttachment = {
+        filename: `Lollipop-Invoice-${order.id}.pdf`,
+        content: Buffer.from(pdfBytes),
+        contentType: "application/pdf",
+      };
+    } catch (pdfErr) {
+      console.warn(`⚠️ [Email Service] Could not generate delivery PDF invoice for order ${order.id}:`, pdfErr);
+    }
+
     const mailOptions = {
       from: fromAddress,
       to: toAddress,
       replyTo: smtpUser || undefined,
       subject: `🎉 Your Order is Delivered Successfully! - Order ${order.id} | Lollipop Cake Shop`,
       html: htmlContent,
+      attachments: pdfAttachment ? [pdfAttachment] : [],
     };
 
     console.log(`📧 [Email Service] Sending delivery confirmation email to ${toAddress} for Order ${order.id}...`);

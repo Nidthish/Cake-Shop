@@ -37,7 +37,7 @@ function SuccessContent() {
         try {
           const link = document.createElement("a");
           link.href = `/api/orders/${order.id}/invoice?download=1`;
-          link.setAttribute("download", `Lollipop-Invoice-${order.id}.html`);
+          link.setAttribute("download", `Lollipop-Invoice-${order.id}.pdf`);
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -64,7 +64,7 @@ function SuccessContent() {
 
   function handlePrintInvoice() {
     if (!order) return;
-    window.open(`/api/orders/${order.id}/invoice?print=1`, "_blank");
+    window.open(`/api/orders/${order.id}/invoice`, "_blank");
   }
 
   return (
@@ -90,14 +90,14 @@ function SuccessContent() {
 
           <div className="bg-[#FAF3EC] rounded-2xl p-4 border border-[#E6C184]/30 text-xs text-[#802B52] font-semibold flex items-center justify-center gap-2">
             <span>
-              An official HTML invoice receipt with delivery timing details and OTP has been emailed to{" "}
+              An official PDF tax invoice receipt with delivery timing details and OTP has been emailed to{" "}
               <strong>{order?.customer?.email || "your email address"}</strong>.
             </span>
           </div>
 
           {autoDownloaded && (
             <div className="bg-emerald-50 text-emerald-800 rounded-xl p-3 border border-emerald-200 text-xs font-medium flex items-center justify-center gap-2 animate-fade-in">
-              <span>Your invoice has been automatically downloaded to your device!</span>
+              <span>Your official PDF invoice has been automatically downloaded to your device!</span>
             </div>
           )}
         </div>
@@ -143,23 +143,23 @@ function SuccessContent() {
         {order && (
           <div className="bg-white rounded-2xl border border-[#E6C184]/40 p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="text-xs text-[#5C524E] text-center sm:text-left">
-              <strong className="text-[#1C0D0A] block">Official Tax Invoice Receipt</strong>
+              <strong className="text-[#1C0D0A] block">Official PDF Tax Invoice Receipt</strong>
               Includes all pricing breakdowns, GST tax details, and verification OTP.
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
                 type="button"
                 onClick={handleManualDownload}
-                className="flex-1 sm:flex-initial bg-[#250527] hover:bg-[#4A0E4E] text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                className="flex-1 sm:flex-initial bg-[#250527] hover:bg-[#4A0E4E] text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm cursor-pointer"
               >
-                Download Invoice
+                <span>📥</span> Download PDF Invoice
               </button>
               <button
                 type="button"
                 onClick={handlePrintInvoice}
-                className="flex-1 sm:flex-initial bg-[#D4AF37] hover:bg-[#C29D26] text-[#250527] text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                className="flex-1 sm:flex-initial bg-[#D4AF37] hover:bg-[#C29D26] text-[#250527] text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm cursor-pointer"
               >
-                Print / PDF
+                <span>🖨️</span> View / Print PDF
               </button>
             </div>
           </div>

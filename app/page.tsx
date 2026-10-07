@@ -327,6 +327,39 @@ export default async function HomePage() {
       </section>
 
       {/* ───────────────────────────────────────────────────────────────
+         SLIDING CONFECTIONERY TICKER (Next-Gen Background Slide Animation)
+         ─────────────────────────────────────────────────────────────── */}
+      <div className="marquee-wrapper py-2.5 sm:py-3 border-y border-[#E6C184]/40 shadow-xs text-xs sm:text-sm font-bold tracking-wider relative z-20">
+        <div className="marquee-content inline-flex items-center gap-8">
+          <span>🎂 HANDCRAFTED FRESH DAILY</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>🍰 54+ UNIQUE SIGNATURE RECIPES</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>🧁 100% ARTISANAL &amp; EGGLESS OPTIONS</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>✨ 2-HOUR EXPRESS DELIVERY IN TIRUPPUR</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>🍓 PREMIUM NATURAL INGREDIENTS</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>🎉 BESPOKE CELEBRATION STUDIO</span>
+          <span className="text-[#E6C184]">✦</span>
+          {/* Repeated for seamless 50% loop */}
+          <span>🎂 HANDCRAFTED FRESH DAILY</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>🍰 54+ UNIQUE SIGNATURE RECIPES</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>🧁 100% ARTISANAL &amp; EGGLESS OPTIONS</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>✨ 2-HOUR EXPRESS DELIVERY IN TIRUPPUR</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>🍓 PREMIUM NATURAL INGREDIENTS</span>
+          <span className="text-[#E6C184]">✦</span>
+          <span>🎉 BESPOKE CELEBRATION STUDIO</span>
+          <span className="text-[#E6C184]">✦</span>
+        </div>
+      </div>
+
+      {/* ───────────────────────────────────────────────────────────────
          4. CELEBRATION OCCASIONS SECTION
          ─────────────────────────────────────────────────────────────── */}
       <section className="py-14 sm:py-20 bg-[#FFF9F5]">

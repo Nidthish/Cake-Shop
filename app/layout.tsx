@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/components/cart/CartProvider";
 import { ToastProvider } from "@/components/common/ToastProvider";
+import RouteLoadingIndicator from "@/components/common/RouteLoadingIndicator";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingActions from "@/components/layout/FloatingActions";
@@ -61,6 +63,9 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
+        <Suspense fallback={null}>
+          <RouteLoadingIndicator />
+        </Suspense>
         <ToastProvider>
           <CartProvider>
             <BakeryBackground />
