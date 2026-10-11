@@ -158,19 +158,22 @@ export default function ProductDetailClient({
 
           <p className="text-[#5C524E] text-sm leading-relaxed mb-6">{product.description}</p>
 
-          <div className="flex flex-wrap items-baseline gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-3 mb-6">
             <span className="font-display font-bold text-3xl text-[#1C0D0A]">₹{price}</span>
             {hasDiscount && <span className="text-base text-[#9C8B84] line-through">₹{originalPrice}</span>}
-            {!eggless && (variant.offer || isKgOffer) && (
-              <span className="bg-[#FAF0F2] text-[#962854] border border-[#962854]/30 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs flex items-center gap-1.5 animate-pulse">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#FAF3EC] text-[#962854] border border-[#E6C184]/60">
+              {variant.weight}
+            </span>
+            {!eggless && ((variant.offer && !variant.offer.toLowerCase().includes("candle") && !variant.offer.toLowerCase().includes("spoon")) || isKgOffer) && (
+              <span className="bg-[#FAF0F2] text-[#962854] border border-[#962854]/30 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-sm">card_giftcard</span>
                 <span>{variant.offer || "1kg + 1/2kg Free"} (With Egg Only)</span>
               </span>
             )}
           </div>
 
-          {/* Weight / variant selector */}
-          {variants.length > 1 && (
+          {/* Weight / variant selector or single weight quantity display */}
+          {variants.length > 1 ? (
             <div className="mb-5">
               <p className="text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">Select Weight</p>
               <div className="flex flex-wrap gap-2">
@@ -195,6 +198,15 @@ export default function ProductDetailClient({
                     </button>
                   );
                 })}
+              </div>
+            </div>
+          ) : (
+            <div className="mb-5">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">Weight</p>
+              <div className="flex flex-wrap gap-2">
+                <span className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#1C0D0A] text-white border border-[#1C0D0A] inline-block shadow-xs">
+                  {variant.weight}
+                </span>
               </div>
             </div>
           )}

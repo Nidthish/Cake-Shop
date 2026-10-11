@@ -11,19 +11,12 @@
     "reviewCount": 38,
     "badge": "Bento Favorite",
     "description": "Adorable minimalist Korean white heart bento cake piped with delicate red micro-hearts and elegant Happy Birthday cursive calligraphy.",
-    "minPrice": 399,
+    "minPrice": 499,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 399,
-        "originalPrice": 450,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 499,
-        "originalPrice": 550,
-        "offer": ""
+        "originalPrice": 499
       }
     ],
     "ingredients": [
@@ -46,19 +39,12 @@
     "reviewCount": 42,
     "badge": "Best Seller",
     "description": "Rich chocolate fudge sponge loaded with Ferrero Rocher halves, glossy chocolate drizzle, and shimmering golden edible pearls.",
-    "minPrice": 450,
+    "minPrice": 550,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 450,
-        "originalPrice": 500,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 550,
-        "originalPrice": 620,
-        "offer": ""
+        "originalPrice": 550
       }
     ],
     "ingredients": [
@@ -81,19 +67,12 @@
     "reviewCount": 29,
     "badge": "Trending",
     "description": "Decadent dark chocolate sponge layered with creamy Nutella spread, toasted roasted nuts, and a golden Happy Birthday topper.",
-    "minPrice": 420,
+    "minPrice": 520,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 420,
-        "originalPrice": 480,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 520,
-        "originalPrice": 580,
-        "offer": ""
+        "originalPrice": 520
       }
     ],
     "ingredients": [
@@ -116,19 +95,12 @@
     "reviewCount": 35,
     "badge": "Chef's Special",
     "description": "Smooth vanilla cream bento cake topped with rich Belgian Lotus Biscoff speculoos spread drip and a whole crunchy Biscoff biscuit.",
-    "minPrice": 440,
+    "minPrice": 540,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 440,
-        "originalPrice": 499,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 540,
-        "originalPrice": 600,
-        "offer": ""
+        "originalPrice": 540
       }
     ],
     "ingredients": [
@@ -151,19 +123,12 @@
     "reviewCount": 46,
     "badge": "Romantic Pick",
     "description": "Sweet love confession bento cake with cute hand-drawn couple illustration, red hearts, and surprise I Love U message ribbon.",
-    "minPrice": 430,
+    "minPrice": 530,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 430,
-        "originalPrice": 480,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 530,
-        "originalPrice": 590,
-        "offer": ""
+        "originalPrice": 530
       }
     ],
     "ingredients": [
@@ -186,19 +151,12 @@
     "reviewCount": 31,
     "badge": "Couple Favorite",
     "description": "Charming birthday bento cake featuring an adorable hugging couple illustration, red heart piping, and sparkling golden border.",
-    "minPrice": 420,
+    "minPrice": 520,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 420,
-        "originalPrice": 470,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 520,
-        "originalPrice": 580,
-        "offer": ""
+        "originalPrice": 520
       }
     ],
     "ingredients": [
@@ -221,19 +179,12 @@
     "reviewCount": 27,
     "badge": "Pure Chocolate",
     "description": "Silky chocolate truffle bento cake with an artisanal spiral swirl top, garnished with crunchy roasted hazelnuts and cocoa drizzle.",
-    "minPrice": 410,
+    "minPrice": 510,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 410,
-        "originalPrice": 460,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 510,
-        "originalPrice": 570,
-        "offer": ""
+        "originalPrice": 510
       }
     ],
     "ingredients": [
@@ -256,19 +207,12 @@
     "reviewCount": 33,
     "badge": "Cute Aesthetic",
     "description": "Pastel purple and blush pink square bento cake bordered with piped rosettes, gold sugar pearls, and delicate 3D flutter butterflies.",
-    "minPrice": 430,
+    "minPrice": 530,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 430,
-        "originalPrice": 490,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 530,
-        "originalPrice": 590,
-        "offer": ""
+        "originalPrice": 530
       }
     ],
     "ingredients": [
@@ -291,19 +235,12 @@
     "reviewCount": 24,
     "badge": "Nutty Delight",
     "description": "Moist chocolate cake layered with chocolate ganache piping, crunchy roasted praline nuts, and a mirror gold Happy Birthday disc.",
-    "minPrice": 420,
+    "minPrice": 520,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 420,
-        "originalPrice": 470,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 520,
-        "originalPrice": 580,
-        "offer": ""
+        "originalPrice": 520
       }
     ],
     "ingredients": [
@@ -326,19 +263,12 @@
     "reviewCount": 40,
     "badge": "Overload Special",
     "description": "Festive celebration bento loaded with farm-fresh strawberries, mini chocolate bar, Oreo biscuit, marshmallow, and roasted peanuts.",
-    "minPrice": 460,
+    "minPrice": 560,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 460,
-        "originalPrice": 520,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 560,
-        "originalPrice": 630,
-        "offer": ""
+        "originalPrice": 560
       }
     ],
     "ingredients": [
@@ -361,19 +291,12 @@
     "reviewCount": 36,
     "badge": "Pastel Dream",
     "description": "Dreamy pink and white ombre textured bento cake piped with Happy Birthday To Me lettering, sugar pearls, and golden-edged butterflies.",
-    "minPrice": 420,
+    "minPrice": 520,
     "variants": [
       {
-        "weight": "350g Bento",
-        "price": 420,
-        "originalPrice": 480,
-        "offer": "Free Candle & Spoon"
-      },
-      {
-        "weight": "500g Bento",
+        "weight": "500g",
         "price": 520,
-        "originalPrice": 580,
-        "offer": ""
+        "originalPrice": 520
       }
     ],
     "ingredients": [
@@ -401,20 +324,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2599,
-        "originalPrice": 2899,
+        "originalPrice": 2599,
         "offer": "Tier Cake Special"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3599,
-        "originalPrice": 3999,
-        "offer": ""
-      },
-      {
-        "weight": "4kg (3-Tier)",
-        "price": 4699,
-        "originalPrice": 5199,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -442,20 +353,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2899,
-        "originalPrice": 3200,
+        "originalPrice": 2899,
         "offer": "Royal Monogram"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3899,
-        "originalPrice": 4300,
-        "offer": ""
-      },
-      {
-        "weight": "4kg (3-Tier)",
-        "price": 4999,
-        "originalPrice": 5500,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -483,20 +382,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2699,
-        "originalPrice": 2999,
+        "originalPrice": 2699,
         "offer": "Fresh Floral Special"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3699,
-        "originalPrice": 4099,
-        "offer": ""
-      },
-      {
-        "weight": "4kg (3-Tier)",
-        "price": 4799,
-        "originalPrice": 5299,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -524,20 +411,8 @@
       {
         "weight": "1.5kg Tall",
         "price": 1999,
-        "originalPrice": 2299,
+        "originalPrice": 1999,
         "offer": "Fresh Floral"
-      },
-      {
-        "weight": "2kg (2-Tier)",
-        "price": 2499,
-        "originalPrice": 2799,
-        "offer": ""
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3499,
-        "originalPrice": 3899,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -565,20 +440,8 @@
       {
         "weight": "1.5kg Tall",
         "price": 2199,
-        "originalPrice": 2499,
+        "originalPrice": 2199,
         "offer": "Silhouette Topper"
-      },
-      {
-        "weight": "2kg (2-Tier)",
-        "price": 2699,
-        "originalPrice": 2999,
-        "offer": ""
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3699,
-        "originalPrice": 4099,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -606,20 +469,8 @@
       {
         "weight": "2.5kg (2-Tier)",
         "price": 3199,
-        "originalPrice": 3599,
+        "originalPrice": 3199,
         "offer": "Couture Ruffle Art"
-      },
-      {
-        "weight": "3.5kg (2-Tier)",
-        "price": 4299,
-        "originalPrice": 4799,
-        "offer": ""
-      },
-      {
-        "weight": "5kg (3-Tier)",
-        "price": 5899,
-        "originalPrice": 6499,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -647,20 +498,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2799,
-        "originalPrice": 3099,
+        "originalPrice": 2799,
         "offer": "Stage Ready Special"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3799,
-        "originalPrice": 4199,
-        "offer": ""
-      },
-      {
-        "weight": "4kg (3-Tier)",
-        "price": 4899,
-        "originalPrice": 5399,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -688,14 +527,8 @@
       {
         "weight": "3.5kg (Floating Tier)",
         "price": 4499,
-        "originalPrice": 4999,
+        "originalPrice": 4499,
         "offer": "Acrylic Spacer Included"
-      },
-      {
-        "weight": "5kg (3-Tier Floating)",
-        "price": 5999,
-        "originalPrice": 6699,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -723,14 +556,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2299,
-        "originalPrice": 2599,
+        "originalPrice": 2299,
         "offer": "Topper Included"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3299,
-        "originalPrice": 3699,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -758,14 +585,8 @@
       {
         "weight": "3kg (3-Tier)",
         "price": 3499,
-        "originalPrice": 3899,
+        "originalPrice": 3499,
         "offer": "Full Toy Set"
-      },
-      {
-        "weight": "4kg (3-Tier)",
-        "price": 4499,
-        "originalPrice": 4999,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -793,14 +614,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2699,
-        "originalPrice": 2999,
+        "originalPrice": 2699,
         "offer": "Traditional Special"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3699,
-        "originalPrice": 4099,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -828,14 +643,8 @@
       {
         "weight": "3kg (3-Tier)",
         "price": 3399,
-        "originalPrice": 3799,
+        "originalPrice": 3399,
         "offer": "Royal Crown Included"
-      },
-      {
-        "weight": "4kg (3-Tier)",
-        "price": 4399,
-        "originalPrice": 4899,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -863,14 +672,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2599,
-        "originalPrice": 2899,
+        "originalPrice": 2599,
         "offer": "Complete Animal Set"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3599,
-        "originalPrice": 3999,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -898,14 +701,8 @@
       {
         "weight": "3kg (Floating Tier)",
         "price": 3299,
-        "originalPrice": 3699,
+        "originalPrice": 3299,
         "offer": "LED Spacer Included"
-      },
-      {
-        "weight": "4kg (Floating Tier)",
-        "price": 4299,
-        "originalPrice": 4799,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -933,14 +730,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2599,
-        "originalPrice": 2899,
+        "originalPrice": 2599,
         "offer": "Cocomelon Figures"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3599,
-        "originalPrice": 3999,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -968,14 +759,8 @@
       {
         "weight": "1.5kg Tall",
         "price": 1899,
-        "originalPrice": 2199,
+        "originalPrice": 1899,
         "offer": "Smash Cake Friendly"
-      },
-      {
-        "weight": "2kg (2-Tier)",
-        "price": 2399,
-        "originalPrice": 2699,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1003,14 +788,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2599,
-        "originalPrice": 2899,
+        "originalPrice": 2599,
         "offer": "Wild One Special"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3599,
-        "originalPrice": 3999,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1038,14 +817,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2499,
-        "originalPrice": 2799,
+        "originalPrice": 2499,
         "offer": "Handcrafted Dolls"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3499,
-        "originalPrice": 3899,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1073,14 +846,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2499,
-        "originalPrice": 2799,
+        "originalPrice": 2499,
         "offer": "Theme Accents"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3499,
-        "originalPrice": 3899,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1108,14 +875,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2699,
-        "originalPrice": 2999,
+        "originalPrice": 2699,
         "offer": "Golden Tiara"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3699,
-        "originalPrice": 4099,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1143,14 +904,8 @@
       {
         "weight": "1.5kg",
         "price": 1799,
-        "originalPrice": 2099,
+        "originalPrice": 1799,
         "offer": "Low Sugar Friendly"
-      },
-      {
-        "weight": "2kg",
-        "price": 2299,
-        "originalPrice": 2599,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1178,14 +933,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2399,
-        "originalPrice": 2699,
+        "originalPrice": 2399,
         "offer": "Elephant Topper"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3399,
-        "originalPrice": 3799,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1213,14 +962,8 @@
       {
         "weight": "3kg (Floating Tier)",
         "price": 3399,
-        "originalPrice": 3799,
+        "originalPrice": 3399,
         "offer": "LED Spacer Included"
-      },
-      {
-        "weight": "4kg (Floating Tier)",
-        "price": 4399,
-        "originalPrice": 4899,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1248,14 +991,8 @@
       {
         "weight": "3kg (Floating Tier)",
         "price": 3299,
-        "originalPrice": 3699,
+        "originalPrice": 3299,
         "offer": "Fairy Lights Included"
-      },
-      {
-        "weight": "4kg (Floating Tier)",
-        "price": 4299,
-        "originalPrice": 4799,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1283,14 +1020,8 @@
       {
         "weight": "2kg (2-Tier)",
         "price": 2499,
-        "originalPrice": 2799,
+        "originalPrice": 2499,
         "offer": "Peppa & George Figures"
-      },
-      {
-        "weight": "3kg (2-Tier)",
-        "price": 3499,
-        "originalPrice": 3899,
-        "offer": ""
       }
     ],
     "ingredients": [
@@ -1318,14 +1049,8 @@
       {
         "weight": "1.5kg",
         "price": 2199,
-        "originalPrice": 2499,
+        "originalPrice": 2199,
         "offer": "Dino Figurines"
-      },
-      {
-        "weight": "2kg (2-Tier)",
-        "price": 2699,
-        "originalPrice": 2999,
-        "offer": ""
       }
     ],
     "ingredients": [
