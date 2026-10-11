@@ -1238,51 +1238,63 @@ export default function AdminPage() {
 
             {/* Sales Stat Cards Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-              <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
-                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Realized Revenue
-                </span>
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+                    Realized Revenue
+                  </span>
+                  <span className="text-base">💰</span>
+                </div>
                 <div className="text-xl sm:text-3xl font-extrabold text-[#802B52] truncate">
                   ₹{salesStats.totalRevenue.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-emerald-600 font-medium">
-                  ✓ Delivered or GPay / Online Paid
+                <p className="text-[10px] sm:text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md inline-block border border-emerald-200">
+                  ✓ Delivered or GPay Paid
                 </p>
               </div>
 
-              <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
-                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Total Orders
-                </span>
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+                    Total Orders
+                  </span>
+                  <span className="text-base">📦</span>
+                </div>
                 <div className="text-xl sm:text-3xl font-extrabold text-[#2A082C]">
                   {salesStats.totalCount} <span className="text-xs sm:text-base font-normal text-gray-500">Orders</span>
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-medium">
-                  📦 Placed in period
+                <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-semibold bg-[#FAF5EE] px-2 py-0.5 rounded-md inline-block border border-[#E6DBCE]">
+                  Placed in period
                 </p>
               </div>
 
-              <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
-                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Avg Realized Value
-                </span>
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+                    Avg Realized Value
+                  </span>
+                  <span className="text-base">🎂</span>
+                </div>
                 <div className="text-xl sm:text-3xl font-extrabold text-[#962854] truncate">
                   ₹{salesStats.avgOrderValue.toFixed(0)}
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-medium">
-                  🎂 Per realized order
+                <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-semibold bg-[#FAF5EE] px-2 py-0.5 rounded-md inline-block border border-[#E6DBCE]">
+                  Per realized order
                 </p>
               </div>
 
-              <div className="bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm space-y-1 sm:space-y-2">
-                <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                  Revenue Orders
-                </span>
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+                    Revenue Orders
+                  </span>
+                  <span className="text-base">✅</span>
+                </div>
                 <div className="text-xl sm:text-3xl font-extrabold text-emerald-600">
                   {salesStats.paidOrders} / {salesStats.totalCount}
                 </div>
-                <p className="text-[11px] text-emerald-700 font-medium">
-                  ✅ Delivered / GPay Paid
+                <p className="text-[10px] sm:text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md inline-block border border-emerald-200">
+                  Delivered / Paid
                 </p>
               </div>
             </div>
@@ -1446,14 +1458,31 @@ export default function AdminPage() {
             ) : (
               <>
                 {/* 📱 MOBILE CARD VIEW FOR PRODUCTS (Visible on screens < 768px) */}
-                <div className="block md:hidden space-y-3">
+                <div className="block md:hidden space-y-3.5">
                   {filteredProducts.map((p) => (
                     <div
                       key={p.id}
-                      className="bg-[#FAF5EE]/60 border border-[#E6DBCE] rounded-xl p-3.5 space-y-3 transition-all hover:bg-white hover:shadow-md"
+                      className="bg-white border border-[#E6DBCE] rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-sm hover:shadow-md hover:border-[#802B52]/40 transition-all"
                     >
-                      <div className="flex items-start gap-3">
-                        <div className="w-14 h-14 rounded-lg overflow-hidden border border-[#E6DBCE] bg-white shrink-0">
+                      {/* Card Top Header */}
+                      <div className="flex items-center justify-between pb-3 border-b border-[#E6DBCE]/70">
+                        <span className="font-mono text-xs font-bold text-[#802B52] bg-[#FAF5EE] border border-[#E6DBCE] px-2.5 py-1 rounded-lg">
+                          {p.productCode}
+                        </span>
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
+                            p.isActive
+                              ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                              : "bg-red-50 text-red-800 border border-red-200"
+                          }`}
+                        >
+                          {p.isActive ? "● Active" : "○ Paused"}
+                        </span>
+                      </div>
+
+                      {/* Product Info with Image */}
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-16 h-16 rounded-xl overflow-hidden border border-[#E6DBCE] bg-[#FAF5EE] shrink-0 shadow-inner">
                           {p.image ? (
                             /* eslint-disable-next-line @next/next/no-img-element */
                             <img
@@ -1465,67 +1494,57 @@ export default function AdminPage() {
                               }}
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-xl">🎂</div>
+                            <div className="w-full h-full flex items-center justify-center text-2xl">🎂</div>
                           )}
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-1 mb-0.5">
-                            <span className="font-mono text-[11px] font-bold text-[#802B52] bg-[#802B52]/10 px-1.5 py-0.5 rounded">
-                              {p.productCode}
-                            </span>
-                            <span
-                              className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                                p.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {p.isActive ? "Active" : "Paused"}
-                            </span>
-                          </div>
-
-                          <h3 className="font-bold text-sm text-[#2D2327] truncate">{p.name}</h3>
-                          <p className="text-[11px] font-medium text-[#5B1E38] truncate">
+                          <h3 className="font-bold text-sm sm:text-base text-[#2D2327] truncate leading-snug">{p.name}</h3>
+                          <p className="text-xs font-medium text-[#802B52] truncate mt-0.5">
                             {p.categoryName || p.category || "Cakes"}
                           </p>
                         </div>
                       </div>
 
                       {/* Variants & Prices Chips */}
-                      <div className="flex flex-wrap gap-1 pt-1 border-t border-[#E6DBCE]/60">
-                        {(p.variants || []).map((v, i) => (
-                          <span
-                            key={i}
-                            className="bg-white border border-[#E6DBCE] text-[#2D2327] font-semibold px-2 py-0.5 rounded text-[10px]"
-                          >
-                            {v.name}: ₹{v.price}
-                          </span>
-                        ))}
+                      <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-2.5">
+                        <p className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider mb-1.5">Variants &amp; Pricing</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(p.variants || []).map((v, i) => (
+                            <span
+                              key={i}
+                              className="bg-white border border-[#E6DBCE] text-[#2D2327] font-semibold px-2 py-0.5 rounded-lg text-[11px] shadow-2xs"
+                            >
+                              {v.name}: <strong className="text-[#802B52]">₹{v.price}</strong>
+                            </span>
+                          ))}
+                        </div>
                       </div>
 
-                      {/* Mobile Action Controls */}
-                      <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#E6DBCE]">
+                      {/* Card Footer Actions */}
+                      <div className="flex items-center justify-between gap-2 pt-3 border-t border-[#E6DBCE]/70">
                         <button
                           onClick={() => handleToggleSales(p.id, p.isActive)}
-                          className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-colors ${
+                          className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer shadow-sm ${
                             p.isActive
-                              ? "border-amber-400 text-amber-800 bg-amber-50 active:bg-amber-100"
-                              : "border-green-500 text-green-700 bg-green-50 active:bg-green-100"
+                              ? "border-amber-300 text-amber-900 bg-amber-50 hover:bg-amber-100 active:bg-amber-200"
+                              : "border-emerald-300 text-emerald-800 bg-emerald-50 hover:bg-emerald-100 active:bg-emerald-200"
                           }`}
                         >
-                          {p.isActive ? "Pause Sales" : "Resume Sales"}
+                          {p.isActive ? "⏸ Pause Sales" : "▶ Resume Sales"}
                         </button>
 
                         {adminUser?.role === "SUPERADMIN" && (
                           <div className="flex items-center gap-1.5">
                             <button
                               onClick={() => handleEditClick(p)}
-                              className="px-3 py-2 rounded-lg text-xs font-bold bg-[#802B52] text-white active:bg-[#682242]"
+                              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#802B52] hover:bg-[#962854] text-white transition-all shadow-sm cursor-pointer"
                             >
-                              Edit
+                              ✏️ Edit
                             </button>
                             <button
                               onClick={() => handleDeleteProduct(p.id, p.name)}
-                              className="px-2.5 py-2 rounded-lg text-xs font-bold text-red-600 bg-red-50 border border-red-200 active:bg-red-100"
+                              className="px-3 py-2 rounded-xl text-xs font-bold text-red-600 bg-red-50 border border-red-200 hover:bg-red-100 transition-all cursor-pointer shadow-sm"
                               title="Delete"
                             >
                               🗑️
@@ -1789,64 +1808,67 @@ export default function AdminPage() {
             ) : (
               <>
                 {/* 📱 MOBILE CARD VIEW FOR ORDERS (Visible on screens < 768px) */}
-                <div className="block md:hidden space-y-3">
+                <div className="block md:hidden space-y-3.5">
                   {orders.map((o) => (
                     <div
                       key={o.id}
-                      className="bg-[#FAF5EE]/60 border border-[#E6DBCE] rounded-xl p-4 space-y-3 hover:bg-white hover:shadow-md transition-all"
+                      className="bg-white border border-[#E6DBCE] rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-sm hover:shadow-md hover:border-[#802B52]/40 transition-all"
                     >
-                      <div className="flex items-center justify-between pb-2 border-b border-[#E6DBCE]">
-                        <div>
-                          <span className="font-mono text-xs font-bold text-[#802B52] bg-[#802B52]/10 px-2 py-0.5 rounded">
-                            {o.orderNumber}
+                      {/* Card Top Header */}
+                      <div className="flex items-center justify-between pb-3 border-b border-[#E6DBCE]/70">
+                        <span className="font-mono text-xs font-bold text-[#802B52] bg-[#FAF5EE] border border-[#E6DBCE] px-2.5 py-1 rounded-lg">
+                          {o.orderNumber}
+                        </span>
+                        <div className="text-right">
+                          <span className="text-[10px] text-[#7A6B72] block font-medium uppercase">Total</span>
+                          <span className="font-extrabold text-base text-[#802B52]">
+                            ₹{o.totalAmount}
                           </span>
-                        </div>
-                        <div className="font-extrabold text-sm text-[#802B52]">
-                          ₹{o.totalAmount}
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div>
-                          <p className="text-[10px] uppercase font-bold text-[#7A6B72]">Customer</p>
-                          <p className="font-bold text-[#2D2327]">{o.customerName}</p>
+                      {/* Customer & Delivery Schedule Grid */}
+                      <div className="grid grid-cols-2 gap-2.5 text-xs">
+                        <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-2.5">
+                          <p className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider">👤 Customer</p>
+                          <p className="font-bold text-[#2D2327] mt-0.5 truncate">{o.customerName}</p>
                           {o.customerPhone && (
-                            <a href={`tel:${o.customerPhone}`} className="text-[#802B52] font-medium text-[11px] underline block mt-0.5">
+                            <a href={`tel:${o.customerPhone}`} className="text-[#802B52] font-semibold text-[11px] hover:underline block mt-0.5">
                               📞 {o.customerPhone}
                             </a>
                           )}
-                          <p className="text-[10px] text-[#7A6B72] mt-1">{o.streetAddress}, {o.city} - {o.pincode}</p>
+                          <p className="text-[10px] text-[#7A6B72] mt-1 line-clamp-2">{o.streetAddress}, {o.city} - {o.pincode}</p>
                         </div>
 
-                        <div>
-                          <p className="text-[10px] uppercase font-bold text-[#7A6B72]">Schedule</p>
-                          <p className="font-semibold text-[#5B1E38]">{o.deliveryDate}</p>
+                        <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-2.5">
+                          <p className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider">📅 Schedule</p>
+                          <p className="font-bold text-[#5B1E38] mt-0.5">{o.deliveryDate}</p>
                           <p className="text-[11px] font-bold text-[#802B52] mt-0.5">⏰ {o.deliveryTimeSlot}</p>
                         </div>
                       </div>
 
-                      {/* Items with Egg status, Offers & Cake Messages */}
-                      <div className="bg-white p-2.5 rounded-lg border border-[#E6DBCE] space-y-2">
-                        <p className="text-[10px] uppercase font-bold text-[#7A6B72]">Items Ordered ({o.items?.length || 0})</p>
+                      {/* Items Ordered Section */}
+                      <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-3 space-y-2">
+                        <p className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider">Items Ordered ({o.items?.length || 0})</p>
                         {o.items?.map((i: any, idx: number) => (
-                          <div key={idx} className="p-2 bg-[#FAF5EE] rounded-lg border border-[#E6DBCE]/80 space-y-1 text-xs">
-                            <div className="font-bold text-[#2D2327] flex justify-between">
-                              <span><span className="text-[#802B52]">{i.quantity}x</span> {i.productName} ({i.variantName})</span>
-                              <span className="text-[#802B52] font-semibold">₹{i.lineTotal || (i.unitPrice * i.quantity)}</span>
+                          <div key={idx} className="p-2.5 bg-white rounded-lg border border-[#E6DBCE]/70 space-y-1 text-xs shadow-2xs">
+                            <div className="font-bold text-[#2D2327] flex justify-between items-center">
+                              <span><span className="text-[#802B52] font-extrabold">{i.quantity}x</span> {i.productName} ({i.variantName})</span>
+                              <span className="text-[#802B52] font-bold">₹{i.lineTotal || (i.unitPrice * i.quantity)}</span>
                             </div>
                             <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
-                              <span className={`px-1.5 py-0.5 rounded font-bold ${i.isEggless ? "bg-emerald-100 text-emerald-800 border border-emerald-300" : "bg-amber-100 text-amber-900 border border-amber-200"}`}>
+                              <span className={`px-2 py-0.5 rounded-md font-bold ${i.isEggless ? "bg-emerald-50 text-emerald-800 border border-emerald-200" : "bg-amber-50 text-amber-900 border border-amber-200"}`}>
                                 {i.isEggless ? "🌱 Eggless" : "🥚 With Egg"}
                               </span>
                               {i.offer && (
-                                <span className="px-1.5 py-0.5 rounded bg-amber-50 border border-amber-300 text-amber-900 font-bold">
+                                <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-300 text-amber-900 font-bold">
                                   🎁 {i.offer}
                                 </span>
                               )}
                             </div>
                             {i.cakeMessage && (
-                              <div className="text-[11px] text-[#802B52] italic font-medium">
-                                🎂 Message: &quot;{i.cakeMessage}&quot;
+                              <div className="text-[11px] text-[#802B52] italic font-medium bg-[#FAF5EE]/60 px-2 py-1 rounded border border-[#E6DBCE]/40">
+                                🎂 &quot;{i.cakeMessage}&quot;
                               </div>
                             )}
                           </div>
@@ -1854,15 +1876,15 @@ export default function AdminPage() {
                       </div>
 
                       {/* Delivery Rider & OTP Details */}
-                      <div className="p-2.5 bg-white rounded-lg border border-[#E6DBCE] space-y-2 text-xs">
+                      <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-3 space-y-2 text-xs">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-[#7A6B72]">Delivery Partner:</span>
+                          <span className="text-[11px] font-bold text-[#7A6B72]">🛵 Delivery Partner:</span>
                           {o.status === "DELIVERED" ? (
-                            <span className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                            <span className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
                               ✅ Delivered {o.deliveryPartnerName ? `by ${o.deliveryPartnerName}` : ""}
                             </span>
                           ) : o.deliveryPartnerName ? (
-                            <span className="text-xs font-bold text-[#5B1E38] bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+                            <span className="text-xs font-bold text-[#5B1E38] bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
                               🛵 {o.status === "OUT_FOR_DELIVERY" ? "Out for Delivery: " : ""}{o.deliveryPartnerName}
                             </span>
                           ) : (
@@ -1872,34 +1894,34 @@ export default function AdminPage() {
 
                         {o.deliveryPartnerPhone && (
                           <div className="text-[11px] text-[#7A6B72]">
-                            Phone: <span className="font-semibold text-[#2D2327]">{o.deliveryPartnerPhone}</span>
+                            Phone: <a href={`tel:${o.deliveryPartnerPhone}`} className="font-semibold text-[#2D2327] hover:underline">{o.deliveryPartnerPhone}</a>
                           </div>
                         )}
 
                         {o.deliveredAt && (
-                          <div className="text-[10px] text-emerald-700">
+                          <div className="text-[10px] text-emerald-700 font-medium">
                             Delivered at: {new Date(o.deliveredAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
                           </div>
                         )}
 
                         {o.deliveryOtp && (
-                          <div className="flex items-center justify-between text-xs pt-1 border-t border-[#E6DBCE]/60">
-                            <span className="text-[#7A6B72]">Delivery OTP:</span>
-                            <span className="font-mono font-bold text-[#802B52] bg-[#FAF5EE] border border-[#E6DBCE] px-2 py-0.5 rounded">
+                          <div className="flex items-center justify-between text-xs pt-1.5 border-t border-[#E6DBCE]/60">
+                            <span className="text-[#7A6B72] font-medium">Delivery OTP:</span>
+                            <span className="font-mono font-bold text-[#802B52] bg-white border border-[#E6DBCE] px-2.5 py-0.5 rounded-lg shadow-2xs">
                               {o.deliveryOtp} {o.deliveryOtpVerified && "✓"}
                             </span>
                           </div>
                         )}
                       </div>
 
-                      {/* Status selector or badge */}
-                      <div className="flex items-center justify-between pt-1 border-t border-[#E6DBCE]">
-                        <span className="text-xs font-bold uppercase text-[#7A6B72]">Status:</span>
+                      {/* Card Footer / Status Action */}
+                      <div className="flex items-center justify-between pt-3 border-t border-[#E6DBCE]/70">
+                        <span className="text-xs font-bold uppercase text-[#7A6B72]">Order Status:</span>
                         {adminUser?.role === "SUPERADMIN" ? (
                           <select
                             value={o.status}
                             onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
-                            className="px-2.5 py-1.5 rounded-lg border border-[#E6DBCE] bg-white text-xs font-semibold focus:outline-none focus:border-[#802B52]"
+                            className="px-3 py-1.5 rounded-xl border border-[#E6DBCE] bg-white text-xs font-bold text-[#2D2327] focus:outline-none focus:border-[#802B52] shadow-sm cursor-pointer"
                           >
                             <option value="PENDING">PENDING</option>
                             <option value="CONFIRMED">CONFIRMED</option>
@@ -1909,7 +1931,7 @@ export default function AdminPage() {
                             <option value="CANCELLED">CANCELLED</option>
                           </select>
                         ) : (
-                          <span className="inline-block px-2.5 py-1 rounded text-xs font-bold bg-[#2A082C] text-[#E6C184]">
+                          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#802B52] text-white shadow-sm">
                             {o.status}
                           </span>
                         )}
@@ -2058,32 +2080,45 @@ export default function AdminPage() {
             </div>
 
             {/* 📱 MOBILE CARD VIEW FOR ADMIN & RIDER USERS */}
-            <div className="block md:hidden space-y-3">
+            <div className="block md:hidden space-y-3.5">
               {adminUsersList.map((u) => (
-                <div key={u.id} className="bg-[#FAF5EE]/60 border border-[#E6DBCE] rounded-xl p-3.5 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-sm text-[#2D2327]">{u.fullName}</span>
+                <div
+                  key={u.id}
+                  className="bg-white border border-[#E6DBCE] rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-sm hover:shadow-md hover:border-[#802B52]/40 transition-all"
+                >
+                  {/* Card Top Header */}
+                  <div className="flex items-center justify-between pb-3 border-b border-[#E6DBCE]/70">
+                    <span className="font-bold text-sm sm:text-base text-[#2D2327] truncate">{u.fullName}</span>
                     <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
                         u.role === "SUPERADMIN"
-                          ? "bg-purple-100 text-purple-800"
+                          ? "bg-purple-100 text-purple-800 border border-purple-200"
                           : u.role === "RIDER"
                           ? "bg-amber-100 text-amber-900 border border-amber-300"
-                          : "bg-blue-100 text-blue-800"
+                          : "bg-blue-100 text-blue-800 border border-blue-200"
                       }`}
                     >
                       {u.role === "SUPERADMIN" ? "👑 Super Admin" : u.role === "RIDER" ? "🛵 Delivery Rider" : "🛡️ Admin"}
                     </span>
                   </div>
-                  <p className="font-mono text-xs text-[#802B52]">{u.email}</p>
-                  {u.phone && (
-                    <p className="text-xs text-[#5C524E]">
-                      📞 Phone: <span className="font-semibold text-[#1C0D0A]">{u.phone}</span>
-                    </p>
-                  )}
-                  <div className="flex items-center justify-between text-[11px] text-[#7A6B72] pt-1 border-t border-[#E6DBCE]">
-                    <span>Status: <strong className="text-green-700">Active</strong></span>
-                    <span>Created: {new Date(u.createdAt).toLocaleDateString("en-IN")}</span>
+
+                  {/* Card Contact Details */}
+                  <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-3 space-y-1.5 text-xs">
+                    <p className="font-mono text-xs font-semibold text-[#802B52]">{u.email}</p>
+                    {u.phone && (
+                      <p className="text-xs text-[#5C524E]">
+                        📞 Phone: <a href={`tel:${u.phone}`} className="font-semibold text-[#1C0D0A] hover:underline">{u.phone}</a>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="flex items-center justify-between text-xs text-[#7A6B72] pt-3 border-t border-[#E6DBCE]/70">
+                    <span className="inline-flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      <span className="font-semibold text-emerald-800">Active</span>
+                    </span>
+                    <span className="font-medium">Created: {new Date(u.createdAt).toLocaleDateString("en-IN")}</span>
                   </div>
                 </div>
               ))}
