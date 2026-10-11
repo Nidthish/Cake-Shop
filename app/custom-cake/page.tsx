@@ -37,16 +37,14 @@ export default function CustomCakePage() {
 
       <div className="bg-[#FAF3EC] rounded-3xl border border-[#E6C184]/40 p-8 sm:p-12 text-center">
         <p className="text-sm text-[#5C524E] mb-1">Custom cakes require at least <strong>24 hours</strong> notice.</p>
-        <p className="text-sm text-[#5C524E] mb-6">Chat with our team on WhatsApp to start designing, or browse our ready-made collections.</p>
+        <p className="text-sm text-[#5C524E] mb-6">Contact our master pastry chefs to start designing, or browse our ready-made collections.</p>
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="https://wa.me/919876543210?text=Hi!%20I%27d%20like%20to%20design%20a%20custom%20cake."
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/contact-us"
             className="btn-primary inline-flex items-center gap-2 py-3.5 px-8 text-xs font-bold uppercase tracking-wider"
           >
-            Start on WhatsApp
-          </a>
+            Contact Cake Studio
+          </Link>
           <Link href="/cakes" className="btn-secondary inline-flex items-center gap-2 py-3.5 px-7 text-xs font-bold uppercase tracking-wider">
             Browse Ready-Made Cakes
           </Link>

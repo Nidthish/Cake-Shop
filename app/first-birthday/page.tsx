@@ -10,6 +10,14 @@ export const metadata: Metadata = {
     "Baby-friendly low-sugar smash cakes, 2-tier safari themes, and princess crown milestone cakes.",
 };
 
+const BIRTHDAY_PILLS = [
+  { label: "Safari & Jungle", keyword: "safari" },
+  { label: "Prince & Crown", keyword: "crown" },
+  { label: "Fairy & Butterfly", keyword: "fairy" },
+  { label: "Teddy Bear & Toys", keyword: "bear" },
+  { label: "LED Floating Tier", keyword: "floating" },
+];
+
 export default async function Page() {
   const allProducts = await getDbProducts();
   const products = getProductsByCategory("first-birthday", allProducts);
@@ -33,7 +41,7 @@ export default async function Page() {
         </div>
       </section>
 
-      <CategoryPageClient products={products} />
+      <CategoryPageClient products={products} pills={BIRTHDAY_PILLS} />
     </>
   );
 }

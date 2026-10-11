@@ -1,31 +1,80 @@
 /**
  * Lollipop Bakery - High-Quality Realistic Product Card Images
- * Replaces painted/vector illustrations on product item cards with photorealistic bakery photos.
+ * Provides photorealistic bakery photos & internet fallback images from Unsplash.
  */
 
-export function getProductCardImage(product: {
+export interface ProductLike {
   id?: string;
   name?: string;
   category?: string;
   subCategory?: string;
   categoryName?: string;
   image?: string;
-}): string {
-  if (
-    product.image &&
-    (product.image.startsWith("data:") ||
-      product.image.startsWith("http://") ||
-      product.image.startsWith("https://") ||
-      product.image.startsWith("/"))
-  ) {
-    return product.image;
-  }
+}
 
+/**
+ * Returns a curated photorealistic Unsplash dummy internet image for any cake or bakery item.
+ */
+export function getDummyInternetImage(product: ProductLike): string {
   const name = (product.name || "").toLowerCase();
   const id = (product.id || "").toLowerCase();
   const cat = (product.category || product.categoryName || product.subCategory || "").toLowerCase();
 
-  // 1. SNACKS & BAKERY ITEMS
+  // 1. BENTO CAKES
+  if (cat.includes("bento") || id.startsWith("bento-") || name.includes("bento")) {
+    if (name.includes("white") || name.includes("heart") || name.includes("minimalist")) {
+      return "https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=600&q=80"; // Aesthetic white heart cake
+    }
+    if (name.includes("biscoff") || name.includes("lotus") || name.includes("caramel")) {
+      return "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=600&q=80"; // Caramel biscoff drip bento
+    }
+    if (name.includes("lavender") || name.includes("butterfly") || name.includes("pink") || name.includes("floral")) {
+      return "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=600&q=80"; // Pastel butterfly floral cake
+    }
+    if (name.includes("strawberry") || name.includes("berry") || name.includes("fruit")) {
+      return "https://images.unsplash.com/photo-1611293388250-580b08c4a145?auto=format&fit=crop&w=600&q=80"; // Chocolate strawberry bento
+    }
+    if (name.includes("love") || name.includes("couple") || name.includes("romantic")) {
+      return "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?auto=format&fit=crop&w=600&q=80"; // Romantic celebration cake
+    }
+    // Default Bento: Chocolate / Nutella drip
+    return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80";
+  }
+
+  // 2. WEDDING CAKES
+  if (cat.includes("wedding") || id.startsWith("wedding-") || name.includes("wedding") || name.includes("tier")) {
+    if (name.includes("rose") || name.includes("blush") || name.includes("crown") || name.includes("crimson")) {
+      return "https://images.unsplash.com/photo-1525253086316-d0c936c81488?auto=format&fit=crop&w=600&q=80"; // Romantic rose tiered wedding cake
+    }
+    if (name.includes("floating") || name.includes("grand") || name.includes("luxury")) {
+      return "https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=600&q=80"; // Multi-tier architectural luxury cake
+    }
+    if (name.includes("orchid") || name.includes("blue") || name.includes("lavender")) {
+      return "https://images.unsplash.com/photo-1535254973040-607b474cb50d?auto=format&fit=crop&w=600&q=80"; // Elegant floral tiered cake
+    }
+    // Default Wedding: Grand multi-tier white floral cake
+    return "https://images.unsplash.com/photo-1535254973040-607b474cb50d?auto=format&fit=crop&w=600&q=80";
+  }
+
+  // 3. 1ST BIRTHDAY CAKES
+  if (cat.includes("1st") || cat.includes("birthday") || id.startsWith("fbd-") || name.includes("1st birthday")) {
+    if (name.includes("safari") || name.includes("jungle") || name.includes("dino") || name.includes("lion")) {
+      return "https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?auto=format&fit=crop&w=600&q=80"; // Safari party celebration cake
+    }
+    if (name.includes("teddy") || name.includes("balloon") || name.includes("elephant") || name.includes("train")) {
+      return "https://images.unsplash.com/photo-1574085733277-851d9d856a3a?auto=format&fit=crop&w=600&q=80"; // Pastel milestone celebration cake
+    }
+    if (name.includes("princess") || name.includes("castle") || name.includes("tiara") || name.includes("queen")) {
+      return "https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=600&q=80"; // Royal princess castle celebration cake
+    }
+    if (name.includes("star") || name.includes("twinkle") || name.includes("rainbow") || name.includes("shark") || name.includes("cocomelon")) {
+      return "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=600&q=80"; // Vibrant kids celebration milestone cake
+    }
+    // Default 1st Birthday
+    return "https://images.unsplash.com/photo-1558301211-0d8c8ddee6ec?auto=format&fit=crop&w=600&q=80";
+  }
+
+  // 4. SNACKS & BAKERY ITEMS
   if (
     cat.includes("snack") ||
     cat.includes("puff") ||
@@ -59,7 +108,7 @@ export function getProductCardImage(product: {
     return "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80";
   }
 
-  // 2. DRY CAKES
+  // 5. DRY CAKES
   if (
     cat.includes("dry") ||
     name.includes("tea cake") ||
@@ -76,7 +125,7 @@ export function getProductCardImage(product: {
     return "https://images.unsplash.com/photo-1543508282-6319a3e2621f?auto=format&fit=crop&w=600&q=80";
   }
 
-  // 3. CAKES (FLAVORS & SPECIALTIES)
+  // 6. CAKES (FLAVORS & SPECIALTIES)
   if (name.includes("black forest") || name.includes("german black")) {
     return "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?auto=format&fit=crop&w=600&q=80"; // Real layered Black Forest
   }
@@ -156,6 +205,32 @@ export function getProductCardImage(product: {
     return "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=600&q=80"; // Fresh exotic fruit cake
   }
 
-  // 4. Default Cake Fallback
+  // 7. General Default Fallback
   return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80";
+}
+
+/**
+ * Returns the fallback image URL for onError image events
+ */
+export function getDummyFallbackImage(product: ProductLike): string {
+  return getDummyInternetImage(product);
+}
+
+/**
+ * Main function returning the display image for a product card.
+ * Prioritizes actual product image when provided, and cleanly falls back to
+ * high-resolution dummy internet images from Unsplash.
+ */
+export function getProductCardImage(product: ProductLike): string {
+  if (
+    product.image &&
+    (product.image.startsWith("data:") ||
+      product.image.startsWith("http://") ||
+      product.image.startsWith("https://") ||
+      product.image.startsWith("/"))
+  ) {
+    return product.image;
+  }
+
+  return getDummyInternetImage(product);
 }

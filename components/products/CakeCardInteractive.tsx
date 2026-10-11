@@ -6,7 +6,7 @@ import type { Product } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
 
 import { is1kgFreeOfferVariant } from "@/lib/products";
-import { getProductCardImage } from "@/lib/dummy-images";
+import { getProductCardImage, getDummyFallbackImage } from "@/lib/dummy-images";
 
 export default function CakeCardInteractive({
   product,
@@ -113,7 +113,10 @@ export default function CakeCardInteractive({
             loading="lazy"
             className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/images/hero_cake.png";
+              const fallback = getDummyFallbackImage(product);
+              if ((e.target as HTMLImageElement).src !== fallback) {
+                (e.target as HTMLImageElement).src = fallback;
+              }
             }}
           />
         </Link>

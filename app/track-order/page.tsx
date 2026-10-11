@@ -377,19 +377,17 @@ function TrackOrderContent() {
                     </div>
                   </div>
 
-                  {/* Action Bar: WhatsApp Support */}
+                  {/* Action Bar: Bakery Phone Support */}
                   <div className="pt-4 border-t border-[#E6C184]/30 flex flex-wrap items-center justify-between gap-3">
                     <p className="text-xs text-[#7A6B72]">
-                      Have a query about your order delivery? Chat directly with our bakery team.
+                      Have a query about your order delivery? Call directly to speak with our bakery team.
                     </p>
 
                     <a
-                      href={`https://wa.me/919489569661?text=${encodeURIComponent(`Hi Lollipop Cake Shop, I have a query regarding my Order #${order.id}.`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-sm"
+                      href="tel:+919489569661"
+                      className="bg-[#962854] hover:bg-[#7d1e44] text-white text-xs font-bold py-2.5 px-4 rounded-xl inline-flex items-center gap-1.5 transition-colors shadow-sm"
                     >
-                      WhatsApp Bakery Help
+                      Call Bakery Help
                     </a>
                   </div>
 

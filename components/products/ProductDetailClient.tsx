@@ -8,6 +8,7 @@ import { useToast } from "@/components/common/ToastProvider";
 import ProductCard from "@/components/products/ProductCard";
 
 import { is1kgFreeOfferVariant } from "@/lib/products";
+import { getDummyFallbackImage } from "@/lib/dummy-images";
 
 export default function ProductDetailClient({
   product,
@@ -96,7 +97,19 @@ export default function ProductDetailClient({
   }
 
   function handleBuyNow() {
-    handleAddToCart();
+    // Instant Buy Now: Add directly to cart with NO fly-to-cart animation
+    addItem({
+      id: `${product.id}${showEggPreference && eggless ? "-eggless" : ""}`,
+      name: product.name,
+      image: product.image,
+      weight: variant.weight,
+      price,
+      originalPrice,
+      offer: itemOffer,
+      cakeMessage: isCakeCategory ? (cakeMessage.trim() || undefined) : undefined,
+      quantity,
+      eggPreference: showEggPreference ? (eggless ? "eggless" : "egg") : "egg",
+    });
     router.push("/cart");
   }
 
@@ -111,7 +124,10 @@ export default function ProductDetailClient({
               alt={product.name}
               className="w-full h-full object-cover"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = "/images/hero_cake.png";
+                const fallback = getDummyFallbackImage(product);
+                if ((e.target as HTMLImageElement).src !== fallback) {
+                  (e.target as HTMLImageElement).src = fallback;
+                }
               }}
             />
           </div>

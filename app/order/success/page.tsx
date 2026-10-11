@@ -299,12 +299,10 @@ function SuccessContent() {
             Back to Home Page
           </Link>
           <a
-            href="https://wa.me/919489569661"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 uppercase tracking-wider shadow-md"
+            href="tel:+919489569661"
+            className="w-full sm:w-auto bg-[#962854] hover:bg-[#7d1e44] text-white font-bold text-xs py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 uppercase tracking-wider shadow-md"
           >
-            WhatsApp Store Chef (+91 9489569661)
+            Call Store Chef (+91 9489569661)
           </a>
         </div>
 

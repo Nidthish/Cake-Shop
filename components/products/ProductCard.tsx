@@ -7,7 +7,7 @@ import { useState } from "react";
 import type { Product } from "@/types";
 import { getCardPrice } from "@/lib/products";
 import { useCart } from "@/components/cart/CartProvider";
-import { getProductCardImage } from "@/lib/dummy-images";
+import { getProductCardImage, getDummyFallbackImage } from "@/lib/dummy-images";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
@@ -73,7 +73,10 @@ export default function ProductCard({ product }: { product: Product }) {
           className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
           onError={(e) => {
-            (e.target as HTMLImageElement).src = "/images/hero_cake.png";
+            const fallback = getDummyFallbackImage(product);
+            if ((e.target as HTMLImageElement).src !== fallback) {
+              (e.target as HTMLImageElement).src = fallback;
+            }
           }}
         />
 

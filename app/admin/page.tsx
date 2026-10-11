@@ -253,13 +253,22 @@ export default function AdminPage() {
   // Navigation & Data State
   const [activeTab, setActiveTab] = useState<"sales" | "products" | "orders" | "users">("sales");
   const [products, setProducts] = useState<ProductAdmin[]>([]);
+  
+  // Orders State (Default: Today's Orders with On-Demand DB Search)
   const [orders, setOrders] = useState<OrderAdmin[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState<boolean>(false);
+  const [ordersDateFilter, setOrdersDateFilter] = useState<"today" | "yesterday" | "7days" | "month" | "all">("today");
+  const [ordersSearchInput, setOrdersSearchInput] = useState<string>("");
+  const [activeSearchQuery, setActiveSearchQuery] = useState<string>("");
+
+  // Sales Orders State (Scoped to analytics date filter)
+  const [salesOrders, setSalesOrders] = useState<OrderAdmin[]>([]);
+  const [salesLoading, setSalesLoading] = useState<boolean>(false);
+  const [salesDateFilter, setSalesDateFilter] = useState<"today" | "yesterday" | "7days" | "month" | "all">("today");
+
   const [adminUsersList, setAdminUsersList] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-
-  // Sales Filter State
-  const [salesDateFilter, setSalesDateFilter] = useState<"today" | "yesterday" | "7days" | "month" | "all">("today");
 
   // Product Filter & Modal State
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -365,7 +374,12 @@ export default function AdminPage() {
 
   async function loadDashboardData() {
     setLoading(true);
-    await Promise.all([fetchProducts(), fetchOrders(), fetchAdminUsers()]);
+    await Promise.all([
+      fetchProducts(),
+      fetchOrders("today", ""),
+      fetchSalesOrders("today"),
+      fetchAdminUsers(),
+    ]);
     setLoading(false);
   }
 
@@ -417,16 +431,88 @@ export default function AdminPage() {
     }
   }
 
-  async function fetchOrders() {
+  // Fetch orders with selective date filter or on-demand DB search
+  async function fetchOrders(dateFilter = ordersDateFilter, searchQuery = activeSearchQuery) {
+    setOrdersLoading(true);
     try {
-      const res = await fetch("/api/admin/orders");
+      const params = new URLSearchParams();
+      const q = (searchQuery || "").trim();
+      if (q) {
+        params.set("q", q);
+        if (dateFilter && dateFilter !== "all") {
+          params.set("date", dateFilter);
+        } else {
+          params.set("date", "all");
+        }
+      } else {
+        params.set("date", dateFilter || "today");
+      }
+
+      const res = await fetch(`/api/admin/orders?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
-        if (data.orders) setOrders(data.orders);
+        if (Array.isArray(data.orders)) {
+          setOrders(data.orders);
+        }
       }
     } catch (err) {
       console.error("Failed to fetch orders", err);
+    } finally {
+      setOrdersLoading(false);
     }
+  }
+
+  // Fetch sales overview orders on-demand for specific date range
+  async function fetchSalesOrders(dateFilter = salesDateFilter) {
+    setSalesLoading(true);
+    try {
+      const res = await fetch(`/api/admin/orders?date=${dateFilter}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.orders)) {
+          setSalesOrders(data.orders);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch sales orders", err);
+    } finally {
+      setSalesLoading(false);
+    }
+  }
+
+  // On-demand database search handler triggered on button click or Enter key
+  async function handleSearchOrders(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    const query = ordersSearchInput.trim();
+    if (!query) {
+      setActiveSearchQuery("");
+      fetchOrders(ordersDateFilter, "");
+      return;
+    }
+    setActiveSearchQuery(query);
+    await fetchOrders("all", query);
+  }
+
+  // Reset search and return to today's orders
+  function handleClearSearch() {
+    setOrdersSearchInput("");
+    setActiveSearchQuery("");
+    setOrdersDateFilter("today");
+    fetchOrders("today", "");
+  }
+
+  // Switch orders date filter and query database
+  function handleSelectOrdersDateFilter(filter: "today" | "yesterday" | "7days" | "month" | "all") {
+    setOrdersSearchInput("");
+    setActiveSearchQuery("");
+    setOrdersDateFilter(filter);
+    fetchOrders(filter, "");
+  }
+
+  // Switch sales overview date filter and query database
+  function handleSalesDateChange(filterKey: "today" | "yesterday" | "7days" | "month" | "all") {
+    setSalesDateFilter(filterKey);
+    fetchSalesOrders(filterKey);
   }
 
   async function fetchAdminUsers() {
@@ -476,57 +562,28 @@ export default function AdminPage() {
     }
   }
 
-  // Sales Analytics Computation with Date Filter
-  const filteredOrders = useMemo(() => {
-    const now = new Date();
-    const todayStr = now.toISOString().split("T")[0];
-
-    return orders.filter((o) => {
-      const orderDate = new Date(o.createdAt);
-      const orderDateStr = orderDate.toISOString().split("T")[0];
-
-      if (salesDateFilter === "today") {
-        return orderDateStr === todayStr;
-      } else if (salesDateFilter === "yesterday") {
-        const yesterday = new Date(now);
-        yesterday.setDate(now.getDate() - 1);
-        return orderDateStr === yesterday.toISOString().split("T")[0];
-      } else if (salesDateFilter === "7days") {
-        const sevenDaysAgo = new Date(now);
-        sevenDaysAgo.setDate(now.getDate() - 7);
-        return orderDate >= sevenDaysAgo;
-      } else if (salesDateFilter === "month") {
-        return (
-          orderDate.getMonth() === now.getMonth() &&
-          orderDate.getFullYear() === now.getFullYear()
-        );
-      }
-      return true; // "all"
-    });
-  }, [orders, salesDateFilter]);
-
   // Realized Revenue Orders:
   // An order counts towards revenue ONLY AFTER:
   // 1. It is DELIVERED (cash collected or completed), OR
   // 2. Paid online via GPay / UPI / Razorpay (PAID), AND
   // 3. Not CANCELLED
   const revenueOrders = useMemo(() => {
-    return filteredOrders.filter((o) => {
+    return salesOrders.filter((o) => {
       if (o.status === "CANCELLED") return false;
       const isDelivered = o.status === "DELIVERED";
       const isPaidOnline = o.paymentStatus === "PAID";
       return isDelivered || isPaidOnline;
     });
-  }, [filteredOrders]);
+  }, [salesOrders]);
 
   const salesStats = useMemo(() => {
     const totalRevenue = revenueOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
-    const totalCount = filteredOrders.length;
+    const totalCount = salesOrders.length;
     const avgOrderValue = revenueOrders.length > 0 ? totalRevenue / revenueOrders.length : 0;
     const paidOrders = revenueOrders.length;
 
     // Unfulfilled / Pending COD orders not yet delivered
-    const pendingCodOrders = filteredOrders.filter(
+    const pendingCodOrders = salesOrders.filter(
       (o) => o.status !== "CANCELLED" && o.status !== "DELIVERED" && o.paymentStatus !== "PAID"
     );
     const pendingCodAmount = pendingCodOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
@@ -539,7 +596,7 @@ export default function AdminPage() {
       pendingCodCount: pendingCodOrders.length,
       pendingCodAmount,
     };
-  }, [filteredOrders, revenueOrders]);
+  }, [salesOrders, revenueOrders]);
 
   // Product Helpers
   function handleAddVariantRow() {
@@ -882,6 +939,14 @@ export default function AdminPage() {
 
   async function handleUpdateOrderStatus(orderId: string, newStatus: string) {
     try {
+      // Optimistically update order status in state for snappy UI
+      setOrders((prev) =>
+        prev.map((o) => (o.id === orderId || o.orderNumber === orderId ? { ...o, status: newStatus } : o))
+      );
+      setSalesOrders((prev) =>
+        prev.map((o) => (o.id === orderId || o.orderNumber === orderId ? { ...o, status: newStatus } : o))
+      );
+
       const res = await fetch("/api/admin/orders", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -890,7 +955,8 @@ export default function AdminPage() {
       const data = await res.json();
       if (data.success) {
         setAlertMessage("Order status updated.");
-        fetchOrders();
+        fetchOrders(ordersDateFilter, activeSearchQuery);
+        fetchSalesOrders(salesDateFilter);
       }
     } catch (err) {
       alert("Failed to update order status.");
@@ -1148,8 +1214,9 @@ export default function AdminPage() {
                 {(["today", "yesterday", "7days", "month", "all"] as const).map((filterKey) => (
                   <button
                     key={filterKey}
-                    onClick={() => setSalesDateFilter(filterKey)}
-                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all cursor-pointer flex-1 sm:flex-initial text-center ${
+                    onClick={() => handleSalesDateChange(filterKey)}
+                    disabled={salesLoading}
+                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all cursor-pointer flex-1 sm:flex-initial text-center disabled:opacity-50 ${
                       salesDateFilter === filterKey
                         ? "bg-[#802B52] text-white shadow-sm"
                         : "text-[#7A6B72] hover:bg-[#E6DBCE]/50"
@@ -1555,26 +1622,169 @@ export default function AdminPage() {
         {/* TAB 3: CUSTOMER ORDERS */}
         {activeTab === "orders" && (
           <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm p-4 sm:p-6 space-y-4 sm:space-y-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="font-serif text-lg sm:text-xl font-bold text-[#5B1E38]">
-                  Recent Customer Orders
-                </h2>
-                <p className="text-xs text-[#7A6B72] hidden sm:block">
-                  Manage customer order fulfillments and schedules.
-                </p>
+            {/* Header & Controls for Orders */}
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="font-serif text-lg sm:text-xl font-bold text-[#5B1E38]">
+                      Customer Orders
+                    </h2>
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-[#802B52]/10 text-[#802B52] border border-[#802B52]/20">
+                      {activeSearchQuery
+                        ? `${orders.length} found`
+                        : ordersDateFilter === "today"
+                        ? `${orders.length} Today`
+                        : `${orders.length} in period`}
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#7A6B72] mt-0.5">
+                    {activeSearchQuery
+                      ? `Showing database search matches for "${activeSearchQuery}".`
+                      : ordersDateFilter === "today"
+                      ? "Showing today's orders by default. Search by name, order ID, or phone to query any order in the database."
+                      : `Showing orders for: ${ordersDateFilter}.`}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => fetchOrders(ordersDateFilter, activeSearchQuery)}
+                  disabled={ordersLoading}
+                  className="self-start sm:self-auto px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-[#FAF5EE] text-[#802B52] border border-[#E6DBCE] hover:bg-[#F3E8DB] cursor-pointer flex items-center gap-1.5 shrink-0 transition-colors disabled:opacity-50"
+                >
+                  <span className={ordersLoading ? "animate-spin inline-block" : ""}>🔄</span>
+                  <span>{ordersLoading ? "Fetching..." : "Refresh"}</span>
+                </button>
               </div>
-              <button
-                onClick={fetchOrders}
-                className="px-3 py-1.5 text-xs font-semibold rounded-xl bg-[#FAF5EE] text-[#802B52] border border-[#E6DBCE] hover:bg-[#F3E8DB] cursor-pointer flex items-center gap-1 shrink-0"
-              >
-                🔄 <span className="hidden sm:inline">Refresh Orders</span><span className="sm:hidden">Refresh</span>
-              </button>
+
+              {/* On-Demand Database Search & Date Filter Bar */}
+              <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 pt-2 border-t border-[#E6DBCE]/60">
+                {/* On-Demand Database Search Form */}
+                <form onSubmit={handleSearchOrders} className="flex-1 flex items-center gap-2 max-w-xl">
+                  <div className="relative flex-1">
+                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-[#7A6B72]">
+                      🔍
+                    </span>
+                    <input
+                      type="text"
+                      value={ordersSearchInput}
+                      onChange={(e) => setOrdersSearchInput(e.target.value)}
+                      placeholder="Search by User Name, Mobile No, or Order ID..."
+                      className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-[#E6DBCE] bg-white text-xs sm:text-sm text-[#2D2327] placeholder:text-[#A19199] focus:outline-none focus:border-[#802B52] focus:ring-1 focus:ring-[#802B52]"
+                    />
+                    {ordersSearchInput && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOrdersSearchInput("");
+                          if (activeSearchQuery) handleClearSearch();
+                        }}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs w-5 h-5 flex items-center justify-center rounded-full hover:bg-gray-100"
+                        title="Clear input"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={ordersLoading}
+                    className="px-4 py-2.5 rounded-xl bg-[#802B52] hover:bg-[#962854] text-white text-xs font-bold transition-all shadow-sm cursor-pointer shrink-0 flex items-center gap-1.5 disabled:opacity-60"
+                  >
+                    {ordersLoading && activeSearchQuery ? (
+                      <>
+                        <span className="animate-spin inline-block">⏳</span>
+                        <span>Searching...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>🔍</span>
+                        <span>Search</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                {/* Quick Date Filter Pills */}
+                <div className="flex flex-wrap items-center gap-1.5 bg-[#FAF5EE] p-1.5 rounded-xl border border-[#E6DBCE] shrink-0">
+                  {(
+                    [
+                      { key: "today", label: "📅 Today" },
+                      { key: "yesterday", label: "Yesterday" },
+                      { key: "7days", label: "Last 7 Days" },
+                      { key: "month", label: "This Month" },
+                      { key: "all", label: "All Orders" },
+                    ] as const
+                  ).map(({ key, label }) => {
+                    const isActive = !activeSearchQuery && ordersDateFilter === key;
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => handleSelectOrdersDateFilter(key)}
+                        disabled={ordersLoading}
+                        className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer disabled:opacity-50 ${
+                          isActive
+                            ? "bg-[#802B52] text-white shadow-sm"
+                            : "text-[#7A6B72] hover:bg-[#E6DBCE]/60 hover:text-[#2D2327]"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Active Search Banner */}
+              {activeSearchQuery && (
+                <div className="flex items-center justify-between gap-3 bg-purple-50 border border-purple-200 rounded-xl px-3.5 py-2.5 text-xs">
+                  <div className="flex items-center gap-2 text-[#5B1E38]">
+                    <span className="font-bold text-sm">🔎</span>
+                    <span>
+                      Database query results for:{" "}
+                      <strong className="text-[#802B52] bg-white px-2 py-0.5 rounded border border-purple-200">
+                        &quot;{activeSearchQuery}&quot;
+                      </strong>{" "}
+                      ({orders.length} {orders.length === 1 ? "order" : "orders"} found)
+                    </span>
+                  </div>
+                  <button
+                    onClick={handleClearSearch}
+                    className="px-2.5 py-1 rounded-lg bg-white border border-purple-300 hover:bg-purple-100 text-[#802B52] font-bold text-[11px] transition-colors cursor-pointer shrink-0 flex items-center gap-1"
+                  >
+                    ✕ Clear &amp; Show Today
+                  </button>
+                </div>
+              )}
             </div>
 
             {orders.length === 0 ? (
-              <div className="text-center py-12 text-[#7A6B72] font-serif">
-                No customer orders recorded yet.
+              <div className="text-center py-12 text-[#7A6B72] font-serif space-y-2">
+                <div className="text-3xl">📦</div>
+                <p className="font-semibold text-sm text-[#2D2327]">
+                  {activeSearchQuery
+                    ? `No orders found matching "${activeSearchQuery}".`
+                    : ordersDateFilter === "today"
+                    ? "No orders recorded for today yet."
+                    : `No orders found for the selected period (${ordersDateFilter}).`}
+                </p>
+                {activeSearchQuery ? (
+                  <button
+                    onClick={handleClearSearch}
+                    className="mt-2 inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#FAF5EE] text-[#802B52] border border-[#E6DBCE] hover:bg-[#E6DBCE] text-xs font-bold cursor-pointer"
+                  >
+                    ✕ Clear Search &amp; Return to Today
+                  </button>
+                ) : ordersDateFilter !== "all" ? (
+                  <button
+                    onClick={() => handleSelectOrdersDateFilter("all")}
+                    className="mt-2 inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#FAF5EE] text-[#802B52] border border-[#E6DBCE] hover:bg-[#E6DBCE] text-xs font-bold cursor-pointer"
+                  >
+                    View All Orders Instead
+                  </button>
+                ) : null}
               </div>
             ) : (
               <>

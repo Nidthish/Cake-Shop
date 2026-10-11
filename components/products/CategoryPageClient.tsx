@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import type { Product } from "@/types";
 import ProductCard from "@/components/products/ProductCard";
 
@@ -143,16 +144,14 @@ export default function CategoryPageClient({
               No Items Currently in This Collection
             </h3>
             <p className="text-xs sm:text-sm text-[#7A6B72] mb-6 leading-relaxed">
-              We prepare custom handcrafted cakes on demand. Contact our master bakers directly on WhatsApp to design & order your custom cake!
+              We prepare custom handcrafted cakes on demand. Contact our master bakers directly to design & order your custom cake!
             </p>
-            <a
-              href="https://wa.me/919489569661?text=Hello%20Lollipop%20Cake%20Shop,%20I%20would%20like%20to%20place%20a%20custom%20cake%20order."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#25D366] text-white font-bold text-xs sm:text-sm hover:bg-[#20ba5a] transition-all shadow-md"
+            <Link
+              href="/custom-cake"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#962854] text-white font-bold text-xs sm:text-sm hover:bg-[#7d1e44] transition-all shadow-md"
             >
-              <span>Custom Order via WhatsApp</span>
-            </a>
+              <span>Request Custom Cake</span>
+            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">

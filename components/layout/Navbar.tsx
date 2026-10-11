@@ -151,7 +151,7 @@ export default function Navbar() {
             </Link>
             <Link
               href="/track-order"
-              className={`hidden sm:flex p-2 rounded-full transition-colors items-center justify-center ${isTrackActive
+              className={`p-2 rounded-full transition-colors flex items-center justify-center ${isTrackActive
                   ? "text-[#962854] bg-[#FAF3EC]"
                   : "text-[#1C0D0A] hover:text-[#962854] hover:bg-[#FAF3EC]"
                 }`}
@@ -174,49 +174,80 @@ export default function Navbar() {
 
       {/* Mobile Drawer Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/50 z-50 transition-opacity ${drawerOpen ? "opacity-100" : "opacity-0 pointer-events-none hidden"
+        className={`fixed inset-0 bg-black/50 backdrop-blur-[2px] z-50 transition-opacity duration-300 ${drawerOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}
         onClick={() => setDrawerOpen(false)}
       />
+      
+      {/* Responsive Mobile Drawer */}
       <aside
-        className={`fixed top-0 right-0 w-80 max-w-full h-full bg-[#FFF9F5] z-50 shadow-2xl flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 ${drawerOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 w-[310px] xs:w-80 max-w-[88vw] h-[100dvh] max-h-[100dvh] bg-[#FFF9F5] z-50 shadow-2xl flex flex-col transition-transform duration-300 ease-out ${drawerOpen ? "translate-x-0" : "translate-x-full"
           }`}
       >
-        <div>
-          <div className="flex items-center justify-between border-b border-[#E6C184]/30 pb-4 mb-6">
-            <span className="font-display font-bold text-2xl text-[#1C0D0A] tracking-[0.03em] block">
-              Lollipop Cake Shop
-            </span>
-            <button
-              className="p-2 text-[#5C524E] hover:text-[#1C0D0A] rounded-full hover:bg-[#FAF3EC] transition-colors"
-              onClick={() => setDrawerOpen(false)}
-              aria-label="Close menu"
-              suppressHydrationWarning
-            >
-              <span className="material-symbols-outlined">close</span>
-            </button>
-          </div>
-          <nav className="flex flex-col space-y-1.5">
-            {DRAWER_LINKS.map((l) => (
+        {/* Drawer Header (Pinned at top) */}
+        <div className="flex-shrink-0 flex items-center justify-between border-b border-[#E6C184]/30 px-5 py-4 bg-[#FFF9F5]">
+          <Link
+            href="/"
+            onClick={() => setDrawerOpen(false)}
+            className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] tracking-[0.02em] block hover:text-[#962854] transition-colors"
+          >
+            Lollipop Cake Shop
+          </Link>
+          <button
+            className="p-1.5 text-[#5C524E] hover:text-[#1C0D0A] rounded-full hover:bg-[#FAF3EC] transition-colors cursor-pointer flex items-center justify-center"
+            onClick={() => setDrawerOpen(false)}
+            aria-label="Close menu"
+            suppressHydrationWarning
+          >
+            <span className="material-symbols-outlined text-2xl">close</span>
+          </button>
+        </div>
+
+        {/* Drawer Scrollable Links Container */}
+        <nav className="flex-1 min-h-0 overflow-y-auto px-3.5 py-3 space-y-1 overscroll-contain">
+          {DRAWER_LINKS.map((l) => {
+            const isActive =
+              l.href === "/"
+                ? pathname === "/"
+                : pathname === l.href || pathname?.startsWith(l.href);
+            return (
               <Link
                 key={l.href}
                 href={l.href}
                 onClick={() => setDrawerOpen(false)}
-                className="p-3 rounded-xl hover:bg-[#FAF3EC] text-[#1C0D0A] flex items-center gap-2 font-semibold text-sm"
+                className={`px-3 py-2.5 rounded-xl flex items-center gap-3 font-semibold text-sm transition-colors ${
+                  isActive
+                    ? "bg-[#962854]/10 text-[#962854] font-bold"
+                    : "text-[#1C0D0A] hover:bg-[#FAF3EC] hover:text-[#962854]"
+                }`}
               >
-                <span className="material-symbols-outlined text-base">{l.icon}</span>
-                {l.label}
+                <span
+                  className={`material-symbols-outlined text-xl transition-colors ${
+                    isActive ? "text-[#962854]" : "text-[#5C524E]"
+                  }`}
+                >
+                  {l.icon}
+                </span>
+                <span>{l.label}</span>
               </Link>
-            ))}
-          </nav>
-        </div>
-        <div className="border-t border-[#E6C184]/30 pt-4 mt-6">
+            );
+          })}
+        </nav>
+
+        {/* Drawer Footer (Pinned at bottom with safe-area spacing - View Cart Button) */}
+        <div className="flex-shrink-0 border-t border-[#E6C184]/30 p-4 bg-[#FFF9F5] shadow-[0_-4px_16px_rgba(0,0,0,0.04)] pb-[max(1rem,env(safe-area-inset-bottom))]">
           <Link
             href="/cart"
             onClick={() => setDrawerOpen(false)}
-            className="w-full bg-[#2A082C] text-white py-3.5 rounded-xl flex items-center justify-center gap-2 font-bold text-sm shadow-md hover:bg-[#962854] transition-colors"
+            className="w-full bg-[#2A082C] text-white py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 font-bold text-sm shadow-md hover:bg-[#962854] active:scale-[0.98] transition-all"
           >
-            <span className="material-symbols-outlined text-base">shopping_bag</span> View Cart
+            <span className="material-symbols-outlined text-xl">shopping_bag</span>
+            <span>View Cart</span>
+            {itemCount > 0 && (
+              <span className="ml-1 bg-[#E6C184] text-[#2A082C] text-xs font-extrabold px-2 py-0.5 rounded-full">
+                {itemCount}
+              </span>
+            )}
           </Link>
         </div>
       </aside>

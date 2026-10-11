@@ -9,13 +9,23 @@ import { sendOrderDeliveredEmail } from "@/lib/email";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// GET /api/admin/orders — Fetch all orders with items & payment details
+// GET /api/admin/orders — Fetch orders with selective date filtering & on-demand search
 export async function GET(req: NextRequest) {
   try {
     const admin = await getAuthenticatedAdmin(req);
     if (!admin) {
       return NextResponse.json({ success: false, error: "Unauthorized access." }, { status: 401 });
     }
+
+    const { searchParams } = new URL(req.url);
+    const searchParam = (searchParams.get("q") || searchParams.get("search") || "").trim();
+    // Default to 'today' unless searching or explicit dateFilter is passed
+    const rawDate = searchParams.get("date") || searchParams.get("dateFilter");
+    const dateFilter = (rawDate || (searchParam ? "all" : "today")).toLowerCase();
+    const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "150", 10), 1), 300);
+
+    const hasSearch = Boolean(searchParam.length > 0);
+    const searchPattern = `%${searchParam}%`;
 
     // 1. Fetch from Neon PostgreSQL (HTTPS port 443)
     try {
@@ -71,8 +81,33 @@ export async function GET(req: NextRequest) {
           FROM orders o
           LEFT JOIN payments p ON p.order_id = o.id
           LEFT JOIN order_items i ON i.order_id = o.id
+          WHERE 
+            (${hasSearch} = false OR (
+              o.order_number ILIKE ${searchPattern} OR
+              o.id::text ILIKE ${searchPattern} OR
+              o.customer_name ILIKE ${searchPattern} OR
+              o.customer_phone ILIKE ${searchPattern} OR
+              o.customer_email ILIKE ${searchPattern}
+            ))
+            AND (
+              ${dateFilter} = 'all' OR
+              (${dateFilter} = 'today' AND (
+                (o.created_at AT TIME ZONE 'Asia/Kolkata')::date = (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::date OR 
+                o.delivery_date = (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata')::date
+              )) OR
+              (${dateFilter} = 'yesterday' AND (
+                (o.created_at AT TIME ZONE 'Asia/Kolkata')::date = ((CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata') - INTERVAL '1 day')::date
+              )) OR
+              (${dateFilter} = '7days' AND (
+                (o.created_at AT TIME ZONE 'Asia/Kolkata')::date >= ((CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata') - INTERVAL '7 days')::date
+              )) OR
+              (${dateFilter} = 'month' AND (
+                to_char(o.created_at AT TIME ZONE 'Asia/Kolkata', 'YYYY-MM') = to_char(CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Kolkata', 'YYYY-MM')
+              ))
+            )
           GROUP BY o.id, p.id
           ORDER BY o.created_at DESC
+          LIMIT ${limit}
         `;
 
         const formatted = rows.map((o: any) => ({
@@ -120,10 +155,30 @@ export async function GET(req: NextRequest) {
             : [],
         }));
 
+        // Compute summary statistics
+        const revenueOrders = formatted.filter(
+          (o: any) => o.status !== "CANCELLED" && (o.status === "DELIVERED" || o.paymentStatus === "PAID")
+        );
+        const totalRevenue = revenueOrders.reduce((sum: number, o: any) => sum + (o.totalAmount || 0), 0);
+        const pendingCodOrders = formatted.filter(
+          (o: any) => o.status !== "CANCELLED" && o.status !== "DELIVERED" && o.paymentStatus !== "PAID"
+        );
+        const pendingCodAmount = pendingCodOrders.reduce((sum: number, o: any) => sum + (o.totalAmount || 0), 0);
+
         return NextResponse.json({
           success: true,
           count: formatted.length,
+          filter: dateFilter,
+          search: searchParam,
           orders: formatted,
+          stats: {
+            totalRevenue,
+            totalCount: formatted.length,
+            paidOrders: revenueOrders.length,
+            avgOrderValue: revenueOrders.length > 0 ? totalRevenue / revenueOrders.length : 0,
+            pendingCodCount: pendingCodOrders.length,
+            pendingCodAmount,
+          },
         });
       }
     } catch (neonErr: any) {
@@ -134,8 +189,28 @@ export async function GET(req: NextRequest) {
     try {
       const pool = getMySqlPool();
       if (pool) {
-        const [orders]: any = await pool.query(`
-          SELECT 
+        let mysqlWhere = "1=1";
+        const mysqlParams: any[] = [];
+
+        if (hasSearch) {
+          mysqlWhere += " AND (o.order_number LIKE ? OR o.customer_name LIKE ? OR o.customer_phone LIKE ? OR o.customer_email LIKE ? OR CAST(o.id AS CHAR) LIKE ?)";
+          mysqlParams.push(searchPattern, searchPattern, searchPattern, searchPattern, searchPattern);
+        }
+
+        if (dateFilter === "today") {
+          mysqlWhere += " AND (DATE(o.created_at) = CURDATE() OR DATE(o.delivery_date) = CURDATE())";
+        } else if (dateFilter === "yesterday") {
+          mysqlWhere += " AND (DATE(o.created_at) = SUBDATE(CURDATE(), 1))";
+        } else if (dateFilter === "7days") {
+          mysqlWhere += " AND (o.created_at >= SUBDATE(NOW(), INTERVAL 7 DAY))";
+        } else if (dateFilter === "month") {
+          mysqlWhere += " AND (YEAR(o.created_at) = YEAR(CURDATE()) AND MONTH(o.created_at) = MONTH(CURDATE()))";
+        }
+
+        mysqlParams.push(limit);
+
+        const [orders]: any = await pool.query(
+          `SELECT 
             o.id,
             o.order_number as orderNumber,
             o.customer_name as customerName,
@@ -166,8 +241,11 @@ export async function GET(req: NextRequest) {
             p.razorpay_payment_id as razorpayPaymentId
           FROM lollipop_db.orders o
           LEFT JOIN lollipop_db.payments p ON p.order_id = o.id
+          WHERE ${mysqlWhere}
           ORDER BY o.created_at DESC
-        `);
+          LIMIT ?`,
+          mysqlParams
+        );
 
         const orderIds = orders.map((o: any) => o.id);
         const itemsByOrderId: Record<number, any[]> = {};
@@ -228,10 +306,29 @@ export async function GET(req: NextRequest) {
           items: itemsByOrderId[o.id] || [],
         }));
 
+        const revenueOrders = formatted.filter(
+          (o: any) => o.status !== "CANCELLED" && (o.status === "DELIVERED" || o.paymentStatus === "PAID")
+        );
+        const totalRevenue = revenueOrders.reduce((sum: number, o: any) => sum + (o.totalAmount || 0), 0);
+        const pendingCodOrders = formatted.filter(
+          (o: any) => o.status !== "CANCELLED" && o.status !== "DELIVERED" && o.paymentStatus !== "PAID"
+        );
+        const pendingCodAmount = pendingCodOrders.reduce((sum: number, o: any) => sum + (o.totalAmount || 0), 0);
+
         return NextResponse.json({
           success: true,
           count: formatted.length,
+          filter: dateFilter,
+          search: searchParam,
           orders: formatted,
+          stats: {
+            totalRevenue,
+            totalCount: formatted.length,
+            paidOrders: revenueOrders.length,
+            avgOrderValue: revenueOrders.length > 0 ? totalRevenue / revenueOrders.length : 0,
+            pendingCodCount: pendingCodOrders.length,
+            pendingCodAmount,
+          },
         });
       }
     } catch (mysqlErr: any) {
@@ -239,59 +336,113 @@ export async function GET(req: NextRequest) {
     }
 
     // 3. Fallback to Prisma
+    const prismaWhere: any = {};
+    if (hasSearch) {
+      prismaWhere.OR = [
+        { orderNumber: { contains: searchParam, mode: "insensitive" } },
+        { customerName: { contains: searchParam, mode: "insensitive" } },
+        { customerPhone: { contains: searchParam, mode: "insensitive" } },
+        { customerEmail: { contains: searchParam, mode: "insensitive" } },
+      ];
+    }
+    if (dateFilter === "today") {
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      prismaWhere.createdAt = { gte: startOfToday };
+    } else if (dateFilter === "yesterday") {
+      const startOfYesterday = new Date();
+      startOfYesterday.setDate(startOfYesterday.getDate() - 1);
+      startOfYesterday.setHours(0, 0, 0, 0);
+      const endOfYesterday = new Date(startOfYesterday);
+      endOfYesterday.setHours(23, 59, 59, 999);
+      prismaWhere.createdAt = { gte: startOfYesterday, lte: endOfYesterday };
+    } else if (dateFilter === "7days") {
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      prismaWhere.createdAt = { gte: sevenDaysAgo };
+    } else if (dateFilter === "month") {
+      const startOfMonth = new Date();
+      startOfMonth.setDate(1);
+      startOfMonth.setHours(0, 0, 0, 0);
+      prismaWhere.createdAt = { gte: startOfMonth };
+    }
+
     const orders = await prisma.order.findMany({
+      where: Object.keys(prismaWhere).length > 0 ? prismaWhere : undefined,
       include: {
         items: true,
         payment: true,
       },
       orderBy: { createdAt: "desc" },
+      take: limit,
     });
+
+    const formattedPrisma = orders.map((o) => ({
+      id: o.id.toString(),
+      orderNumber: o.orderNumber,
+      customerName: o.customerName,
+      customerEmail: o.customerEmail,
+      customerPhone: o.customerPhone,
+      streetAddress: o.streetAddress,
+      city: o.city,
+      pincode: o.pincode,
+      deliveryDate: o.deliveryDate.toISOString().split("T")[0],
+      deliveryTimeSlot: o.deliveryTimeSlot,
+      hasEgglessItems: o.hasEgglessItems,
+      subtotal: Number(o.subtotal),
+      taxAmount: Number(o.taxAmount),
+      deliveryFee: Number(o.deliveryFee),
+      totalAmount: Number(o.totalAmount),
+      status: o.status,
+      deliveryOtp: o.deliveryOtp || null,
+      deliveryOtpVerified: o.deliveryOtpVerified,
+      deliveryPartnerName: o.deliveryPartnerName || null,
+      deliveryPartnerPhone: o.deliveryPartnerPhone || null,
+      cancellationReason: o.cancellationReason || null,
+      cancelledAt: o.cancelledAt ? o.cancelledAt.toISOString() : null,
+      deliveredAt: o.deliveredAt ? o.deliveredAt.toISOString() : null,
+      assignedAt: o.assignedAt ? o.assignedAt.toISOString() : null,
+      createdAt: o.createdAt.toISOString(),
+      paymentStatus: o.payment ? o.payment.paymentStatus : "PENDING",
+      paymentMethod: o.payment ? o.payment.paymentMethod : "RAZORPAY",
+      razorpayPaymentId: o.payment ? o.payment.razorpayPaymentId : null,
+      items: o.items.map((i) => ({
+        id: i.id.toString(),
+        productCode: i.productCode,
+        productName: i.productName,
+        variantName: i.variantName,
+        isEggless: i.isEggless,
+        quantity: i.quantity,
+        unitPrice: Number(i.unitPrice),
+        lineTotal: Number(i.lineTotal),
+        cakeMessage: i.cakeMessage || null,
+        offer: (i as any).offer || null,
+      })),
+    }));
+
+    const revenueOrders = formattedPrisma.filter(
+      (o: any) => o.status !== "CANCELLED" && (o.status === "DELIVERED" || o.paymentStatus === "PAID")
+    );
+    const totalRevenue = revenueOrders.reduce((sum: number, o: any) => sum + (o.totalAmount || 0), 0);
+    const pendingCodOrders = formattedPrisma.filter(
+      (o: any) => o.status !== "CANCELLED" && o.status !== "DELIVERED" && o.paymentStatus !== "PAID"
+    );
+    const pendingCodAmount = pendingCodOrders.reduce((sum: number, o: any) => sum + (o.totalAmount || 0), 0);
 
     return NextResponse.json({
       success: true,
-      count: orders.length,
-      orders: orders.map((o) => ({
-        id: o.id.toString(),
-        orderNumber: o.orderNumber,
-        customerName: o.customerName,
-        customerEmail: o.customerEmail,
-        customerPhone: o.customerPhone,
-        streetAddress: o.streetAddress,
-        city: o.city,
-        pincode: o.pincode,
-        deliveryDate: o.deliveryDate.toISOString().split("T")[0],
-        deliveryTimeSlot: o.deliveryTimeSlot,
-        hasEgglessItems: o.hasEgglessItems,
-        subtotal: Number(o.subtotal),
-        taxAmount: Number(o.taxAmount),
-        deliveryFee: Number(o.deliveryFee),
-        totalAmount: Number(o.totalAmount),
-        status: o.status,
-        deliveryOtp: o.deliveryOtp || null,
-        deliveryOtpVerified: o.deliveryOtpVerified,
-        deliveryPartnerName: o.deliveryPartnerName || null,
-        deliveryPartnerPhone: o.deliveryPartnerPhone || null,
-        cancellationReason: o.cancellationReason || null,
-        cancelledAt: o.cancelledAt ? o.cancelledAt.toISOString() : null,
-        deliveredAt: o.deliveredAt ? o.deliveredAt.toISOString() : null,
-        assignedAt: o.assignedAt ? o.assignedAt.toISOString() : null,
-        createdAt: o.createdAt.toISOString(),
-        paymentStatus: o.payment ? o.payment.paymentStatus : "PENDING",
-        paymentMethod: o.payment ? o.payment.paymentMethod : "RAZORPAY",
-        razorpayPaymentId: o.payment ? o.payment.razorpayPaymentId : null,
-        items: o.items.map((i) => ({
-          id: i.id.toString(),
-          productCode: i.productCode,
-          productName: i.productName,
-          variantName: i.variantName,
-          isEggless: i.isEggless,
-          quantity: i.quantity,
-          unitPrice: Number(i.unitPrice),
-          lineTotal: Number(i.lineTotal),
-          cakeMessage: i.cakeMessage || null,
-          offer: (i as any).offer || null,
-        })),
-      })),
+      count: formattedPrisma.length,
+      filter: dateFilter,
+      search: searchParam,
+      orders: formattedPrisma,
+      stats: {
+        totalRevenue,
+        totalCount: formattedPrisma.length,
+        paidOrders: revenueOrders.length,
+        avgOrderValue: revenueOrders.length > 0 ? totalRevenue / revenueOrders.length : 0,
+        pendingCodCount: pendingCodOrders.length,
+        pendingCodAmount,
+      },
     });
   } catch (error: any) {
     console.error("[GET /api/admin/orders] Error:", error);

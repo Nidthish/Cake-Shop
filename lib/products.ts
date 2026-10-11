@@ -34,7 +34,8 @@ export async function getDbProducts(): Promise<Product[]> {
                          'name', v.name,
                          'price', v.price,
                          'is_eggless', v.is_eggless,
-                         'is_available', v.is_available
+                         'is_available', v.is_available,
+                         'offer', v.offer
                        )
                      ) FILTER (WHERE v.id IS NOT NULL), '[]'
                    ) as variants
@@ -62,7 +63,7 @@ export async function getDbProducts(): Promise<Product[]> {
             weight: v.name,
             price: Number(v.price),
             originalPrice: Number(v.price),
-            offer: (p.badge || "").includes("1kg Free") ? "Buy 1kg Get 1/2kg Free (Offer)" : undefined,
+            offer: v.offer || ((p.badge || "").includes("1kg Free") ? "Buy 1kg Get 1/2kg Free (Offer)" : undefined),
             isEggless: Boolean(v.is_eggless),
           }));
 
@@ -102,6 +103,7 @@ export async function getDbProducts(): Promise<Product[]> {
             variants: mappedVariants,
             isEggless: hasEggless,
             egglessAvailable: isCakeCategory,
+            productCode: p.product_code,
           };
         });
       }
@@ -139,7 +141,7 @@ export async function getDbProducts(): Promise<Product[]> {
             weight: v.name,
             price: Number(v.price),
             originalPrice: Number(v.price),
-            offer: hasOffer ? (p.badge || "Buy 1kg Get 1/2kg Free (Offer)") : undefined,
+            offer: (v as any).offer || (hasOffer ? (p.badge || "Buy 1kg Get 1/2kg Free (Offer)") : undefined),
             isEggless: v.isEggless,
           };
         });
@@ -182,6 +184,7 @@ export async function getDbProducts(): Promise<Product[]> {
           variants,
           isEggless: hasEgglessVariant,
           egglessAvailable: isCakeCategory,
+          productCode: p.productCode,
         };
       });
     }

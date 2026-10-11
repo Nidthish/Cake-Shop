@@ -29,6 +29,7 @@ export interface Product {
   ingredients?: string[];
   egglessAvailable?: boolean;
   isEggless?: boolean;
+  productCode?: string;
 }
 
 export interface CartItem {

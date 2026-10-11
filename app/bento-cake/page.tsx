@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     "Korean minimalist bento box lunchbox cakes in cute pastel shades with custom piping.",
 };
 
+const BENTO_PILLS = [
+  { label: "Chocolate & Nutella", keyword: "chocolate" },
+  { label: "Lotus Biscoff", keyword: "biscoff" },
+  { label: "Hearts & Love", keyword: "love" },
+  { label: "Pastel & Butterfly", keyword: "butterfly" },
+];
+
 export default async function Page() {
   const allProducts = await getDbProducts();
   const products = getProductsByCategory("bento-cake", allProducts);
@@ -33,7 +40,7 @@ export default async function Page() {
         </div>
       </section>
 
-      <CategoryPageClient products={products} />
+      <CategoryPageClient products={products} pills={BENTO_PILLS} />
     </>
   );
 }
