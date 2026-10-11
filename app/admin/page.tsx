@@ -72,6 +72,9 @@ interface OrderAdmin {
   deliveredAt?: string | null;
   assignedAt?: string | null;
   createdAt: string;
+  specialInstructions?: string | null;
+  deliveryNotes?: string | null;
+  cakeMessage?: string | null;
   items: any[];
 }
 
@@ -260,6 +263,7 @@ export default function AdminPage() {
   const [ordersDateFilter, setOrdersDateFilter] = useState<"today" | "yesterday" | "7days" | "month" | "all">("today");
   const [ordersSearchInput, setOrdersSearchInput] = useState<string>("");
   const [activeSearchQuery, setActiveSearchQuery] = useState<string>("");
+  const [selectedOrderModal, setSelectedOrderModal] = useState<OrderAdmin | null>(null);
 
   // Sales Orders State (Scoped to analytics date filter)
   const [salesOrders, setSalesOrders] = useState<OrderAdmin[]>([]);
@@ -1179,7 +1183,7 @@ export default function AdminPage() {
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
             }`}
           >
-            📦 <span className="inline">Orders ({orders.length})</span>
+            <span className="inline">Orders ({orders.length})</span>
           </button>
 
           {adminUser?.role === "SUPERADMIN" && (
@@ -1671,7 +1675,7 @@ export default function AdminPage() {
                   disabled={ordersLoading}
                   className="self-start sm:self-auto px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-[#FAF5EE] text-[#802B52] border border-[#E6DBCE] hover:bg-[#F3E8DB] cursor-pointer flex items-center gap-1.5 shrink-0 transition-colors disabled:opacity-50"
                 >
-                  <span className={ordersLoading ? "animate-spin inline-block" : ""}>🔄</span>
+                  <span className={`material-symbols-outlined text-sm ${ordersLoading ? "animate-spin" : ""}`}>refresh</span>
                   <span>{ordersLoading ? "Fetching..." : "Refresh"}</span>
                 </button>
               </div>
@@ -1681,8 +1685,8 @@ export default function AdminPage() {
                 {/* On-Demand Database Search Form */}
                 <form onSubmit={handleSearchOrders} className="flex-1 flex items-center gap-2 max-w-xl">
                   <div className="relative flex-1">
-                    <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-[#7A6B72]">
-                      🔍
+                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-[#7A6B72]">
+                      search
                     </span>
                     <input
                       type="text"
@@ -1713,12 +1717,12 @@ export default function AdminPage() {
                   >
                     {ordersLoading && activeSearchQuery ? (
                       <>
-                        <span className="animate-spin inline-block">⏳</span>
+                        <span className="material-symbols-outlined text-sm animate-spin">progress_activity</span>
                         <span>Searching...</span>
                       </>
                     ) : (
                       <>
-                        <span>🔍</span>
+                        <span className="material-symbols-outlined text-sm">search</span>
                         <span>Search</span>
                       </>
                     )}
@@ -1729,7 +1733,7 @@ export default function AdminPage() {
                 <div className="flex flex-wrap items-center gap-1.5 bg-[#FAF5EE] p-1.5 rounded-xl border border-[#E6DBCE] shrink-0">
                   {(
                     [
-                      { key: "today", label: "📅 Today" },
+                      { key: "today", label: "Today" },
                       { key: "yesterday", label: "Yesterday" },
                       { key: "7days", label: "Last 7 Days" },
                       { key: "month", label: "This Month" },
@@ -1760,7 +1764,7 @@ export default function AdminPage() {
               {activeSearchQuery && (
                 <div className="flex items-center justify-between gap-3 bg-purple-50 border border-purple-200 rounded-xl px-3.5 py-2.5 text-xs">
                   <div className="flex items-center gap-2 text-[#5B1E38]">
-                    <span className="font-bold text-sm">🔎</span>
+                    <span className="material-symbols-outlined text-sm text-[#802B52]">search</span>
                     <span>
                       Database query results for:{" "}
                       <strong className="text-[#802B52] bg-white px-2 py-0.5 rounded border border-purple-200">
@@ -1781,7 +1785,9 @@ export default function AdminPage() {
 
             {orders.length === 0 ? (
               <div className="text-center py-12 text-[#7A6B72] font-serif space-y-2">
-                <div className="text-3xl">📦</div>
+                <div>
+                  <span className="material-symbols-outlined text-3xl text-[#7A6B72]">inventory_2</span>
+                </div>
                 <p className="font-semibold text-sm text-[#2D2327]">
                   {activeSearchQuery
                     ? `No orders found matching "${activeSearchQuery}".`
@@ -1807,7 +1813,7 @@ export default function AdminPage() {
               </div>
             ) : (
               <>
-                {/* 📱 MOBILE CARD VIEW FOR ORDERS (Visible on screens < 768px) */}
+                {/* MOBILE CARD VIEW FOR ORDERS (Visible on screens < 768px) */}
                 <div className="block md:hidden space-y-3.5">
                   {orders.map((o) => (
                     <div
@@ -1830,62 +1836,59 @@ export default function AdminPage() {
                       {/* Customer & Delivery Schedule Grid */}
                       <div className="grid grid-cols-2 gap-2.5 text-xs">
                         <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-2.5">
-                          <p className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider">👤 Customer</p>
+                          <p className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider">Customer</p>
                           <p className="font-bold text-[#2D2327] mt-0.5 truncate">{o.customerName}</p>
                           {o.customerPhone && (
                             <a href={`tel:${o.customerPhone}`} className="text-[#802B52] font-semibold text-[11px] hover:underline block mt-0.5">
-                              📞 {o.customerPhone}
+                              {o.customerPhone}
                             </a>
                           )}
                           <p className="text-[10px] text-[#7A6B72] mt-1 line-clamp-2">{o.streetAddress}, {o.city} - {o.pincode}</p>
                         </div>
 
                         <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-2.5">
-                          <p className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider">📅 Schedule</p>
+                          <p className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider">Delivery Schedule</p>
                           <p className="font-bold text-[#5B1E38] mt-0.5">{o.deliveryDate}</p>
-                          <p className="text-[11px] font-bold text-[#802B52] mt-0.5">⏰ {o.deliveryTimeSlot}</p>
+                          <p className="text-[11px] font-bold text-[#802B52] mt-0.5">{o.deliveryTimeSlot}</p>
                         </div>
                       </div>
 
-                      {/* Items Ordered Section */}
-                      <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-3 space-y-2">
-                        <p className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider">Items Ordered ({o.items?.length || 0})</p>
-                        {o.items?.map((i: any, idx: number) => (
-                          <div key={idx} className="p-2.5 bg-white rounded-lg border border-[#E6DBCE]/70 space-y-1 text-xs shadow-2xs">
-                            <div className="font-bold text-[#2D2327] flex justify-between items-center">
-                              <span><span className="text-[#802B52] font-extrabold">{i.quantity}x</span> {i.productName} ({i.variantName})</span>
-                              <span className="text-[#802B52] font-bold">₹{i.lineTotal || (i.unitPrice * i.quantity)}</span>
-                            </div>
-                            <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
-                              <span className={`px-2 py-0.5 rounded-md font-bold ${i.isEggless ? "bg-emerald-50 text-emerald-800 border border-emerald-200" : "bg-amber-50 text-amber-900 border border-amber-200"}`}>
-                                {i.isEggless ? "🌱 Eggless" : "🥚 With Egg"}
-                              </span>
-                              {i.offer && (
-                                <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-300 text-amber-900 font-bold">
-                                  🎁 {i.offer}
-                                </span>
-                              )}
-                            </div>
-                            {i.cakeMessage && (
-                              <div className="text-[11px] text-[#802B52] italic font-medium bg-[#FAF5EE]/60 px-2 py-1 rounded border border-[#E6DBCE]/40">
-                                🎂 &quot;{i.cakeMessage}&quot;
-                              </div>
-                            )}
+                      {/* Items & Details Clickable Box (Only Cake Count) */}
+                      <div className="bg-[#FAF5EE]/60 border border-[#E6DBCE] rounded-xl p-3">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedOrderModal(o)}
+                          className="w-full text-left flex items-center justify-between group cursor-pointer"
+                        >
+                          <div>
+                            <span className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider block">Items &amp; Details</span>
+                            <span className="font-extrabold text-sm text-[#1C0D0A] group-hover:text-[#802B52] block mt-0.5">
+                              {(() => {
+                                const count = o.items?.reduce((sum: number, it: any) => sum + (it.quantity || 1), 0) || o.items?.length || 0;
+                                return `${count} ${count === 1 ? "Cake" : "Cakes"}`;
+                              })()}
+                            </span>
+                            <span className="text-[11px] text-[#802B52] font-semibold underline block mt-0.5">
+                              Tap to view items &amp; remarks
+                            </span>
                           </div>
-                        ))}
+                          <span className="material-symbols-outlined text-xl text-[#802B52] group-hover:translate-x-0.5 transition-transform">
+                            open_in_new
+                          </span>
+                        </button>
                       </div>
 
                       {/* Delivery Rider & OTP Details */}
                       <div className="bg-[#FAF5EE]/50 border border-[#E6DBCE]/60 rounded-xl p-3 space-y-2 text-xs">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-[#7A6B72]">🛵 Delivery Partner:</span>
+                          <span className="text-[11px] font-bold text-[#7A6B72]">Delivery Partner:</span>
                           {o.status === "DELIVERED" ? (
                             <span className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                              ✅ Delivered {o.deliveryPartnerName ? `by ${o.deliveryPartnerName}` : ""}
+                              Delivered {o.deliveryPartnerName ? `by ${o.deliveryPartnerName}` : ""}
                             </span>
                           ) : o.deliveryPartnerName ? (
                             <span className="text-xs font-bold text-[#5B1E38] bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
-                              🛵 {o.status === "OUT_FOR_DELIVERY" ? "Out for Delivery: " : ""}{o.deliveryPartnerName}
+                              {o.status === "OUT_FOR_DELIVERY" ? "Out for Delivery: " : ""}{o.deliveryPartnerName}
                             </span>
                           ) : (
                             <span className="text-xs text-gray-400 italic">Open to all delivery partners</span>
@@ -1940,7 +1943,7 @@ export default function AdminPage() {
                   ))}
                 </div>
 
-                {/* 🖥️ DESKTOP TABLE VIEW FOR ORDERS */}
+                {/* DESKTOP TABLE VIEW FOR ORDERS */}
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
@@ -1973,37 +1976,36 @@ export default function AdminPage() {
                           </td>
                           <td className="py-4 px-4">
                             <div className="font-semibold text-[#5B1E38]">{o.deliveryDate}</div>
-                            <div className="text-[11px] font-bold text-[#802B52] mt-0.5">⏰ {o.deliveryTimeSlot}</div>
+                            <div className="text-[11px] font-bold text-[#802B52] mt-0.5">{o.deliveryTimeSlot}</div>
                           </td>
-                          <td className="py-4 px-4 max-w-xs space-y-2">
-                            {o.items?.map((i: any, idx: number) => (
-                              <div key={idx} className="p-2 bg-[#FAF5EE] rounded-lg border border-[#E6DBCE]/70 text-[11px] space-y-0.5">
-                                <div className="font-bold text-[#2D2327]">
-                                  {i.quantity}x {i.productName} ({i.variantName})
-                                </div>
-                                <div className="flex flex-wrap items-center gap-1">
-                                  <span className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${i.isEggless ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-900"}`}>
-                                    {i.isEggless ? "🌱 Eggless" : "🥚 With Egg"}
-                                  </span>
-                                  {i.offer && (
-                                    <span className="px-1.5 py-0.2 rounded bg-amber-50 border border-amber-300 text-amber-900 text-[10px] font-bold">
-                                      🎁 {i.offer}
-                                    </span>
-                                  )}
-                                </div>
-                                {i.cakeMessage && (
-                                  <div className="text-[10px] text-[#802B52] italic font-medium">
-                                    🎂 &quot;{i.cakeMessage}&quot;
-                                  </div>
-                                )}
+                          <td className="py-4 px-4">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedOrderModal(o)}
+                              className="px-3.5 py-2 rounded-xl border border-[#E6DBCE] bg-[#FAF5EE] hover:bg-[#F3E8DC] hover:border-[#802B52]/40 text-left flex items-center justify-between gap-3 shadow-2xs group cursor-pointer transition-all w-full max-w-[210px]"
+                              title="Click to view full products ordered, cake remarks and customer texted details"
+                            >
+                              <div>
+                                <span className="font-extrabold text-xs block text-[#1C0D0A] group-hover:text-[#802B52]">
+                                  {(() => {
+                                    const count = o.items?.reduce((sum: number, it: any) => sum + (it.quantity || 1), 0) || o.items?.length || 0;
+                                    return `${count} ${count === 1 ? "Cake" : "Cakes"}`;
+                                  })()}
+                                </span>
+                                <span className="text-[10px] text-[#7A6B72] font-medium block">
+                                  View items &amp; remarks
+                                </span>
                               </div>
-                            ))}
+                              <span className="material-symbols-outlined text-base text-[#802B52] transition-transform group-hover:translate-x-0.5">
+                                open_in_new
+                              </span>
+                            </button>
                           </td>
                           <td className="py-4 px-4">
                             {o.status === "DELIVERED" ? (
                               <div className="space-y-1">
                                 <div className="font-bold text-emerald-800 text-[11px] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded inline-block">
-                                  ✅ Delivered {o.deliveryPartnerName ? `by ${o.deliveryPartnerName}` : ""}
+                                  Delivered {o.deliveryPartnerName ? `by ${o.deliveryPartnerName}` : ""}
                                 </div>
                                 {o.deliveryPartnerPhone && (
                                   <div className="text-[10px] text-[#7A6B72]">{o.deliveryPartnerPhone}</div>
@@ -2017,7 +2019,7 @@ export default function AdminPage() {
                             ) : o.deliveryPartnerName ? (
                               <div className="space-y-1">
                                 <div className="font-bold text-[#5B1E38] text-[11px] bg-amber-50 border border-amber-200 px-2 py-0.5 rounded inline-block">
-                                  🛵 {o.status === "OUT_FOR_DELIVERY" ? "Out: " : ""}{o.deliveryPartnerName}
+                                  {o.status === "OUT_FOR_DELIVERY" ? "Out: " : ""}{o.deliveryPartnerName}
                                 </div>
                                 {o.deliveryPartnerPhone && (
                                   <div className="text-[10px] text-[#7A6B72]">{o.deliveryPartnerPhone}</div>
@@ -2544,6 +2546,245 @@ export default function AdminPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* POPUP MODAL: ORDER DETAILS & CUSTOMER REMARKS */}
+      {selectedOrderModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+          <div className="bg-white rounded-2xl sm:rounded-3xl border border-[#E6DBCE] shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden my-auto animate-in fade-in zoom-in-95 duration-150">
+            {/* Modal Header */}
+            <div className="p-4 sm:p-5 border-b border-[#E6DBCE] flex items-center justify-between bg-[#FAF5EE]/70 shrink-0">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-sm sm:text-base font-extrabold text-[#802B52] bg-white border border-[#E6DBCE] px-2.5 py-0.5 rounded-lg">
+                    {selectedOrderModal.orderNumber}
+                  </span>
+                  <span
+                    className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                      selectedOrderModal.status === "DELIVERED"
+                        ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                        : selectedOrderModal.status === "CANCELLED"
+                        ? "bg-rose-100 text-rose-800 border border-rose-300"
+                        : selectedOrderModal.status === "OUT_FOR_DELIVERY"
+                        ? "bg-amber-100 text-amber-900 border border-amber-300"
+                        : "bg-purple-100 text-[#802B52] border border-purple-200"
+                    }`}
+                  >
+                    {selectedOrderModal.status}
+                  </span>
+                </div>
+                <p className="text-[11px] text-[#7A6B72]">
+                  Ordered on {new Date(selectedOrderModal.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedOrderModal(null)}
+                className="w-8 h-8 rounded-full bg-white hover:bg-gray-100 border border-[#E6DBCE] text-[#7A6B72] hover:text-[#1C0D0A] flex items-center justify-center font-bold text-sm cursor-pointer transition-colors"
+                title="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Scrollable Body */}
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-5 text-xs text-[#2D2327]">
+              {/* Customer & Delivery Schedule Info */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#FAF5EE]/50 border border-[#E6DBCE]/70 rounded-2xl p-3.5">
+                <div className="space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider block">Customer Details</span>
+                  <p className="font-bold text-sm text-[#1C0D0A]">{selectedOrderModal.customerName}</p>
+                  {selectedOrderModal.customerPhone && (
+                    <p className="text-xs">
+                      Phone:{" "}
+                      <a href={`tel:${selectedOrderModal.customerPhone}`} className="text-[#802B52] font-semibold hover:underline">
+                        {selectedOrderModal.customerPhone}
+                      </a>
+                    </p>
+                  )}
+                  {selectedOrderModal.customerEmail && (
+                    <p className="text-xs text-[#7A6B72]">{selectedOrderModal.customerEmail}</p>
+                  )}
+                  <p className="text-[11px] text-[#5C524E] pt-1">
+                    {selectedOrderModal.streetAddress}, {selectedOrderModal.city} - {selectedOrderModal.pincode}
+                  </p>
+                </div>
+
+                <div className="space-y-1 sm:border-l sm:border-[#E6DBCE]/70 sm:pl-3.5 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#E6DBCE]/60">
+                  <span className="text-[10px] uppercase font-bold text-[#7A6B72] tracking-wider block">Delivery Schedule &amp; Rider</span>
+                  <p className="text-xs font-semibold text-[#5B1E38]">
+                    Date: <span className="font-bold text-[#1C0D0A]">{selectedOrderModal.deliveryDate}</span>
+                  </p>
+                  <p className="text-xs font-semibold text-[#802B52]">
+                    Slot: <span className="font-bold">{selectedOrderModal.deliveryTimeSlot}</span>
+                  </p>
+                  {selectedOrderModal.deliveryPartnerName && (
+                    <p className="text-xs text-[#5C524E]">
+                      Rider: <span className="font-semibold text-[#1C0D0A]">{selectedOrderModal.deliveryPartnerName}</span>
+                      {selectedOrderModal.deliveryPartnerPhone && ` (${selectedOrderModal.deliveryPartnerPhone})`}
+                    </p>
+                  )}
+                  {selectedOrderModal.deliveryOtp && (
+                    <div className="pt-1 flex items-center gap-1.5">
+                      <span className="text-[11px] text-[#7A6B72] font-semibold">Delivery OTP:</span>
+                      <span className="font-mono font-bold text-xs text-[#802B52] bg-white border border-[#E6DBCE] px-2 py-0.5 rounded shadow-2xs">
+                        {selectedOrderModal.deliveryOtp} {selectedOrderModal.deliveryOtpVerified && "✓"}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Products Ordered Section */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-bold text-xs uppercase tracking-wider text-[#5B1E38]">
+                    Products Ordered ({selectedOrderModal.items?.length || 0})
+                  </h4>
+                  <span className="text-[11px] font-semibold text-[#7A6B72]">
+                    Total Cakes: {selectedOrderModal.items?.reduce((sum: number, it: any) => sum + (it.quantity || 1), 0) || selectedOrderModal.items?.length || 0}
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  {selectedOrderModal.items?.map((item: any, idx: number) => (
+                    <div key={idx} className="bg-[#FAF5EE]/40 border border-[#E6DBCE] rounded-xl p-3 space-y-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                        <div>
+                          <span className="font-extrabold text-xs sm:text-sm text-[#1C0D0A]">
+                            <span className="text-[#802B52] font-black mr-1">{item.quantity}x</span>
+                            {item.productName}
+                            {item.variantName ? ` (${item.variantName})` : ""}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <span className="font-bold text-xs sm:text-sm text-[#802B52]">
+                            ₹{item.lineTotal || (item.unitPrice * item.quantity)}
+                          </span>
+                          <span className="text-[10px] text-[#7A6B72] block">
+                            (₹{item.unitPrice} each)
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                        <span
+                          className={`px-2 py-0.5 rounded-md font-bold ${
+                            item.isEggless
+                              ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                              : "bg-amber-50 text-amber-900 border border-amber-200"
+                          }`}
+                        >
+                          {item.isEggless ? "Eggless" : "With Egg"}
+                        </span>
+
+                        {item.offer && (
+                          <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-300 text-amber-900 font-bold">
+                            Offer: {item.offer}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Cake Message Remarks */}
+                      {item.cakeMessage && (
+                        <div className="bg-white border border-[#E6DBCE] rounded-lg p-2.5 text-xs">
+                          <span className="font-bold text-[10px] uppercase text-[#7A6B72] block tracking-wider">
+                            Cake Inscription / Remarks:
+                          </span>
+                          <span className="font-semibold italic text-xs text-[#802B52] mt-0.5 block">
+                            &ldquo;{item.cakeMessage}&rdquo;
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Customer Texted Remarks & Special Instructions */}
+              <div className="bg-[#FAF5EE] border border-[#E6DBCE] rounded-xl p-3.5 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs uppercase tracking-wider text-[#5B1E38]">
+                    Customer Remarks &amp; Special Instructions
+                  </span>
+                  <span className="text-[10px] text-[#7A6B72] font-semibold">Checkout Notes</span>
+                </div>
+
+                {selectedOrderModal.specialInstructions || selectedOrderModal.deliveryNotes ? (
+                  <div className="bg-white p-3 rounded-lg border border-[#E6DBCE] text-xs text-[#1C0D0A] font-medium whitespace-pre-wrap leading-relaxed shadow-2xs">
+                    {selectedOrderModal.specialInstructions || selectedOrderModal.deliveryNotes}
+                  </div>
+                ) : (
+                  <div className="bg-white/60 p-2.5 rounded-lg border border-[#E6DBCE]/50 text-xs text-[#7A6B72] italic">
+                    No special instructions were texted by the customer for this order.
+                  </div>
+                )}
+
+                {/* Fallback if order-level cake message exists */}
+                {selectedOrderModal.cakeMessage && !selectedOrderModal.items?.some((it: any) => it.cakeMessage === selectedOrderModal.cakeMessage) && (
+                  <div className="bg-white p-3 rounded-lg border border-[#E6DBCE] text-xs space-y-1 shadow-2xs">
+                    <span className="font-bold text-[10px] uppercase text-[#7A6B72] block tracking-wider">
+                      Order Message on Cake:
+                    </span>
+                    <span className="font-semibold italic text-xs text-[#802B52]">
+                      &ldquo;{selectedOrderModal.cakeMessage}&rdquo;
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Payment & Amount Summary */}
+              <div className="bg-[#FAF5EE]/40 border border-[#E6DBCE] rounded-xl p-3.5 space-y-1.5">
+                <div className="flex justify-between text-xs text-[#7A6B72]">
+                  <span>Payment Method:</span>
+                  <span className="font-bold text-[#1C0D0A] uppercase">{selectedOrderModal.paymentMethod || "COD"}</span>
+                </div>
+                <div className="flex justify-between text-xs text-[#7A6B72]">
+                  <span>Payment Status:</span>
+                  <span className={`font-bold ${selectedOrderModal.paymentStatus === "PAID" ? "text-emerald-700" : "text-amber-800"}`}>
+                    {selectedOrderModal.paymentStatus || "PENDING"}
+                  </span>
+                </div>
+                <div className="flex justify-between text-xs text-[#7A6B72]">
+                  <span>Subtotal:</span>
+                  <span className="font-semibold text-[#1C0D0A]">₹{selectedOrderModal.subtotal}</span>
+                </div>
+                {Number(selectedOrderModal.deliveryFee || 0) > 0 && (
+                  <div className="flex justify-between text-xs text-[#7A6B72]">
+                    <span>Delivery Fee:</span>
+                    <span className="font-semibold text-[#1C0D0A]">₹{selectedOrderModal.deliveryFee}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-sm sm:text-base font-extrabold text-[#802B52] pt-2 border-t border-[#E6DBCE]">
+                  <span>Total Amount:</span>
+                  <span>₹{selectedOrderModal.totalAmount}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div className="p-3.5 sm:p-4 border-t border-[#E6DBCE] bg-[#FAF5EE]/70 flex items-center justify-between gap-2 shrink-0">
+              <a
+                href={`/api/orders/${selectedOrderModal.id}/invoice`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#FAF5EE] text-[#802B52] border border-[#E6DBCE] text-xs font-bold transition-colors inline-flex items-center gap-1.5 shadow-2xs cursor-pointer"
+              >
+                <span>View / Print Invoice</span>
+                <span className="material-symbols-outlined text-sm">open_in_new</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => setSelectedOrderModal(null)}
+                className="px-5 py-2 rounded-xl bg-[#802B52] hover:bg-[#962854] text-white text-xs font-bold transition-colors shadow-sm cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}

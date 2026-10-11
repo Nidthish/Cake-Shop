@@ -123,17 +123,14 @@ export default function ShippingPolicyPage() {
               4. Shipping Rates &amp; Charges
             </h2>
             <p className="mb-3">
-              Delivery charges are calculated transparently and displayed on the checkout page before you make any payment via Razorpay:
+              Delivery charges are calculated manually based on distance and communicated transparently:
             </p>
             <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm">
               <li>
-                <strong>Orders ₹499 and Above:</strong> <strong>FREE Doorstep Delivery</strong> across standard Trichy city locations.
+                <strong>Doorstep Delivery:</strong> Delivery charge is calculated manually at <strong>₹5 per kilometer</strong> from our bakery to your delivery address, payable directly to the delivery partner upon arrival.
               </li>
               <li>
-                <strong>Orders Below ₹499:</strong> A nominal delivery charge of <strong>₹50</strong> applies to support dedicated courier transit.
-              </li>
-              <li>
-                <strong>Self-Pickup:</strong> 100% <strong>FREE</strong>. You can choose to collect your packaged order directly from our bakery counters.
+                <strong>Self-Pickup:</strong> 100% <strong>FREE</strong>. You can choose to collect your packaged order directly from our bakery counter.
               </li>
             </ul>
           </section>

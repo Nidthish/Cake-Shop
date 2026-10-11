@@ -390,6 +390,13 @@ export default function CheckoutPage() {
                     />
                     {errors.pincode && <p className="text-xs text-red-600 mt-1">{errors.pincode}</p>}
                   </div>
+
+                  <div className="sm:col-span-2 mt-2 p-3.5 bg-[#FAF5EE] rounded-xl border border-[#E6DBCE] flex items-start gap-2.5 text-xs text-[#5C524E]">
+                    <span className="material-symbols-outlined text-base text-[#802B52] mt-0.5">two_wheeler</span>
+                    <div>
+                      <strong className="text-[#802B52]">Doorstep Delivery Charge Note:</strong> Delivery charges are calculated manually at <strong>₹5 per kilometer</strong> from our bakery to your delivery address, payable directly upon delivery.
+                    </div>
+                  </div>
                 </div>
               </section>
 
@@ -627,9 +634,9 @@ export default function CheckoutPage() {
                     <span>CGST (2.5%)</span>
                     <span>₹{summary.cgst}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center text-xs">
                     <span>Delivery Fee</span>
-                    <span className="text-emerald-600 font-bold">FREE</span>
+                    <span className="text-[#802B52] font-bold text-right">₹5 / km (Calculated manually)</span>
                   </div>
                 </div>
 

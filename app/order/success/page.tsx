@@ -198,6 +198,9 @@ function SuccessContent() {
                 <div><strong>Delivery Date:</strong> {new Date(order.schedule.date).toLocaleDateString("en-IN", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}</div>
                 <div><strong>Time Slot:</strong> <span className="font-bold text-[#802B52]">{order.schedule.timeSlot}</span></div>
                 <div><strong>Address:</strong> {order.address.street}, {order.address.city} - {order.address.pincode}</div>
+                <div className="mt-2 pt-2 border-t border-[#E6DBCE] text-[11px] text-[#5C524E]">
+                  <strong className="text-[#802B52]">🛵 Delivery Charge Note:</strong> Delivery charge will be calculated manually at <strong>₹5 per kilometer</strong> from our bakery to your doorstep and payable to the delivery partner upon arrival.
+                </div>
               </div>
             </div>
 
@@ -271,9 +274,11 @@ function SuccessContent() {
                 <span>Tax (5% GST):</span>
                 <span>₹{order.tax}</span>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between items-center">
                 <span>Delivery Charge:</span>
-                <span className="text-emerald-600 font-bold">FREE</span>
+                <span className="text-[#802B52] font-bold text-right">
+                  ₹5 / km (Calculated manually by distance)
+                </span>
               </div>
               <div className="border-t border-[#E6DBCE] pt-2 mt-2 flex justify-between text-base font-extrabold text-[#802B52]">
                 <span>Total Amount:</span>

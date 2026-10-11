@@ -395,6 +395,7 @@ export function generateInvoiceHtml(order: Order, options: { autoPrint?: boolean
               <li>This is a computer-generated tax invoice and requires no physical signature.</li>
               <li>Handcrafted fresh to order using 100% pure food-grade ingredients.</li>
               <li>Storage: Refrigerate below 4°C immediately upon receipt and consume within 24 hours.</li>
+              <li><strong>Delivery Charge:</strong> Standard doorstep delivery is charged manually at Rs. 5 per km from our bakery, payable upon delivery.</li>
               <li><strong>Refund &amp; Replacement Policy:</strong> As all products are freshly prepared perishable food items, returns are not accepted after handoff. If you experience transit damage or quality concerns, notify via WhatsApp (+91 9489569661) within 2 hours of delivery for an immediate replacement or full refund.</li>
               <li>For support, contact Helpline / WhatsApp: +91 9489569661 quoting your Order ID.</li>
             </ol>
@@ -416,7 +417,7 @@ export function generateInvoiceHtml(order: Order, options: { autoPrint?: boolean
           </div>
           <div class="breakdown-row">
             <span>Delivery Charges:</span>
-            <strong>${(order.deliveryFee || 0) === 0 ? "FREE" : `Rs. ${(order.deliveryFee || 0).toFixed(2)}`}</strong>
+            <strong>Manual (Rs. 5/km)</strong>
           </div>
           <div class="breakdown-row total">
             <span>Grand Total:</span>
@@ -566,6 +567,9 @@ export function generateInvoicePdf(order: Order): Uint8Array {
   doc.text(splitAddress, margin + 10, y + 67);
 
   // Card B: Order & Payment Details
+  doc.setFillColor(255, 255, 255);
+  doc.setDrawColor(180, 180, 180);
+  doc.setLineWidth(0.75);
   doc.roundedRect(margin + cardWidth + 10, y, cardWidth, cardHeight, 4, 4, "FD");
 
   const cardBX = margin + cardWidth + 20;
@@ -574,6 +578,8 @@ export function generateInvoicePdf(order: Order): Uint8Array {
   doc.setTextColor(0, 0, 0);
   doc.text("ORDER & PAYMENT INFORMATION", cardBX, y + 15);
 
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(0.5);
   doc.line(cardBX - 10, y + 20, margin + contentWidth - 10, y + 20);
 
   const deliveryScheduleDate = order.schedule?.date
@@ -763,7 +769,7 @@ export function generateInvoicePdf(order: Order): Uint8Array {
   sumLine("Items Subtotal:", `Rs. ${(order.subtotal || 0).toFixed(2)}`, y + 16);
   sumLine("SGST (2.5%):", `Rs. ${(order.sgst || 0).toFixed(2)}`, y + 30);
   sumLine("CGST (2.5%):", `Rs. ${(order.cgst || 0).toFixed(2)}`, y + 44);
-  sumLine("Delivery Charges:", (order.deliveryFee || 0) === 0 ? "FREE" : `Rs. ${(order.deliveryFee || 0).toFixed(2)}`, y + 58);
+  sumLine("Delivery Charges:", "Manual (Rs. 5/km)", y + 58);
 
   // Total Divider line
   doc.setDrawColor(0, 0, 0);
@@ -796,22 +802,23 @@ export function generateInvoicePdf(order: Order): Uint8Array {
   doc.line(noteX + 10, y + 18, noteX + noteWidth - 10, y + 18);
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(7);
+  doc.setFontSize(6.8);
   doc.setTextColor(60, 60, 60);
 
   const notesText = [
     "1. Computer-generated tax invoice; requires no physical signature.",
     "2. Handcrafted fresh to order using 100% pure food-grade ingredients.",
     "3. Storage: Refrigerate below 4C upon receipt; consume within 24 hours.",
-    "4. Refund Policy: As bakery items are perishable, returns are not accepted after handoff. For damaged delivery or quality issues, notify via WhatsApp within 2 hours of delivery for an immediate replacement or full refund.",
-    "5. For support, contact Helpline / WhatsApp: +91 9489569661 with Order ID.",
+    "4. Delivery Charge: Standard doorstep delivery is charged manually at Rs. 5 per km from our bakery, payable to delivery partner upon arrival.",
+    "5. Refund Policy: Perishable food item; returns not accepted after handoff. For transit damage, notify via WhatsApp within 2 hours with photos.",
+    "6. For support, contact Helpline / WhatsApp: +91 9489569661 with Order ID.",
   ];
 
-  let noteY = y + 27;
+  let noteY = y + 26;
   notesText.forEach((t) => {
     const wrappedT = doc.splitTextToSize(t, noteWidth - 20);
     doc.text(wrappedT, noteX + 10, noteY);
-    noteY += Array.isArray(wrappedT) ? wrappedT.length * 9 : 9;
+    noteY += Array.isArray(wrappedT) ? wrappedT.length * 8.5 : 8.5;
   });
 
   // 7. Footer Divider & Text

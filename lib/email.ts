@@ -171,7 +171,8 @@ export function generateOrderConfirmationHtml(order: Order): string {
                           <strong>Phone:</strong> ${order.customer.phone}<br />
                           <strong>Address:</strong> ${order.address.street}, ${order.address.city} - ${order.address.pincode}<br />
                           <strong>Scheduled Date:</strong> ${deliveryDateFormatted}<br />
-                          <strong>Time Slot:</strong> <span style="color: #802B52; font-weight: bold;">${order.schedule.timeSlot}</span>
+                          <strong>Time Slot:</strong> <span style="color: #802B52; font-weight: bold;">${order.schedule.timeSlot}</span><br />
+                          <span style="font-size: 11px; color: #7A6B72; display: inline-block; margin-top: 4px;">🛵 <strong>Delivery Charge:</strong> Manually calculated at ₹5 per km from our bakery, payable upon delivery.</span>
                         </div>
                       </div>
                     </td>
@@ -226,8 +227,8 @@ export function generateOrderConfirmationHtml(order: Order): string {
                         </tr>
                         <tr>
                           <td style="padding: 4px 0; font-size: 13px; color: #5B1E38;">Delivery Charge:</td>
-                          <td style="padding: 4px 0; font-size: 13px; color: #1B5E20; text-align: right; font-weight: bold;">
-                            ${order.deliveryFee === 0 ? "FREE" : `₹${order.deliveryFee.toFixed(2)}`}
+                          <td style="padding: 4px 0; font-size: 13px; color: #802B52; text-align: right; font-weight: bold;">
+                            ₹5 / km (Calculated manually)
                           </td>
                         </tr>
                         <tr>
@@ -488,16 +489,6 @@ export function generateOrderDeliveredHtml(order: Order): string {
                   </tr>
                 </table>
 
-                <!-- Official Tax Invoice PDF Attached Notice -->
-                <div style="background-color: #FFFDF8; border: 1.5px dashed #D4AF37; border-radius: 12px; padding: 14px 18px; margin-bottom: 25px; text-align: center;">
-                  <span style="font-size: 13px; font-weight: bold; color: #802B52;">
-                    📎 Official Tax Invoice (PDF) Attached
-                  </span>
-                  <p style="margin: 4px 0 0 0; font-size: 12px; color: #5C524E;">
-                    Your official tax invoice receipt has been generated and attached as a PDF document to this email for your records.
-                  </p>
-                </div>
-
                 <!-- WhatsApp Feedback Banner -->
                 <div style="background-color: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 12px; padding: 16px; text-align: center;">
                   <span style="font-size: 14px; font-weight: bold; color: #2E7D32;">
@@ -533,7 +524,7 @@ export function generateOrderDeliveredHtml(order: Order): string {
 }
 
 /**
- * Send Order Delivered Email to customer
+ * Send Order Delivered Email to customer (Without invoice - invoice is sent only on order confirmation)
  */
 export async function sendOrderDeliveredEmail(order: Order): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
@@ -551,25 +542,13 @@ export async function sendOrderDeliveredEmail(order: Order): Promise<{ success: 
 
     const htmlContent = generateOrderDeliveredHtml(order);
 
-    let pdfAttachment: any = null;
-    try {
-      const pdfBytes = generateInvoicePdf(order);
-      pdfAttachment = {
-        filename: `Lollipop-Invoice-${order.id}.pdf`,
-        content: Buffer.from(pdfBytes),
-        contentType: "application/pdf",
-      };
-    } catch (pdfErr) {
-      console.warn(`⚠️ [Email Service] Could not generate delivery PDF invoice for order ${order.id}:`, pdfErr);
-    }
-
     const mailOptions = {
       from: fromAddress,
       to: toAddress,
       replyTo: smtpUser || undefined,
       subject: `🎉 Your Order is Delivered Successfully! - Order ${order.id} | Lollipop Cake Shop`,
       html: htmlContent,
-      attachments: pdfAttachment ? [pdfAttachment] : [],
+      attachments: [], // Invoices are sent exclusively upon Order Confirmation, not delivery
     };
 
     console.log(`📧 [Email Service] Sending delivery confirmation email to ${toAddress} for Order ${order.id}...`);
