@@ -9,6 +9,7 @@
     "lint": "eslint app components lib types",
     "test": "npx tsx tests/security-suite.ts",
     "seed:neon": "npx tsx scripts/seed-neon.ts",
+    "seed:new-cakes": "npx tsx scripts/seed-new-cakes-to-neon.ts",
     "seed:db": "npx tsx scripts/seed-neon.ts"
   },
   "dependencies": {
