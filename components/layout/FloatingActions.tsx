@@ -299,6 +299,7 @@ export default function FloatingActions() {
     "/order",
     "/track-order",
     "/search-order",
+    "/custom-cake",
   ];
 
   const isHiddenRoute = HIDDEN_PREFIXES.some(
