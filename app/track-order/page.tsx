@@ -23,7 +23,20 @@ function TrackOrderContent() {
   async function executeSearch(query: string) {
     const q = query.trim();
     if (!q) {
-      setErrorMsg("Please enter your Order ID or registered mobile phone number.");
+      setErrorMsg("Please enter your Order ID.");
+      return;
+    }
+
+    // Explicitly reject mobile numbers with guidance
+    const digitsOnly = q.replace(/[\s\-\(\)\+]/g, "");
+    const isMobileNumber =
+      /^(?:\+?91)?[6-9]\d{9}$/.test(digitsOnly) ||
+      (/^\d{10,13}$/.test(digitsOnly) && !q.toUpperCase().startsWith("LLP-"));
+
+    if (isMobileNumber) {
+      setOrders([]);
+      setHasSearched(true);
+      setErrorMsg("Tracking by mobile number is disabled. Please enter your Order ID (e.g. LLP-2026...).");
       return;
     }
 
@@ -38,11 +51,11 @@ function TrackOrderContent() {
       if (data.success && Array.isArray(data.orders)) {
         setOrders(data.orders);
         if (data.orders.length === 0) {
-          setErrorMsg(`No orders found matching "${q}". Please double-check your Order ID or phone number.`);
+          setErrorMsg(data.message || `No orders found with Order ID "${q}". Please double-check your Order ID.`);
         }
       } else {
         setOrders([]);
-        setErrorMsg(data.error || "Unable to locate order. Please check your query.");
+        setErrorMsg(data.error || "Unable to locate order. Please check your Order ID.");
       }
     } catch {
       setOrders([]);
@@ -87,7 +100,7 @@ function TrackOrderContent() {
             Track Your Cake Order Status
           </h1>
           <p className="text-sm text-[#5C524E] max-w-xl mx-auto">
-            Enter your <strong>Order Number</strong> (e.g. <code>LLP-2026...</code>) or <strong>10-digit mobile phone number</strong> to view live delivery progress and payment details.
+            Enter your <strong>Order ID</strong> (e.g. <code>LLP-2026...</code>) to view live delivery progress and payment details.
           </p>
         </div>
 
@@ -102,7 +115,7 @@ function TrackOrderContent() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Enter Order ID (LLP-...) or 10-digit Mobile Number"
+                placeholder="Enter Order ID (e.g. LLP-20260416-1234)"
                 className="w-full bg-[#FAF5EE] border border-[#E6DBCE] rounded-2xl py-3.5 pl-12 pr-4 text-sm font-semibold text-[#1C0D0A] focus:outline-none focus:border-[#802B52] placeholder-[#7A6B72]"
               />
             </div>
@@ -127,7 +140,7 @@ function TrackOrderContent() {
 
           {/* Quick Help Hints */}
           <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-[#7A6B72]">
-            <span>Tip: You can search by your 10-digit mobile number to track active orders.</span>
+            <span>Tip: You can find your Order ID on your order confirmation page or SMS receipt.</span>
           </div>
         </div>
 
@@ -407,7 +420,7 @@ function TrackOrderContent() {
               Check Your Order Progress
             </h3>
             <p className="text-xs text-[#5C524E] max-w-md mx-auto">
-              Enter your Order ID or registered mobile phone number above to see real-time baking and delivery status.
+              Enter your Order ID above to see real-time baking and delivery status.
             </p>
           </div>
         )}

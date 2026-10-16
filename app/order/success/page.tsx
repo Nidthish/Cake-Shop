@@ -292,7 +292,7 @@ function SuccessContent() {
         {/* Bottom Actions */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="/track-order"
+            href={order?.id ? `/track-order?orderId=${encodeURIComponent(order.id)}` : "/track-order"}
             className="w-full sm:w-auto bg-[#250527] hover:bg-[#4A0E4E] text-white text-xs font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 uppercase tracking-wider transition-colors shadow-md text-center"
           >
             Track Order Live

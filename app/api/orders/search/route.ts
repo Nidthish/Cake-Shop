@@ -29,17 +29,39 @@ export async function GET(req: NextRequest) {
 
   try {
     const { searchParams } = new URL(req.url);
-    const query = searchParams.get("q")?.trim() || "";
+    const rawQuery = searchParams.get("q") || searchParams.get("orderId") || "";
+    const query = rawQuery.trim();
 
     if (!query) {
       return NextResponse.json(
-        { success: false, error: "Please enter an order number or mobile phone number." },
+        { success: false, error: "Please enter your Order ID." },
         { status: 400 }
       );
     }
 
-    // First check exact order ID lookup
-    const directOrder = await orderStore.get(query);
+    // Explicitly reject mobile phone number queries
+    const digitsOnly = query.replace(/[\s\-\(\)\+]/g, "");
+    const isMobileNumber =
+      /^(?:\+?91)?[6-9]\d{9}$/.test(digitsOnly) ||
+      (/^\d{10,13}$/.test(digitsOnly) && !query.toUpperCase().startsWith("LLP-"));
+
+    if (isMobileNumber) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Tracking by mobile phone number is disabled. Please track your order using your Order ID (e.g. LLP-2026...).",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Lookup strictly by Order ID (remove any '#' prefix that users may copy)
+    const cleanId = query.replace(/^#/, "").trim();
+    let directOrder = await orderStore.get(cleanId);
+    if (!directOrder && cleanId !== cleanId.toUpperCase()) {
+      directOrder = await orderStore.get(cleanId.toUpperCase());
+    }
+
     if (directOrder) {
       return NextResponse.json({
         success: true,
@@ -48,14 +70,11 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // Otherwise perform fuzzy multi-field search
-    const rawOrders = await orderStore.search(query);
-    const sanitizedOrders = rawOrders.map(sanitizeOrder);
-
     return NextResponse.json({
       success: true,
-      count: sanitizedOrders.length,
-      orders: sanitizedOrders,
+      count: 0,
+      orders: [],
+      message: `No order found with Order ID "${query}". Please verify your Order ID.`,
     });
   } catch (error: any) {
     console.error("[GET /api/orders/search] Error:", error);

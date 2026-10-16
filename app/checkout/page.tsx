@@ -36,10 +36,30 @@ const SPECIFIC_DELIVERY_TIMES = [
   "09:30 PM",
 ];
 
-function tomorrow(): string {
+const POPULAR_TIME_CHIPS = [
+  { label: "11:00 AM", slot: "11:00 AM", desc: "Brunch" },
+  { label: "01:00 PM", slot: "01:00 PM", desc: "Lunch" },
+  { label: "04:00 PM", slot: "04:00 PM", desc: "Teatime" },
+  { label: "06:30 PM", slot: "06:30 PM", desc: "Evening" },
+  { label: "08:00 PM", slot: "08:00 PM", desc: "Dinner" },
+  { label: "09:00 PM", slot: "09:00 PM", desc: "Late Party" },
+];
+
+function getDayString(daysOffset: number): string {
   const d = new Date();
-  d.setDate(d.getDate() + 1);
+  d.setDate(d.getDate() + daysOffset);
   return d.toISOString().split("T")[0];
+}
+
+function formatDisplayDate(dateStr: string): string {
+  if (!dateStr) return "";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const dateObj = new Date(y, m - 1, d);
+  return dateObj.toLocaleDateString("en-IN", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
 }
 
 export default function CheckoutPage() {
@@ -54,17 +74,43 @@ export default function CheckoutPage() {
 
   // Address State
   const [street, setStreet] = useState("");
-  const [city, setCity] = useState("Tiruchirappalli");
+  const [city] = useState("Tiruchirappalli");
   const [pincode, setPincode] = useState("");
 
+  // Eggless check & Minimum delivery date logic
+  const egglessItems = useMemo(
+    () => items.filter((i) => i.eggPreference === "eggless"),
+    [items]
+  );
+  const hasEggless = egglessItems.length > 0;
+  const todayStr = useMemo(() => getDayString(0), []);
+  const tomorrowStr = useMemo(() => getDayString(1), []);
+  const dayAfterStr = useMemo(() => getDayString(2), []);
+  const minDate = useMemo(() => (hasEggless ? tomorrowStr : todayStr), [hasEggless, tomorrowStr, todayStr]);
+
   // Schedule State: Specific Delivery Time
-  const [date, setDate] = useState(tomorrow());
-  const [timeSlot, setTimeSlot] = useState(SPECIFIC_DELIVERY_TIMES[14]); // Default to 04:00 PM
+  const [date, setDate] = useState(tomorrowStr);
+  const [timeSlot, setTimeSlot] = useState("04:00 PM"); // Default to 04:00 PM
   const [customTime, setCustomTime] = useState("");
 
   // Cake Customization State
   const [cakeMessage, setCakeMessage] = useState("");
   const [specialInstructions, setSpecialInstructions] = useState("");
+
+  // Carryover cake message from cart item if available
+  useEffect(() => {
+    const itemWithMsg = items.find((i) => i.cakeMessage?.trim());
+    if (itemWithMsg?.cakeMessage && !cakeMessage) {
+      setCakeMessage(itemWithMsg.cakeMessage.trim());
+    }
+  }, [items, cakeMessage]);
+
+  // If eggless items are present and date was somehow set to today, update to tomorrow
+  useEffect(() => {
+    if (hasEggless && date === todayStr) {
+      setDate(tomorrowStr);
+    }
+  }, [hasEggless, date, todayStr, tomorrowStr]);
 
   // Payment Option: "COD" (Direct Order / Cash on Delivery) vs "RAZORPAY" (Online Payment)
   const [paymentOption, setPaymentOption] = useState<"COD" | "RAZORPAY">("COD");
@@ -84,27 +130,39 @@ export default function CheckoutPage() {
     }
   }, []);
 
-  const egglessItems = useMemo(
-    () => items.filter((i) => i.eggPreference === "eggless"),
-    [items]
-  );
-  const hasEggless = egglessItems.length > 0;
-  const todayStr = useMemo(() => new Date().toISOString().split("T")[0], []);
-  const minDate = useMemo(() => (hasEggless ? tomorrow() : todayStr), [hasEggless, todayStr]);
+  function clearError(field: string) {
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const copy = { ...prev };
+      delete copy[field];
+      return copy;
+    });
+  }
 
   function validate(): boolean {
     const next: Record<string, string> = {};
-    if (fullName.trim().length < 2) next.fullName = "Enter your full name.";
+    if (fullName.trim().length < 2) next.fullName = "Please enter your full name.";
     if (!/^[6-9]\d{9}$/.test(phone.trim())) next.phone = "Enter a valid 10-digit mobile number.";
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) next.email = "Enter a valid email address.";
-    if (street.trim().length < 5) next.street = "Enter your complete delivery address.";
-    if (city.trim().length < 2) next.city = "City is required.";
-    if (!/^\d{6}$/.test(pincode.trim())) next.pincode = "Enter a valid 6-digit pincode.";
+    if (street.trim().length < 5) next.street = "Enter your full street address & door number.";
+    if (!/^\d{6}$/.test(pincode.trim())) next.pincode = "Enter a valid 6-digit postal pincode.";
     if (hasEggless && date === todayStr) {
-      next.date = "Delivery for today is not available for eggless cakes. Select tomorrow or later.";
+      next.date = "Eggless cakes require 24 hours prior baking notice. Please choose tomorrow or later.";
     }
+
     setErrors(next);
-    return Object.keys(next).length === 0;
+
+    if (Object.keys(next).length > 0) {
+      // Scroll to the first error element smoothly
+      const firstErrorField = Object.keys(next)[0];
+      const el = document.getElementById(firstErrorField);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.focus();
+      }
+      return false;
+    }
+    return true;
   }
 
   async function handleSubmitOrder() {
@@ -113,7 +171,7 @@ export default function CheckoutPage() {
       return;
     }
     if (!validate()) {
-      showToast("Please fill in all required delivery details.", "error");
+      showToast("Please complete the required delivery information.", "error");
       return;
     }
 
@@ -148,14 +206,14 @@ export default function CheckoutPage() {
         const data = await res.json();
         if (data.success && data.orderId) {
           clearCart();
-          showToast("Order placed successfully! Order confirmation email sent.", "success");
+          showToast("Order placed successfully! Confirmation invoice dispatched.", "success");
           router.push(`/order/success?orderId=${data.orderId}`);
         } else {
-          showToast(data.error || "Could not place order. Please try again.", "error");
+          showToast(data.error || "Could not place order. Please check your details.", "error");
           setSubmitting(false);
         }
       } catch {
-        showToast("Network error. Please try again.", "error");
+        showToast("Network error placing order. Please try again.", "error");
         setSubmitting(false);
       }
       return;
@@ -193,7 +251,7 @@ export default function CheckoutPage() {
       const data = await res.json();
 
       if (!data.success) {
-        showToast(data.error || "Could not start payment.", "error");
+        showToast(data.error || "Could not initiate payment gateway.", "error");
         setSubmitting(false);
         return;
       }
@@ -234,7 +292,7 @@ export default function CheckoutPage() {
         modal: {
           ondismiss: () => {
             setSubmitting(false);
-            showToast("Payment cancelled.", "info");
+            showToast("Payment checkout cancelled.", "info");
           },
         },
       });
@@ -251,16 +309,32 @@ export default function CheckoutPage() {
     }
   }
 
+  // Quick Date Pill Options
+  const dateOptions = useMemo(() => {
+    const list = [];
+    if (!hasEggless) {
+      list.push({ dateStr: todayStr, label: "Today", sub: formatDisplayDate(todayStr) });
+    }
+    list.push({ dateStr: tomorrowStr, label: "Tomorrow", sub: formatDisplayDate(tomorrowStr) });
+    list.push({ dateStr: dayAfterStr, label: "Day After", sub: formatDisplayDate(dayAfterStr) });
+    return list;
+  }, [hasEggless, todayStr, tomorrowStr, dayAfterStr]);
+
   if (items.length === 0) {
     return (
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
-        <div className="w-20 h-20 bg-[#802B52]/10 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl text-[#802B52]">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+        <div className="w-20 h-20 bg-[#802B52]/10 rounded-full flex items-center justify-center mx-auto mb-5 text-[#802B52]">
           <span className="material-symbols-outlined text-4xl">cake</span>
         </div>
         <h1 className="font-display font-bold text-3xl text-[#1C0D0A] mb-3">Your Cart is Empty</h1>
-        <p className="text-[#5C524E] mb-8">Add something delicious to your cart to proceed with ordering.</p>
-        <Link href="/cakes" className="btn-primary inline-flex items-center gap-2 py-3.5 px-8 text-xs font-bold uppercase tracking-wider">
-          Explore Cake Catalog
+        <p className="text-sm text-[#5C524E] mb-8 max-w-md mx-auto">
+          Please add a freshly baked cake or dessert to your cart before proceeding to checkout.
+        </p>
+        <Link
+          href="/cakes"
+          className="btn-primary inline-flex items-center gap-2 py-3.5 px-8 text-xs font-bold uppercase tracking-wider"
+        >
+          Explore Fresh Cakes
         </Link>
       </div>
     );
@@ -273,334 +347,527 @@ export default function CheckoutPage() {
         onLoad={() => setScriptReady(true)}
       />
 
-      <div className="bg-[#FAF5EE] min-h-screen py-10">
+      <div className="bg-[#FAF5EE] min-h-screen py-8 sm:py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-8">
-            <span className="material-symbols-outlined text-3xl text-[#802B52]">shopping_bag</span>
-            <div>
-              <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#1C0D0A]">
-                Checkout &amp; Order Placement
-              </h1>
-              <p className="text-xs text-[#7A6B72]">
-                Complete your details below to confirm your fresh artisanal cake delivery.
-              </p>
+          
+          {/* Header & Flow Indicator */}
+          <div className="mb-8">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#802B52] uppercase tracking-wider mb-2">
+              <Link href="/cart" className="hover:underline flex items-center gap-1">
+                <span>Cart</span>
+              </Link>
+              <span className="text-[#E6C184]">•</span>
+              <span className="text-[#1C0D0A]">Confirm Order &amp; Delivery</span>
+              <span className="text-[#E6C184]">•</span>
+              <span className="text-[#9C8B84]">Confirmation</span>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#1C0D0A]">
+                  Order Confirmation &amp; Delivery
+                </h1>
+                <p className="text-xs text-[#5C524E] mt-1">
+                  Quick 60-second checkout — no account creation required.
+                </p>
+              </div>
+
+              <div className="hidden sm:flex items-center gap-2 bg-white border border-[#E6C184]/40 px-3.5 py-1.5 rounded-full text-xs text-[#5C524E] shadow-xs">
+                <span className="material-symbols-outlined text-base text-emerald-600">verified_user</span>
+                <span>Direct Bakery Doorstep Delivery</span>
+              </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column: Form Sections */}
+            
+            {/* Left Column: Focused 3-Step Guided Form */}
             <div className="lg:col-span-2 space-y-6">
-              
-              {/* SECTION 1: Customer Contact Details */}
-              <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm">
-                <div className="flex items-center gap-2.5 mb-4 text-[#802B52]">
-                  <span className="material-symbols-outlined text-xl">person</span>
-                  <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
-                    Customer Contact Details
-                  </h2>
+
+              {/* STEP 1: Contact & Delivery Location */}
+              <section className="bg-white rounded-3xl border border-[#E6C184]/40 p-6 sm:p-8 shadow-sm">
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#E6C184]/30">
+                  <span className="w-8 h-8 rounded-full bg-[#802B52] text-white font-bold text-xs flex items-center justify-center flex-shrink-0">
+                    1
+                  </span>
+                  <div>
+                    <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
+                      Contact &amp; Delivery Address
+                    </h2>
+                    <p className="text-xs text-[#7A6B72]">
+                      Where should our delivery team bring your fresh cake?
+                    </p>
+                  </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Full Name *
-                    </label>
-                    <input
-                      placeholder="e.g. Nidthish Selvam"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30"
-                    />
-                    {errors.fullName && <p className="text-xs text-red-600 mt-1">{errors.fullName}</p>}
+
+                <div className="space-y-4">
+                  {/* Name & Mobile Phone */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="fullName" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                        Full Name *
+                      </label>
+                      <input
+                        id="fullName"
+                        type="text"
+                        autoComplete="name"
+                        placeholder="Enter your full name"
+                        value={fullName}
+                        onChange={(e) => {
+                          setFullName(e.target.value);
+                          clearError("fullName");
+                        }}
+                        className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
+                          errors.fullName
+                            ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                            : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                        }`}
+                      />
+                      {errors.fullName && <p className="text-xs text-red-600 mt-1">{errors.fullName}</p>}
+                    </div>
+
+                    <div>
+                      <label htmlFor="phone" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                        Mobile Phone (for delivery OTP) *
+                      </label>
+                      <div className="relative mt-1.5 flex items-center">
+                        <span className="absolute left-4 text-xs font-bold text-[#802B52] select-none pointer-events-none">
+                          +91
+                        </span>
+                        <input
+                          id="phone"
+                          type="tel"
+                          inputMode="numeric"
+                          autoComplete="tel"
+                          maxLength={10}
+                          placeholder="10-digit mobile number"
+                          value={phone}
+                          onChange={(e) => {
+                            const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+                            setPhone(val);
+                            clearError("phone");
+                          }}
+                          className={`w-full pl-12 pr-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
+                            errors.phone
+                              ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                              : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                          }`}
+                        />
+                      </div>
+                      {errors.phone && <p className="text-xs text-red-600 mt-1">{errors.phone}</p>}
+                    </div>
                   </div>
 
+                  {/* Email */}
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Mobile Phone (for delivery updates) *
+                    <label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                      Email Address (for instant receipt &amp; order tracking) *
                     </label>
                     <input
-                      placeholder="e.g. 9876543210"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      maxLength={10}
-                      className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30"
-                    />
-                    {errors.phone && <p className="text-xs text-red-600 mt-1">{errors.phone}</p>}
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Email Address (for instant receipt email) *
-                    </label>
-                    <input
-                      placeholder="e.g. customer@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      id="email"
                       type="email"
-                      className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30"
+                      inputMode="email"
+                      autoComplete="email"
+                      placeholder="Enter your email address"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        clearError("email");
+                      }}
+                      className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
+                        errors.email
+                          ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                          : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                      }`}
                     />
                     {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
                   </div>
-                </div>
-              </section>
 
-              {/* SECTION 2: Delivery Address */}
-              <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm">
-                <div className="flex items-center gap-2.5 mb-4 text-[#802B52]">
-                  <span className="material-symbols-outlined text-xl">location_on</span>
-                  <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
-                    Delivery Address
-                  </h2>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Street Address &amp; Door No. *
+                  {/* Street Address */}
+                  <div>
+                    <label htmlFor="street" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                      Complete Street Address &amp; Door No. *
                     </label>
                     <input
-                      placeholder="e.g. No. 14, Main Road, Sanjeevi Nagar"
+                      id="street"
+                      type="text"
+                      autoComplete="street-address"
+                      placeholder="Flat / House no., building name, street, landmark"
                       value={street}
-                      onChange={(e) => setStreet(e.target.value)}
-                      className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30"
+                      onChange={(e) => {
+                        setStreet(e.target.value);
+                        clearError("street");
+                      }}
+                      className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
+                        errors.street
+                          ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                          : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                      }`}
                     />
                     {errors.street && <p className="text-xs text-red-600 mt-1">{errors.street}</p>}
                   </div>
 
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      City *
-                    </label>
-                    <input
-                      value={city}
-                      onChange={(e) => setCity(e.target.value)}
-                      className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30"
-                    />
-                    {errors.city && <p className="text-xs text-red-600 mt-1">{errors.city}</p>}
+                  {/* City (Pre-set) & Pincode */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                        Delivery City
+                      </label>
+                      <div className="mt-1.5 flex items-center justify-between px-4 py-3 rounded-2xl border border-[#E6DBCE] bg-[#FAF5EE]/70 text-sm font-semibold text-[#1C0D0A]">
+                        <div className="flex items-center gap-2">
+                          <span className="material-symbols-outlined text-base text-[#802B52]">location_city</span>
+                          <span>Tiruchirappalli (Trichy)</span>
+                        </div>
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                          Serving
+                        </span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label htmlFor="pincode" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                        Pincode *
+                      </label>
+                      <input
+                        id="pincode"
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="postal-code"
+                        maxLength={6}
+                        placeholder="6-digit pincode"
+                        value={pincode}
+                        onChange={(e) => {
+                          const val = e.target.value.replace(/\D/g, "").slice(0, 6);
+                          setPincode(val);
+                          clearError("pincode");
+                        }}
+                        className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
+                          errors.pincode
+                            ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                            : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                        }`}
+                      />
+                      {errors.pincode && <p className="text-xs text-red-600 mt-1">{errors.pincode}</p>}
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Pincode *
-                    </label>
-                    <input
-                      placeholder="e.g. 620002"
-                      value={pincode}
-                      onChange={(e) => setPincode(e.target.value)}
-                      maxLength={6}
-                      className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30"
-                    />
-                    {errors.pincode && <p className="text-xs text-red-600 mt-1">{errors.pincode}</p>}
-                  </div>
-
-                  <div className="sm:col-span-2 mt-2 p-3.5 bg-[#FAF5EE] rounded-xl border border-[#E6DBCE] flex items-start gap-2.5 text-xs text-[#5C524E]">
+                  {/* Delivery Charge Note */}
+                  <div className="p-3.5 bg-[#FAF5EE] rounded-2xl border border-[#E6DBCE] flex items-start gap-2.5 text-xs text-[#5C524E]">
                     <span className="material-symbols-outlined text-base text-[#802B52] mt-0.5">two_wheeler</span>
                     <div>
-                      <strong className="text-[#802B52]">Doorstep Delivery Charge Note:</strong> Delivery charges are calculated manually at <strong>₹5 per kilometer</strong> from our bakery to your delivery address, payable directly upon delivery.
+                      <strong className="text-[#802B52]">Doorstep Delivery Charge:</strong> Calculated at standard <strong>₹5 per kilometer</strong> from our bakery in Trichy to your address, payable directly upon delivery.
                     </div>
                   </div>
                 </div>
               </section>
 
-              {/* SECTION 3: Delivery Schedule & Time Slot */}
-              <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm">
-                <div className="flex items-center gap-2.5 mb-4 text-[#802B52]">
-                  <span className="material-symbols-outlined text-xl">schedule</span>
-                  <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
-                    Delivery Date &amp; Time Slot
-                  </h2>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* STEP 2: Delivery Date & Time Slot */}
+              <section className="bg-white rounded-3xl border border-[#E6C184]/40 p-6 sm:p-8 shadow-sm">
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#E6C184]/30">
+                  <span className="w-8 h-8 rounded-full bg-[#802B52] text-white font-bold text-xs flex items-center justify-center flex-shrink-0">
+                    2
+                  </span>
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Select Delivery Date *
-                    </label>
-                    <input
-                      type="date"
-                      min={minDate}
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                      className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30"
-                    />
-                    {errors.date && <p className="text-xs text-red-600 mt-1">{errors.date}</p>}
-                    {hasEggless && (
-                      <p className="text-[11px] text-[#802B52] font-semibold mt-1.5 flex items-center gap-1">
-                        Eggless items require 1 day prior notice.
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Specific Delivery Time *
-                    </label>
-                    <select
-                      value={timeSlot}
-                      onChange={(e) => setTimeSlot(e.target.value)}
-                      className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30 bg-white font-medium text-[#1C0D0A]"
-                    >
-                      {SPECIFIC_DELIVERY_TIMES.map((t) => (
-                        <option key={t} value={t}>
-                          {t}
-                        </option>
-                      ))}
-                      <option value="CUSTOM">Custom Exact Time...</option>
-                    </select>
-                    {timeSlot === "CUSTOM" && (
-                      <div className="mt-2">
-                        <label className="text-[11px] font-bold text-[#802B52] block mb-1">
-                          Enter Specific Delivery Time:
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. 05:45 PM"
-                          value={customTime}
-                          onChange={(e) => setCustomTime(e.target.value)}
-                          className="w-full px-3.5 py-2 rounded-xl border border-[#802B52]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30 bg-white"
-                        />
-                      </div>
-                    )}
-                    <p className="text-[11px] text-[#7A6B72] mt-1">
-                      Choose an exact delivery time for your fresh cake delivery.
+                    <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
+                      Delivery Schedule
+                    </h2>
+                    <p className="text-xs text-[#7A6B72]">
+                      Select the preferred day and time for your fresh bake.
                     </p>
                   </div>
                 </div>
+
+                <div className="space-y-6">
+                  {/* Date Selection */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                        Select Delivery Date *
+                      </label>
+                      {hasEggless && (
+                        <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                          🌱 Eggless: 24h Prior Notice
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Quick Date Chips */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-3">
+                      {dateOptions.map((opt) => {
+                        const isSelected = date === opt.dateStr;
+                        return (
+                          <button
+                            key={opt.dateStr}
+                            type="button"
+                            onClick={() => {
+                              setDate(opt.dateStr);
+                              clearError("date");
+                            }}
+                            className={`p-3 rounded-2xl border text-left transition-all ${
+                              isSelected
+                                ? "bg-[#802B52] text-white border-[#802B52] shadow-sm font-bold"
+                                : "bg-[#FAF5EE]/60 text-[#1C0D0A] border-[#E6DBCE] hover:border-[#802B52]/50"
+                            }`}
+                          >
+                            <div className="text-xs font-bold">{opt.label}</div>
+                            <div className={`text-[11px] mt-0.5 ${isSelected ? "text-pink-100" : "text-[#7A6B72]"}`}>
+                              {opt.sub}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Custom Date Picker Fallback */}
+                    <div className="flex items-center gap-3">
+                      <div className="relative flex-1">
+                        <input
+                          id="date"
+                          type="date"
+                          min={minDate}
+                          value={date}
+                          onChange={(e) => {
+                            setDate(e.target.value);
+                            clearError("date");
+                          }}
+                          className={`w-full px-4 py-2.5 rounded-2xl border text-xs font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
+                            errors.date
+                              ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                              : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                          }`}
+                        />
+                      </div>
+                      <span className="text-xs text-[#7A6B72]">Selected: <strong>{formatDisplayDate(date)}</strong></span>
+                    </div>
+                    {errors.date && <p className="text-xs text-red-600 mt-1">{errors.date}</p>}
+                  </div>
+
+                  {/* Time Slot Selection */}
+                  <div>
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E] block mb-2">
+                      Specific Delivery Time *
+                    </label>
+
+                    {/* Popular Time Chips */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
+                      {POPULAR_TIME_CHIPS.map((chip) => {
+                        const isSelected = timeSlot === chip.slot;
+                        return (
+                          <button
+                            key={chip.slot}
+                            type="button"
+                            onClick={() => setTimeSlot(chip.slot)}
+                            className={`p-2.5 rounded-xl border text-center transition-all ${
+                              isSelected
+                                ? "bg-[#802B52] text-white border-[#802B52] font-bold shadow-xs"
+                                : "bg-[#FAF5EE]/60 text-[#1C0D0A] border-[#E6DBCE] hover:border-[#802B52]/40"
+                            }`}
+                          >
+                            <div className="text-xs font-bold">{chip.label}</div>
+                            <div className={`text-[10px] ${isSelected ? "text-pink-100" : "text-[#7A6B72]"}`}>
+                              {chip.desc}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Full Dropdown for all 27 exact slots */}
+                    <div className="flex flex-col sm:flex-row gap-3 items-center">
+                      <div className="w-full sm:w-auto flex-1">
+                        <select
+                          value={timeSlot}
+                          onChange={(e) => setTimeSlot(e.target.value)}
+                          className="w-full px-4 py-2.5 rounded-2xl border border-[#E6DBCE] bg-white text-xs font-semibold text-[#1C0D0A] focus:outline-none focus:border-[#802B52] focus:ring-2 focus:ring-[#802B52]/20"
+                        >
+                          <optgroup label="Select Specific 30-min Window">
+                            {SPECIFIC_DELIVERY_TIMES.map((t) => (
+                              <option key={t} value={t}>
+                                {t}
+                              </option>
+                            ))}
+                          </optgroup>
+                          <option value="CUSTOM">Custom Exact Time...</option>
+                        </select>
+                      </div>
+
+                      {timeSlot === "CUSTOM" && (
+                        <div className="w-full sm:w-auto flex-1">
+                          <input
+                            type="text"
+                            placeholder="Enter time (e.g. 05:45 PM)"
+                            value={customTime}
+                            onChange={(e) => setCustomTime(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-2xl border border-[#802B52] bg-white text-xs font-semibold text-[#1C0D0A] focus:outline-none focus:ring-2 focus:ring-[#802B52]/20"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </section>
 
-              {/* SECTION 4: Cake Customization & Bakery Instructions */}
-              <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm space-y-4">
-                <div className="flex items-center gap-2.5 text-[#802B52]">
-                  <span className="material-symbols-outlined text-xl">edit_note</span>
-                  <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
-                    Cake Personalization &amp; Special Notes
-                  </h2>
+              {/* STEP 3: Personalization & Payment Method */}
+              <section className="bg-white rounded-3xl border border-[#E6C184]/40 p-6 sm:p-8 shadow-sm space-y-6">
+                <div className="flex items-center gap-3 pb-4 border-b border-[#E6C184]/30">
+                  <span className="w-8 h-8 rounded-full bg-[#802B52] text-white font-bold text-xs flex items-center justify-center flex-shrink-0">
+                    3
+                  </span>
+                  <div>
+                    <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
+                      Personalization &amp; Payment
+                    </h2>
+                    <p className="text-xs text-[#7A6B72]">
+                      Add cake piping text and pick your payment method.
+                    </p>
+                  </div>
                 </div>
 
+                {/* Cake Message */}
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                    Message to Write on Cake (Optional)
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="cakeMessage" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                      Message to Pipe on Cake
+                      <span className="text-[10px] lowercase text-[#7A6B72] font-normal ml-1.5">(optional)</span>
+                    </label>
+                    <span className="text-[10px] font-mono text-[#7A6B72]">
+                      {cakeMessage.length}/60
+                    </span>
+                  </div>
                   <input
-                    placeholder='e.g. "Happy 25th Birthday Ananya!"'
+                    id="cakeMessage"
+                    type="text"
+                    maxLength={60}
+                    placeholder="Name or celebration message to pipe on the cake"
                     value={cakeMessage}
                     onChange={(e) => setCakeMessage(e.target.value)}
-                    maxLength={60}
-                    className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30"
+                    className="w-full mt-1.5 px-4 py-3 rounded-2xl border border-[#E6DBCE] bg-[#FAF5EE]/40 text-sm font-semibold text-[#1C0D0A] focus:outline-none focus:border-[#802B52] focus:ring-2 focus:ring-[#802B52]/20"
                   />
                   <p className="text-[11px] text-[#7A6B72] mt-1">
-                    This message will be piped in fresh chocolate icing on your cake.
+                    Freshly piped on top of your cake in gourmet chocolate icing at no extra charge.
                   </p>
                 </div>
 
+                {/* Special Instructions */}
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                    Special Bakery &amp; Delivery Instructions (Optional)
+                  <label htmlFor="specialInstructions" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                    Delivery Notes / Bakery Requests
+                    <span className="text-[10px] lowercase text-[#7A6B72] font-normal ml-1.5">(optional)</span>
                   </label>
                   <textarea
-                    placeholder="e.g. Please include 5 candles & knife. Less cream, extra chocolate drizzle."
+                    id="specialInstructions"
+                    rows={2}
+                    maxLength={250}
+                    placeholder="Any landmark details, candle count, knife requests, or gate instructions"
                     value={specialInstructions}
                     onChange={(e) => setSpecialInstructions(e.target.value)}
-                    rows={2}
-                    className="w-full mt-1 px-3.5 py-2.5 rounded-xl border border-[#E6C184]/40 text-sm focus:outline-none focus:ring-2 focus:ring-[#802B52]/30"
+                    className="w-full mt-1.5 px-4 py-3 rounded-2xl border border-[#E6DBCE] bg-[#FAF5EE]/40 text-sm font-semibold text-[#1C0D0A] focus:outline-none focus:border-[#802B52] focus:ring-2 focus:ring-[#802B52]/20 resize-none"
                   />
                 </div>
-              </section>
 
-              {/* SECTION 5: Payment Method Selection */}
-              <section className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-sm space-y-4">
-                <div className="flex items-center gap-2.5 text-[#802B52]">
-                  <span className="material-symbols-outlined text-xl">credit_card</span>
-                  <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
-                    Select Payment Method
-                  </h2>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Option A: Cash on Delivery / Direct Order */}
-                  <label
-                    onClick={() => setPaymentOption("COD")}
-                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3.5 ${
-                      paymentOption === "COD"
-                        ? "border-[#802B52] bg-[#802B52]/5 text-[#802B52]"
-                        : "border-[#E6C184]/40 bg-white hover:border-[#802B52]/40"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="paymentOption"
-                      checked={paymentOption === "COD"}
-                      onChange={() => setPaymentOption("COD")}
-                      className="mt-1 accent-[#802B52]"
-                    />
-                    <div>
-                      <div className="font-bold text-sm text-[#1C0D0A] flex items-center gap-2">
-                        Direct Order / Cash on Delivery
-                        <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-extrabold uppercase">
-                          Instant
-                        </span>
-                      </div>
-                      <p className="text-xs text-[#7A6B72] mt-1 leading-relaxed">
-                        No online payment required now! Pay cash or UPI when your cake is delivered to your doorstep.
-                      </p>
-                    </div>
+                {/* Payment Option Cards */}
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E] block mb-3">
+                    Select Payment Method *
                   </label>
 
-                  {/* Option B: Razorpay Online Payment */}
-                  <label
-                    onClick={() => setPaymentOption("RAZORPAY")}
-                    className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3.5 ${
-                      paymentOption === "RAZORPAY"
-                        ? "border-[#802B52] bg-[#802B52]/5 text-[#802B52]"
-                        : "border-[#E6C184]/40 bg-white hover:border-[#802B52]/40"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="paymentOption"
-                      checked={paymentOption === "RAZORPAY"}
-                      onChange={() => setPaymentOption("RAZORPAY")}
-                      className="mt-1 accent-[#802B52]"
-                    />
-                    <div>
-                      <div className="font-bold text-sm text-[#1C0D0A] flex items-center gap-2">
-                        Pay Online (Razorpay)
-                      </div>
-                      <p className="text-xs text-[#7A6B72] mt-1 leading-relaxed">
-                        Pay securely using GPay, PhonePe, Paytm, Credit/Debit Cards, or NetBanking.
-                      </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    {/* Option A: Cash on Delivery / Direct Order */}
+                    <div
+                      onClick={() => setPaymentOption("COD")}
+                      className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-start gap-3.5 ${
+                        paymentOption === "COD"
+                          ? "border-[#802B52] bg-[#802B52]/5 text-[#802B52] shadow-sm"
+                          : "border-[#E6DBCE] bg-white hover:border-[#802B52]/40"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        id="payment-cod"
+                        name="paymentOption"
+                        checked={paymentOption === "COD"}
+                        onChange={() => setPaymentOption("COD")}
+                        className="mt-1 accent-[#802B52]"
+                      />
+                      <label htmlFor="payment-cod" className="cursor-pointer space-y-1">
+                        <div className="font-bold text-sm text-[#1C0D0A] flex items-center gap-2">
+                          <span>Cash on Delivery</span>
+                          <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-extrabold uppercase">
+                            Instant
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#7A6B72] leading-relaxed">
+                          No payment required now. Pay cash or scan UPI when delivered.
+                        </p>
+                      </label>
                     </div>
-                  </label>
+
+                    {/* Option B: Razorpay Online Payment */}
+                    <div
+                      onClick={() => setPaymentOption("RAZORPAY")}
+                      className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-start gap-3.5 ${
+                        paymentOption === "RAZORPAY"
+                          ? "border-[#802B52] bg-[#802B52]/5 text-[#802B52] shadow-sm"
+                          : "border-[#E6DBCE] bg-white hover:border-[#802B52]/40"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        id="payment-rzp"
+                        name="paymentOption"
+                        checked={paymentOption === "RAZORPAY"}
+                        onChange={() => setPaymentOption("RAZORPAY")}
+                        className="mt-1 accent-[#802B52]"
+                      />
+                      <label htmlFor="payment-rzp" className="cursor-pointer space-y-1">
+                        <div className="font-bold text-sm text-[#1C0D0A] flex items-center gap-2">
+                          <span>Pay Online (Razorpay)</span>
+                          <span className="bg-purple-100 text-purple-800 text-[10px] px-2 py-0.5 rounded-full font-extrabold uppercase">
+                            Secure
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#7A6B72] leading-relaxed">
+                          Pay securely via GPay, PhonePe, Cards, or NetBanking.
+                        </p>
+                      </label>
+                    </div>
+                  </div>
                 </div>
               </section>
 
             </div>
 
-            {/* Right Column: Order Summary & Placement Button */}
+            {/* Right Column: Reassuring Sticky Order Summary */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl border border-[#E6C184]/40 p-6 shadow-lg sticky top-28 space-y-5">
-                <h2 className="font-display font-bold text-xl text-[#1C0D0A] border-b border-[#E6C184]/30 pb-3 flex items-center justify-between">
-                  <span>Order Summary</span>
-                  <span className="text-xs font-bold text-[#802B52] bg-[#802B52]/10 px-2.5 py-1 rounded-full">
+              <div className="bg-white rounded-3xl border border-[#E6C184]/40 p-6 shadow-xl sticky top-24 space-y-5">
+                
+                <div className="flex items-center justify-between pb-3 border-b border-[#E6C184]/30">
+                  <h2 className="font-display font-bold text-xl text-[#1C0D0A]">
+                    Order Summary
+                  </h2>
+                  <span className="text-xs font-bold text-[#802B52] bg-[#802B52]/10 px-3 py-1 rounded-full">
                     {items.length} {items.length === 1 ? "Item" : "Items"}
                   </span>
-                </h2>
+                </div>
 
-                {/* Cart Items List */}
-                <div className="space-y-3.5 max-h-60 overflow-y-auto pr-1">
+                {/* Items List */}
+                <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
                   {items.map((item) => (
                     <div
                       key={`${item.id}__${item.weight}`}
-                      className="p-3 bg-[#FAF5EE] rounded-xl border border-[#E6DBCE] flex justify-between gap-3 text-xs"
+                      className="p-3 bg-[#FAF5EE] rounded-2xl border border-[#E6DBCE] flex justify-between gap-3 text-xs"
                     >
                       <div className="space-y-1">
                         <div className="font-bold text-[#1C0D0A]">{item.name}</div>
                         <div className="text-[11px] text-[#7A6B72] flex items-center gap-1.5">
-                          <span>Variant: <strong>{item.weight}</strong></span>
+                          <span>Weight: <strong>{item.weight}</strong></span>
                           <span>•</span>
                           <span className={item.eggPreference === "eggless" ? "text-emerald-700 font-bold" : "text-amber-700"}>
                             {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
                           </span>
                         </div>
                         {item.offer && (
-                          <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-900 text-[10px] font-bold">
+                          <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold">
                             <span>🎁</span> {item.offer}
                           </div>
                         )}
@@ -635,64 +902,87 @@ export default function CheckoutPage() {
                     <span>₹{summary.cgst}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
-                    <span>Delivery Fee</span>
-                    <span className="text-[#802B52] font-bold text-right">₹5 / km (Calculated manually)</span>
+                    <span>Delivery Charge</span>
+                    <span className="text-[#802B52] font-semibold text-right">₹5 / km (at delivery)</span>
                   </div>
                 </div>
 
+                {/* Total */}
                 <div className="border-t border-[#E6C184]/40 pt-4 flex justify-between items-baseline">
-                  <span className="font-display font-bold text-lg text-[#1C0D0A]">Grand Total</span>
-                  <span className="font-display font-extrabold text-2xl text-[#802B52]">
+                  <div>
+                    <span className="font-display font-bold text-lg text-[#1C0D0A] block">
+                      Total Payable
+                    </span>
+                    <span className="text-[11px] text-[#7A6B72]">Taxes included</span>
+                  </div>
+                  <span className="font-display font-extrabold text-3xl text-[#802B52]">
                     ₹{summary.total}
                   </span>
                 </div>
 
-                {/* Submission Button */}
+                {/* Submit Order Action */}
                 <button
+                  type="button"
                   onClick={handleSubmitOrder}
                   disabled={submitting}
-                  className="btn-primary w-full py-4 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl hover:shadow-pink-900/30 transition-all cursor-pointer disabled:opacity-60"
+                  className="w-full bg-[#250527] hover:bg-[#4A0E4E] text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-50"
                 >
                   {submitting ? (
                     <>
-                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Processing Order...
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Placing Your Order...</span>
                     </>
                   ) : paymentOption === "COD" ? (
                     <>
-                      Place Order Instantly (COD)
+                      <span>Confirm &amp; Place Order (COD)</span>
+                      <span className="material-symbols-outlined text-base">check_circle</span>
                     </>
                   ) : (
                     <>
-                      <span className="material-symbols-outlined text-base">lock</span> Pay ₹{summary.total} via Razorpay
+                      <span className="material-symbols-outlined text-base">lock</span>
+                      <span>Pay ₹{summary.total} via Razorpay</span>
                     </>
                   )}
                 </button>
 
-                <div className="p-3 bg-[#FAF5EE] rounded-xl border border-[#E6DBCE] text-[11px] text-[#7A6B72] text-center space-y-1">
-                  <p className="font-bold text-[#802B52]">
-                    Instant Email Confirmation
-                  </p>
-                  <p>
-                    An official PDF tax invoice receipt with product delivery time slot and OTP will be dispatched to <strong>{email || "your email"}</strong> immediately upon order placement.
-                  </p>
+                {/* Trust Signals */}
+                <div className="space-y-2 pt-2 border-t border-[#E6C184]/20 text-[11px] text-[#7A6B72]">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-base text-emerald-600">verified</span>
+                    <span>Instant PDF Invoice &amp; Handoff OTP via Email</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-base text-[#802B52]">lock</span>
+                    <span>100% Secure Checkout &amp; Data Privacy</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-base text-amber-600">cookie</span>
+                    <span>Artisanal Cake Baked Fresh for Your Time Slot</span>
+                  </div>
                 </div>
 
-                <div className="text-[10px] text-[#9C8B84] text-center">
-                  By placing your order, you agree to our{" "}
-                  <Link href="/terms-and-conditions" target="_blank" className="text-[#802B52] underline">
-                    Terms
-                  </Link>{" "}
-                  &amp;{" "}
-                  <Link href="/privacy-policy" target="_blank" className="text-[#802B52] underline">
-                    Privacy Policy
-                  </Link>
-                  .
-                </div>
               </div>
             </div>
+
           </div>
         </div>
+
+        {/* Mobile Sticky Action Bar */}
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#E6C184]/40 p-4 z-40 shadow-2xl flex items-center justify-between gap-4">
+          <div>
+            <div className="text-[10px] uppercase font-bold text-[#7A6B72]">Grand Total</div>
+            <div className="font-display font-extrabold text-xl text-[#802B52]">₹{summary.total}</div>
+          </div>
+          <button
+            type="button"
+            onClick={handleSubmitOrder}
+            disabled={submitting}
+            className="flex-1 bg-[#250527] hover:bg-[#4A0E4E] text-white py-3.5 px-6 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50"
+          >
+            {submitting ? "Placing..." : paymentOption === "COD" ? "Place Order (COD)" : `Pay ₹${summary.total}`}
+          </button>
+        </div>
+
       </div>
     </>
   );

@@ -252,7 +252,20 @@ class HybridOrderStore implements OrderStore {
   }
 
   async get(orderId: string): Promise<Order | null> {
-    const memory = this.memoryOrders.get(orderId);
+    if (!orderId || typeof orderId !== "string") return null;
+    const cleanId = orderId.trim().replace(/^#/, "");
+    if (!cleanId) return null;
+
+    let memory = this.memoryOrders.get(cleanId);
+    if (!memory) {
+      const lower = cleanId.toLowerCase();
+      for (const [k, v] of this.memoryOrders.entries()) {
+        if (k.toLowerCase() === lower) {
+          memory = v;
+          break;
+        }
+      }
+    }
     if (memory) return memory;
 
     // Check Neon PostgreSQL
@@ -281,7 +294,7 @@ class HybridOrderStore implements OrderStore {
           FROM orders o
           LEFT JOIN payments p ON p.order_id = o.id
           LEFT JOIN order_items i ON i.order_id = o.id
-          WHERE o.order_number = ${orderId} OR o.id::text = ${orderId}
+          WHERE o.order_number ILIKE ${cleanId} OR o.order_number = ${cleanId} OR o.id::text = ${cleanId}
           GROUP BY o.id, p.id
           LIMIT 1
         `;
@@ -335,8 +348,8 @@ class HybridOrderStore implements OrderStore {
       const mysqlPool = getMySqlPool();
       if (mysqlPool) {
         const [orders]: any = await mysqlPool.query(
-          "SELECT o.*, p.payment_method, p.payment_status, p.razorpay_order_id, p.razorpay_payment_id FROM lollipop_db.orders o LEFT JOIN lollipop_db.payments p ON p.order_id = o.id WHERE o.order_number = ? OR o.id = ? LIMIT 1",
-          [orderId, orderId]
+          "SELECT o.*, p.payment_method, p.payment_status, p.razorpay_order_id, p.razorpay_payment_id FROM lollipop_db.orders o LEFT JOIN lollipop_db.payments p ON p.order_id = o.id WHERE LOWER(o.order_number) = LOWER(?) OR o.order_number = ? OR o.id = ? LIMIT 1",
+          [cleanId, cleanId, cleanId]
         );
         if (orders.length > 0) {
           const o = orders[0];
