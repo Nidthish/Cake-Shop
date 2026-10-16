@@ -125,111 +125,194 @@ export function getDummyInternetImage(product: ProductLike): string {
     return "https://images.unsplash.com/photo-1543508282-6319a3e2621f?auto=format&fit=crop&w=600&q=80";
   }
 
-  // 6. CAKES (FLAVORS & SPECIALTIES)
+  // 6. CAKES (FLAVORS & SPECIALTIES - REAL 1024x1024 WEBP IMAGES)
   if (name.includes("black forest") || name.includes("german black")) {
-    return "https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?auto=format&fit=crop&w=600&q=80"; // Real layered Black Forest
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
   }
   if (name.includes("white forest")) {
-    return "https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=600&q=80"; // Elegant White Forest cake
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/white_forest.webp";
   }
-  if (name.includes("butter scotch") || name.includes("butterscotch") || name.includes("caramel")) {
-    return "https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=600&q=80"; // Caramel butterscotch drip cake
+  if (name.includes("butter scotch") || name.includes("butterscotch")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/butter_scotch.webp";
+  }
+  if (name.includes("caramel")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/caramel.webp";
   }
   if (name.includes("mango")) {
-    return "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=600&q=80"; // Fresh mango gateau
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/mango.webp";
   }
-  if (name.includes("strawberry")) {
-    return "https://images.unsplash.com/photo-1611293388250-580b08c4a145?auto=format&fit=crop&w=600&q=80"; // Fresh strawberry cream cake
+  if (name.includes("strawberry") && !name.includes("choco")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/strawberry.webp";
   }
   if (name.includes("pineapple")) {
-    return "https://images.unsplash.com/photo-1549576490-b0b4831ef60a?auto=format&fit=crop&w=600&q=80"; // Fresh pineapple cake
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/pineapple.webp";
   }
   if (name.includes("red velvet") || name.includes("redvelvet") || name.includes("red bee")) {
-    return "https://images.unsplash.com/photo-1586788680434-30d324b2d46f?auto=format&fit=crop&w=600&q=80"; // Classic red velvet
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/red_velvet.webp";
   }
-  if (
-    name.includes("blueberry") ||
-    name.includes("black currant") ||
-    name.includes("currant") ||
-    name.includes("kiwi")
-  ) {
-    return "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=600&q=80"; // Blueberry berry cake
+  if (name.includes("blueberry")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/blueberry.webp";
   }
-  if (
-    name.includes("ferrero") ||
-    name.includes("nutella") ||
-    name.includes("hazelnut") ||
-    name.includes("rocher")
-  ) {
-    return "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=600&q=80"; // Ferrero hazelnut chocolate
+  if (name.includes("black currant") || name.includes("currant")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_currant.webp";
   }
-  if (
-    name.includes("kit kat") ||
-    name.includes("kitkat") ||
-    name.includes("oreo") ||
-    name.includes("snickers")
-  ) {
-    return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80"; // Cookies & cream / chocolate overload
+  if (name.includes("kiwi")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/kiwi.webp";
   }
-  if (
-    name.includes("truffle") ||
-    name.includes("choco") ||
-    name.includes("chocolate") ||
-    name.includes("fudge")
-  ) {
-    return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80"; // Decadent chocolate truffle cake
+  if (name.includes("ferrero rocher")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/ferrero_rocher.webp";
+  }
+  if (name.includes("ferrero truffle") || name.includes("ferrero")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/ferrero_truffle.webp";
+  }
+  if (name.includes("nutella")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/nutella.webp";
+  }
+  if (name.includes("kit kat") || name.includes("kitkat")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_kit_kat.webp";
+  }
+  if (name.includes("oreo")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_oreo.webp";
+  }
+  if (name.includes("snickers")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_snickers.webp";
+  }
+  if (name.includes("choco almond")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_almond.webp";
+  }
+  if (name.includes("choco delight")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_delight.webp";
+  }
+  if (name.includes("choco fantacy")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_fantacy.webp";
+  }
+  if (name.includes("choco nuts")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_nuts.webp";
+  }
+  if (name.includes("choco redvelvet")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_redvelvet.webp";
+  }
+  if (name.includes("choco strawberry")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_strawberry.webp";
+  }
+  if (name.includes("choco vanilla")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_vanilla.webp";
+  }
+  if (name.includes("truffle") || name.includes("choco") || name.includes("chocolate")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/choco_truffle.webp";
   }
   if (name.includes("pista") || name.includes("pistachio")) {
-    return "https://images.unsplash.com/photo-1562772186-08573190886a?auto=format&fit=crop&w=600&q=80"; // Pistachio green cream cake
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/pista.webp";
   }
   if (name.includes("coffee") || name.includes("iris")) {
-    return "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80"; // Mocha espresso coffee cake
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/iris_coffee.webp";
   }
-  if (
-    name.includes("rasamalai") ||
-    name.includes("rasagulla") ||
-    name.includes("gulab jamun")
-  ) {
-    return "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80"; // Saffron cardamom fusion cake
+  if (name.includes("rasamalai")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/rasamalai.webp";
   }
-  if (
-    name.includes("vancho") ||
-    name.includes("vanilla") ||
-    name.includes("coconut") ||
-    name.includes("raffaello") ||
-    name.includes("milky")
-  ) {
-    return "https://images.unsplash.com/photo-1535141192574-5d4897c13136?auto=format&fit=crop&w=600&q=80"; // Creamy white vanilla cake
+  if (name.includes("rasagulla")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/rasagulla.webp";
   }
-  if (name.includes("fruit")) {
-    return "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=600&q=80"; // Fresh exotic fruit cake
+  if (name.includes("gulab jamun")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/gulab_jamun.webp";
+  }
+  if (name.includes("vancho")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/vancho.webp";
+  }
+  if (name.includes("coconut") || name.includes("soconut")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/tender_coconut.webp";
+  }
+  if (name.includes("raffaello")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/raffaello_cake.webp";
+  }
+  if (name.includes("biscoff") || name.includes("lotus")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/louts_biscoff.webp";
+  }
+  if (name.includes("fudge nut") || name.includes("fudge")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/fudge_nut.webp";
+  }
+  if (name.includes("milky truffle")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/milky_truffle.webp";
+  }
+  if (name.includes("nutty bubble")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/nutty_bubble.webp";
+  }
+  if (name.includes("nutty choco")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/nutty_choco_truffle.webp";
+  }
+  if (name.includes("nutty ferrero")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/nutty_ferrero_truffle.webp";
+  }
+  if (name.includes("2 in 1") || name.includes("2_in_1")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/2_in_1_fruit_cake_flavour.webp";
+  }
+  if (name.includes("3 in 1") || name.includes("3_in_1")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/3_in_1_fruit_cake_flavour.webp";
+  }
+  if (name.includes("fruit fantacy")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/fruit_fantacy.webp";
+  }
+  if (name.includes("spanish delight")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/spanish_delight.webp";
+  }
+
+  // If category is cakes or subcategory is cakes, return black forest webp as default
+  if (cat.includes("cake")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
   }
 
   // 7. General Default Fallback
-  return "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80";
+  return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
 }
 
 /**
  * Returns the fallback image URL for onError image events
  */
 export function getDummyFallbackImage(product: ProductLike): string {
+  const name = (product.name || "").toLowerCase();
+  if (name.includes("black forest") || name.includes("german black")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
+  }
+  if (product.image && (product.image.includes("black_forest") || product.image.includes("1791131428600"))) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
+  }
+  if (product.image && product.image.includes("/NORMAL CAKES/")) {
+    let img = product.image.trim();
+    if (!img.startsWith("/")) img = `/${img}`;
+    return img.replace(/\.jpg$/i, ".webp");
+  }
   return getDummyInternetImage(product);
 }
 
 /**
  * Main function returning the display image for a product card.
- * Prioritizes actual product image when provided, and cleanly falls back to
- * high-resolution dummy internet images from Unsplash.
+ * Prioritizes actual product image when provided, and cleanly maps
+ * cakes to their real 1024x1024 WebP image files in public/PRODUCT_IMAGES/cakes/NORMAL CAKES/.
  */
 export function getProductCardImage(product: ProductLike): string {
-  if (
-    product.image &&
-    (product.image.startsWith("data:") ||
-      product.image.startsWith("http://") ||
-      product.image.startsWith("https://") ||
-      product.image.startsWith("/"))
-  ) {
-    return product.image;
+  const name = (product.name || "").toLowerCase();
+  if (name.includes("black forest") || name.includes("german black")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
+  }
+
+  let img = product.image ? product.image.trim() : "";
+
+  if (img) {
+    if (img.includes("black_forest") || img.includes("1791131428600")) {
+      return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
+    }
+    if (!img.startsWith("/") && !img.startsWith("http://") && !img.startsWith("https://") && !img.startsWith("data:")) {
+      img = `/${img}`;
+    }
+    if (img.startsWith("/images/Cakes/")) {
+      return img
+        .replace("/images/Cakes/", "/PRODUCT_IMAGES/cakes/NORMAL CAKES/")
+        .replace(/\.jpg$/i, ".webp");
+    }
+    if (img.includes("/NORMAL CAKES/") && img.endsWith(".jpg")) {
+      return img.replace(/\.jpg$/i, ".webp");
+    }
+    return img;
   }
 
   return getDummyInternetImage(product);

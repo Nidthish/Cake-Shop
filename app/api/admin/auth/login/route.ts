@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
 
     // Auto-seed initial Super Admin if default admin email does not exist yet
     const initialAdminEmail = (process.env.INITIAL_ADMIN_EMAIL || "admin@lollipopcakeshop.com").trim().toLowerCase();
-    const initialAdminPassword = process.env.INITIAL_ADMIN_PASSWORD || "Admin@123456";
+    const initialAdminPassword = process.env.INITIAL_ADMIN_PASSWORD;
 
     let existingDefaultAdmin = null;
     try {
@@ -45,18 +45,20 @@ export async function POST(req: NextRequest) {
     }
 
     if (!existingDefaultAdmin) {
-      console.log(`🌱 Auto-seeding initial Super Admin user (${initialAdminEmail})...`);
-      const defaultPasswordHash = hashPassword(initialAdminPassword);
-      await prisma.user.create({
-        data: {
-          email: initialAdminEmail,
-          fullName: "Master Super Admin",
-          passwordHash: defaultPasswordHash,
-          role: "SUPERADMIN",
-          isActive: true,
-        },
-      });
-    } else if (cleanEmail === initialAdminEmail && password === initialAdminPassword) {
+      if (initialAdminPassword) {
+        console.log(`🌱 Auto-seeding initial Super Admin user (${initialAdminEmail})...`);
+        const defaultPasswordHash = hashPassword(initialAdminPassword);
+        await prisma.user.create({
+          data: {
+            email: initialAdminEmail,
+            fullName: "Master Super Admin",
+            passwordHash: defaultPasswordHash,
+            role: "SUPERADMIN",
+            isActive: true,
+          },
+        });
+      }
+    } else if (initialAdminPassword && cleanEmail === initialAdminEmail && password === initialAdminPassword) {
       const isValid = verifyPassword(password, existingDefaultAdmin.passwordHash || "");
       if (!isValid) {
         console.log(`🔄 Updating Super Admin password to match INITIAL_ADMIN_PASSWORD...`);

@@ -332,7 +332,7 @@ export default function CheckoutPage() {
                       Email Address (for instant receipt email) *
                     </label>
                     <input
-                      placeholder="e.g. nidthishselvam@gmail.com"
+                      placeholder="e.g. customer@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       type="email"

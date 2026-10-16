@@ -4,6 +4,38 @@ import rawProducts from "./products-data.json";
 // The full 133-item catalog backup
 export const PRODUCTS_DATA: Product[] = rawProducts as Product[];
 
+export function normalizeProductImage(rawImage: string | null | undefined, name?: string): string {
+  const cakeName = (name || "").toLowerCase();
+  if (cakeName.includes("black forest") || cakeName.includes("german black")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
+  }
+
+  let img = (rawImage || "").trim();
+  if (!img || img === "product.image") {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
+  }
+
+  if (img.includes("black_forest") || img.includes("1791131428600")) {
+    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
+  }
+
+  if (!img.startsWith("/") && !img.startsWith("http://") && !img.startsWith("https://") && !img.startsWith("data:")) {
+    img = `/${img}`;
+  }
+
+  if (img.startsWith("/images/Cakes/")) {
+    img = img
+      .replace("/images/Cakes/", "/PRODUCT_IMAGES/cakes/NORMAL CAKES/")
+      .replace(/\.jpg$/i, ".webp");
+  }
+
+  if (img.includes("/NORMAL CAKES/") && img.endsWith(".jpg")) {
+    img = img.replace(/\.jpg$/i, ".webp");
+  }
+
+  return img;
+}
+
 /**
  * Fetch live active products from Neon PostgreSQL database.
  * Uses direct Neon serverless driver with auto-retry and Prisma Client fallback.
@@ -95,7 +127,7 @@ export async function getDbProducts(): Promise<Product[]> {
             price: minPrice,
             minPrice,
             originalPrice: minPrice,
-            image: p.image_name || "product.image",
+            image: normalizeProductImage(p.image_name, p.name),
             rating: Number(p.rating),
             reviewCount: p.review_count,
             badge: p.badge || undefined,
@@ -176,7 +208,7 @@ export async function getDbProducts(): Promise<Product[]> {
           price: minPrice,
           minPrice,
           originalPrice: minPrice,
-          image: p.imageName || "product.image",
+          image: normalizeProductImage(p.imageName, p.name),
           rating: Number(p.rating),
           reviewCount: p.reviewCount,
           badge: p.badge || undefined,

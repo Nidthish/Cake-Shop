@@ -83,8 +83,8 @@ export function normalizeNeonConnectionString(url: string): string {
     .replace(/^["']|["']$/g, "")
     .replace("&channel_binding=require", "")
     .replace("?channel_binding=require", "");
-  if (clean.includes("-pooler.c-7.")) {
-    clean = clean.replace("-pooler.c-7.", ".c-7.");
+  if (clean.includes("-pooler.")) {
+    clean = clean.replace("-pooler.", ".");
   }
   return clean;
 }

@@ -14,7 +14,11 @@ async function main() {
 
   // 1. Seed Initial Super Admin User
   const initialEmail = (process.env.INITIAL_ADMIN_EMAIL || "admin@lollipopcakeshop.com").trim().toLowerCase();
-  const initialPassword = process.env.INITIAL_ADMIN_PASSWORD || "Admin@123456";
+  const initialPassword = process.env.INITIAL_ADMIN_PASSWORD;
+  if (!initialPassword) {
+    console.error("❌ ERROR: INITIAL_ADMIN_PASSWORD environment variable is not set.");
+    process.exit(1);
+  }
 
   const adminUser = await prisma.user.upsert({
     where: { email: initialEmail },

@@ -70,6 +70,9 @@ export default function ProductCard({ product }: { product: Product }) {
         <img
           src={cardImage}
           alt={product.name}
+          width={1024}
+          height={1024}
+          decoding="async"
           className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
           onError={(e) => {

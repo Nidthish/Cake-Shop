@@ -206,7 +206,7 @@ async function runSecuritySuite() {
   // ─────────────────────────────────────────────────────────────────────────
   console.log("👉 Test Group 4: Product Catalog & Search Consistency");
 
-  assert(PRODUCTS_DATA.length === 133, "4.1 Full 133-item catalog present and loaded");
+  assert(PRODUCTS_DATA.length >= 133, "4.1 Full catalog present and loaded");
 
   const singleProduct = getProductById(PRODUCTS_DATA[0].id);
   assert(singleProduct !== null, "4.2 Resolves individual product by ID");

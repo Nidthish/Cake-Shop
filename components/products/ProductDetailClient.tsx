@@ -8,7 +8,7 @@ import { useToast } from "@/components/common/ToastProvider";
 import ProductCard from "@/components/products/ProductCard";
 
 import { is1kgFreeOfferVariant } from "@/lib/products";
-import { getDummyFallbackImage } from "@/lib/dummy-images";
+import { getDummyFallbackImage, getProductCardImage } from "@/lib/dummy-images";
 
 export default function ProductDetailClient({
   product,
@@ -20,6 +20,8 @@ export default function ProductDetailClient({
   const { addItem } = useCart();
   const { showToast } = useToast();
   const router = useRouter();
+
+  const displayImage = getProductCardImage(product);
 
   const variants = product.variants?.length
     ? product.variants
@@ -75,7 +77,7 @@ export default function ProductDetailClient({
           detail: {
             x,
             y,
-            image: product.image,
+            image: displayImage,
           },
         })
       );
@@ -84,7 +86,7 @@ export default function ProductDetailClient({
     addItem({
       id: `${product.id}${showEggPreference && eggless ? "-eggless" : ""}`,
       name: product.name,
-      image: product.image,
+      image: displayImage,
       weight: variant.weight,
       price,
       originalPrice,
@@ -101,7 +103,7 @@ export default function ProductDetailClient({
     addItem({
       id: `${product.id}${showEggPreference && eggless ? "-eggless" : ""}`,
       name: product.name,
-      image: product.image,
+      image: displayImage,
       weight: variant.weight,
       price,
       originalPrice,
@@ -120,8 +122,10 @@ export default function ProductDetailClient({
         <div>
           <div className="rounded-3xl overflow-hidden bg-[#F1E6DF] aspect-square shadow-md">
             <img
-              src={product.image}
+              src={displayImage}
               alt={product.name}
+              width={1024}
+              height={1024}
               className="w-full h-full object-cover"
               onError={(e) => {
                 const fallback = getDummyFallbackImage(product);

@@ -10,6 +10,14 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/PRODUCT_IMAGES/cakes/black_forest:suffix(.*)",
+        destination: "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp",
+      },
+    ];
+  },
   async headers() {
     return [
       {

@@ -111,6 +111,9 @@ export default function CakeCardInteractive({
             src={cardImage}
             alt={product.name}
             loading="lazy"
+            decoding="async"
+            width={1024}
+            height={1024}
             className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
               const fallback = getDummyFallbackImage(product);

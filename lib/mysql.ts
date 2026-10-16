@@ -10,7 +10,7 @@ export function getMySqlPool(): mysql.Pool | null {
       host: process.env.MYSQL_HOST || "localhost",
       port: Number(process.env.MYSQL_PORT || 3306),
       user: process.env.MYSQL_USER || "root",
-      password: process.env.MYSQL_PASSWORD || "1122",
+      password: process.env.MYSQL_PASSWORD || "",
       database: process.env.MYSQL_DATABASE || "lollipop_db",
       waitForConnections: true,
       connectionLimit: 10,
