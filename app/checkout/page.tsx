@@ -519,7 +519,7 @@ export default function CheckoutPage() {
                           <span>Tiruchirappalli (Trichy)</span>
                         </div>
                         <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                          Serving
+                          Active Delivery
                         </span>
                       </div>
                     </div>

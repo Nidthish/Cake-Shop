@@ -13,7 +13,6 @@ export interface ShowcaseCake {
   image: string;
   description: string;
   tiers: string;
-  servings: string;
   flavours: string[];
   highlights: string[];
 }
@@ -28,7 +27,6 @@ export const SHOWCASE_CAKES: ShowcaseCake[] = [
     description:
       "A grand multi-tier centerpiece with an architectural floating tier, hand-painted edible gold leaf, and cascading fresh roses.",
     tiers: "3 Tiers (Floating Architecture)",
-    servings: "Serves 40 to 60 Guests",
     flavours: ["Belgian Dark Chocolate", "Red Velvet Cream Cheese", "Vanilla Bean"],
     highlights: ["Floating Tier Design", "24K Edible Gold Leaf", "Fresh Rose Cascade"],
   },
@@ -41,7 +39,6 @@ export const SHOWCASE_CAKES: ShowcaseCake[] = [
     description:
       "Our most loved 1st birthday cake with hand-sculpted teddy bears, a colorful toy train with name blocks, and a golden crown topper.",
     tiers: "3 Tiers (Tiered Stacking)",
-    servings: "Serves 25 to 40 Guests",
     flavours: ["Belgian Chocolate Truffle", "Velvet Vanilla", "Strawberry Cream"],
     highlights: ["Custom Name Blocks", "Hand-Sculpted Bears", "Golden Crown Topper"],
   },
@@ -54,7 +51,6 @@ export const SHOWCASE_CAKES: ShowcaseCake[] = [
     description:
       "Blush pink pleated celebration cake crowned with a royal tiara, fresh champagne roses, and edible sugar pearls.",
     tiers: "2 Tiers (Wide Base)",
-    servings: "Serves 15 to 30 Guests",
     flavours: ["Red Velvet Cream Cheese", "White Chocolate Raspberry"],
     highlights: ["Tiara Crown Topper", "Fresh Rose Garland", "Pleated Texture"],
   },
@@ -67,7 +63,6 @@ export const SHOWCASE_CAKES: ShowcaseCake[] = [
     description:
       "Regal royal blue and gold celebration cake with edible golden scrolls, quilted pattern, and a handcrafted imperial crown.",
     tiers: "3 Tiers (Imperial Stacking)",
-    servings: "Serves 30 to 45 Guests",
     flavours: ["Belgian Milk Chocolate", "Nutty Praline Truffle", "Classic Vanilla"],
     highlights: ["Imperial Crown Topper", "Gold Baroque Scrolls", "Quilted Diamond Finish"],
   },
@@ -76,91 +71,160 @@ export const SHOWCASE_CAKES: ShowcaseCake[] = [
 interface FlavourOption {
   id: string;
   name: string;
-  gradient: string;
+  badgeName: string;
+  tierTopColor: string;
+  tierBaseColor: string;
   dripColor: string;
-  pearlColor: string;
   accentBg: string;
+  glowColor: string;
+  topperDefault: "crown" | "heart" | "teddy" | "star" | "rosette";
 }
 
 const FLAVOUR_OPTIONS: FlavourOption[] = [
   {
     id: "belgian-chocolate",
     name: "Belgian Chocolate",
-    gradient: "from-[#442217] via-[#2E150D] to-[#1C0A05]",
-    dripColor: "#170804",
-    pearlColor: "#F5E6CC",
-    accentBg: "bg-[#2E150D]",
+    badgeName: "BELGIAN CHOCOLATE",
+    tierTopColor: "#4A2417",
+    tierBaseColor: "#1C0A05",
+    dripColor: "#120502",
+    accentBg: "bg-[#2A130B]",
+    glowColor: "rgba(180, 110, 50, 0.22)",
+    topperDefault: "crown",
   },
   {
     id: "red-velvet",
     name: "Red Velvet",
-    gradient: "from-[#9E2336] via-[#7D1625] to-[#590C16]",
-    dripColor: "#FFF9F2",
-    pearlColor: "#FFFFFF",
-    accentBg: "bg-[#7D1625]",
+    badgeName: "RED VELVET",
+    tierTopColor: "#9E1C2F",
+    tierBaseColor: "#520A14",
+    dripColor: "#FFF8F0",
+    accentBg: "bg-[#7D1525]",
+    glowColor: "rgba(225, 29, 72, 0.25)",
+    topperDefault: "heart",
   },
   {
     id: "vanilla-gold",
     name: "Vanilla Gold",
-    gradient: "from-[#FFFDF9] via-[#F4ECE0] to-[#E3D4B8]",
+    badgeName: "VANILLA GOLD",
+    tierTopColor: "#FCF8F0",
+    tierBaseColor: "#E2D1B3",
     dripColor: "#D4AF37",
-    pearlColor: "#D4AF37",
     accentBg: "bg-[#E3D4B8]",
-  },
-  {
-    id: "blueberry",
-    name: "Blueberry",
-    gradient: "from-[#8C649B] via-[#6D477C] to-[#4E2E5D]",
-    dripColor: "#391C45",
-    pearlColor: "#F3E8F7",
-    accentBg: "bg-[#6D477C]",
+    glowColor: "rgba(212, 175, 55, 0.28)",
+    topperDefault: "crown",
   },
   {
     id: "butterscotch",
     name: "Butterscotch",
-    gradient: "from-[#B87034] via-[#995420] to-[#753B0E]",
-    dripColor: "#522607",
-    pearlColor: "#FFF1DC",
+    badgeName: "BUTTERSCOTCH",
+    tierTopColor: "#C27532",
+    tierBaseColor: "#70350B",
+    dripColor: "#472005",
     accentBg: "bg-[#995420]",
+    glowColor: "rgba(217, 119, 6, 0.25)",
+    topperDefault: "star",
   },
   {
     id: "fresh-mango",
     name: "Fresh Mango",
-    gradient: "from-[#EB8E2C] via-[#CE7316] to-[#A35308]",
-    dripColor: "#7A3B02",
-    pearlColor: "#FFF4E5",
+    badgeName: "FRESH MANGO",
+    tierTopColor: "#F59325",
+    tierBaseColor: "#A35105",
+    dripColor: "#6B3302",
     accentBg: "bg-[#CE7316]",
+    glowColor: "rgba(249, 115, 22, 0.25)",
+    topperDefault: "star",
+  },
+  {
+    id: "blueberry",
+    name: "Blueberry",
+    badgeName: "BLUEBERRY",
+    tierTopColor: "#845A94",
+    tierBaseColor: "#412152",
+    dripColor: "#2A1236",
+    accentBg: "bg-[#6D477C]",
+    glowColor: "rgba(147, 51, 234, 0.25)",
+    topperDefault: "rosette",
+  },
+  {
+    id: "strawberry",
+    name: "Strawberry",
+    badgeName: "STRAWBERRY",
+    tierTopColor: "#E85D7B",
+    tierBaseColor: "#9C223E",
+    dripColor: "#FFF5F7",
+    accentBg: "bg-[#D14A68]",
+    glowColor: "rgba(244, 63, 94, 0.26)",
+    topperDefault: "heart",
+  },
+  {
+    id: "black-forest",
+    name: "Black Forest",
+    badgeName: "BLACK FOREST",
+    tierTopColor: "#331810",
+    tierBaseColor: "#140602",
+    dripColor: "#0D0301",
+    accentBg: "bg-[#240F09]",
+    glowColor: "rgba(225, 29, 72, 0.2)",
+    topperDefault: "heart",
+  },
+  {
+    id: "lotus-biscoff",
+    name: "Lotus Biscoff",
+    badgeName: "LOTUS BISCOFF",
+    tierTopColor: "#A85E2B",
+    tierBaseColor: "#5E2C09",
+    dripColor: "#3D1A04",
+    accentBg: "bg-[#8C4A1D]",
+    glowColor: "rgba(180, 83, 9, 0.25)",
+    topperDefault: "star",
+  },
+  {
+    id: "pistachio",
+    name: "Pistachio",
+    badgeName: "PISTACHIO",
+    tierTopColor: "#7CA35D",
+    tierBaseColor: "#426127",
+    dripColor: "#273D14",
+    accentBg: "bg-[#658D46]",
+    glowColor: "rgba(34, 197, 94, 0.22)",
+    topperDefault: "rosette",
   },
 ];
 
 const LAYER_OPTIONS = [
-  { count: 1, label: "1 Layer", serves: "Serves 10 to 15" },
-  { count: 2, label: "2 Layers", serves: "Serves 20 to 25" },
-  { count: 3, label: "3 Layers", serves: "Serves 35 to 50" },
+  { count: 1, label: "1 Layer" },
+  { count: 2, label: "2 Layers" },
+  { count: 3, label: "3 Layers" },
 ];
 
 const WEIGHT_OPTIONS = [
-  { weight: "1.5 kg", label: "1.5 kg (10-15)" },
-  { weight: "2.0 kg", label: "2.0 kg (15-20)" },
-  { weight: "3.0 kg", label: "3.0 kg (25-30)" },
-  { weight: "4.0 kg+", label: "4.0 kg+ (35+)" },
+  { weight: "1.5 kg" },
+  { weight: "2.0 kg" },
+  { weight: "3.0 kg" },
+  { weight: "4.0 kg+" },
 ];
 
 const TOPPER_OPTIONS = [
+  { id: "auto", label: "Auto Match", icon: "auto_awesome" },
   { id: "crown", label: "Tiara Crown", icon: "military_tech" },
+  { id: "heart", label: "Romantic Heart", icon: "favorite" },
   { id: "teddy", label: "Sugar Teddy", icon: "pets" },
   { id: "star", label: "Golden Star", icon: "star" },
   { id: "rosette", label: "Sugar Flowers", icon: "local_florist" },
-  { id: "none", label: "Simple Top", icon: "horizontal_rule" },
 ];
 
 export default function CustomCakeClient() {
+  // Photo inspection modal state
+  const [inspectCake, setInspectCake] = useState<ShowcaseCake | null>(null);
+
   // Builder visual states
   const [layers, setLayers] = useState<1 | 2 | 3>(2);
   const [selectedFlavourId, setSelectedFlavourId] = useState<string>("belgian-chocolate");
   const [selectedWeight, setSelectedWeight] = useState<string>("2.0 kg");
   const [customName, setCustomName] = useState<string>("Happy Birthday");
-  const [selectedTopperId, setSelectedTopperId] = useState<string>("crown");
+  const [selectedTopperId, setSelectedTopperId] = useState<string>("auto");
 
   // Form states (pre-filled from builder, but freely editable manually!)
   const [formFlavour, setFormFlavour] = useState<string>("Belgian Chocolate");
@@ -196,6 +260,14 @@ export default function CustomCakeClient() {
     return FLAVOUR_OPTIONS.find((f) => f.id === selectedFlavourId) || FLAVOUR_OPTIONS[0];
   }, [selectedFlavourId]);
 
+  // Determine active topper type
+  const activeTopperType = useMemo(() => {
+    if (selectedTopperId === "auto") {
+      return currentFlavour.topperDefault;
+    }
+    return selectedTopperId;
+  }, [selectedTopperId, currentFlavour]);
+
   // Generate direct WhatsApp link from manual form values
   const whatsappUrl = useMemo(() => {
     const lines = [
@@ -225,15 +297,142 @@ export default function CustomCakeClient() {
             Customized Cakes
           </h1>
           <p className="text-xs sm:text-sm text-[#5C524E] max-w-lg mx-auto">
-            Design your own cake online or choose from our best creations in Trichy.
+            Explore our signature creations or design your own cake online with instant WhatsApp ordering.
           </p>
         </div>
       </section>
 
-      {/* ── 2. CREATE MY OWN CAKE (FIRST SECTION!) ───────────────────────── */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      {/* ── 2. SHOWCASE: OUR BEST CAKES (FULL-IMAGE EDITORIAL SHOWCASE, NO CARDS, NO BUY BUTTONS) ── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 border-b border-[#E6C184]/30">
+        
+        <div className="text-center max-w-2xl mx-auto mb-14 sm:mb-20 space-y-2">
+          <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52]">
+            Celebration Portfolio
+          </span>
+          <h2 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
+            Our Best Cakes
+          </h2>
+          <p className="text-xs sm:text-sm text-[#5C524E] max-w-md mx-auto">
+            A visual showcase of recent custom masterpieces handcrafted for celebrations in Trichy.
+          </p>
+        </div>
+
+        {/* Editorial Borderless Layout (Alternating Large Photography & Rich Narrative) */}
+        <div className="space-y-16 sm:space-y-28">
+          {SHOWCASE_CAKES.map((cake, idx) => {
+            const isEven = idx % 2 === 1;
+            // Responsive: mobile shows top 2 cakes (< md), laptop shows all 4 cakes (>= md)
+            const isHiddenOnMobile = idx >= 2;
+
+            return (
+              <div
+                key={cake.id}
+                className={`${isHiddenOnMobile ? "hidden md:block" : "block"} transition-all duration-700`}
+              >
+                <div
+                  className={`flex flex-col lg:flex-row items-center gap-8 sm:gap-12 lg:gap-16 ${
+                    isEven ? "lg:flex-row-reverse" : ""
+                  }`}
+                >
+                  {/* Big Animated Full Image Container */}
+                  <div className="w-full lg:w-1/2">
+                    <div
+                      onClick={() => setInspectCake(cake)}
+                      className="group relative cursor-pointer overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 bg-[#F0E5D8]"
+                    >
+                      {/* Image with smooth zoom on hover */}
+                      <div className="aspect-[4/3] w-full overflow-hidden">
+                        <img
+                          src={cake.image}
+                          alt={cake.name}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
+                        />
+                      </div>
+
+                      {/* Subtle Vignette Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                      {/* Category Badge on Image */}
+                      <div className="absolute top-4 left-4">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-white/95 text-[#802B52] border border-[#E6DBCE] shadow-xs backdrop-blur-xs">
+                          {cake.category}
+                        </span>
+                      </div>
+
+                      {/* Click to Inspect Hint */}
+                      <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span className="inline-flex items-center gap-1.5 bg-[#1C0D0A]/85 text-white text-[11px] font-medium px-3 py-1.5 rounded-full backdrop-blur-xs shadow-md">
+                          <span className="material-symbols-outlined text-sm">zoom_in</span>
+                          <span>View Full Photo</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Rich Narrative & Explanation of the Cake (No Buy / Order Buttons!) */}
+                  <div className="w-full lg:w-1/2 space-y-4 sm:space-y-5">
+                    <div className="space-y-2">
+                      <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52]">
+                        {cake.tagline}
+                      </span>
+                      <h3 className="font-display font-bold text-2xl sm:text-4xl text-[#1C0D0A] leading-tight">
+                        {cake.name}
+                      </h3>
+                    </div>
+
+                    <p className="text-xs sm:text-sm text-[#5C524E] leading-relaxed">
+                      {cake.description}
+                    </p>
+
+                    {/* Architecture Details */}
+                    <div className="pt-2 border-l-2 border-[#802B52] pl-4 py-1 space-y-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A6B72] block">
+                        Architecture
+                      </span>
+                      <span className="text-xs sm:text-sm font-semibold text-[#1C0D0A] block">
+                        {cake.tiers}
+                      </span>
+                    </div>
+
+                    {/* Artisanal Craftsmanship Elements */}
+                    <div className="pt-1 space-y-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A6B72] block">
+                        Handcrafted Techniques
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {cake.highlights.map((h, i) => (
+                          <span
+                            key={i}
+                            className="text-[11px] bg-white border border-[#E6DBCE] px-3 py-1 rounded-full text-[#5C524E] font-medium shadow-2xs"
+                          >
+                            {h}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Recommended Flavours Note */}
+                    <div className="pt-1 text-xs text-[#7A6B72]">
+                      <span className="font-bold text-[#1C0D0A]">Recommended Flavours: </span>
+                      {cake.flavours.join(" • ")}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+      </section>
+
+      {/* ── 3. CREATE YOUR CAKE & CUSTOM BUILDER (PLACED AFTER BEST CAKES) ── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         
         <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8 space-y-1">
+          <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52]">
+            Online Atelier Studio
+          </span>
           <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#1C0D0A]">
             Create Your Cake
           </h2>
@@ -245,126 +444,371 @@ export default function CustomCakeClient() {
         {/* 2-Column Layout on Laptop, Compact Stack on Mobile */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           
-          {/* ── LEFT: PROPER TIERED CAKE VISUALIZER ─────────────────────── */}
-          <div className="lg:col-span-5 bg-white rounded-3xl border border-[#E6C184]/60 p-4 sm:p-6 shadow-lg flex flex-col items-center justify-between relative overflow-hidden">
+          {/* ── LEFT: MAGICAL PYRAMID TIERED CAKE WITH RICH CELEBRATION ASSETS ── */}
+          <div className="lg:col-span-6 bg-white rounded-3xl border border-[#E6C184]/70 p-5 sm:p-6 shadow-xl flex flex-col items-center justify-between relative overflow-hidden">
             
-            {/* Top Info Bar */}
-            <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-[#E6DBCE] text-[11px] text-[#7A6B72]">
-              <span className="font-bold text-[#802B52] uppercase tracking-wider">
-                Live Cake Preview
+            {/* Top Bar matching reference */}
+            <div className="w-full flex items-center justify-between pb-3 mb-2 border-b border-[#E6DBCE]/80 text-[11px]">
+              <span className="font-bold text-[#802B52] uppercase tracking-wider font-mono">
+                LIVE CAKE PREVIEW
               </span>
-              <span>{layers} Tier{layers > 1 ? "s" : ""} • {selectedWeight}</span>
+              <span className="text-[#5C524E] font-semibold">
+                {layers} Tier{layers > 1 ? "s" : ""} • {selectedWeight}
+              </span>
             </div>
 
-            {/* REALISTIC ANIMATED TIERED CAKE STAGE */}
-            <div className="w-full h-56 sm:h-64 flex flex-col items-center justify-end relative pb-1 pt-4 select-none">
+            {/* Cake Ambient Stage Container with Animated Celebration Background */}
+            <div className="w-full h-80 sm:h-92 relative flex items-center justify-center select-none overflow-hidden rounded-2xl bg-gradient-to-b from-[#FDFBF7] via-[#FAF3E8] to-[#F5ECE0]">
               
-              {/* Topper Element */}
-              <div className="mb-1 transition-all duration-300 flex flex-col items-center">
-                {selectedTopperId === "crown" && (
-                  <span className="material-symbols-outlined text-amber-500 text-3xl drop-shadow-sm animate-pulse">
-                    military_tech
-                  </span>
-                )}
-                {selectedTopperId === "teddy" && (
-                  <span className="material-symbols-outlined text-amber-800 text-3xl drop-shadow-sm">
-                    pets
-                  </span>
-                )}
-                {selectedTopperId === "star" && (
-                  <span className="material-symbols-outlined text-amber-400 text-3xl drop-shadow-sm">
-                    star
-                  </span>
-                )}
-                {selectedTopperId === "rosette" && (
-                  <span className="material-symbols-outlined text-rose-500 text-3xl drop-shadow-sm">
-                    local_florist
-                  </span>
-                )}
-                {selectedTopperId === "none" && (
-                  <div className="w-4 h-1.5 rounded-full bg-amber-400/80 mb-0.5" />
-                )}
-              </div>
-
-              {/* TIER 3 (Top Tier - Only when layers === 3) */}
-              {layers === 3 && (
-                <div
-                  className={`w-28 sm:w-32 h-11 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-b ${currentFlavour.gradient} shadow-md relative border border-white/40 transition-all duration-500 transform animate-fade-in flex flex-col items-center justify-between p-1`}
-                >
-                  <div
-                    className="w-11/12 h-1.5 rounded-full opacity-85 shadow-xs"
-                    style={{ backgroundColor: currentFlavour.dripColor }}
-                  />
-                  <div className="w-full flex justify-around px-2">
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: currentFlavour.pearlColor }} />
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: currentFlavour.pearlColor }} />
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: currentFlavour.pearlColor }} />
-                  </div>
-                </div>
-              )}
-
-              {/* TIER 2 (Middle Tier - When layers >= 2) */}
-              {layers >= 2 && (
-                <div
-                  className={`w-40 sm:w-48 h-13 sm:h-14 -mt-1 rounded-xl sm:rounded-2xl bg-gradient-to-b ${currentFlavour.gradient} shadow-lg relative border border-white/40 transition-all duration-500 flex flex-col items-center justify-between p-1.5`}
-                >
-                  <div className="w-full h-1 bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200 opacity-90 rounded-full" />
-                  <div className="w-full flex justify-between items-center px-3">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: currentFlavour.pearlColor }} />
-                    <span className="text-[9px] uppercase font-bold tracking-wider text-white/80">
-                      Handcrafted
-                    </span>
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: currentFlavour.pearlColor }} />
-                  </div>
-                </div>
-              )}
-
-              {/* TIER 1 (Base Tier - Always visible) */}
+              {/* Dynamic Ambient Center Glow */}
               <div
-                className={`w-56 sm:w-64 h-16 sm:h-18 -mt-1 rounded-xl sm:rounded-2xl bg-gradient-to-b ${currentFlavour.gradient} shadow-xl relative border border-white/50 transition-all duration-500 flex flex-col items-center justify-between p-2`}
+                className="absolute inset-0 pointer-events-none transition-all duration-700"
+                style={{
+                  background: `radial-gradient(circle at 50% 60%, ${currentFlavour.glowColor} 0%, rgba(255,255,255,0) 70%)`,
+                }}
+              />
+
+              {/* CELEBRATION ASSETS: BALLOONS, HEARTS, STARS, PARTY SPARKLES (SVG) */}
+              <svg
+                viewBox="0 0 400 340"
+                className="w-full h-full absolute inset-0 pointer-events-none"
+                preserveAspectRatio="xMidYMid meet"
               >
-                {/* Drip Edge */}
-                <div
-                  className="w-full h-2 rounded-full opacity-90"
-                  style={{ backgroundColor: currentFlavour.dripColor }}
-                />
+                <defs>
+                  {/* Balloon Gradients */}
+                  <linearGradient id="balGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFF2B2" />
+                    <stop offset="50%" stopColor="#E5B94E" />
+                    <stop offset="100%" stopColor="#B38728" />
+                  </linearGradient>
+                  <linearGradient id="balRose" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFC2D1" />
+                    <stop offset="50%" stopColor="#E86280" />
+                    <stop offset="100%" stopColor="#AA2E48" />
+                  </linearGradient>
+                  <linearGradient id="balBurgundy" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#B84A74" />
+                    <stop offset="60%" stopColor="#802B52" />
+                    <stop offset="100%" stopColor="#4A122E" />
+                  </linearGradient>
 
-                {/* Name Plaque */}
-                <div className="bg-[#FAF5EE]/95 border border-[#D4AF37] px-3 py-0.5 rounded-full shadow-xs max-w-[85%] text-center">
-                  <span className="font-display font-bold text-xs sm:text-sm text-[#1C0D0A] block truncate">
-                    {customName.trim() || "Your Name Here"}
-                  </span>
-                </div>
+                  {/* Cake Tier Gradient */}
+                  <linearGradient id="cakeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor={currentFlavour.tierTopColor} />
+                    <stop offset="45%" stopColor={currentFlavour.tierTopColor} />
+                    <stop offset="100%" stopColor={currentFlavour.tierBaseColor} />
+                  </linearGradient>
 
-                {/* Base Trim */}
-                <div className="w-full flex justify-between items-center px-3">
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: currentFlavour.pearlColor }} />
-                  <span className="text-[9px] uppercase font-bold tracking-wider text-white/70">
-                    {currentFlavour.name}
-                  </span>
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: currentFlavour.pearlColor }} />
-                </div>
-              </div>
+                  {/* Golden Platter Gradient */}
+                  <linearGradient id="platterGold" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#B88A2E" />
+                    <stop offset="35%" stopColor="#FDEAA8" />
+                    <stop offset="60%" stopColor="#FFF5D1" />
+                    <stop offset="80%" stopColor="#D9A73A" />
+                    <stop offset="100%" stopColor="#9E731F" />
+                  </linearGradient>
 
-              {/* Golden Cake Pedestal Stand */}
-              <div className="w-64 sm:w-72 h-3 bg-gradient-to-r from-[#C5A030] via-[#F4E1A1] to-[#C5A030] rounded-full shadow-md border border-amber-300 mt-1" />
-              <div className="w-24 h-2.5 bg-gradient-to-b from-[#B89228] to-[#7D6013] rounded-b-lg" />
+                  {/* Soft Platter Drop Shadow */}
+                  <filter id="platterShadow" x="-10%" y="-10%" width="120%" height="150%">
+                    <feDropShadow dx="0" dy="6" stdDeviation="5" floodColor="#2A1407" floodOpacity="0.28" />
+                  </filter>
+
+                  {/* Tier Drop Shadow */}
+                  <filter id="tierShadow" x="-10%" y="-10%" width="120%" height="130%">
+                    <feDropShadow dx="0" dy="3" stdDeviation="3.5" floodColor="#000000" floodOpacity="0.32" />
+                  </filter>
+                </defs>
+
+                {/* ── 1. CELEBRATION BALLOONS (LEFT CLUSTER) ── */}
+                <g className="animate-balloon-left">
+                  {/* Balloon Strings */}
+                  <path d="M 40 82 Q 48 135 55 180" stroke="#C5A030" strokeWidth="1.2" fill="none" opacity="0.6" strokeDasharray="2,2" />
+                  <path d="M 68 62 Q 62 120 57 182" stroke="#E6A8B8" strokeWidth="1.2" fill="none" opacity="0.6" />
+                  <path d="M 22 108 Q 38 148 53 184" stroke="#D4AF37" strokeWidth="1.2" fill="none" opacity="0.6" strokeDasharray="3,2" />
+                  
+                  {/* Balloon 1: Gold */}
+                  <ellipse cx="40" cy="65" rx="18" ry="22" fill="url(#balGold)" opacity="0.9" />
+                  <ellipse cx="34" cy="56" rx="4" ry="7" fill="#FFFFFF" opacity="0.6" />
+                  <polygon points="38,87 42,87 40,90" fill="#B38728" />
+
+                  {/* Balloon 2: Rose */}
+                  <ellipse cx="68" cy="46" rx="16" ry="20" fill="url(#balRose)" opacity="0.88" />
+                  <ellipse cx="63" cy="38" rx="3.5" ry="6" fill="#FFFFFF" opacity="0.55" />
+                  <polygon points="66,66 70,66 68,69" fill="#AA2E48" />
+
+                  {/* Balloon 3: Burgundy */}
+                  <ellipse cx="22" cy="92" rx="14" ry="17" fill="url(#balBurgundy)" opacity="0.85" />
+                  <ellipse cx="18" cy="85" rx="3" ry="5" fill="#FFFFFF" opacity="0.5" />
+                  <polygon points="20,109 24,109 22,112" fill="#802B52" />
+                </g>
+
+                {/* ── 2. CELEBRATION BALLOONS (RIGHT CLUSTER) ── */}
+                <g className="animate-balloon-right">
+                  {/* Balloon Strings */}
+                  <path d="M 360 82 Q 352 135 345 180" stroke="#C5A030" strokeWidth="1.2" fill="none" opacity="0.6" strokeDasharray="2,2" />
+                  <path d="M 332 62 Q 338 120 343 182" stroke="#E6A8B8" strokeWidth="1.2" fill="none" opacity="0.6" />
+                  <path d="M 378 108 Q 362 148 347 184" stroke="#D4AF37" strokeWidth="1.2" fill="none" opacity="0.6" strokeDasharray="3,2" />
+
+                  {/* Balloon 1: Rose */}
+                  <ellipse cx="360" cy="65" rx="18" ry="22" fill="url(#balRose)" opacity="0.9" />
+                  <ellipse cx="354" cy="56" rx="4" ry="7" fill="#FFFFFF" opacity="0.6" />
+                  <polygon points="358,87 362,87 360,90" fill="#AA2E48" />
+
+                  {/* Balloon 2: Gold */}
+                  <ellipse cx="332" cy="46" rx="16" ry="20" fill="url(#balGold)" opacity="0.88" />
+                  <ellipse cx="327" cy="38" rx="3.5" ry="6" fill="#FFFFFF" opacity="0.55" />
+                  <polygon points="330,66 334,66 332,69" fill="#B38728" />
+
+                  {/* Balloon 3: Burgundy */}
+                  <ellipse cx="378" cy="92" rx="14" ry="17" fill="url(#balBurgundy)" opacity="0.85" />
+                  <ellipse cx="374" cy="85" rx="3" ry="5" fill="#FFFFFF" opacity="0.5" />
+                  <polygon points="376,109 380,109 378,112" fill="#802B52" />
+                </g>
+
+                {/* ── 3. FLOATING HEARTS & CRACKER STARS (MANY ELEVATING ASSETS) ── */}
+                {/* Floating Hearts */}
+                <g className="animate-float-heart-1">
+                  <path d="M 85 140 C 85 133 75 130 75 137 C 75 144 85 152 85 152 C 85 152 95 144 95 137 C 95 130 85 133 85 140 Z" fill="#E11D48" opacity="0.75" />
+                </g>
+                <g className="animate-float-heart-2">
+                  <path d="M 315 135 C 315 128 305 125 305 132 C 305 139 315 147 315 147 C 315 147 325 139 325 132 C 325 125 315 128 315 135 Z" fill="#F43F5E" opacity="0.7" />
+                </g>
+                <g className="animate-float-heart-3">
+                  <path d="M 50 195 C 50 190 42 188 42 193 C 42 198 50 204 50 204 C 50 204 58 198 58 193 C 58 188 50 190 50 195 Z" fill="#E11D48" opacity="0.6" />
+                </g>
+                <g className="animate-float-heart-1">
+                  <path d="M 350 195 C 350 190 342 188 342 193 C 342 198 350 204 350 204 C 350 204 358 198 358 193 C 358 188 350 190 350 195 Z" fill="#FB7185" opacity="0.65" />
+                </g>
+                <g className="animate-float-heart-2">
+                  <path d="M 125 60 C 125 56 118 54 118 58 C 118 63 125 68 125 68 C 125 68 132 63 132 58 C 132 54 125 56 125 60 Z" fill="#E11D48" opacity="0.55" />
+                </g>
+                <g className="animate-float-heart-3">
+                  <path d="M 275 60 C 275 56 268 54 268 58 C 268 63 275 68 275 68 C 275 68 282 63 282 58 C 282 54 275 56 275 60 Z" fill="#F43F5E" opacity="0.55" />
+                </g>
+
+                {/* Sparkling Crack Stars & Poppers */}
+                <path d="M 105 40 Q 105 46 111 46 Q 105 46 105 52 Q 105 46 99 46 Q 105 46 105 40 Z" fill="#F59E0B" className="animate-twinkle-1" />
+                <path d="M 295 40 Q 295 46 301 46 Q 295 46 295 52 Q 295 46 289 46 Q 295 46 295 40 Z" fill="#FBBF24" className="animate-twinkle-2" />
+                <path d="M 155 30 Q 155 35 159 35 Q 155 35 155 40 Q 155 35 151 35 Q 155 35 155 30 Z" fill="#D97706" className="animate-twinkle-3" />
+                <path d="M 245 30 Q 245 35 249 35 Q 245 35 245 40 Q 245 35 241 35 Q 245 35 245 30 Z" fill="#F59E0B" className="animate-twinkle-1" />
+
+                {/* Starburst Cracker Sparkle Left */}
+                <g opacity="0.75" className="animate-twinkle-2">
+                  <line x1="88" y1="92" x2="88" y2="82" stroke="#E5B94E" strokeWidth="1.5" strokeLinecap="round" />
+                  <line x1="88" y1="92" x2="88" y2="102" stroke="#E5B94E" strokeWidth="1.5" strokeLinecap="round" />
+                  <line x1="88" y1="92" x2="78" y2="92" stroke="#E5B94E" strokeWidth="1.5" strokeLinecap="round" />
+                  <line x1="88" y1="92" x2="98" y2="92" stroke="#E5B94E" strokeWidth="1.5" strokeLinecap="round" />
+                  <circle cx="88" cy="92" r="2" fill="#FFFFFF" />
+                </g>
+
+                {/* Starburst Cracker Sparkle Right */}
+                <g opacity="0.75" className="animate-twinkle-3">
+                  <line x1="312" y1="92" x2="312" y2="82" stroke="#E5B94E" strokeWidth="1.5" strokeLinecap="round" />
+                  <line x1="312" y1="92" x2="312" y2="102" stroke="#E5B94E" strokeWidth="1.5" strokeLinecap="round" />
+                  <line x1="312" y1="92" x2="302" y2="92" stroke="#E5B94E" strokeWidth="1.5" strokeLinecap="round" />
+                  <line x1="312" y1="92" x2="322" y2="92" stroke="#E5B94E" strokeWidth="1.5" strokeLinecap="round" />
+                  <circle cx="312" cy="92" r="2" fill="#FFFFFF" />
+                </g>
+
+                {/* ── 4. GOLDEN METALLIC TRAY / PLATTER (BOTTOM OF CAKE) ── */}
+                <g filter="url(#platterShadow)">
+                  {/* Platter Pedestal Foot */}
+                  <rect x="175" y="278" width="50" height="15" rx="5" ry="5" fill="#9E731F" />
+                  <rect x="160" y="291" width="80" height="7" rx="3.5" ry="3.5" fill="url(#platterGold)" />
+                  {/* Wide Golden Platter Table (Width 310, wider than base tier 270) */}
+                  <rect x="45" y="268" width="310" height="13" rx="6.5" ry="6.5" fill="url(#platterGold)" stroke="#D4AF37" strokeWidth="0.8" />
+                  {/* Top Platter Highlight Rim */}
+                  <line x1="60" y1="270" x2="340" y2="270" stroke="#FFFFFF" strokeWidth="1.2" opacity="0.7" strokeLinecap="round" />
+                </g>
+
+                {/* ── 5. PROPER PYRAMID TIERED CAKE ARCHITECTURE ── */}
+
+                {/* TIER 1: BASE TIER (WIDEST: Width = 270, Center = 200, Left = 65, Right = 335) */}
+                <g filter="url(#tierShadow)">
+                  {/* Base Tier Body (clean modern rectangular slab with subtle rx=10) */}
+                  <rect x="65" y="202" width="270" height="68" rx="10" ry="10" fill="url(#cakeGradient)" />
+                  
+                  {/* Dripping Glaze along top edge of Tier 1 */}
+                  <path
+                    d="M 65 210 Q 75 220 85 210 Q 95 226 105 212 Q 118 228 130 211 Q 148 225 165 212 Q 185 228 200 213 Q 215 227 235 211 Q 255 228 270 212 Q 285 226 300 211 Q 315 224 325 210 Q 332 216 335 210 L 335 202 L 65 202 Z"
+                    fill={currentFlavour.dripColor}
+                    opacity="0.9"
+                  />
+
+                  {/* Top Rim Highlight */}
+                  <line x1="72" y1="203" x2="328" y2="203" stroke="#FFFFFF" strokeWidth="1" opacity="0.35" />
+
+                  {/* ICONIC CENTER PLAQUE (EXACT MATCH TO REFERENCE PHOTO) */}
+                  <g>
+                    {/* Plaque Background & Double Gold Border */}
+                    <rect x="110" y="222" width="180" height="38" rx="19" ry="19" fill="#FFFDF9" stroke="#D4AF37" strokeWidth="2.2" />
+                    <rect x="113" y="225" width="174" height="32" rx="16" ry="16" fill="none" stroke="#E6C184" strokeWidth="0.8" opacity="0.7" />
+                    
+                    {/* Line 1: Inscribed Name */}
+                    <text
+                      x="200"
+                      y="238"
+                      textAnchor="middle"
+                      fill="#1C0D0A"
+                      fontFamily="var(--font-cormorant), Georgia, serif"
+                      fontSize="13"
+                      fontWeight="700"
+                    >
+                      {customName.trim() || "Happy Birthday"}
+                    </text>
+
+                    {/* Line 2: Flavour Badge Name in bold tracking */}
+                    <text
+                      x="200"
+                      y="251"
+                      textAnchor="middle"
+                      fill="#802B52"
+                      fontFamily="var(--font-manrope), sans-serif"
+                      fontSize="8.5"
+                      fontWeight="800"
+                      letterSpacing="1.8px"
+                    >
+                      {currentFlavour.badgeName}
+                    </text>
+                  </g>
+                </g>
+
+                {/* TIER 2: MIDDLE TIER (NARROWER: Width = 196, Center = 200, Left = 102, Right = 298) */}
+                {layers >= 2 && (
+                  <g filter="url(#tierShadow)" className="animate-tier-mount">
+                    {/* Middle Tier Body */}
+                    <rect x="102" y="146" width="196" height="58" rx="8" ry="8" fill="url(#cakeGradient)" />
+
+                    {/* Tier 2 Glaze Drips */}
+                    <path
+                      d="M 102 154 Q 112 166 122 153 Q 135 168 148 154 Q 165 169 180 155 Q 200 170 215 154 Q 232 168 250 154 Q 268 168 282 153 Q 292 164 298 154 L 298 146 L 102 146 Z"
+                      fill={currentFlavour.dripColor}
+                      opacity="0.9"
+                    />
+
+                    {/* Metallic Accent Trim across Tier 2 */}
+                    <line x1="108" y1="147" x2="292" y2="147" stroke="#D4AF37" strokeWidth="1.2" opacity="0.8" />
+                  </g>
+                )}
+
+                {/* TIER 3: TOP TIER (NARROWEST: Width = 132, Center = 200, Left = 134, Right = 266) */}
+                {layers === 3 && (
+                  <g filter="url(#tierShadow)" className="animate-tier-mount">
+                    {/* Top Tier Body */}
+                    <rect x="134" y="94" width="132" height="54" rx="7" ry="7" fill="url(#cakeGradient)" />
+
+                    {/* Tier 3 Glaze Drips */}
+                    <path
+                      d="M 134 102 Q 144 114 154 102 Q 168 116 182 103 Q 200 117 215 102 Q 232 116 246 102 Q 258 113 266 102 L 266 94 L 134 94 Z"
+                      fill={currentFlavour.dripColor}
+                      opacity="0.9"
+                    />
+
+                    {/* Top Tier Rim Highlight */}
+                    <line x1="140" y1="95" x2="260" y2="95" stroke="#FFFFFF" strokeWidth="1" opacity="0.4" />
+                  </g>
+                )}
+
+                {/* ── 6. DYNAMIC TOPPER MOUNT (ON SUMMIT OF HIGHEST TIER) ── */}
+                <g
+                  transform={`translate(200, ${layers === 1 ? 194 : layers === 2 ? 138 : 86})`}
+                  className="animate-topper-bob"
+                >
+                  {/* Stem connector */}
+                  <line x1="0" y1="0" x2="0" y2="6" stroke="#C5A030" strokeWidth="2" strokeLinecap="round" />
+
+                  {/* Tiara Crown */}
+                  {activeTopperType === "crown" && (
+                    <g transform="translate(-16, -24)">
+                      <path
+                        d="M 0 18 L 4 4 L 11 12 L 16 0 L 21 12 L 28 4 L 32 18 Z"
+                        fill="url(#platterGold)"
+                        stroke="#B88A2E"
+                        strokeWidth="1.2"
+                        strokeLinejoin="round"
+                      />
+                      <circle cx="16" cy="2" r="2.5" fill="#FFFFFF" />
+                      <circle cx="4" cy="5" r="2" fill="#E11D48" />
+                      <circle cx="28" cy="5" r="2" fill="#E11D48" />
+                      <rect x="0" y="18" width="32" height="3" rx="1.5" fill="#AA820A" />
+                    </g>
+                  )}
+
+                  {/* Romantic Heart */}
+                  {activeTopperType === "heart" && (
+                    <g transform="translate(-14, -26)">
+                      <path
+                        d="M 14 26 C 14 26 0 17 0 8 C 0 3 4 0 9 0 C 12 0 14 3 14 3 C 14 3 16 0 19 0 C 24 0 28 3 28 8 C 28 17 14 26 14 26 Z"
+                        fill="#E11D48"
+                        stroke="#FFF0F2"
+                        strokeWidth="1.5"
+                      />
+                      <ellipse cx="8" cy="6" rx="2.5" ry="4" fill="#FFFFFF" opacity="0.55" transform="rotate(-25 8 6)" />
+                    </g>
+                  )}
+
+                  {/* Golden Star */}
+                  {activeTopperType === "star" && (
+                    <g transform="translate(-15, -25)">
+                      <polygon
+                        points="15,0 19,10 30,11 22,18 24,29 15,23 6,29 8,18 0,11 11,10"
+                        fill="url(#platterGold)"
+                        stroke="#AA820A"
+                        strokeWidth="1"
+                      />
+                      <circle cx="15" cy="15" r="3" fill="#FFFFFF" opacity="0.65" />
+                    </g>
+                  )}
+
+                  {/* Sugar Teddy */}
+                  {activeTopperType === "teddy" && (
+                    <g transform="translate(-14, -24)">
+                      {/* Ears */}
+                      <circle cx="4" cy="4" r="4.5" fill="#8C5326" />
+                      <circle cx="4" cy="4" r="2.5" fill="#FFD5AC" />
+                      <circle cx="24" cy="4" r="4.5" fill="#8C5326" />
+                      <circle cx="24" cy="4" r="2.5" fill="#FFD5AC" />
+                      {/* Head */}
+                      <circle cx="14" cy="14" r="11" fill="#A86A38" />
+                      {/* Snout */}
+                      <ellipse cx="14" cy="17" rx="5" ry="4" fill="#FFD5AC" />
+                      <polygon points="12,15 16,15 14,17" fill="#1C0A05" />
+                      {/* Eyes */}
+                      <circle cx="10" cy="12" r="1.5" fill="#1C0A05" />
+                      <circle cx="18" cy="12" r="1.5" fill="#1C0A05" />
+                    </g>
+                  )}
+
+                  {/* Sugar Rose */}
+                  {activeTopperType === "rosette" && (
+                    <g transform="translate(-14, -22)">
+                      <circle cx="14" cy="12" r="10" fill="#E11D48" />
+                      <circle cx="14" cy="12" r="7" fill="#F43F5E" />
+                      <circle cx="14" cy="12" r="4" fill="#FB7185" />
+                      <circle cx="14" cy="12" r="2" fill="#FFF1F2" />
+                      {/* Green leaf */}
+                      <path d="M 4 18 Q 0 24 8 22 Q 12 18 4 18 Z" fill="#22C55E" />
+                      <path d="M 24 18 Q 28 24 20 22 Q 16 18 24 18 Z" fill="#22C55E" />
+                    </g>
+                  )}
+                </g>
+              </svg>
             </div>
 
-            {/* Bottom Flavour & Servings Tag */}
-            <div className="w-full pt-2 border-t border-[#E6DBCE] flex items-center justify-between text-[11px] text-[#5C524E]">
-              <span className="font-semibold">{currentFlavour.name}</span>
-              <span className="font-bold text-[#802B52]">{selectedWeight}</span>
+            {/* Bottom Flavour and Weight Bar */}
+            <div className="w-full pt-3 border-t border-[#E6DBCE] flex items-center justify-between text-xs text-[#5C524E]">
+              <span className="font-bold text-[#1C0D0A]">{currentFlavour.name}</span>
+              <span className="font-bold text-[#802B52] font-mono">{selectedWeight}</span>
             </div>
           </div>
 
           {/* ── RIGHT: COMPACT CONTROLS (NO ENDLESS SCROLLING) ──────────── */}
-          <div className="lg:col-span-7 space-y-4">
+          <div className="lg:col-span-6 space-y-3.5">
             
             {/* 1. LAYERS (Compact 3 buttons) */}
-            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3.5 shadow-xs space-y-2">
+            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3 shadow-xs space-y-1.5">
               <label className="text-xs font-bold text-[#1C0D0A] block">
-                1. Select Layers
+                1. Layers (Pyramid Structure)
               </label>
               <div className="grid grid-cols-3 gap-2">
                 {LAYER_OPTIONS.map((opt) => (
@@ -374,25 +818,22 @@ export default function CustomCakeClient() {
                     onClick={() => handleLayersChange(opt.count as 1 | 2 | 3)}
                     className={`py-2 px-2 rounded-xl text-center border transition-all ${
                       layers === opt.count
-                        ? "bg-[#802B52] text-white border-[#802B52] font-bold shadow-xs"
+                        ? "bg-[#802B52] text-white border-[#802B52] font-bold shadow-xs scale-101"
                         : "bg-[#FAF5EE] text-[#1C0D0A] border-[#E6DBCE] hover:border-[#802B52]/40"
                     }`}
                   >
                     <span className="block text-xs font-bold">{opt.label}</span>
-                    <span className={`block text-[10px] ${layers === opt.count ? "text-white/80" : "text-[#7A6B72]"}`}>
-                      {opt.serves}
-                    </span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* 2. FLAVOURS (Compact 3x2 pills) */}
-            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3.5 shadow-xs space-y-2">
+            {/* 2. FLAVOURS (Compact 10 flavours from reference) */}
+            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3 shadow-xs space-y-1.5">
               <label className="text-xs font-bold text-[#1C0D0A] block">
-                2. Choose Flavour
+                2. Flavour
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
                 {FLAVOUR_OPTIONS.map((f) => (
                   <button
                     key={f.id}
@@ -414,11 +855,11 @@ export default function CustomCakeClient() {
             </div>
 
             {/* 3. WEIGHT (Compact 4 buttons) */}
-            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3.5 shadow-xs space-y-2">
+            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3 shadow-xs space-y-1.5">
               <label className="text-xs font-bold text-[#1C0D0A] block">
-                3. Cake Weight
+                3. Weight
               </label>
-              <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+              <div className="grid grid-cols-4 gap-1.5">
                 {WEIGHT_OPTIONS.map((w) => (
                   <button
                     key={w.weight}
@@ -426,26 +867,23 @@ export default function CustomCakeClient() {
                     onClick={() => handleWeightChange(w.weight)}
                     className={`py-2 px-1 rounded-xl text-center border transition-all ${
                       selectedWeight === w.weight
-                        ? "bg-[#802B52] text-white border-[#802B52] font-bold shadow-xs"
+                        ? "bg-[#802B52] text-white border-[#802B52] font-bold shadow-xs scale-101"
                         : "bg-[#FAF5EE] text-[#1C0D0A] border-[#E6DBCE] hover:border-[#802B52]/40"
                     }`}
                   >
                     <span className="block text-xs font-bold">{w.weight}</span>
-                    <span className={`block text-[9px] ${selectedWeight === w.weight ? "text-white/80" : "text-[#7A6B72]"}`}>
-                      {w.weight === "1.5 kg" ? "10-15 p" : w.weight === "2.0 kg" ? "15-20 p" : w.weight === "3.0 kg" ? "25-30 p" : "35+ p"}
-                    </span>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* 4. NAME TO WRITE (Compact input, reduced font size) */}
-            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3.5 shadow-xs space-y-2">
+            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3 shadow-xs space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-bold text-[#1C0D0A]">
                   4. Name to Write on Cake
                 </label>
-                <span className="text-[10px] text-[#7A6B72]">Shows live on cake</span>
+                <span className="text-[10px] text-[#7A6B72]">Live on base plaque</span>
               </div>
               <input
                 type="text"
@@ -453,10 +891,10 @@ export default function CustomCakeClient() {
                 value={customName}
                 maxLength={30}
                 onChange={(e) => handleNameChange(e.target.value)}
-                className="w-full bg-[#FAF5EE] border border-[#E6DBCE] rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold text-[#1C0D0A] focus:outline-none focus:border-[#802B52]"
+                className="w-full bg-[#FAF5EE] border border-[#E6DBCE] rounded-xl px-3 py-1.5 text-xs sm:text-sm font-semibold text-[#1C0D0A] focus:outline-none focus:border-[#802B52]"
               />
               <div className="flex flex-wrap gap-1 pt-0.5">
-                {["Happy Birthday", "Aarav", "Happy 1st Birthday", "Forever Together"].map((s) => (
+                {["Happy Birthday", "Aarav", "Forever Together", "Sweet Little Princess"].map((s) => (
                   <button
                     key={s}
                     type="button"
@@ -470,9 +908,9 @@ export default function CustomCakeClient() {
             </div>
 
             {/* 5. TOPPER (Compact chips) */}
-            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3.5 shadow-xs space-y-2">
+            <div className="bg-white rounded-2xl border border-[#E6DBCE] p-3 shadow-xs space-y-1.5">
               <label className="text-xs font-bold text-[#1C0D0A] block">
-                5. Topper Style
+                5. Topper Garnish
               </label>
               <div className="flex flex-wrap gap-1.5">
                 {TOPPER_OPTIONS.map((t) => (
@@ -595,7 +1033,7 @@ export default function CustomCakeClient() {
               />
             </div>
 
-            {/* Special Request Notes (Full width on sm/md) */}
+            {/* Special Request Notes */}
             <div className="sm:col-span-2 md:col-span-3">
               <label className="text-[11px] font-bold text-[#5C524E] uppercase tracking-wider block mb-1">
                 Special Request / Reference Photo Notes
@@ -638,86 +1076,204 @@ export default function CustomCakeClient() {
 
       </section>
 
-      {/* ── 4. SHOWCASE CAKES (2 ON MOBILE, 4 ON LAPTOP) ────────────────── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 border-t border-[#E6C184]/30">
-        
-        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12 space-y-1">
-          <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#1C0D0A]">
-            Our Best Cakes
-          </h2>
-          <p className="text-xs sm:text-sm text-[#5C524E]">
-            Handcrafted custom cakes made for recent celebrations in Trichy.
-          </p>
-        </div>
+      {/* Embedded CSS for animations */}
+      <style jsx>{`
+        /* Smooth Showcase Card Entrance */
+        @keyframes fadeInUp {
+          0% {
+            opacity: 0;
+            transform: translateY(22px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
-        {/* Responsive Grid: Mobile shows 2 cakes, Laptop shows 4 cakes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SHOWCASE_CAKES.map((cake, idx) => {
-            // Hide 3rd and 4th cakes on mobile, show on md and above
-            const isHiddenOnMobile = idx >= 2;
+        /* Tier Mount Spring Bounce */
+        .animate-tier-mount {
+          animation: tierMount 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
 
-            return (
-              <div
-                key={cake.id}
-                className={`${
-                  isHiddenOnMobile ? "hidden md:flex" : "flex"
-                } flex-col bg-white rounded-3xl border border-[#E6DBCE] overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group`}
-              >
-                {/* Cake Image */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#F0E5D8]">
-                  <img
-                    src={cake.image}
-                    alt={cake.name}
-                    loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-white/95 text-[#802B52] border border-[#E6DBCE] shadow-2xs">
-                      {cake.category}
+        @keyframes tierMount {
+          0% {
+            transform: translateY(-26px) scale(0.95);
+            opacity: 0;
+          }
+          70% {
+            transform: translateY(2px) scale(1.02);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+          }
+        }
+
+        /* Balloon Swaying */
+        .animate-balloon-left {
+          animation: balloonSwayLeft 5s ease-in-out infinite;
+          transform-origin: 55px 180px;
+        }
+
+        @keyframes balloonSwayLeft {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-8px) rotate(-3deg);
+          }
+        }
+
+        .animate-balloon-right {
+          animation: balloonSwayRight 5.5s ease-in-out infinite;
+          transform-origin: 345px 180px;
+        }
+
+        @keyframes balloonSwayRight {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-9px) rotate(3deg);
+          }
+        }
+
+        /* Floating Hearts Animation */
+        .animate-float-heart-1 {
+          animation: floatHeart 4s ease-in-out infinite;
+        }
+        .animate-float-heart-2 {
+          animation: floatHeart 5s ease-in-out infinite 1.2s;
+        }
+        .animate-float-heart-3 {
+          animation: floatHeart 4.5s ease-in-out infinite 2.2s;
+        }
+
+        @keyframes floatHeart {
+          0%, 100% {
+            transform: translateY(0) scale(1);
+            opacity: 0.65;
+          }
+          50% {
+            transform: translateY(-14px) scale(1.15);
+            opacity: 0.95;
+          }
+        }
+
+        /* Twinkling Star Sparks */
+        .animate-twinkle-1 {
+          animation: starTwinkle 2.5s ease-in-out infinite;
+        }
+        .animate-twinkle-2 {
+          animation: starTwinkle 3s ease-in-out infinite 0.8s;
+        }
+        .animate-twinkle-3 {
+          animation: starTwinkle 3.2s ease-in-out infinite 1.6s;
+        }
+
+        @keyframes starTwinkle {
+          0%, 100% {
+            transform: scale(0.85);
+            opacity: 0.4;
+          }
+          50% {
+            transform: scale(1.25);
+            opacity: 1;
+          }
+        }
+
+        /* Topper Gentle Bob */
+        .animate-topper-bob {
+          animation: topperBob 3.5s ease-in-out infinite;
+        }
+
+        @keyframes topperBob {
+          0%, 100% {
+            transform: translate(200px, ${layers === 1 ? 194 : layers === 2 ? 138 : 86}px) translateY(0);
+          }
+          50% {
+            transform: translate(200px, ${layers === 1 ? 194 : layers === 2 ? 138 : 86}px) translateY(-3px);
+          }
+        }
+      `}</style>
+
+      {/* Full Photo Inspection Modal */}
+      {inspectCake && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm"
+          onClick={() => setInspectCake(null)}
+        >
+          <div 
+            className="relative max-w-4xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl border border-[#E6DBCE]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setInspectCake(null)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-colors cursor-pointer"
+              aria-label="Close photo view"
+            >
+              <span className="material-symbols-outlined text-lg">close</span>
+            </button>
+
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-3/5 bg-[#F0E5D8]">
+                <img
+                  src={inspectCake.image}
+                  alt={inspectCake.name}
+                  className="w-full h-full max-h-[70vh] object-cover"
+                />
+              </div>
+              <div className="w-full md:w-2/5 p-6 sm:p-8 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#802B52]">
+                    {inspectCake.category}
+                  </span>
+                  <h3 className="font-display font-bold text-2xl text-[#1C0D0A] leading-tight">
+                    {inspectCake.name}
+                  </h3>
+                  <p className="text-xs text-[#5C524E] leading-relaxed">
+                    {inspectCake.description}
+                  </p>
+                  <div className="pt-3 border-t border-[#E6DBCE] space-y-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A6B72] block">
+                      Architecture
+                    </span>
+                    <span className="text-xs font-semibold text-[#1C0D0A]">
+                      {inspectCake.tiers}
                     </span>
                   </div>
+                  <div className="pt-2 space-y-1.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A6B72] block">
+                      Handcrafted Highlights
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {inspectCake.highlights.map((h, i) => (
+                        <span
+                          key={i}
+                          className="text-[11px] bg-[#FAF8F5] border border-[#E6DBCE] px-2.5 py-0.5 rounded-full text-[#5C524E] font-medium"
+                        >
+                          {h}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Cake Details */}
-                <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 space-y-3">
-                  <div className="space-y-1.5">
-                    <h3 className="font-display font-bold text-lg text-[#1C0D0A] leading-snug">
-                      {cake.name}
-                    </h3>
-                    <p className="text-xs font-semibold text-[#802B52]">
-                      {cake.tagline}
-                    </p>
-                    <p className="text-xs text-[#5C524E] leading-relaxed line-clamp-2">
-                      {cake.description}
-                    </p>
-                  </div>
-
-                  <div className="space-y-3 pt-2 border-t border-[#E6DBCE]/60">
-                    <div className="text-[11px] text-[#7A6B72] space-y-0.5">
-                      <div className="font-semibold text-[#1C0D0A]">{cake.tiers}</div>
-                      <div>{cake.servings}</div>
-                    </div>
-
-                    {/* Quick WhatsApp Inquiry for this exact cake */}
-                    <a
-                      href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-                        `Hello Lollipop! I would like to order the "${cake.name}" design for my celebration in Trichy. Please confirm price quote and available dates.`
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full bg-[#FAF5EE] hover:bg-[#802B52] text-[#802B52] hover:text-white border border-[#E6DBCE] hover:border-[#802B52] py-2 px-3 rounded-xl font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all"
-                    >
-                      <span>Inquire This Cake</span>
-                      <span className="material-symbols-outlined text-xs">arrow_forward</span>
-                    </a>
-                  </div>
+                <div className="pt-4 border-t border-[#E6DBCE]">
+                  <button
+                    onClick={() => setInspectCake(null)}
+                    className="w-full py-2.5 rounded-full border border-[#E6DBCE] text-xs font-bold uppercase tracking-wider text-[#5C524E] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+                  >
+                    Close Preview
+                  </button>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          </div>
         </div>
-
-      </section>
+      )}
 
     </div>
   );
