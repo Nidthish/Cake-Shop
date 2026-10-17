@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
 
@@ -15,6 +16,7 @@ export default function CakeCardInteractive({
   product: Product;
   animDelay?: number;
 }) {
+  const router = useRouter();
   const { addItem } = useCart();
   const [eggPreference, setEggPreference] = useState<"egg" | "eggless">(
     product.isEggless !== undefined ? (product.isEggless ? "eggless" : "egg") : "egg"
@@ -65,6 +67,14 @@ export default function CakeCardInteractive({
 
   const cardImage = getProductCardImage(product);
 
+  function handleCardClick(e: React.MouseEvent) {
+    const target = e.target as HTMLElement;
+    if (target.closest("button") || target.closest("select") || target.closest("input")) {
+      return;
+    }
+    router.push(`/products/${product.id}`);
+  }
+
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
@@ -100,7 +110,8 @@ export default function CakeCardInteractive({
 
   return (
     <div
-      className="product-card group relative bg-white border border-[#F1E6DF] rounded-2xl p-2.5 sm:p-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full font-sans"
+      onClick={handleCardClick}
+      className="product-card group relative bg-white border border-[#F1E6DF] rounded-2xl p-2.5 sm:p-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full font-sans cursor-pointer"
       style={{ animationDelay: `${animDelay}s` }}
       data-id={product.id}
     >

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import BranchSection from "@/components/about/BranchSection";
+import ScrollReveal from "@/components/common/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "About Us - Lollipop The Cake Shop, Trichy",
@@ -48,13 +49,13 @@ const FAQS = [
 
 export default function AboutPage() {
   return (
-    <div className="bg-[#FFF9F5] text-[#1C0D0A] min-h-screen">
+    <div className="bg-[#FFF9F5] text-[#1C0D0A] min-h-screen overflow-x-hidden">
       {/* ───────────────────────────────────────────────────────────────
          1. HERO SECTION
          ─────────────────────────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-r from-[#FFF9F5] via-[#FAF3EC] to-[#FAF0F2] py-14 sm:py-20 border-b border-[#E6C184]/30">
+      <section className="relative bg-gradient-to-r from-[#FFF9F5] via-[#FAF3EC] to-[#FAF0F2] py-14 sm:py-20 border-b border-[#E6C184]/30 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <ScrollReveal direction="left" distance={50} duration={850} className="lg:col-span-7 space-y-6 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FAF0F2] border border-[#962854]/30 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#962854] animate-pulse" />
               <span className="text-xs font-extrabold text-[#962854] uppercase tracking-wider">
@@ -85,9 +86,9 @@ export default function AboutPage() {
                 <span>Design a custom cake</span>
               </Link>
             </div>
-          </div>
+          </ScrollReveal>
 
-          <div className="lg:col-span-5 flex justify-center">
+          <ScrollReveal direction="right" distance={50} duration={850} className="lg:col-span-5 flex justify-center">
             <div className="w-full max-w-md aspect-square rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-2xl bg-white relative group">
               <Image
                 src="/images/about/hero-storefront.webp"
@@ -104,16 +105,16 @@ export default function AboutPage() {
                Lollipop The Cake Shop • Trichy
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ───────────────────────────────────────────────────────────────
          2. STORY SECTION
          ─────────────────────────────────────────────────────────────── */}
-      <section className="py-16 sm:py-24">
+      <section className="py-16 sm:py-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          <div className="lg:col-span-7 space-y-6 text-[#4A3E39] text-base leading-relaxed">
+          <ScrollReveal direction="left" distance={50} duration={850} className="lg:col-span-7 space-y-6 text-[#4A3E39] text-base leading-relaxed">
             <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-[#1C0D0A]">
               It started with a simple thought.
             </h2>
@@ -136,9 +137,9 @@ export default function AboutPage() {
             <p>
               We care about how the cake tastes, how it looks, how fresh it is, how comfortably you can order it, and most importantly, how you feel when you share it with the people you love.
             </p>
-          </div>
+          </ScrollReveal>
 
-          <aside className="lg:col-span-5 sticky top-28 bg-white border border-[#F1E6DF] p-8 rounded-3xl shadow-xl space-y-6 border-l-4 border-l-[#962854]">
+          <ScrollReveal direction="right" distance={50} duration={850} className="lg:col-span-5 sticky top-28 bg-white border border-[#F1E6DF] p-8 rounded-3xl shadow-xl space-y-6 border-l-4 border-l-[#962854]">
             <p className="font-display font-semibold text-2xl sm:text-3xl text-[#1C0D0A] leading-tight">
               &ldquo;Because a cake is never just a cake.&rdquo;
             </p>
@@ -162,56 +163,60 @@ export default function AboutPage() {
             <p className="text-xs sm:text-sm text-[#5C524E] font-medium pt-4 border-t border-[#F1E6DF]">
               And we&apos;re happy to be a small part of it. ❤️
             </p>
-          </aside>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ───────────────────────────────────────────────────────────────
          3. PHOTOS STRIP SECTION
          ─────────────────────────────────────────────────────────────── */}
-      <section className="py-8">
+      <section className="py-8 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-6">
-          <figure className="md:col-span-7 relative rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-md h-72 sm:h-96 group">
-            <Image
-              src="/images/about/counter-display.webp"
-              alt="Display counter with cakes, pastries and fondant cake posters at Lollipop"
-              width={800}
-              height={500}
-              loading="lazy"
-              quality={85}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              sizes="(max-width: 768px) 100vw, 700px"
-            />
-            <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md">
-              Fresh cakes and bakes, daily
-            </figcaption>
-          </figure>
+          <ScrollReveal direction="left" distance={50} duration={850} className="md:col-span-7">
+            <figure className="relative rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-md h-72 sm:h-96 group">
+              <Image
+                src="/images/about/counter-display.webp"
+                alt="Display counter with cakes, pastries and fondant cake posters at Lollipop"
+                width={800}
+                height={500}
+                loading="lazy"
+                quality={85}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                sizes="(max-width: 768px) 100vw, 700px"
+              />
+              <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md">
+                Fresh cakes and bakes, daily
+              </figcaption>
+            </figure>
+          </ScrollReveal>
 
-          <figure className="md:col-span-5 relative rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-md h-72 sm:h-96 group">
-            <Image
-              src="/images/about/seating-area.webp"
-              alt="Seating area inside Lollipop with colourful chairs and framed custom cake photos"
-              width={600}
-              height={500}
-              loading="lazy"
-              quality={85}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              sizes="(max-width: 768px) 100vw, 500px"
-            />
-            <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md">
-              Sit, taste, celebrate
-            </figcaption>
-          </figure>
+          <ScrollReveal direction="right" distance={50} duration={850} className="md:col-span-5">
+            <figure className="relative rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-md h-72 sm:h-96 group">
+              <Image
+                src="/images/about/seating-area.webp"
+                alt="Seating area inside Lollipop with colourful chairs and framed custom cake photos"
+                width={600}
+                height={500}
+                loading="lazy"
+                quality={85}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                sizes="(max-width: 768px) 100vw, 500px"
+              />
+              <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md">
+                Sit, taste, celebrate
+              </figcaption>
+            </figure>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ───────────────────────────────────────────────────────────────
          4. PROMISE + FOCUS BAND SECTION
          ─────────────────────────────────────────────────────────────── */}
-      <section className="py-16 sm:py-24 bg-[#FAF3EC] border-y border-[#E6C184]/40">
+      <section className="py-16 sm:py-24 bg-[#FAF3EC] border-y border-[#E6C184]/40 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Promise Column */}
-          <div className="lg:col-span-5 space-y-6">
+          <ScrollReveal direction="left" distance={50} duration={850} className="lg:col-span-5 space-y-6">
             <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#1C0D0A]">
               Our promise
             </h2>
@@ -232,10 +237,10 @@ export default function AboutPage() {
                 </p>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Focus Column */}
-          <div className="lg:col-span-7 space-y-6">
+          <ScrollReveal direction="right" distance={50} duration={850} className="lg:col-span-7 space-y-6">
             <h2 className="font-display font-bold text-3xl sm:text-4xl text-[#1C0D0A]">
               What we focus on
             </h2>
@@ -289,21 +294,23 @@ export default function AboutPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ───────────────────────────────────────────────────────────────
          5. JOURNEY SECTION
          ─────────────────────────────────────────────────────────────── */}
-      <section className="py-16 sm:py-24">
+      <section className="py-16 sm:py-24 overflow-hidden">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] text-center mb-12">
-            Our journey
-          </h2>
+          <ScrollReveal direction="up" distance={30} duration={800}>
+            <h2 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] text-center mb-12">
+              Our journey
+            </h2>
+          </ScrollReveal>
 
           <div className="relative pl-8 border-l-2 border-gradient-to-b from-[#962854] to-[#E6C184] space-y-10">
-            <div className="relative">
+            <ScrollReveal direction="left" distance={40} delay={100} className="relative">
               <span className="absolute -left-[41px] top-1.5 w-4 h-4 rounded-full bg-[#962854] border-4 border-[#FFF9F5] shadow-md ring-2 ring-[#962854]" />
               <h3 className="font-display font-bold text-2xl text-[#962854]">
                 2019: The beginning
@@ -311,9 +318,9 @@ export default function AboutPage() {
               <p className="text-sm sm:text-base text-[#4A3E39] mt-1 leading-relaxed">
                 Lollipop started with a simple goal: to provide good cakes at an affordable price.
               </p>
-            </div>
+            </ScrollReveal>
 
-            <div className="relative">
+            <ScrollReveal direction="right" distance={40} delay={200} className="relative">
               <span className="absolute -left-[41px] top-1.5 w-4 h-4 rounded-full bg-[#962854] border-4 border-[#FFF9F5] shadow-md ring-2 ring-[#962854]" />
               <h3 className="font-display font-bold text-2xl text-[#962854]">
                 Growing with Trichy
@@ -321,9 +328,9 @@ export default function AboutPage() {
               <p className="text-sm sm:text-base text-[#4A3E39] mt-1 leading-relaxed">
                 With the support of our customers, Lollipop became part of more birthdays, celebrations, family moments and special occasions.
               </p>
-            </div>
+            </ScrollReveal>
 
-            <div className="relative">
+            <ScrollReveal direction="left" distance={40} delay={300} className="relative">
               <span className="absolute -left-[41px] top-1.5 w-4 h-4 rounded-full bg-[#E6C184] border-4 border-[#FFF9F5] shadow-md ring-2 ring-[#E6C184]" />
               <h3 className="font-display font-bold text-2xl text-[#962854]">
                 Today: two branches
@@ -331,7 +338,7 @@ export default function AboutPage() {
               <p className="text-sm sm:text-base text-[#4A3E39] mt-1 leading-relaxed">
                 We continue to create cakes and sweet treats with the same purpose we started with: good taste, freshness, affordability and happy customers.
               </p>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -344,9 +351,9 @@ export default function AboutPage() {
       {/* ───────────────────────────────────────────────────────────────
          7. TIMES OF INDIA FEATURE SECTION
          ─────────────────────────────────────────────────────────────── */}
-      <section className="py-16 sm:py-24">
+      <section className="py-16 sm:py-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-6 space-y-6">
+          <ScrollReveal direction="left" distance={50} duration={850} className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FAF3EC] border border-[#E6C184] text-xs font-bold text-[#1C0D0A]">
               <span>📰 Media Feature</span>
             </div>
@@ -374,9 +381,9 @@ export default function AboutPage() {
             >
               <span>Read the article ↗</span>
             </a>
-          </div>
+          </ScrollReveal>
 
-          <div className="lg:col-span-6">
+          <ScrollReveal direction="right" distance={50} duration={850} className="lg:col-span-6">
             <a
               href={TOI_ARTICLE_URL}
               target="_blank"
@@ -400,15 +407,15 @@ export default function AboutPage() {
                 </span>
               </div>
             </a>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
       {/* ───────────────────────────────────────────────────────────────
          8. CLOSING SECTION
          ─────────────────────────────────────────────────────────────── */}
-      <section className="py-16 sm:py-24 bg-gradient-to-r from-[#FAF3EC] via-[#FAF0F2] to-[#FAF3EC] text-center border-y border-[#E6C184]/40">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
+      <section className="py-16 sm:py-24 bg-gradient-to-r from-[#FAF3EC] via-[#FAF0F2] to-[#FAF3EC] text-center border-y border-[#E6C184]/40 overflow-hidden">
+        <ScrollReveal direction="up" distance={40} duration={850} className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
           <h2 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A]">
             More than just a cake
           </h2>
@@ -437,39 +444,47 @@ export default function AboutPage() {
               <span>Start a custom cake</span>
             </Link>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* ───────────────────────────────────────────────────────────────
          9. FREQUENTLY ASKED QUESTIONS
          ─────────────────────────────────────────────────────────────── */}
-      <section className="py-16 sm:py-24">
+      <section className="py-16 sm:py-24 overflow-hidden">
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <h2 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] text-center mb-10">
-            Frequently asked questions
-          </h2>
+          <ScrollReveal direction="up" distance={30} duration={800}>
+            <h2 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] text-center mb-10">
+              Frequently asked questions
+            </h2>
+          </ScrollReveal>
 
           <div className="space-y-4">
             {FAQS.map((faq, idx) => (
-              <details
+              <ScrollReveal
                 key={idx}
-                className="group border border-[#F1E6DF] bg-white rounded-2xl p-6 transition-all hover:border-[#962854]/40"
+                direction={idx % 2 === 0 ? "left" : "right"}
+                distance={35}
+                delay={idx * 50}
               >
-                <summary className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] cursor-pointer list-none flex items-center justify-between gap-4">
-                  <span>{faq.q}</span>
-                  <span className="material-symbols-outlined text-[#962854] group-open:rotate-45 transition-transform text-2xl">
-                    add
-                  </span>
-                </summary>
-                <p className="text-xs sm:text-sm text-[#4A3E39] mt-3 leading-relaxed border-t border-[#F1E6DF] pt-3">
-                  {faq.a}{" "}
-                  {faq.linkText && faq.linkUrl && (
-                    <a href={faq.linkUrl} className="text-[#962854] font-bold underline">
-                      {faq.linkText}
-                    </a>
-                  )}
-                </p>
-              </details>
+                <details
+                  className="group border border-[#F1E6DF] bg-white rounded-2xl p-6 transition-all hover:border-[#962854]/40"
+                >
+                  <summary className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] cursor-pointer list-none flex items-center justify-between gap-4">
+                    <span>{faq.q}</span>
+                    <span className="material-symbols-outlined text-[#962854] group-open:rotate-45 transition-transform text-2xl">
+                      add
+                    </span>
+                  </summary>
+                  <p className="text-xs sm:text-sm text-[#4A3E39] mt-3 leading-relaxed border-t border-[#F1E6DF] pt-3">
+                    {faq.a}{" "}
+                    {faq.linkText && faq.linkUrl && (
+                      <a href={faq.linkUrl} className="text-[#962854] font-bold underline">
+                        {faq.linkText}
+                      </a>
+                    )}
+                  </p>
+                </details>
+              </ScrollReveal>
             ))}
           </div>
         </div>

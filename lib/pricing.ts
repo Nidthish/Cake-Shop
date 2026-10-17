@@ -4,6 +4,8 @@ import type { CreateOrderRequestItem, OrderLineItem } from "@/types";
 export const SGST_RATE = 0.025;
 export const CGST_RATE = 0.025;
 export const DELIVERY_FEE = 0; // "Handcrafted Delivery — FREE" in the original UI
+export const MIN_ORDER_SUBTOTAL = 300; // Minimum order value required for all payment methods
+export const COD_MIN_SUBTOTAL = 1000; // Cash on Delivery only available above ₹1,000
 
 export class PricingError extends Error {
   code: string;
@@ -101,6 +103,14 @@ export function priceOrder(items: CreateOrderRequestItem[]): PricedOrder {
   });
 
   const subtotal = round2(lineItems.reduce((sum, li) => sum + li.lineTotal, 0));
+
+  if (subtotal < MIN_ORDER_SUBTOTAL) {
+    throw new PricingError(
+      `Minimum order value is ₹${MIN_ORDER_SUBTOTAL}. Please add ₹${MIN_ORDER_SUBTOTAL - subtotal} more to your cart to proceed.`,
+      "MIN_ORDER_NOT_MET"
+    );
+  }
+
   const sgst = Math.round(subtotal * SGST_RATE);
   const cgst = Math.round(subtotal * CGST_RATE);
   const tax = sgst + cgst;

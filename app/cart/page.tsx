@@ -38,6 +38,8 @@ export default function CartPage() {
   const [showTodayError, setShowTodayError] = useState<boolean>(false);
 
   const minAllowedDate = hasEggless ? tomorrowStr : todayStr;
+  const isMinOrderMet = summary.subtotal >= 300;
+  const minOrderDiff = Math.max(0, 300 - summary.subtotal);
 
   function handleDateChange(newDate: string) {
     if (hasEggless && newDate === todayStr) {
@@ -54,6 +56,13 @@ export default function CartPage() {
   }
 
   function handleProceedToCheckout() {
+    if (!isMinOrderMet) {
+      showToast(
+        `Minimum order amount is ₹300. Please add ₹${minOrderDiff} more of our fresh bakery items to proceed.`,
+        "error"
+      );
+      return;
+    }
     if (hasEggless && selectedDate === todayStr) {
       setShowTodayError(true);
       showToast(
@@ -276,31 +285,81 @@ export default function CartPage() {
             )}
           </div>
 
+          {/* Minimum Order Value Alert */}
+          {!isMinOrderMet && (
+            <div className="bg-amber-50 border border-amber-300 p-3.5 rounded-2xl flex items-start gap-2.5 text-xs text-amber-900">
+              <span className="material-symbols-outlined text-amber-700 text-lg shrink-0 mt-0.5">
+                info
+              </span>
+              <div className="space-y-0.5">
+                <p className="font-bold">Minimum Order Requirement: ₹300</p>
+                <p className="text-[11px] text-amber-800">
+                  Current items subtotal is <strong>₹{summary.subtotal}</strong>. Please add{" "}
+                  <strong>₹{minOrderDiff}</strong> more to your cart to proceed to checkout.
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="space-y-3 text-sm text-[#4A3E39]">
             <div className="flex justify-between items-center">
               <span className="font-normal text-[#5C524E]">Items Subtotal</span>
               <span className="font-bold text-[#1C0D0A]">₹{summary.subtotal}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="font-normal text-[#5C524E]">SGST &amp; CGST (2.5% + 2.5%)</span>
-              <span className="font-bold text-[#1C0D0A]">₹{summary.tax}</span>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#5C524E]">SGST (2.5%)</span>
+              <span className="font-semibold text-[#1C0D0A]">₹{summary.sgst}</span>
+            </div>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#5C524E]">CGST (2.5%)</span>
+              <span className="font-semibold text-[#1C0D0A]">₹{summary.cgst}</span>
+            </div>
+            <div className="flex justify-between items-center text-xs text-[#7A6B72]">
+              <span>Total GST (5%)</span>
+              <span>₹{summary.tax}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-normal text-[#5C524E]">Doorstep Express Delivery</span>
               <span className="font-bold text-emerald-700">FREE</span>
             </div>
             <div className="border-t border-[#F1E6DF] pt-3 flex justify-between items-center text-base font-bold text-[#1C0D0A]">
-              <span>Total Price</span>
+              <div>
+                <span>Total Price</span>
+                <span className="block text-[11px] font-normal text-[#7A6B72]">Inclusive of 5% GST</span>
+              </div>
               <span className="font-sans text-2xl font-bold text-[#962854]">₹{summary.total}</span>
             </div>
           </div>
 
           <button
             onClick={handleProceedToCheckout}
-            className="w-full btn-primary py-4 text-xs uppercase tracking-wider font-bold shadow-xl flex items-center justify-center gap-2"
+            disabled={!isMinOrderMet}
+            className={`w-full py-4 text-xs uppercase tracking-wider font-bold shadow-xl flex items-center justify-center gap-2 rounded-2xl transition-all cursor-pointer ${
+              isMinOrderMet
+                ? "btn-primary"
+                : "bg-gray-300 text-gray-600 cursor-not-allowed hover:bg-gray-300"
+            }`}
           >
-            PROCEED TO CHECKOUT <span className="material-symbols-outlined text-lg">east</span>
+            {isMinOrderMet ? (
+              <>
+                <span>PROCEED TO CHECKOUT</span>
+                <span className="material-symbols-outlined text-lg">east</span>
+              </>
+            ) : (
+              <span>MINIMUM ORDER ₹300 (ADD ₹{minOrderDiff} MORE)</span>
+            )}
           </button>
+
+          {/* Bakery Order Guidelines */}
+          <div className="bg-[#FAF5EE] p-3 rounded-xl border border-[#E6DBCE] space-y-1 text-[11px] text-[#7A6B72]">
+            <div className="flex items-center gap-1.5 font-semibold text-[#1C0D0A]">
+              <span className="material-symbols-outlined text-sm text-[#802B52]">verified</span>
+              <span>Lollipop Bakery Order Rules:</span>
+            </div>
+            <p>&bull; <strong>Minimum Order:</strong> ₹300 applicable for all orders (COD &amp; GPay).</p>
+            <p>&bull; <strong>Cash on Delivery:</strong> Available for purchases above ₹1,000.</p>
+            <p>&bull; <strong>GST:</strong> Standard 2.5% CGST + 2.5% SGST applied to all orders.</p>
+          </div>
         </div>
       </div>
     </main>

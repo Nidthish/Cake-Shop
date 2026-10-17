@@ -4,12 +4,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Product } from "@/types";
 import { getCardPrice } from "@/lib/products";
 import { useCart } from "@/components/cart/CartProvider";
 import { getProductCardImage, getDummyFallbackImage } from "@/lib/dummy-images";
 
 export default function ProductCard({ product }: { product: Product }) {
+  const router = useRouter();
   const { addItem } = useCart();
   const [addedToast, setAddedToast] = useState(false);
 
@@ -26,6 +28,14 @@ export default function ProductCard({ product }: { product: Product }) {
 
   const price = halfKgVariant?.price || getCardPrice(product);
   const weight = halfKgVariant?.weight || "0.5kg";
+
+  function handleCardClick(e: React.MouseEvent) {
+    const target = e.target as HTMLElement;
+    if (target.closest("button") || target.closest("select") || target.closest("input")) {
+      return;
+    }
+    router.push(`/products/${product.id}`);
+  }
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
@@ -62,7 +72,10 @@ export default function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <div className="product-card group relative bg-white border border-[#F1E6DF] rounded-2xl p-2.5 sm:p-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full">
+    <div
+      onClick={handleCardClick}
+      className="product-card group relative bg-white border border-[#F1E6DF] rounded-2xl p-2.5 sm:p-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full cursor-pointer"
+    >
       <Link
         href={`/products/${product.id}`}
         className="block relative aspect-square overflow-hidden bg-[#FAF5F0] rounded-xl border border-[#E6C184]/20 p-2 group-hover:border-[#962854]/40 transition-colors"

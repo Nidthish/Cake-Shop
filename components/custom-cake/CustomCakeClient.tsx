@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import LiveCakeCustomizer, { CakeCustomizerState } from "./LiveCakeCustomizer";
+import { useState, useMemo } from "react";
+import LiveCakeCustomizer from "./LiveCakeCustomizer";
+import ScrollReveal from "@/components/common/ScrollReveal";
 
 const WHATSAPP_NUMBER = "918489324697";
 const PHONE_DISPLAY = "+91 84893 24697";
@@ -86,14 +87,6 @@ export default function CustomCakeClient() {
   const [formTime, setFormTime] = useState<string>("");
   const [formNotes, setFormNotes] = useState<string>("");
 
-  // Sync choices from LiveCakeCustomizer to the WhatsApp order form
-  const handleDesignChange = useCallback((design: CakeCustomizerState) => {
-    setFormLayers(design.layerLabel);
-    setFormFlavour(design.flavourName);
-    setFormWeight(design.weight);
-    setFormName(design.cakeMessage);
-    setFormToppings(design.activeDecorationNames.join(', '));
-  }, []);
 
   // Generate direct WhatsApp link from manual form values (NO PRICES, NO HEIGHT, NO SLICE COUNT)
   const whatsappUrl = useMemo(() => {
@@ -119,126 +112,134 @@ export default function CustomCakeClient() {
   return (
     <div className="bg-[#FAF5EE] min-h-screen text-[#1C0D0A] selection:bg-[#802B52] selection:text-white pb-20">
       
-      {/* ── 1. CLEAN HEADER (SIMPLE WORDS, NO COMPLICATED TEXT) ───────────── */}
-      <section className="pt-8 pb-6 sm:pt-14 sm:pb-8 border-b border-[#E6C184]/30 bg-gradient-to-b from-[#FAF5EE] to-[#F6EDE1]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-2">
-          <h1 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
-            Customized Cakes
-          </h1>
-          <p className="text-xs sm:text-sm text-[#5C524E] max-w-lg mx-auto">
-            Explore our signature creations or design your own bespoke cake online with instant WhatsApp ordering.
-          </p>
-        </div>
-      </section>
+      {/* ── 1. HEADER & GALLERY SHOWCASE ── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-14 sm:pb-20 border-b border-[#E6C184]/30 bg-[#FAF5EE]">
+        <ScrollReveal>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-2 mb-10 sm:mb-14">
+            <h1 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
+              Customized Cakes
+            </h1>
+            <p className="text-xs sm:text-sm text-[#5C524E] max-w-lg mx-auto">
+              Explore our signature creations or design your own bespoke cake online with instant WhatsApp ordering.
+            </p>
+          </div>
+        </ScrollReveal>
 
-      {/* ── 2. SHOWCASE: OUR BEST CAKES (FULL-IMAGE EDITORIAL SHOWCASE) ── */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 border-b border-[#E6C184]/30">
-        
-        <div className="text-center max-w-2xl mx-auto mb-14 sm:mb-20 space-y-2">
-          <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52]">
-            Celebration Portfolio
-          </span>
-          <h2 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
-            Our Best Cakes
-          </h2>
-          <p className="text-xs sm:text-sm text-[#5C524E] max-w-md mx-auto">
-            A visual showcase of recent custom masterpieces handcrafted for celebrations in Trichy.
-          </p>
-        </div>
-
-        {/* Editorial Borderless Layout (Alternating Large Photography & Rich Narrative) */}
-        <div className="space-y-16 sm:space-y-28">
+        {/* Editorial Layout (Gallery Cards with Scroll Reveal Animation) */}
+        <div className="space-y-16 sm:space-y-24">
           {SHOWCASE_CAKES.map((cake, idx) => {
             const isEven = idx % 2 === 1;
             const isHiddenOnMobile = idx >= 2;
 
+            // Animate each side from outside towards center:
+            // Odd: Photo from Left, Description from Right
+            // Even: Photo from Right, Description from Left
+            const photoDirection = isEven ? "right" : "left";
+            const textDirection = isEven ? "left" : "right";
+
             return (
               <div
                 key={cake.id}
-                className={`${isHiddenOnMobile ? "hidden md:block" : "block"} transition-all duration-700`}
+                className={`${isHiddenOnMobile ? "hidden md:block" : "block"} overflow-hidden`}
               >
                 <div
                   className={`flex flex-col lg:flex-row items-center gap-8 sm:gap-12 lg:gap-16 ${
                     isEven ? "lg:flex-row-reverse" : ""
                   }`}
                 >
-                  {/* Big Animated Full Image Container */}
-                  <div className="w-full lg:w-1/2">
+                  {/* Photo Container - Glides in from Left/Right */}
+                  <ScrollReveal
+                    direction={photoDirection}
+                    distance={60}
+                    duration={850}
+                    className="w-full lg:w-1/2 flex"
+                  >
                     <div
                       onClick={() => setInspectCake(cake)}
-                      className="group relative cursor-pointer overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 bg-[#F0E5D8]"
+                      className="group relative cursor-pointer overflow-hidden rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 border border-[#E6DBCE] w-full aspect-square bg-[#F5EFE6]"
                     >
-                      <div className="aspect-[4/3] w-full overflow-hidden">
-                        <img
-                          src={cake.image}
-                          alt={cake.name}
-                          loading="lazy"
-                          className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-108"
-                        />
-                      </div>
+                      <img
+                        src={cake.image}
+                        alt={cake.name}
+                        loading="lazy"
+                        className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
 
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-                      <div className="absolute top-4 left-4">
+                      <div className="absolute top-4 left-4 z-10">
                         <span className="text-[10px] font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-white/95 text-[#802B52] border border-[#E6DBCE] shadow-xs backdrop-blur-xs">
                           {cake.category}
                         </span>
                       </div>
 
-                      <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span className="inline-flex items-center gap-1.5 bg-[#1C0D0A]/85 text-white text-[11px] font-medium px-3 py-1.5 rounded-full backdrop-blur-xs shadow-md">
+                      <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                        <span className="inline-flex items-center gap-1.5 bg-[#1C0D0A]/85 text-white text-[11px] font-medium px-3.5 py-1.5 rounded-full backdrop-blur-xs shadow-md">
                           <span className="material-symbols-outlined text-sm">zoom_in</span>
                           <span>View Full Photo</span>
                         </span>
                       </div>
                     </div>
-                  </div>
+                  </ScrollReveal>
 
-                  {/* Rich Narrative & Explanation */}
-                  <div className="w-full lg:w-1/2 space-y-4 sm:space-y-5">
-                    <div className="space-y-2">
-                      <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52]">
-                        {cake.tagline}
-                      </span>
-                      <h3 className="font-display font-bold text-2xl sm:text-4xl text-[#1C0D0A] leading-tight">
-                        {cake.name}
-                      </h3>
-                    </div>
+                  {/* Open Editorial Description - Glides in from Opposite Side (NOT A CARD) */}
+                  <ScrollReveal
+                    direction={textDirection}
+                    distance={60}
+                    duration={850}
+                    className="w-full lg:w-1/2 flex"
+                  >
+                    <div className="w-full space-y-4 sm:space-y-5 py-2 sm:py-4 px-1 sm:px-2 flex flex-col justify-between">
+                      <div className="space-y-2">
+                        <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52]">
+                          {cake.tagline}
+                        </span>
+                        <h3 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-[#1C0D0A] leading-tight">
+                          {cake.name}
+                        </h3>
+                      </div>
 
-                    <p className="text-xs sm:text-sm text-[#5C524E] leading-relaxed">
-                      {cake.description}
-                    </p>
+                      <p className="text-sm sm:text-base text-[#5C524E] leading-relaxed font-normal">
+                        {cake.description}
+                      </p>
 
-                    <div className="pt-2 border-l-2 border-[#802B52] pl-4 py-1 space-y-1">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A6B72] block">
-                        Architecture
-                      </span>
-                      <span className="text-xs sm:text-sm font-semibold text-[#1C0D0A] block">
-                        {cake.tiers}
-                      </span>
-                    </div>
-
-                    <div className="pt-1 space-y-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A6B72] block">
-                        Handcrafted Techniques
-                      </span>
-                      <div className="flex flex-wrap gap-2">
-                        {cake.highlights.map((h, i) => (
-                          <span
-                            key={i}
-                            className="text-[11px] bg-white border border-[#E6DBCE] px-3 py-1 rounded-full text-[#5C524E] font-medium shadow-2xs"
-                          >
-                            {h}
+                      {/* Architecture Specification Pill */}
+                      <div className="flex items-center gap-3.5 bg-white/90 border border-[#E6DBCE] rounded-2xl p-3.5 shadow-2xs backdrop-blur-xs">
+                        <div className="w-9 h-9 rounded-xl bg-[#FAF0F2] text-[#802B52] flex items-center justify-center shrink-0 border border-[#802B52]/15">
+                          <span className="material-symbols-outlined text-lg">layers</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[#802B52] block leading-tight">
+                            Architecture
                           </span>
-                        ))}
+                          <span className="text-xs sm:text-sm font-bold text-[#1C0D0A] block mt-0.5">
+                            {cake.tiers}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="pt-1 space-y-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A6B72] block">
+                          Handcrafted Techniques
+                        </span>
+                        <div className="flex flex-wrap gap-2">
+                          {cake.highlights.map((h, i) => (
+                            <span
+                              key={i}
+                              className="text-[11px] bg-white/90 border border-[#E6DBCE] px-3.5 py-1.5 rounded-full text-[#5C524E] font-medium shadow-2xs"
+                            >
+                              {h}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-[#E6DBCE]/70 text-xs text-[#7A6B72]">
+                        <span className="font-bold text-[#1C0D0A]">Recommended Flavours: </span>
+                        {cake.flavours.join(" • ")}
                       </div>
                     </div>
-
-                    <div className="pt-1 text-xs text-[#7A6B72]">
-                      <span className="font-bold text-[#1C0D0A]">Recommended Flavours: </span>
-                      {cake.flavours.join(" • ")}
-                    </div>
-                  </div>
+                  </ScrollReveal>
                 </div>
               </div>
             );
@@ -254,22 +255,22 @@ export default function CustomCakeClient() {
           id="cake-customizer-section"
           className="order-2 lg:order-1 max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-8 sm:py-14"
         >
-          <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8 space-y-1">
-            <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52]">
-              Online Atelier Studio
-            </span>
-            <h2 className="font-display font-bold text-2xl sm:text-4xl text-[#1C0D0A]">
-              Design Your Cake
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5C524E]">
-              Customize tiers, flavours, glaze drips, toppings &amp; inscription. Watch your cake update live in 3D!
-            </p>
-          </div>
+          <ScrollReveal>
+            <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8 space-y-1">
+              <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52]">
+                Online Atelier Studio
+              </span>
+              <h2 className="font-display font-bold text-2xl sm:text-4xl text-[#1C0D0A]">
+                Design Your Cake
+              </h2>
+              <p className="text-xs sm:text-sm text-[#5C524E]">
+                Customize tiers, flavours, glaze drips, toppings &amp; inscription. Watch your cake update live in 3D!
+              </p>
+            </div>
 
-          {/* Live Vector Animated Studio Component */}
-          <LiveCakeCustomizer
-            onDesignChange={handleDesignChange}
-          />
+            {/* Live Vector Animated Studio Component (Interactive For Fun Preview) */}
+            <LiveCakeCustomizer />
+          </ScrollReveal>
         </section>
 
         {/* Manual Editable Order Form (order-1 on Mobile, order-2 on Laptop) */}
@@ -277,14 +278,15 @@ export default function CustomCakeClient() {
           id="custom-cake-order-form"
           className="order-1 lg:order-2 max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-8 sm:pt-14 pb-12 sm:pb-20 lg:pt-0"
         >
-          <div className="bg-white rounded-3xl border border-[#E6C184]/70 p-5 sm:p-8 shadow-xl space-y-6">
+          <ScrollReveal>
+            <div className="bg-white rounded-3xl border border-[#E6C184]/70 p-5 sm:p-8 shadow-xl space-y-6">
             <div className="pb-3 border-b border-[#E6DBCE] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A]">
                   Custom Cake Order Form
                 </h3>
                 <p className="text-xs text-[#5C524E]">
-                  Auto-filled from your studio design. You can also edit any field manually!
+                  Enter your custom cake requirements to order directly on WhatsApp.
                 </p>
               </div>
               <span className="text-[11px] font-bold text-[#802B52] uppercase tracking-wider">
@@ -439,10 +441,10 @@ export default function CustomCakeClient() {
               <span>Call {PHONE_DISPLAY}</span>
             </a>
           </div>
-
         </div>
-      </section>
-    </div>
+      </ScrollReveal>
+    </section>
+  </div>
 
       {/* Full Photo Inspection Modal for Showcase Cakes */}
       {inspectCake && (
@@ -464,11 +466,11 @@ export default function CustomCakeClient() {
             </button>
 
             <div className="flex flex-col md:flex-row">
-              <div className="w-full md:w-3/5 bg-[#F0E5D8]">
+              <div className="w-full md:w-3/5 bg-[#F8F4EE] flex items-center justify-center p-2">
                 <img
                   src={inspectCake.image}
                   alt={inspectCake.name}
-                  className="w-full h-full max-h-[70vh] object-cover"
+                  className="w-full h-full max-h-[70vh] object-contain object-center"
                 />
               </div>
               <div className="w-full md:w-2/5 p-6 sm:p-8 flex flex-col justify-between space-y-4">

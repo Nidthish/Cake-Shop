@@ -92,7 +92,7 @@ export default function Navbar() {
     <>
       <header
         id="main-header"
-        className="sticky top-0 z-50 w-full glass-header border-b border-[#E6C184]/20 transition-all duration-300"
+        className="relative z-50 w-full glass-header border-b border-[#E6C184]/20 transition-all duration-300"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4">
           <Link href="/" className="flex flex-col group flex-shrink-0">

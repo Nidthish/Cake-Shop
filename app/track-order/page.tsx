@@ -351,6 +351,9 @@ function TrackOrderContent() {
                         <span>Total Amount:</span>
                         <span>₹{order.total}</span>
                       </div>
+                      <div className="text-[10px] text-[#7A6B72] text-right">
+                        Includes 5% GST (2.5% CGST + 2.5% SGST)
+                      </div>
                     </div>
                   </div>
 

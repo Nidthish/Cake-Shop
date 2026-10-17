@@ -112,8 +112,23 @@ export default function CheckoutPage() {
     }
   }, [hasEggless, date, todayStr, tomorrowStr]);
 
-  // Payment Option: "COD" (Direct Order / Cash on Delivery) vs "RAZORPAY" (Online Payment)
-  const [paymentOption, setPaymentOption] = useState<"COD" | "RAZORPAY">("COD");
+  // Payment Option & Order Threshold Rules
+  const isMinOrderMet = summary.subtotal >= 300;
+  const minOrderDiff = Math.max(0, 300 - summary.subtotal);
+  const isCodEligible = summary.subtotal >= 1000;
+  const codDiff = Math.max(0, 1000 - summary.subtotal);
+
+  // Payment Option: "COD" vs "RAZORPAY" (defaults to RAZORPAY if under ₹1,000)
+  const [paymentOption, setPaymentOption] = useState<"COD" | "RAZORPAY">(
+    summary.subtotal >= 1000 ? "COD" : "RAZORPAY"
+  );
+
+  // If subtotal drops below ₹1,000 and COD was chosen, auto-switch to RAZORPAY
+  useEffect(() => {
+    if (!isCodEligible && paymentOption === "COD") {
+      setPaymentOption("RAZORPAY");
+    }
+  }, [isCodEligible, paymentOption]);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -168,6 +183,20 @@ export default function CheckoutPage() {
   async function handleSubmitOrder() {
     if (items.length === 0) {
       showToast("Your cart is empty.", "error");
+      return;
+    }
+    if (!isMinOrderMet) {
+      showToast(
+        `Minimum order amount is ₹300. Please add ₹${minOrderDiff} more of our fresh bakery items to proceed.`,
+        "error"
+      );
+      return;
+    }
+    if (paymentOption === "COD" && !isCodEligible) {
+      showToast(
+        `Cash on Delivery is only available for purchases above ₹1,000. Please pay online via UPI / GPay / Card.`,
+        "error"
+      );
       return;
     }
     if (!validate()) {
@@ -767,18 +796,34 @@ export default function CheckoutPage() {
 
                 {/* Payment Option Cards */}
                 <div>
-                  <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E] block mb-3">
-                    Select Payment Method *
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E] block">
+                      Select Payment Method *
+                    </label>
+                    <span className="text-[11px] font-semibold text-[#802B52]">
+                      5% GST (2.5% CGST + 2.5% SGST) applied
+                    </span>
+                  </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    {/* Option A: Cash on Delivery / Direct Order */}
+                    {/* Option A: Cash on Delivery (Strictly for orders >= ₹1,000) */}
                     <div
-                      onClick={() => setPaymentOption("COD")}
-                      className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-start gap-3.5 ${
-                        paymentOption === "COD"
-                          ? "border-[#802B52] bg-[#802B52]/5 text-[#802B52] shadow-sm"
-                          : "border-[#E6DBCE] bg-white hover:border-[#802B52]/40"
+                      onClick={() => {
+                        if (isCodEligible) {
+                          setPaymentOption("COD");
+                        } else {
+                          showToast(
+                            `Cash on Delivery is only available for purchases above ₹1,000. Current total is ₹${summary.subtotal}. Please pay online via UPI/GPay or add items worth ₹${codDiff} more.`,
+                            "error"
+                          );
+                        }
+                      }}
+                      className={`p-4 rounded-2xl border-2 transition-all flex items-start gap-3.5 ${
+                        !isCodEligible
+                          ? "opacity-60 bg-gray-50 border-gray-200 cursor-not-allowed"
+                          : paymentOption === "COD"
+                          ? "border-[#802B52] bg-[#802B52]/5 text-[#802B52] shadow-sm cursor-pointer"
+                          : "border-[#E6DBCE] bg-white hover:border-[#802B52]/40 cursor-pointer"
                       }`}
                     >
                       <input
@@ -786,23 +831,37 @@ export default function CheckoutPage() {
                         id="payment-cod"
                         name="paymentOption"
                         checked={paymentOption === "COD"}
-                        onChange={() => setPaymentOption("COD")}
-                        className="mt-1 accent-[#802B52]"
+                        disabled={!isCodEligible}
+                        onChange={() => {
+                          if (isCodEligible) setPaymentOption("COD");
+                        }}
+                        className="mt-1 accent-[#802B52] cursor-pointer disabled:cursor-not-allowed"
                       />
-                      <label htmlFor="payment-cod" className="cursor-pointer space-y-1">
-                        <div className="font-bold text-sm text-[#1C0D0A] flex items-center gap-2">
+                      <label
+                        htmlFor="payment-cod"
+                        className={`space-y-1 ${isCodEligible ? "cursor-pointer" : "cursor-not-allowed"}`}
+                      >
+                        <div className="font-bold text-sm text-[#1C0D0A] flex flex-wrap items-center gap-2">
                           <span>Cash on Delivery</span>
-                          <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-extrabold uppercase">
-                            Instant
-                          </span>
+                          {isCodEligible ? (
+                            <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-extrabold uppercase">
+                              Eligible
+                            </span>
+                          ) : (
+                            <span className="bg-amber-100 text-amber-900 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                              Above ₹1,000 only
+                            </span>
+                          )}
                         </div>
                         <p className="text-xs text-[#7A6B72] leading-relaxed">
-                          No payment required now. Pay cash or scan UPI when delivered.
+                          {isCodEligible
+                            ? "Pay cash or scan UPI when delivered at your doorstep."
+                            : `Available only for orders above ₹1,000. Add ₹${codDiff} more to enable COD.`}
                         </p>
                       </label>
                     </div>
 
-                    {/* Option B: Razorpay Online Payment */}
+                    {/* Option B: Razorpay Online Payment (UPI, GPay, PhonePe, Cards) */}
                     <div
                       onClick={() => setPaymentOption("RAZORPAY")}
                       className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-start gap-3.5 ${
@@ -817,17 +876,17 @@ export default function CheckoutPage() {
                         name="paymentOption"
                         checked={paymentOption === "RAZORPAY"}
                         onChange={() => setPaymentOption("RAZORPAY")}
-                        className="mt-1 accent-[#802B52]"
+                        className="mt-1 accent-[#802B52] cursor-pointer"
                       />
                       <label htmlFor="payment-rzp" className="cursor-pointer space-y-1">
-                        <div className="font-bold text-sm text-[#1C0D0A] flex items-center gap-2">
-                          <span>Pay Online (Razorpay)</span>
+                        <div className="font-bold text-sm text-[#1C0D0A] flex flex-wrap items-center gap-2">
+                          <span>Pay Online (GPay / UPI / Cards)</span>
                           <span className="bg-purple-100 text-purple-800 text-[10px] px-2 py-0.5 rounded-full font-extrabold uppercase">
-                            Secure
+                            Recommended
                           </span>
                         </div>
                         <p className="text-xs text-[#7A6B72] leading-relaxed">
-                          Pay securely via GPay, PhonePe, Cards, or NetBanking.
+                          Instant payment via Google Pay, PhonePe, UPI apps, Credit/Debit cards &amp; NetBanking.
                         </p>
                       </label>
                     </div>
@@ -887,6 +946,22 @@ export default function CheckoutPage() {
                   ))}
                 </div>
 
+                {/* Minimum Order Value Alert */}
+                {!isMinOrderMet && (
+                  <div className="bg-amber-50 border border-amber-300 p-3 rounded-2xl flex items-start gap-2 text-xs text-amber-900">
+                    <span className="material-symbols-outlined text-amber-700 text-base shrink-0 mt-0.5">
+                      info
+                    </span>
+                    <div className="space-y-0.5">
+                      <p className="font-bold">Minimum Order Requirement: ₹300</p>
+                      <p className="text-[11px] text-amber-800">
+                        Current subtotal is <strong>₹{summary.subtotal}</strong>. Add{" "}
+                        <strong>₹{minOrderDiff}</strong> more to place an order.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Price Breakdown */}
                 <div className="space-y-2 text-sm text-[#5C524E] border-t border-[#E6C184]/30 pt-4">
                   <div className="flex justify-between">
@@ -895,11 +970,15 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-xs text-[#7A6B72]">
                     <span>SGST (2.5%)</span>
-                    <span>₹{summary.sgst}</span>
+                    <span className="font-semibold text-[#1C0D0A]">₹{summary.sgst}</span>
                   </div>
                   <div className="flex justify-between text-xs text-[#7A6B72]">
                     <span>CGST (2.5%)</span>
-                    <span>₹{summary.cgst}</span>
+                    <span className="font-semibold text-[#1C0D0A]">₹{summary.cgst}</span>
+                  </div>
+                  <div className="flex justify-between text-xs text-[#7A6B72]">
+                    <span>Total GST (5%)</span>
+                    <span>₹{summary.tax}</span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
                     <span>Delivery Charge</span>
@@ -913,7 +992,7 @@ export default function CheckoutPage() {
                     <span className="font-display font-bold text-lg text-[#1C0D0A] block">
                       Total Payable
                     </span>
-                    <span className="text-[11px] text-[#7A6B72]">Taxes included</span>
+                    <span className="text-[11px] text-[#7A6B72]">Inclusive of 5% GST</span>
                   </div>
                   <span className="font-display font-extrabold text-3xl text-[#802B52]">
                     ₹{summary.total}
@@ -924,14 +1003,20 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={handleSubmitOrder}
-                  disabled={submitting}
-                  className="w-full bg-[#250527] hover:bg-[#4A0E4E] text-white py-4 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer disabled:opacity-50"
+                  disabled={submitting || !isMinOrderMet}
+                  className={`w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all ${
+                    !isMinOrderMet
+                      ? "bg-gray-300 text-gray-600 cursor-not-allowed hover:bg-gray-300"
+                      : "bg-[#250527] hover:bg-[#4A0E4E] text-white cursor-pointer"
+                  } disabled:opacity-60`}
                 >
                   {submitting ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       <span>Placing Your Order...</span>
                     </>
+                  ) : !isMinOrderMet ? (
+                    <span>Minimum Order ₹300 (Add ₹{minOrderDiff} more)</span>
                   ) : paymentOption === "COD" ? (
                     <>
                       <span>Confirm &amp; Place Order (COD)</span>
@@ -940,10 +1025,21 @@ export default function CheckoutPage() {
                   ) : (
                     <>
                       <span className="material-symbols-outlined text-base">lock</span>
-                      <span>Pay ₹{summary.total} via Razorpay</span>
+                      <span>Pay ₹{summary.total} via Razorpay (GPay/Cards)</span>
                     </>
                   )}
                 </button>
+
+                {/* Lollipop Bakery Order Rules Box */}
+                <div className="bg-[#FAF5EE] p-3 rounded-2xl border border-[#E6DBCE] space-y-1 text-[11px] text-[#7A6B72]">
+                  <div className="flex items-center gap-1.5 font-bold text-[#1C0D0A]">
+                    <span className="material-symbols-outlined text-sm text-[#802B52]">verified</span>
+                    <span>Bakery Order Requirements:</span>
+                  </div>
+                  <p>&bull; <strong>Minimum Order:</strong> ₹300 across all orders (COD &amp; GPay).</p>
+                  <p>&bull; <strong>Cash on Delivery:</strong> Applicable for orders above ₹1,000.</p>
+                  <p>&bull; <strong>GST:</strong> 2.5% CGST + 2.5% SGST applied to all types of payments.</p>
+                </div>
 
                 {/* Trust Signals */}
                 <div className="space-y-2 pt-2 border-t border-[#E6C184]/20 text-[11px] text-[#7A6B72]">
@@ -976,10 +1072,20 @@ export default function CheckoutPage() {
           <button
             type="button"
             onClick={handleSubmitOrder}
-            disabled={submitting}
-            className="flex-1 bg-[#250527] hover:bg-[#4A0E4E] text-white py-3.5 px-6 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50"
+            disabled={submitting || !isMinOrderMet}
+            className={`flex-1 py-3.5 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all ${
+              !isMinOrderMet
+                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                : "bg-[#250527] hover:bg-[#4A0E4E] text-white cursor-pointer"
+            }`}
           >
-            {submitting ? "Placing..." : paymentOption === "COD" ? "Place Order (COD)" : `Pay ₹${summary.total}`}
+            {submitting
+              ? "Placing..."
+              : !isMinOrderMet
+              ? `Min Order ₹300`
+              : paymentOption === "COD"
+              ? "Place Order (COD)"
+              : `Pay ₹${summary.total} (GPay)`}
           </button>
         </div>
 

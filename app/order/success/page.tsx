@@ -270,8 +270,16 @@ function SuccessContent() {
                 <span>Items Subtotal:</span>
                 <span className="font-semibold text-[#1C0D0A]">₹{order.subtotal}</span>
               </div>
-              <div className="flex justify-between">
-                <span>Tax (5% GST):</span>
+              <div className="flex justify-between text-xs text-[#7A6B72]">
+                <span>SGST (2.5%):</span>
+                <span>₹{order.sgst ?? Math.round(order.subtotal * 0.025)}</span>
+              </div>
+              <div className="flex justify-between text-xs text-[#7A6B72]">
+                <span>CGST (2.5%):</span>
+                <span>₹{order.cgst ?? Math.round(order.subtotal * 0.025)}</span>
+              </div>
+              <div className="flex justify-between text-xs text-[#7A6B72]">
+                <span>Total GST (5%):</span>
                 <span>₹{order.tax}</span>
               </div>
               <div className="flex justify-between items-center">

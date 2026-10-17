@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { priceOrder, PricingError } from "@/lib/pricing";
+import { priceOrder, PricingError, COD_MIN_SUBTOTAL } from "@/lib/pricing";
 import { orderStore, generateOrderId, generateDeliveryOtp } from "@/lib/orders";
 import { sendOrderConfirmationEmail } from "@/lib/email";
 import type { Order, ApiError } from "@/types";
@@ -44,11 +44,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Calculate authoritative price breakdown on server
+    // Calculate authoritative price breakdown on server (validates MIN_ORDER_SUBTOTAL of 300)
     const priced = priceOrder(items);
     const orderId = generateOrderId();
     const deliveryOtp = generateDeliveryOtp();
     const chosenPaymentMethod = paymentMethod === "DIRECT" ? "DIRECT" : "COD";
+
+    // Cash on Delivery is strictly restricted to orders of ₹1,000 or above
+    if (chosenPaymentMethod === "COD" && priced.subtotal < COD_MIN_SUBTOTAL) {
+      return NextResponse.json<ApiError>(
+        {
+          success: false,
+          error: `Cash on Delivery is only available for purchases above ₹${COD_MIN_SUBTOTAL}. Please pay online via UPI / GPay / Card or add more items.`,
+          code: "COD_THRESHOLD_NOT_MET",
+        },
+        { status: 400 }
+      );
+    }
 
     const cleanCakeMessage = sanitizeString(cakeMessage);
     const cleanSpecialInstructions = sanitizeString(specialInstructions);

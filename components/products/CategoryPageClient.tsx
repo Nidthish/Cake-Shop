@@ -57,7 +57,7 @@ export default function CategoryPageClient({
 
   return (
     <>
-      <div className="sticky top-20 z-30 bg-[#FFF9F5]/95 backdrop-blur-sm border-b border-[#E6C184]/20 py-4">
+      <div className="relative z-20 bg-[#FFF9F5]/95 backdrop-blur-sm border-b border-[#E6C184]/20 py-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
             <div className="relative flex-grow max-w-sm">

@@ -474,7 +474,29 @@ export default async function HomePage() {
           // Retrieve up to 4 items from the catalog for each category section
           let items = getProductsByCategory(sec.slug, allProducts);
           if (sec.id === "custom-cake") {
-            items = allProducts.filter((p) => p.badge || p.subCategory?.includes("Special")).slice(0, 4);
+            const homeWeddingIds = new Set(
+              getProductsByCategory("wedding-cakes", allProducts).slice(0, 4).map((p) => p.id)
+            );
+            const homeBdayIds = new Set(
+              getProductsByCategory("first-birthday", allProducts).slice(0, 4).map((p) => p.id)
+            );
+
+            const otherWeddingCakes = getProductsByCategory("wedding-cakes", allProducts).filter(
+              (p) => !homeWeddingIds.has(p.id)
+            );
+            const otherBdayCakes = getProductsByCategory("first-birthday", allProducts).filter(
+              (p) => !homeBdayIds.has(p.id)
+            );
+
+            // Curate 4 premium custom cakes (2 wedding + 2 1st birthday) strictly NOT already on the home page
+            const customPicks = [
+              otherWeddingCakes.find((p) => p.id === "wedding-grand-floating-tier-luxury") || otherWeddingCakes[0],
+              otherBdayCakes.find((p) => p.id === "bday-baby-shark-underwater-floating-tier") || otherBdayCakes[0],
+              otherWeddingCakes.find((p) => p.id === "wedding-crimson-romance-fondant-2tier") || otherWeddingCakes[1],
+              otherBdayCakes.find((p) => p.id === "bday-jungle-safari-adventure-2tier") || otherBdayCakes[1],
+            ].filter(Boolean) as typeof allProducts;
+
+            items = customPicks.length === 4 ? customPicks : [...otherWeddingCakes.slice(0, 2), ...otherBdayCakes.slice(0, 2)];
           } else {
             items = items.slice(0, 4);
           }

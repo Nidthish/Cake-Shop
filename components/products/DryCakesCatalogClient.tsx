@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
 import { getProductCardImage } from "@/lib/dummy-images";
@@ -14,6 +15,7 @@ const SUB_PILLS = [
 ];
 
 function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
+  const router = useRouter();
   const { addItem } = useCart();
   const [isAdded, setIsAdded] = useState(false);
 
@@ -27,6 +29,14 @@ function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
       : undefined);
 
   const hasDiscount = Boolean(originalPrice && originalPrice > price);
+
+  function handleCardClick(e: React.MouseEvent) {
+    const target = e.target as HTMLElement;
+    if (target.closest("button") || target.closest("select") || target.closest("input")) {
+      return;
+    }
+    router.push(`/products/${p.id}`);
+  }
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
@@ -61,7 +71,8 @@ function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
 
   return (
     <div
-      className="product-card group relative bg-white border border-[#F1E6DF] rounded-2xl p-2.5 sm:p-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full font-sans"
+      onClick={handleCardClick}
+      className="product-card group relative bg-white border border-[#F1E6DF] rounded-2xl p-2.5 sm:p-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full font-sans cursor-pointer"
       style={{ animationDelay: `${animDelay}s` }}
     >
       <div className="relative aspect-square overflow-hidden bg-[#FAF5F0] rounded-xl border border-[#E6C184]/20 p-2 group-hover:border-[#962854]/40 transition-colors mb-2.5">
@@ -234,7 +245,7 @@ export default function DryCakesCatalogClient({
       </section>
 
       {/* ── Search & Subcategory Controls ────────────────────────────── */}
-      <section className="bg-white/95 backdrop-blur-md border-b border-[#F1E6DF] shadow-sm sticky top-20 z-30 transition-all font-sans">
+      <section className="bg-white/95 backdrop-blur-md border-b border-[#F1E6DF] shadow-sm relative z-20 transition-all font-sans">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 space-y-3">
           <div className="flex flex-col sm:flex-row gap-2.5 items-center">
             <div className="relative flex-grow w-full sm:max-w-md">

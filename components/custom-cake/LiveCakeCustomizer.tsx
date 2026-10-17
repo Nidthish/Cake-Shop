@@ -9,9 +9,7 @@ import {
   Moon,
   Sun,
   Check,
-  Info,
   RotateCcw,
-  Award,
   Layers as LayersIcon,
   Utensils,
   Scale,
@@ -909,7 +907,6 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
 
   // Mobile UI & Modals
   const [mobileTab, setMobileTab] = useState<string>('all');
-  const [showRecipeModal, setShowRecipeModal] = useState<boolean>(false);
 
   const currentFlavour = useMemo(
     () => FLAVOURS.find((f) => f.id === selectedFlavourId) || FLAVOURS[0],
@@ -1143,22 +1140,7 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
 
       <div className="max-w-[1320px] w-full grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-7 items-start">
         {/* ==================== LEFT COLUMN: LIVE CAKE PREVIEW ==================== */}
-        <div className="lg:col-span-6 relative lg:sticky lg:top-[92px] z-30 bg-white rounded-[24px] sm:rounded-[28px] border border-[#F0E6DC] shadow-[0_12px_36px_rgba(92,52,32,0.08)] p-3.5 sm:p-6 flex flex-col justify-between transition-all">
-          {/* Card Top Header */}
-          <div className="flex items-center justify-between mb-2 sm:mb-3.5 px-1">
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-[#802348] animate-pulse" />
-              <span className="text-[11px] sm:text-[13px] font-bold tracking-[0.14em] text-[#802348] uppercase">
-                LIVE CAKE PREVIEW
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] sm:text-[13px] font-semibold text-[#7A6A63]">
-                {layers} {layers === 1 ? 'Tier' : 'Tiers'} &bull; {weight}
-              </span>
-            </div>
-          </div>
-
+        <div className="lg:col-span-6 relative bg-white rounded-[24px] sm:rounded-[28px] border border-[#F0E6DC] shadow-[0_12px_36px_rgba(92,52,32,0.08)] p-2.5 sm:p-4 transition-all">
           {/* Inner Cream / Night Preview Canvas */}
           <div
             className={`relative w-full h-[340px] xs:h-[380px] sm:h-[420px] lg:h-[470px] rounded-2xl overflow-hidden flex items-center justify-center border transition-colors duration-500 ${
@@ -1235,27 +1217,6 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
                   <PartyPopper className="w-3.5 h-3.5" />
                 </button>
               </div>
-            </div>
-
-            {/* Stand Selector Quick Bar (Bottom of Canvas) */}
-            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1 bg-white/85 backdrop-blur-md px-2 py-1 rounded-full border border-[#EADFD4] shadow-sm">
-              <span className="text-[10px] font-bold text-[#7A6A63] px-1.5 hidden sm:inline">
-                Stand:
-              </span>
-              {CAKE_STANDS.map((st) => (
-                <button
-                  key={st.id}
-                  type="button"
-                  onClick={() => setStandStyle(st.id)}
-                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition-all cursor-pointer ${
-                    standStyle === st.id
-                      ? 'bg-[#802348] text-white'
-                      : 'text-[#5C4B42] hover:bg-[#F3ECE2]'
-                  }`}
-                >
-                  {st.name}
-                </button>
-              ))}
             </div>
 
             {/* SVG CAKE ILLUSTRATION STAGE */}
@@ -1853,38 +1814,6 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
               )}
             </svg>
           </div>
-
-          {/* Card Bottom Footer + Tasting Note Strip */}
-          <div className="mt-3 sm:mt-4 px-1">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-base sm:text-[19px] font-bold text-[#3D1E12]">
-                  {currentFlavour.name}
-                </span>
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#FDF2F5] text-[#802348] border border-[#F5D6E0]">
-                  {currentFlavour.badge}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-base sm:text-[19px] font-extrabold text-[#802348]">
-                  {weight}
-                </span>
-              </div>
-            </div>
-
-            {/* Tasting Note & Recipe Info Trigger */}
-            <div className="mt-2 pt-2 border-t border-[#F3EAE0] flex items-center justify-between gap-2 text-xs text-[#6E5A4F]">
-              <p className="line-clamp-1 italic">{currentFlavour.tastingNote}</p>
-              <button
-                type="button"
-                onClick={() => setShowRecipeModal(true)}
-                className="shrink-0 inline-flex items-center gap-1 font-bold text-[#802348] hover:underline cursor-pointer"
-              >
-                <Info className="w-3.5 h-3.5" />
-                <span>Chef&apos;s Notes</span>
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* ==================== MOBILE CATEGORY STEP NAVIGATOR (< 1024px) ==================== */}
@@ -2168,64 +2097,6 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
           )}
         </div>
       </div>
-
-      {/* ==================== CHEF'S RECIPE & NUTRITION SPEC SHEET MODAL ==================== */}
-      {showRecipeModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 border border-[#F0E6DC] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-3 border-b border-[#F2EAE0]">
-              <div className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-[#802348]" />
-                <h3 className="font-bold text-base text-[#2B1810]">
-                  Patisserie Specification
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowRecipeModal(false)}
-                className="p-1 rounded-full hover:bg-[#FAF6F0] text-[#7A6A63] cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="py-4 space-y-3 text-xs sm:text-sm">
-              <div className="bg-[#FAF4EC] p-3.5 rounded-2xl border border-[#EFE5DA]">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#802348]">
-                  Selected Flavour Profile
-                </span>
-                <h4 className="text-base font-extrabold text-[#2B1810] mt-0.5">
-                  {currentFlavour.name}
-                </h4>
-                <p className="text-xs text-[#5C4B42] mt-1 leading-relaxed">
-                  {currentFlavour.tastingNote}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                <div className="p-3 rounded-xl bg-[#FAF6F0] border border-[#EFE5DA]">
-                  <span className="text-[11px] text-[#8C7A6B] block">Energy Estimate</span>
-                  <span className="font-bold text-[#2B1810]">{currentFlavour.calories}</span>
-                </div>
-                <div className="p-3 rounded-xl bg-[#FAF6F0] border border-[#EFE5DA]">
-                  <span className="text-[11px] text-[#8C7A6B] block">Architecture</span>
-                  <span className="font-bold text-[#2B1810]">
-                    {layers} {layers === 1 ? 'Tier' : 'Tiers'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setShowRecipeModal(false)}
-              className="w-full py-2.5 rounded-xl font-bold text-xs bg-[#802348] text-white cursor-pointer"
-            >
-              Back to Studio
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

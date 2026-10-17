@@ -151,8 +151,8 @@ export default function CakesCatalogClient({
         </div>
       </section>
 
-      {/* ── STICKY FILTER BAR ──────────────────────────────────────────────── */}
-      <section className="bg-white/95 backdrop-blur-md border-b border-[#F1E6DF] shadow-sm sticky top-20 z-30">
+      {/* ── FILTER BAR ──────────────────────────────────────────────── */}
+      <section className="bg-white/95 backdrop-blur-md border-b border-[#F1E6DF] shadow-sm relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 space-y-3">
           {/* Search + Sort row */}
           <div className="flex flex-col sm:flex-row gap-2.5 items-center">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import ScrollReveal from "@/components/common/ScrollReveal";
 
 export interface Branch {
   id: string;
@@ -122,7 +123,7 @@ export default function BranchSection() {
   const currentBranch = BRANCHES.find((b) => b.id === selectedBranchId) || BRANCHES[0];
 
   return (
-    <section className="bg-[#250527] text-white py-16 sm:py-24 scroll-mt-20" id="branches">
+    <section className="bg-[#250527] text-white py-16 sm:py-24 scroll-mt-20 overflow-hidden" id="branches">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div>
           <h2 className="font-display font-bold text-3xl sm:text-5xl text-white">
@@ -135,7 +136,7 @@ export default function BranchSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-10">
           {/* Branch List Cards */}
-          <div className="lg:col-span-5 space-y-5">
+          <ScrollReveal direction="left" distance={50} duration={850} className="lg:col-span-5 space-y-5">
             {BRANCHES.map((b) => {
               const isSelected = b.id === selectedBranchId;
               return (
@@ -188,10 +189,10 @@ export default function BranchSection() {
                 </div>
               );
             })}
-          </div>
+          </ScrollReveal>
 
           {/* Interactive Leaflet / OpenStreetMap Map Container */}
-          <div className="lg:col-span-7">
+          <ScrollReveal direction="right" distance={50} duration={850} className="lg:col-span-7">
             <div className="rounded-3xl overflow-hidden border border-white/15 bg-[#E8E0D8] min-h-[420px] h-full shadow-2xl relative">
               <div ref={mapRef} id="branch-map" className="w-full h-full min-h-[420px] z-10" />
 
@@ -213,7 +214,7 @@ export default function BranchSection() {
                 </div>
               )}
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
