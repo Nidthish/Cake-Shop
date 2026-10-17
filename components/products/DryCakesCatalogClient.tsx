@@ -65,12 +65,15 @@ function DryCakeCard({ p, animDelay = 0 }: { p: Product; animDelay?: number }) {
       style={{ animationDelay: `${animDelay}s` }}
     >
       <div className="relative aspect-square overflow-hidden bg-[#FAF5F0] rounded-xl border border-[#E6C184]/20 p-2 group-hover:border-[#962854]/40 transition-colors mb-2.5">
-        <Link href={`/products/${p.id}`}>
+        <Link href={`/products/${p.id}`} className="block w-full h-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={cardImage}
             alt={p.name}
+            width={1024}
+            height={1024}
             loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
               (e.target as HTMLImageElement).src = "/images/hero_cake.png";

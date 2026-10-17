@@ -312,6 +312,9 @@ export function getProductCardImage(product: ProductLike): string {
     if (img.includes("/NORMAL CAKES/") && img.endsWith(".jpg")) {
       return img.replace(/\.jpg$/i, ".webp");
     }
+    if (img.includes("/PRODUCT_IMAGES/Snacks/") && img.endsWith(".png")) {
+      return img.replace(/\.png$/i, ".webp");
+    }
     return img;
   }
 

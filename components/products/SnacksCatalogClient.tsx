@@ -225,12 +225,15 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
                   className="product-card group relative bg-white border border-[#F1E6DF] rounded-2xl p-2.5 sm:p-3 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex flex-col justify-between h-full font-sans"
                 >
                   <div className="relative aspect-square overflow-hidden bg-[#FAF5F0] rounded-xl border border-[#E6C184]/20 p-2 group-hover:border-[#962854]/40 transition-colors mb-2.5">
-                    <Link href={`/products/${p.id}`}>
+                    <Link href={`/products/${p.id}`} className="block w-full h-full">
                       <img
                         src={getProductCardImage(p)}
                         alt={p.name}
-                        className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
+                        width={1024}
+                        height={1024}
                         loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = "/images/hero_cake.png";
                         }}

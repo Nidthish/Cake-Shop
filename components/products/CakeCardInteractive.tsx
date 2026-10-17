@@ -105,7 +105,7 @@ export default function CakeCardInteractive({
       data-id={product.id}
     >
       <div className="relative aspect-square overflow-hidden bg-[#FAF5F0] rounded-xl border border-[#E6C184]/20 p-2 group-hover:border-[#962854]/40 transition-colors mb-2.5">
-        <Link href={`/products/${product.id}`}>
+        <Link href={`/products/${product.id}`} className="block w-full h-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={cardImage}

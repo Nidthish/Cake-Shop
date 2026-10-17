@@ -33,6 +33,10 @@ export function normalizeProductImage(rawImage: string | null | undefined, name?
     img = img.replace(/\.jpg$/i, ".webp");
   }
 
+  if (img.includes("/PRODUCT_IMAGES/Snacks/") && img.endsWith(".png")) {
+    img = img.replace(/\.png$/i, ".webp");
+  }
+
   return img;
 }
 
