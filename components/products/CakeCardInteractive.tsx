@@ -62,7 +62,14 @@ export default function CakeCardInteractive({
   const rawOffer = currentVariant.offer || "";
 
   // The 1kg + 1/2kg free offer is active ONLY for egg cakes ("With Egg")
-  const isVariantOffer = is1kgFreeOfferVariant(currentVariant) || Boolean(rawOffer);
+  const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(product.category);
+  const isBento = product.category === "bento-cake";
+  // Bento cakes are always egg unless egglessAvailable is explicitly enabled in admin.
+  // Other cakes show egg preference unless egglessAvailable is false.
+  const showEggPreference = isCakeCategory && (isBento ? product.egglessAvailable === true : product.egglessAvailable !== false);
+
+  // The offer is active ONLY for cakes and for egg cakes ("With Egg")
+  const isVariantOffer = isCakeCategory && (is1kgFreeOfferVariant(currentVariant) || Boolean(rawOffer));
   const showOfferTag = eggPreference === "egg" && isVariantOffer;
 
   const cardImage = getProductCardImage(product);
@@ -92,16 +99,18 @@ export default function CakeCardInteractive({
       );
     }
 
+    const actualEggPref = showEggPreference ? eggPreference : "egg";
+
     addItem({
-      id: `${product.id}${eggPreference === "eggless" ? "-eggless" : ""}`,
+      id: `${product.id}${actualEggPref === "eggless" ? "-eggless" : ""}`,
       name: product.name,
       image: cardImage,
       weight: currentVariant.weight,
       price: price,
       originalPrice: currentVariant.originalPrice,
-      offer: showOfferTag ? (rawOffer || "1kg + 1/2kg Free") : undefined,
+      offer: actualEggPref === "eggless" ? undefined : (showOfferTag ? (rawOffer || "1kg + 1/2kg Free") : undefined),
       quantity: 1,
-      eggPreference: eggPreference,
+      eggPreference: actualEggPref,
     });
 
     setIsAdded(true);
@@ -173,7 +182,7 @@ export default function CakeCardInteractive({
               </span>
             ) : eggPreference === "eggless" ? (
               <span className="text-[#962854] bg-[#FAF0F2] border border-[#962854]/30 px-2 py-0.5 rounded-md inline-flex items-center gap-0.5 font-sans">
-                Order 1 Day Prior
+                {isVariantOffer ? "1/2kg Offer: With Egg Only" : "Order 1 Day Prior"}
               </span>
             ) : null}
           </div>
@@ -206,8 +215,8 @@ export default function CakeCardInteractive({
 
         <div className="flex-grow" />
 
-        {/* Egg Preference Section (Available for all cake categories) */}
-        {product.egglessAvailable !== false && (
+        {/* Egg Preference Section (Shown only if eggless is available for this cake) */}
+        {showEggPreference && (
           <div className="mt-2 font-sans">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-[#5C524E] mb-1.5 text-left font-sans">
               Egg Preference
@@ -235,9 +244,14 @@ export default function CakeCardInteractive({
               </button>
             </div>
             {eggPreference === "eggless" && (
-              <p className="text-[10px] text-[#962854] font-semibold mt-1.5 flex items-center gap-1 font-sans">
-                <span>For eggless cakes, you need to order 1 day prior.</span>
-              </p>
+              <div className="text-[10px] text-[#962854] font-semibold mt-1.5 space-y-0.5 font-sans">
+                <p className="flex items-center gap-1">
+                  <span>• For eggless cakes, you need to order 1 day prior.</span>
+                </p>
+                <p className="text-amber-900 font-bold flex items-center gap-1">
+                  <span>• 1/2kg Free Offer is valid for With Egg cakes only.</span>
+                </p>
+              </div>
             )}
           </div>
         )}

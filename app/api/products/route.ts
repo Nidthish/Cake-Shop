@@ -26,19 +26,6 @@ export async function GET() {
 
     // Format products to match Product type interface
     const formattedProducts = products.map((p: any) => {
-      const variants = p.variants.map((v: any) => {
-        const hasOffer = p.offers.some((o: any) => o.buyVariantId === v.id);
-        return {
-          weight: v.name,
-          price: Number(v.price),
-          originalPrice: Number(v.price),
-          offer: hasOffer ? (p.badge || "Buy 1kg Get 1/2kg Free (Offer)") : undefined,
-          isEggless: v.isEggless,
-        };
-      });
-
-      const minPrice = variants.length > 0 ? Math.min(...variants.map((v: any) => v.price)) : 0;
-
       const catSlug = (p.category.slug || "").toLowerCase();
       let mainCategory = "cakes";
       if (
@@ -58,8 +45,30 @@ export async function GET() {
         mainCategory = "custom-cake";
       }
 
+      const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
+
+      const variants = p.variants.map((v: any) => {
+        const hasOffer = p.offers.some((o: any) => o.buyVariantId === v.id);
+        return {
+          weight: v.name,
+          price: Number(v.price),
+          originalPrice: Number(v.price),
+          offer: isCakeCategory ? ((v as any).offer || (hasOffer ? (p.badge || "Buy 1kg Get 1/2kg Free (Offer)") : undefined)) : undefined,
+          isEggless: v.isEggless,
+        };
+      });
+
+      const minPrice = variants.length > 0 ? Math.min(...variants.map((v: any) => v.price)) : 0;
       const hasEgglessVariant = p.variants.some((v: any) => v.isEggless);
-      const isCakeCategory = ["cakes", "dry-cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
+
+      let egglessAvail: boolean;
+      if ((p as any).egglessAvailable !== null && (p as any).egglessAvailable !== undefined) {
+        egglessAvail = Boolean((p as any).egglessAvailable);
+      } else if (mainCategory === "bento-cake") {
+        egglessAvail = false;
+      } else {
+        egglessAvail = isCakeCategory;
+      }
 
       return {
         id: p.slug,
@@ -78,7 +87,7 @@ export async function GET() {
         description: p.description || "",
         variants,
         isEggless: hasEgglessVariant,
-        egglessAvailable: isCakeCategory || hasEgglessVariant,
+        egglessAvailable: egglessAvail,
       };
     });
 

@@ -124,6 +124,7 @@ export interface Order {
   paymentMethod?: "COD" | "RAZORPAY" | "DIRECT";
   cakeMessage?: string;
   specialInstructions?: string;
+  deliveryNotes?: string;
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
   deliveryOtp?: string;

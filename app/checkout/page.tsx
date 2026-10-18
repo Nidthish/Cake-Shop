@@ -7,13 +7,7 @@ import Link from "next/link";
 import { useCart } from "@/components/cart/CartProvider";
 import { useToast } from "@/components/common/ToastProvider";
 
-const SPECIFIC_DELIVERY_TIMES = [
-  "09:00 AM",
-  "09:30 AM",
-  "10:00 AM",
-  "10:30 AM",
-  "11:00 AM",
-  "11:30 AM",
+const WITH_EGG_DELIVERY_TIMES = [
   "12:00 PM",
   "12:30 PM",
   "01:00 PM",
@@ -33,16 +27,26 @@ const SPECIFIC_DELIVERY_TIMES = [
   "08:00 PM",
   "08:30 PM",
   "09:00 PM",
-  "09:30 PM",
 ];
 
-const POPULAR_TIME_CHIPS = [
-  { label: "11:00 AM", slot: "11:00 AM", desc: "Brunch" },
-  { label: "01:00 PM", slot: "01:00 PM", desc: "Lunch" },
-  { label: "04:00 PM", slot: "04:00 PM", desc: "Teatime" },
-  { label: "06:30 PM", slot: "06:30 PM", desc: "Evening" },
-  { label: "08:00 PM", slot: "08:00 PM", desc: "Dinner" },
-  { label: "09:00 PM", slot: "09:00 PM", desc: "Late Party" },
+const EGGLESS_DELIVERY_TIMES = [
+  "01:00 PM",
+  "01:30 PM",
+  "02:00 PM",
+  "02:30 PM",
+  "03:00 PM",
+  "03:30 PM",
+  "04:00 PM",
+  "04:30 PM",
+  "05:00 PM",
+  "05:30 PM",
+  "06:00 PM",
+  "06:30 PM",
+  "07:00 PM",
+  "07:30 PM",
+  "08:00 PM",
+  "08:30 PM",
+  "09:00 PM",
 ];
 
 function getDayString(daysOffset: number): string {
@@ -88,10 +92,24 @@ export default function CheckoutPage() {
   const dayAfterStr = useMemo(() => getDayString(2), []);
   const minDate = useMemo(() => (hasEggless ? tomorrowStr : todayStr), [hasEggless, tomorrowStr, todayStr]);
 
+  // Available Delivery Time Slots based on Egg / Eggless constraints
+  // Eggless: 01:00 PM to 09:00 PM; With Egg: 12:00 PM to 09:00 PM
+  const availableDeliveryTimes = useMemo(
+    () => (hasEggless ? EGGLESS_DELIVERY_TIMES : WITH_EGG_DELIVERY_TIMES),
+    [hasEggless]
+  );
+
   // Schedule State: Specific Delivery Time
   const [date, setDate] = useState(tomorrowStr);
-  const [timeSlot, setTimeSlot] = useState("04:00 PM"); // Default to 04:00 PM
+  const [timeSlot, setTimeSlot] = useState(hasEggless ? "01:00 PM" : "12:00 PM");
   const [customTime, setCustomTime] = useState("");
+
+  // Auto-switch timeSlot if current slot is outside the valid constraint (e.g. 12:00 PM for eggless)
+  useEffect(() => {
+    if (timeSlot !== "CUSTOM" && !availableDeliveryTimes.includes(timeSlot)) {
+      setTimeSlot(availableDeliveryTimes[0]);
+    }
+  }, [availableDeliveryTimes, timeSlot]);
 
   // Cake Customization State
   const [cakeMessage, setCakeMessage] = useState("");
@@ -164,6 +182,15 @@ export default function CheckoutPage() {
     if (hasEggless && date === todayStr) {
       next.date = "Eggless cakes require 24 hours prior baking notice. Please choose tomorrow or later.";
     }
+    if (timeSlot === "CUSTOM") {
+      if (!customTime.trim()) {
+        next.deliveryTimeSlot = "Please enter your preferred delivery time (e.g. 05:30 PM).";
+      }
+    } else if (hasEggless && !EGGLESS_DELIVERY_TIMES.includes(timeSlot)) {
+      next.deliveryTimeSlot = "For eggless cakes, earliest delivery begins from 01:00 PM.";
+    } else if (!hasEggless && !WITH_EGG_DELIVERY_TIMES.includes(timeSlot)) {
+      next.deliveryTimeSlot = "Delivery hours are between 12:00 PM and 09:00 PM.";
+    }
 
     setErrors(next);
 
@@ -221,13 +248,14 @@ export default function CheckoutPage() {
               quantity: i.quantity,
               eggPreference: i.eggPreference,
               cakeMessage: i.cakeMessage || cakeMessage,
-              offer: i.offer,
+              offer: i.eggPreference === "eggless" ? undefined : i.offer,
             })),
             customer: { fullName, phone, email },
             address: { street, city, pincode },
             schedule: { date, timeSlot: finalDeliveryTime },
-            cakeMessage,
-            specialInstructions,
+            cakeMessage: cakeMessage.trim() || undefined,
+            specialInstructions: specialInstructions.trim() || undefined,
+            deliveryNotes: specialInstructions.trim() || undefined,
             paymentMethod: "COD",
           }),
         });
@@ -266,13 +294,14 @@ export default function CheckoutPage() {
             quantity: i.quantity,
             eggPreference: i.eggPreference,
             cakeMessage: i.cakeMessage || cakeMessage,
-            offer: i.offer,
+            offer: i.eggPreference === "eggless" ? undefined : i.offer,
           })),
           customer: { fullName, phone, email },
           address: { street, city, pincode },
           schedule: { date, timeSlot: finalDeliveryTime },
-          cakeMessage,
-          specialInstructions,
+          cakeMessage: cakeMessage.trim() || undefined,
+          specialInstructions: specialInstructions.trim() || undefined,
+          deliveryNotes: specialInstructions.trim() || undefined,
           idempotencyKey: idempotencyKey.current ?? undefined,
         }),
       });
@@ -378,7 +407,7 @@ export default function CheckoutPage() {
 
       <div className="bg-[#FAF5EE] min-h-screen py-8 sm:py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          
+
           {/* Header & Flow Indicator */}
           <div className="mb-8">
             <div className="flex items-center gap-2 text-xs font-bold text-[#802B52] uppercase tracking-wider mb-2">
@@ -390,7 +419,7 @@ export default function CheckoutPage() {
               <span className="text-[#E6C184]">•</span>
               <span className="text-[#9C8B84]">Confirmation</span>
             </div>
-            
+
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
                 <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#1C0D0A]">
@@ -409,7 +438,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
+
             {/* Left Column: Focused 3-Step Guided Form */}
             <div className="lg:col-span-2 space-y-6">
 
@@ -446,11 +475,10 @@ export default function CheckoutPage() {
                           setFullName(e.target.value);
                           clearError("fullName");
                         }}
-                        className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
-                          errors.fullName
-                            ? "border-red-400 bg-red-50/20 focus:ring-red-300"
-                            : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
-                        }`}
+                        className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${errors.fullName
+                          ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                          : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                          }`}
                       />
                       {errors.fullName && <p className="text-xs text-red-600 mt-1">{errors.fullName}</p>}
                     </div>
@@ -476,11 +504,10 @@ export default function CheckoutPage() {
                             setPhone(val);
                             clearError("phone");
                           }}
-                          className={`w-full pl-12 pr-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
-                            errors.phone
-                              ? "border-red-400 bg-red-50/20 focus:ring-red-300"
-                              : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
-                          }`}
+                          className={`w-full pl-12 pr-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${errors.phone
+                            ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                            : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                            }`}
                         />
                       </div>
                       {errors.phone && <p className="text-xs text-red-600 mt-1">{errors.phone}</p>}
@@ -503,11 +530,10 @@ export default function CheckoutPage() {
                         setEmail(e.target.value);
                         clearError("email");
                       }}
-                      className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
-                        errors.email
-                          ? "border-red-400 bg-red-50/20 focus:ring-red-300"
-                          : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
-                      }`}
+                      className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${errors.email
+                        ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                        : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                        }`}
                     />
                     {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
                   </div>
@@ -527,11 +553,10 @@ export default function CheckoutPage() {
                         setStreet(e.target.value);
                         clearError("street");
                       }}
-                      className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
-                        errors.street
-                          ? "border-red-400 bg-red-50/20 focus:ring-red-300"
-                          : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
-                      }`}
+                      className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${errors.street
+                        ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                        : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                        }`}
                     />
                     {errors.street && <p className="text-xs text-red-600 mt-1">{errors.street}</p>}
                   </div>
@@ -542,12 +567,12 @@ export default function CheckoutPage() {
                       <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
                         Delivery City
                       </label>
-                      <div className="mt-1.5 flex items-center justify-between px-4 py-3 rounded-2xl border border-[#E6DBCE] bg-[#FAF5EE]/70 text-sm font-semibold text-[#1C0D0A]">
-                        <div className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-base text-[#802B52]">location_city</span>
-                          <span>Tiruchirappalli (Trichy)</span>
+                      <div className="mt-1.5 flex items-center justify-between gap-3 px-4 py-3 rounded-2xl border border-[#E6DBCE] bg-[#FAF5EE]/70 text-sm font-semibold text-[#1C0D0A]">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="material-symbols-outlined text-base text-[#802B52] shrink-0">location_city</span>
+                          <span className="truncate">Tiruchirappalli (Trichy)</span>
                         </div>
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                        <span className="shrink-0 whitespace-nowrap inline-flex items-center justify-center text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full leading-none">
                           Active Delivery
                         </span>
                       </div>
@@ -570,11 +595,10 @@ export default function CheckoutPage() {
                           setPincode(val);
                           clearError("pincode");
                         }}
-                        className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
-                          errors.pincode
-                            ? "border-red-400 bg-red-50/20 focus:ring-red-300"
-                            : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
-                        }`}
+                        className={`w-full mt-1.5 px-4 py-3 rounded-2xl border text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${errors.pincode
+                          ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                          : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                          }`}
                       />
                       {errors.pincode && <p className="text-xs text-red-600 mt-1">{errors.pincode}</p>}
                     </div>
@@ -615,7 +639,7 @@ export default function CheckoutPage() {
                       </label>
                       {hasEggless && (
                         <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
-                          🌱 Eggless: 24h Prior Notice
+                          Eggless: Next-Day From 01:00 PM
                         </span>
                       )}
                     </div>
@@ -632,11 +656,10 @@ export default function CheckoutPage() {
                               setDate(opt.dateStr);
                               clearError("date");
                             }}
-                            className={`p-3 rounded-2xl border text-left transition-all ${
-                              isSelected
-                                ? "bg-[#802B52] text-white border-[#802B52] shadow-sm font-bold"
-                                : "bg-[#FAF5EE]/60 text-[#1C0D0A] border-[#E6DBCE] hover:border-[#802B52]/50"
-                            }`}
+                            className={`p-3 rounded-2xl border text-left transition-all ${isSelected
+                              ? "bg-[#802B52] text-white border-[#802B52] shadow-sm font-bold"
+                              : "bg-[#FAF5EE]/60 text-[#1C0D0A] border-[#E6DBCE] hover:border-[#802B52]/50"
+                              }`}
                           >
                             <div className="text-xs font-bold">{opt.label}</div>
                             <div className={`text-[11px] mt-0.5 ${isSelected ? "text-pink-100" : "text-[#7A6B72]"}`}>
@@ -659,11 +682,10 @@ export default function CheckoutPage() {
                             setDate(e.target.value);
                             clearError("date");
                           }}
-                          className={`w-full px-4 py-2.5 rounded-2xl border text-xs font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${
-                            errors.date
-                              ? "border-red-400 bg-red-50/20 focus:ring-red-300"
-                              : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
-                          }`}
+                          className={`w-full px-4 py-2.5 rounded-2xl border text-xs font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${errors.date
+                            ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                            : "border-[#E6DBCE] bg-[#FAF5EE]/40 focus:border-[#802B52] focus:ring-[#802B52]/20"
+                            }`}
                         />
                       </div>
                       <span className="text-xs text-[#7A6B72]">Selected: <strong>{formatDisplayDate(date)}</strong></span>
@@ -671,46 +693,46 @@ export default function CheckoutPage() {
                     {errors.date && <p className="text-xs text-red-600 mt-1">{errors.date}</p>}
                   </div>
 
-                  {/* Time Slot Selection */}
+                  {/* Time Slot Selection: Dropdown Only (Box Cards Removed) */}
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-[#5C524E] block mb-2">
-                      Specific Delivery Time *
-                    </label>
-
-                    {/* Popular Time Chips */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
-                      {POPULAR_TIME_CHIPS.map((chip) => {
-                        const isSelected = timeSlot === chip.slot;
-                        return (
-                          <button
-                            key={chip.slot}
-                            type="button"
-                            onClick={() => setTimeSlot(chip.slot)}
-                            className={`p-2.5 rounded-xl border text-center transition-all ${
-                              isSelected
-                                ? "bg-[#802B52] text-white border-[#802B52] font-bold shadow-xs"
-                                : "bg-[#FAF5EE]/60 text-[#1C0D0A] border-[#E6DBCE] hover:border-[#802B52]/40"
-                            }`}
-                          >
-                            <div className="text-xs font-bold">{chip.label}</div>
-                            <div className={`text-[10px] ${isSelected ? "text-pink-100" : "text-[#7A6B72]"}`}>
-                              {chip.desc}
-                            </div>
-                          </button>
-                        );
-                      })}
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                      <label htmlFor="deliveryTimeSlot" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
+                        Specific Delivery Time *
+                      </label>
+                      {hasEggless ? (
+                        <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                          Eggless: 01:00 PM – 09:00 PM
+                        </span>
+                      ) : (
+                        <span className="text-[11px] font-bold text-[#802B52] bg-[#FAF5EE] border border-[#E6C184]/40 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                          With Egg: 12:00 PM – 09:00 PM
+                        </span>
+                      )}
                     </div>
 
-                    {/* Full Dropdown for all 27 exact slots */}
+                    {/* Single Full Dropdown tailored to Egg vs Eggless constraints */}
                     <div className="flex flex-col sm:flex-row gap-3 items-center">
                       <div className="w-full sm:w-auto flex-1">
                         <select
+                          id="deliveryTimeSlot"
                           value={timeSlot}
-                          onChange={(e) => setTimeSlot(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-2xl border border-[#E6DBCE] bg-white text-xs font-semibold text-[#1C0D0A] focus:outline-none focus:border-[#802B52] focus:ring-2 focus:ring-[#802B52]/20"
+                          onChange={(e) => {
+                            setTimeSlot(e.target.value);
+                            clearError("deliveryTimeSlot");
+                          }}
+                          className={`w-full px-4 py-3 rounded-2xl border text-xs sm:text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${errors.deliveryTimeSlot
+                            ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                            : "border-[#E6DBCE] bg-white focus:border-[#802B52] focus:ring-[#802B52]/20"
+                            }`}
                         >
-                          <optgroup label="Select Specific 30-min Window">
-                            {SPECIFIC_DELIVERY_TIMES.map((t) => (
+                          <optgroup
+                            label={
+                              hasEggless
+                                ? "Eggless Delivery Slots (01:00 PM to 09:00 PM)"
+                                : "With Egg Delivery Slots (12:00 PM to 09:00 PM)"
+                            }
+                          >
+                            {availableDeliveryTimes.map((t) => (
                               <option key={t} value={t}>
                                 {t}
                               </option>
@@ -726,12 +748,27 @@ export default function CheckoutPage() {
                             type="text"
                             placeholder="Enter time (e.g. 05:45 PM)"
                             value={customTime}
-                            onChange={(e) => setCustomTime(e.target.value)}
-                            className="w-full px-4 py-2.5 rounded-2xl border border-[#802B52] bg-white text-xs font-semibold text-[#1C0D0A] focus:outline-none focus:ring-2 focus:ring-[#802B52]/20"
+                            onChange={(e) => {
+                              setCustomTime(e.target.value);
+                              clearError("deliveryTimeSlot");
+                            }}
+                            className={`w-full px-4 py-3 rounded-2xl border text-xs sm:text-sm font-semibold text-[#1C0D0A] transition-all focus:outline-none focus:ring-2 ${errors.deliveryTimeSlot
+                              ? "border-red-400 bg-red-50/20 focus:ring-red-300"
+                              : "border-[#802B52] bg-white focus:ring-[#802B52]/20"
+                              }`}
                           />
                         </div>
                       )}
                     </div>
+                    {errors.deliveryTimeSlot && (
+                      <p className="text-xs text-red-600 mt-1">{errors.deliveryTimeSlot}</p>
+                    )}
+
+                    <p className="text-[11px] text-[#7A6B72] mt-2">
+                      {hasEggless
+                        ? "• Eggless cakes require specialized batter formulation & chilling. Next-day delivery begins from 01:00 PM (up to 09:00 PM)."
+                        : "• Freshly baked to order. Available delivery slots: 12:00 PM to 09:00 PM."}
+                    </p>
                   </div>
                 </div>
               </section>
@@ -818,13 +855,12 @@ export default function CheckoutPage() {
                           );
                         }
                       }}
-                      className={`p-4 rounded-2xl border-2 transition-all flex items-start gap-3.5 ${
-                        !isCodEligible
-                          ? "opacity-60 bg-gray-50 border-gray-200 cursor-not-allowed"
-                          : paymentOption === "COD"
+                      className={`p-4 rounded-2xl border-2 transition-all flex items-start gap-3.5 ${!isCodEligible
+                        ? "opacity-60 bg-gray-50 border-gray-200 cursor-not-allowed"
+                        : paymentOption === "COD"
                           ? "border-[#802B52] bg-[#802B52]/5 text-[#802B52] shadow-sm cursor-pointer"
                           : "border-[#E6DBCE] bg-white hover:border-[#802B52]/40 cursor-pointer"
-                      }`}
+                        }`}
                     >
                       <input
                         type="radio"
@@ -864,11 +900,10 @@ export default function CheckoutPage() {
                     {/* Option B: Razorpay Online Payment (UPI, GPay, PhonePe, Cards) */}
                     <div
                       onClick={() => setPaymentOption("RAZORPAY")}
-                      className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-start gap-3.5 ${
-                        paymentOption === "RAZORPAY"
-                          ? "border-[#802B52] bg-[#802B52]/5 text-[#802B52] shadow-sm"
-                          : "border-[#E6DBCE] bg-white hover:border-[#802B52]/40"
-                      }`}
+                      className={`p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-start gap-3.5 ${paymentOption === "RAZORPAY"
+                        ? "border-[#802B52] bg-[#802B52]/5 text-[#802B52] shadow-sm"
+                        : "border-[#E6DBCE] bg-white hover:border-[#802B52]/40"
+                        }`}
                     >
                       <input
                         type="radio"
@@ -899,7 +934,7 @@ export default function CheckoutPage() {
             {/* Right Column: Reassuring Sticky Order Summary */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-3xl border border-[#E6C184]/40 p-6 shadow-xl sticky top-24 space-y-5">
-                
+
                 <div className="flex items-center justify-between pb-3 border-b border-[#E6C184]/30">
                   <h2 className="font-display font-bold text-xl text-[#1C0D0A]">
                     Order Summary
@@ -1004,11 +1039,10 @@ export default function CheckoutPage() {
                   type="button"
                   onClick={handleSubmitOrder}
                   disabled={submitting || !isMinOrderMet}
-                  className={`w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all ${
-                    !isMinOrderMet
-                      ? "bg-gray-300 text-gray-600 cursor-not-allowed hover:bg-gray-300"
-                      : "bg-[#250527] hover:bg-[#4A0E4E] text-white cursor-pointer"
-                  } disabled:opacity-60`}
+                  className={`w-full py-4 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all ${!isMinOrderMet
+                    ? "bg-gray-300 text-gray-600 cursor-not-allowed hover:bg-gray-300"
+                    : "bg-[#250527] hover:bg-[#4A0E4E] text-white cursor-pointer"
+                    } disabled:opacity-60`}
                 >
                   {submitting ? (
                     <>
@@ -1073,19 +1107,18 @@ export default function CheckoutPage() {
             type="button"
             onClick={handleSubmitOrder}
             disabled={submitting || !isMinOrderMet}
-            className={`flex-1 py-3.5 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all ${
-              !isMinOrderMet
-                ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                : "bg-[#250527] hover:bg-[#4A0E4E] text-white cursor-pointer"
-            }`}
+            className={`flex-1 py-3.5 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all ${!isMinOrderMet
+              ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+              : "bg-[#250527] hover:bg-[#4A0E4E] text-white cursor-pointer"
+              }`}
           >
             {submitting
               ? "Placing..."
               : !isMinOrderMet
-              ? `Min Order ₹300`
-              : paymentOption === "COD"
-              ? "Place Order (COD)"
-              : `Pay ₹${summary.total} (GPay)`}
+                ? `Min Order ₹300`
+                : paymentOption === "COD"
+                  ? "Place Order (COD)"
+                  : `Pay ₹${summary.total} (GPay)`}
           </button>
         </div>
 

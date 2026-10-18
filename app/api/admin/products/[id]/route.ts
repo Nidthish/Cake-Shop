@@ -35,6 +35,13 @@ export async function GET(
       );
     }
 
+    const catSlug = (product.category.slug || "").toLowerCase();
+    const isBento = catSlug.includes("bento");
+    const isCake = !["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug) && product.productType === "CAKE";
+    const egglessAvailable = product.egglessAvailable !== undefined && product.egglessAvailable !== null
+      ? Boolean(product.egglessAvailable)
+      : (isBento ? false : isCake);
+
     return NextResponse.json({
       success: true,
       product: {
@@ -52,6 +59,7 @@ export async function GET(
         reviewCount: product.reviewCount,
         productType: product.productType,
         isActive: product.isActive,
+        egglessAvailable,
         variants: product.variants.map((v) => ({
           id: v.id.toString(),
           name: v.name,
@@ -61,6 +69,7 @@ export async function GET(
           isEggless: v.isEggless,
           isAvailable: v.isAvailable,
           serves: v.serves,
+          offer: v.offer || "",
         })),
       },
     });
@@ -133,6 +142,7 @@ export async function PUT(
       badge,
       productType,
       isActive,
+      egglessAvailable,
       variants,
     } = body;
 
@@ -196,6 +206,17 @@ export async function PUT(
       }
     }
 
+    const effectiveCatSlug = (categorySlug || "").toLowerCase();
+    const effectiveProductType = productType || existingProduct.productType;
+    const isCake = !["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(effectiveCatSlug) && effectiveProductType === "CAKE";
+    const isBento = effectiveCatSlug.includes("bento");
+
+    const finalEgglessAvailable = egglessAvailable !== undefined
+      ? Boolean(egglessAvailable)
+      : (existingProduct.egglessAvailable !== undefined && existingProduct.egglessAvailable !== null
+          ? existingProduct.egglessAvailable
+          : (isBento ? false : isCake));
+
     const updatedProduct = await prisma.product.update({
       where: { id: productId },
       data: {
@@ -212,6 +233,7 @@ export async function PUT(
         badge: finalBadge,
         productType: productType || existingProduct.productType,
         isActive: typeof isActive === "boolean" ? isActive : existingProduct.isActive,
+        egglessAvailable: finalEgglessAvailable,
       },
     });
 
@@ -245,6 +267,7 @@ export async function PUT(
             isEggless: v.isEggless !== undefined ? v.isEggless : true,
             isAvailable: true,
             serves: v.serves || "4-6 Servings",
+            offer: isCake && v.offer ? v.offer.trim() : null,
           },
         });
 

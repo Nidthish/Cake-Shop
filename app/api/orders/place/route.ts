@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { items, customer, address, schedule, cakeMessage, specialInstructions, paymentMethod } = body;
+    const { items, customer, address, schedule, cakeMessage, specialInstructions, deliveryNotes, paymentMethod } = body;
 
     // Validate customer details
     if (!customer?.fullName?.trim() || !customer?.phone?.trim() || !customer?.email?.trim()) {
@@ -63,17 +63,20 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanCakeMessage = sanitizeString(cakeMessage);
-    const cleanSpecialInstructions = sanitizeString(specialInstructions);
+    const cleanSpecialInstructions = sanitizeString(specialInstructions || deliveryNotes);
 
     const order: Order = {
       id: orderId,
-      items: priced.lineItems.map((item, idx) => ({
-        ...item,
-        isEggless: items[idx]?.eggPreference === "eggless" || Boolean(item.isEggless),
-        eggPreference: items[idx]?.eggPreference || item.eggPreference || "eggless",
-        offer: items[idx]?.offer || item.offer || undefined,
-        cakeMessage: sanitizeString(items[idx]?.cakeMessage || cleanCakeMessage),
-      })),
+      items: priced.lineItems.map((item, idx) => {
+        const isEggless = items[idx]?.eggPreference === "eggless" || Boolean(item.isEggless);
+        return {
+          ...item,
+          isEggless,
+          eggPreference: items[idx]?.eggPreference || item.eggPreference || (isEggless ? "eggless" : "egg"),
+          offer: isEggless ? undefined : (items[idx]?.offer || item.offer || undefined),
+          cakeMessage: sanitizeString(items[idx]?.cakeMessage || cleanCakeMessage),
+        };
+      }),
       customer: {
         fullName: sanitizeString(customer.fullName),
         phone: sanitizeString(customer.phone),

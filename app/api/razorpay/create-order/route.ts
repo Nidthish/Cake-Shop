@@ -40,6 +40,7 @@ const requestSchema = z.object({
   }),
   cakeMessage: z.string().trim().optional(),
   specialInstructions: z.string().trim().optional(),
+  deliveryNotes: z.string().trim().optional(),
   idempotencyKey: z.string().trim().optional(),
 });
 
@@ -127,15 +128,19 @@ export async function POST(req: NextRequest) {
     });
 
     const now = new Date().toISOString();
+    const cleanInstructions = parsed.data.specialInstructions || parsed.data.deliveryNotes;
     const order: Order = {
       id: orderId,
-      items: priced.lineItems.map((item, idx) => ({
-        ...item,
-        isEggless: items[idx]?.eggPreference === "eggless" || Boolean(item.isEggless),
-        eggPreference: (items[idx]?.eggPreference === "egg" ? "egg" : "eggless") as "eggless" | "egg",
-        offer: items[idx]?.offer || item.offer || undefined,
-        cakeMessage: items[idx]?.cakeMessage || parsed.data.cakeMessage,
-      })),
+      items: priced.lineItems.map((item, idx) => {
+        const isEggless = items[idx]?.eggPreference === "eggless" || Boolean(item.isEggless);
+        return {
+          ...item,
+          isEggless,
+          eggPreference: (items[idx]?.eggPreference === "egg" ? "egg" : "eggless") as "eggless" | "egg",
+          offer: isEggless ? undefined : (items[idx]?.offer || item.offer || undefined),
+          cakeMessage: items[idx]?.cakeMessage || parsed.data.cakeMessage,
+        };
+      }),
       customer,
       address,
       schedule,
@@ -151,7 +156,7 @@ export async function POST(req: NextRequest) {
       deliveryOtp: generateDeliveryOtp(),
       deliveryOtpVerified: false,
       cakeMessage: parsed.data.cakeMessage,
-      specialInstructions: parsed.data.specialInstructions,
+      specialInstructions: cleanInstructions,
       createdAt: now,
       updatedAt: now,
     };

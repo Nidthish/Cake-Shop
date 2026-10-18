@@ -61,7 +61,7 @@ export function generateOrderConfirmationHtml(order: Order): string {
           <strong style="color: #802B52; font-size: 15px;">${item.name}</strong><br />
           <span style="font-size: 12px; color: #7A6B72;">
             Weight / Variant: <strong>${item.weight}</strong>
-            ${item.eggPreference ? ` | <span style="color: ${item.eggPreference === "eggless" ? "#2E7D32" : "#D97706"}; font-weight: bold;">${item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}</span>` : ""}
+            ${item.eggPreference ? ` | <span style="color: ${item.eggPreference === "eggless" ? "#2E7D32" : "#D97706"}; font-weight: bold;">${item.eggPreference === "eggless" ? "Eggless" : "With Egg"}</span>` : ""}
             ${item.offer ? ` | <span style="color: #802B52; font-weight: bold;">🎁 Offer: ${item.offer}</span>` : ""}
           </span>
           ${item.cakeMessage ? `<br/><span style="font-size: 12px; color: #802B52; font-style: italic;">🎂 Name / Message on Cake: "${item.cakeMessage}"</span>` : ""}
@@ -341,19 +341,19 @@ export async function sendOrderConfirmationEmail(order: Order): Promise<{ succes
 export function generateOrderDeliveredHtml(order: Order): string {
   const formattedDeliveryDate = order.deliveredAt
     ? new Date(order.deliveredAt).toLocaleDateString("en-IN", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      })
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
     : new Date().toLocaleDateString("en-IN", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
   const itemsHtml = order.items
     .map(
@@ -363,7 +363,7 @@ export function generateOrderDeliveredHtml(order: Order): string {
           <strong style="color: #802B52; font-size: 15px;">${item.name}</strong><br />
           <span style="font-size: 12px; color: #7A6B72;">
             Weight / Variant: <strong>${item.weight}</strong>
-            ${item.eggPreference ? ` | <span style="color: ${item.eggPreference === "eggless" ? "#2E7D32" : "#D97706"}; font-weight: bold;">${item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}</span>` : ""}
+            ${item.eggPreference ? ` | <span style="color: ${item.eggPreference === "eggless" ? "#2E7D32" : "#D97706"}; font-weight: bold;">${item.eggPreference === "eggless" ? "Eggless" : "With Egg"}</span>` : ""}
             ${item.offer ? ` | <span style="color: #802B52; font-weight: bold;">🎁 Offer: ${item.offer}</span>` : ""}
           </span>
           ${item.cakeMessage ? `<br/><span style="font-size: 12px; color: #802B52; font-style: italic;">🎂 Name / Message on Cake: "${item.cakeMessage}"</span>` : ""}

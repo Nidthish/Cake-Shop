@@ -87,6 +87,8 @@ export function priceOrder(items: CreateOrderRequestItem[]): PricedOrder {
 
     const lineTotal = Math.round(unitPrice * item.quantity * 100) / 100;
     const isEggless = item.eggPreference === "eggless" || Boolean(matchedVariant?.isEggless);
+    // 1/2kg Free offer is strictly constrained to With Egg cakes only, NEVER for eggless cakes
+    const resolvedOffer = isEggless ? undefined : (item.offer || matchedVariant?.offer || undefined);
 
     return {
       productId: product.id,
@@ -97,7 +99,7 @@ export function priceOrder(items: CreateOrderRequestItem[]): PricedOrder {
       lineTotal,
       isEggless,
       eggPreference: item.eggPreference || (isEggless ? "eggless" : "egg"),
-      offer: item.offer || matchedVariant?.offer || undefined,
+      offer: resolvedOffer,
       cakeMessage: item.cakeMessage || undefined,
     };
   });

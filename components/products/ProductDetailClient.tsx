@@ -41,11 +41,14 @@ export default function ProductDetailClient({
     return halfKgIdx !== -1 ? halfKgIdx : 0;
   });
   const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(product.category);
-  const showEggPreference = isCakeCategory && product.egglessAvailable !== false;
+  const isBento = product.category === "bento-cake";
+  // Bento cakes are always egg by default; show egg preference only if egglessAvailable is explicitly true.
+  // Other cakes show egg preference unless egglessAvailable is explicitly set to false.
+  const showEggPreference = isCakeCategory && (isBento ? product.egglessAvailable === true : product.egglessAvailable !== false);
 
   // Default to product.isEggless preference if set for cakes, otherwise default to with egg (false)
   const [eggless, setEggless] = useState<boolean>(() => {
-    if (!isCakeCategory) return false;
+    if (!showEggPreference) return false;
     return product.isEggless !== undefined ? product.isEggless : false;
   });
   const [cakeMessage, setCakeMessage] = useState("");
@@ -168,10 +171,16 @@ export default function ProductDetailClient({
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-[#FAF3EC] text-[#962854] border border-[#E6C184]/60">
               {variant.weight}
             </span>
-            {!eggless && ((variant.offer && !variant.offer.toLowerCase().includes("candle") && !variant.offer.toLowerCase().includes("spoon")) || isKgOffer) && (
+            {!eggless && (variant.offer || isKgOffer) && (
               <span className="bg-[#FAF0F2] text-[#962854] border border-[#962854]/30 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-sm">card_giftcard</span>
-                <span>{variant.offer || "1kg + 1/2kg Free"} (With Egg Only)</span>
+                <span>🎁 {variant.offer || "1kg + 1/2kg Free"} (With Egg Only)</span>
+              </span>
+            )}
+            {eggless && (variant.offer || isKgOffer) && (
+              <span className="bg-[#FAF3EC] text-[#962854] border border-[#962854]/30 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-2xs flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-sm text-[#962854]">info</span>
+                <span>Special Offers are valid for With Egg cakes only</span>
               </span>
             )}
           </div>
@@ -196,7 +205,7 @@ export default function ProductDetailClient({
                       <span>{v.weight}</span>
                       {hasVOffer && (
                         <span className="text-[10px] bg-[#962854] text-white px-1.5 py-0.5 rounded-md font-bold">
-                          FREE 1/2kg
+                          {v.offer ? (v.offer.length > 14 ? "OFFER" : v.offer) : "FREE 1/2kg"}
                         </span>
                       )}
                     </button>
@@ -237,9 +246,14 @@ export default function ProductDetailClient({
               </div>
 
               {eggless && (
-                <div className="mt-3 p-3.5 rounded-2xl bg-[#FAF3EC] border border-[#D8C3B3] flex items-center gap-2.5 text-xs text-[#2A082C] font-semibold animate-fadeIn shadow-xs">
-                  <span className="material-symbols-outlined text-base text-[#962854] shrink-0">info</span>
-                  <span>For eggless cakes, you need to order one day prior.</span>
+                <div className="mt-3 p-3.5 rounded-2xl bg-[#FAF3EC] border border-[#D8C3B3] space-y-1.5 text-xs text-[#2A082C] font-semibold animate-fadeIn shadow-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-base text-[#962854] shrink-0">info</span>
+                    <span>For eggless cakes, you need to order one day prior.</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-amber-900 font-bold text-[11px] pl-6">
+                    <span>• 1/2kg Free Offer is valid only for With Egg cakes (Not applicable for Eggless).</span>
+                  </div>
                 </div>
               )}
             </div>

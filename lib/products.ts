@@ -62,7 +62,7 @@ export async function getDbProducts(): Promise<Product[]> {
         try {
           rows = await sql`
             SELECT p.id, p.product_code, p.name, p.slug, p.description, p.image_name, p.badge, 
-                   p.rating, p.review_count, p.is_active, p.product_type,
+                   p.rating, p.review_count, p.is_active, p.product_type, p.eggless_available,
                    c.name as category_name, c.slug as category_slug,
                    COALESCE(
                      json_agg(
@@ -94,16 +94,6 @@ export async function getDbProducts(): Promise<Product[]> {
 
       if (rows && rows.length > 0) {
         return rows.map((p: any) => {
-          const variantsList = Array.isArray(p.variants) ? p.variants : [];
-          const mappedVariants = variantsList.map((v: any) => ({
-            weight: v.name,
-            price: Number(v.price),
-            originalPrice: Number(v.price),
-            offer: v.offer || ((p.badge || "").includes("1kg Free") ? "Buy 1kg Get 1/2kg Free (Offer)" : undefined),
-            isEggless: Boolean(v.is_eggless),
-          }));
-
-          const minPrice = mappedVariants.length > 0 ? Math.min(...mappedVariants.map((v: any) => v.price)) : 0;
           const catSlug = (p.category_slug || "").toLowerCase();
           let mainCategory = "cakes";
           if (p.product_type === "SNACK" || ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug)) {
@@ -119,7 +109,30 @@ export async function getDbProducts(): Promise<Product[]> {
           }
 
           const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
+
+          const variantsList = Array.isArray(p.variants) ? p.variants : [];
+          const mappedVariants = variantsList.map((v: any) => ({
+            weight: v.name,
+            price: Number(v.price),
+            originalPrice: Number(v.price),
+            // Offer is strictly for cakes only
+            offer: isCakeCategory ? (v.offer || ((p.badge || "").includes("1kg Free") ? "Buy 1kg Get 1/2kg Free (Offer)" : undefined)) : undefined,
+            isEggless: Boolean(v.is_eggless),
+          }));
+
+          const minPrice = mappedVariants.length > 0 ? Math.min(...mappedVariants.map((v: any) => v.price)) : 0;
           const hasEggless = isCakeCategory && mappedVariants.some((v: any) => v.isEggless);
+
+          // Eggless available determination:
+          // If explicitly in database, use it. For bento-cake default to false (always egg unless admin enabled).
+          let egglessAvail: boolean;
+          if (p.eggless_available !== null && p.eggless_available !== undefined) {
+            egglessAvail = Boolean(p.eggless_available);
+          } else if (mainCategory === "bento-cake") {
+            egglessAvail = false;
+          } else {
+            egglessAvail = isCakeCategory;
+          }
 
           return {
             id: p.slug,
@@ -138,7 +151,7 @@ export async function getDbProducts(): Promise<Product[]> {
             description: p.description || "",
             variants: mappedVariants,
             isEggless: hasEggless,
-            egglessAvailable: isCakeCategory,
+            egglessAvailable: egglessAvail,
             productCode: p.product_code,
           };
         });
@@ -202,6 +215,21 @@ export async function getDbProducts(): Promise<Product[]> {
         const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
         const hasEgglessVariant = isCakeCategory && p.variants.some((v: any) => v.isEggless);
 
+        // Filter offers for cakes only
+        const cakeVariants = variants.map((v: any) => ({
+          ...v,
+          offer: isCakeCategory ? v.offer : undefined,
+        }));
+
+        let egglessAvail: boolean;
+        if ((p as any).egglessAvailable !== null && (p as any).egglessAvailable !== undefined) {
+          egglessAvail = Boolean((p as any).egglessAvailable);
+        } else if (mainCategory === "bento-cake") {
+          egglessAvail = false;
+        } else {
+          egglessAvail = isCakeCategory;
+        }
+
         return {
           id: p.slug,
           name: p.name,
@@ -217,9 +245,9 @@ export async function getDbProducts(): Promise<Product[]> {
           reviewCount: p.reviewCount,
           badge: p.badge || undefined,
           description: p.description || "",
-          variants,
+          variants: cakeVariants,
           isEggless: hasEgglessVariant,
-          egglessAvailable: isCakeCategory,
+          egglessAvailable: egglessAvail,
           productCode: p.productCode,
         };
       });

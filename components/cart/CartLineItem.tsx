@@ -24,13 +24,12 @@ export default function CartLineItem({ item }: { item: CartItem }) {
           <span>Weight: <strong>{item.weight}</strong></span>
           {item.eggPreference && (
             <span
-              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                item.eggPreference === "eggless"
-                  ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
-                  : "bg-amber-100 text-amber-900 border border-amber-200"
-              }`}
+              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${item.eggPreference === "eggless"
+                ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                : "bg-amber-100 text-amber-900 border border-amber-200"
+                }`}
             >
-              {item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}
+              {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
             </span>
           )}
         </div>

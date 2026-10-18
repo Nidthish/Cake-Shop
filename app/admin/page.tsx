@@ -20,6 +20,7 @@ interface VariantInput {
   weightUnit: string;
   isEggless: boolean;
   serves: string;
+  offer?: string;
   isOffer1kgFree?: boolean;
 }
 
@@ -42,6 +43,7 @@ interface ProductAdmin {
   isActive: boolean;
   isOfferProduct?: boolean;
   isEggless?: boolean;
+  egglessAvailable?: boolean;
   variants: VariantInput[];
   offers: any[];
 }
@@ -122,6 +124,7 @@ interface RawStoredCake {
   isActive?: boolean;
   isOfferProduct?: boolean;
   isEggless?: boolean;
+  egglessAvailable?: boolean;
   variants?: VariantInput[];
   offers?: unknown[];
 }
@@ -143,26 +146,31 @@ function normalizeCake(c: RawStoredCake): ProductAdmin {
   const fallbackVariants: VariantInput[] =
     Array.isArray(c.variants) && c.variants.length > 0
       ? c.variants.map((v) => ({
-          id: v.id ? String(v.id) : undefined,
-          name: v.name || "Regular",
-          price: typeof v.price === "number" ? v.price : 0,
-          weightValue: typeof v.weightValue === "number" ? v.weightValue : 0.5,
-          weightUnit: v.weightUnit || "kg",
-          isEggless: v.isEggless !== undefined ? Boolean(v.isEggless) : true,
-          serves: v.serves || "4-6 Servings",
-          isOffer1kgFree: Boolean(v.isOffer1kgFree),
-        }))
+        id: v.id ? String(v.id) : undefined,
+        name: v.name || "Regular",
+        price: typeof v.price === "number" ? v.price : 0,
+        weightValue: typeof v.weightValue === "number" ? v.weightValue : 0.5,
+        weightUnit: v.weightUnit || "kg",
+        isEggless: v.isEggless !== undefined ? Boolean(v.isEggless) : true,
+        serves: v.serves || "4-6 Servings",
+        offer: v.offer || "",
+        isOffer1kgFree: Boolean(v.isOffer1kgFree),
+      }))
       : [
-          {
-            name: "Regular",
-            price: typeof c.price === "number" ? c.price : 450,
-            weightValue: 0.5,
-            weightUnit: "kg",
-            isEggless: true,
-            serves: "4-6 Servings",
-            isOffer1kgFree: false,
-          },
-        ];
+        {
+          name: "Regular",
+          price: typeof c.price === "number" ? c.price : 450,
+          weightValue: 0.5,
+          weightUnit: "kg",
+          isEggless: true,
+          serves: "4-6 Servings",
+          offer: "",
+          isOffer1kgFree: false,
+        },
+      ];
+
+  const isBento = (c.category || "").toLowerCase().includes("bento");
+  const egglessAvail = c.egglessAvailable !== undefined ? Boolean(c.egglessAvailable) : (isBento ? false : true);
 
   return {
     id: String(c.id || Date.now()),
@@ -182,6 +190,7 @@ function normalizeCake(c: RawStoredCake): ProductAdmin {
     isActive: c.isActive !== undefined ? Boolean(c.isActive) : true,
     isOfferProduct: Boolean(c.isOfferProduct),
     isEggless: c.isEggless !== undefined ? Boolean(c.isEggless) : true,
+    egglessAvailable: egglessAvail,
     variants: fallbackVariants,
     offers: Array.isArray(c.offers) ? c.offers : [],
     price: typeof c.price === "number" ? c.price : fallbackVariants[0]?.price,
@@ -256,7 +265,7 @@ export default function AdminPage() {
   // Navigation & Data State
   const [activeTab, setActiveTab] = useState<"sales" | "products" | "orders" | "users">("sales");
   const [products, setProducts] = useState<ProductAdmin[]>([]);
-  
+
   // Orders State (Default: Today's Orders with On-Demand DB Search)
   const [orders, setOrders] = useState<OrderAdmin[]>([]);
   const [ordersLoading, setOrdersLoading] = useState<boolean>(false);
@@ -293,9 +302,11 @@ export default function AdminPage() {
   const [imageError, setImageError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [badge, setBadge] = useState<string>("");
+  const [egglessAvailable, setEgglessAvailable] = useState<boolean>(true);
+  const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(categorySlug);
   const [variants, setVariants] = useState<VariantInput[]>([
-    { name: "0.5kg", price: 450, weightValue: 0.5, weightUnit: "kg", isEggless: true, serves: "4-6 Servings", isOffer1kgFree: false },
-    { name: "1kg", price: 850, weightValue: 1.0, weightUnit: "kg", isEggless: true, serves: "8-10 Servings", isOffer1kgFree: false },
+    { name: "0.5kg", price: 450, weightValue: 0.5, weightUnit: "kg", isEggless: true, serves: "4-6 Servings", offer: "", isOffer1kgFree: false },
+    { name: "1kg", price: 850, weightValue: 1.0, weightUnit: "kg", isEggless: true, serves: "8-10 Servings", offer: "", isOffer1kgFree: false },
   ]);
 
   // Special Offer Form State
@@ -371,7 +382,7 @@ export default function AdminPage() {
   async function handleLogout() {
     try {
       await fetch("/api/admin/auth/logout", { method: "POST" });
-    } catch (err) {}
+    } catch (err) { }
     setIsAuthenticated(false);
     setAdminUser(null);
   }
@@ -606,7 +617,7 @@ export default function AdminPage() {
   function handleAddVariantRow() {
     setVariants([
       ...variants,
-      { name: "1.5kg", price: 1250, weightValue: 1.5, weightUnit: "kg", isEggless: true, serves: "12-14 Servings", isOffer1kgFree: false },
+      { name: "1.5kg", price: 1250, weightValue: 1.5, weightUnit: "kg", isEggless: true, serves: "12-14 Servings", offer: "", isOffer1kgFree: false },
     ]);
   }
 
@@ -637,13 +648,14 @@ export default function AdminPage() {
     setImageError(null);
     setSelectedFile(null);
     setBadge("");
+    setEgglessAvailable(true);
     setHasOffer(false);
     setOfferBadge("1kg Free Offer");
     setOfferBuyVariant("1kg");
     setOfferFreeVariant("0.5kg");
     setVariants([
-      { name: "0.5kg", price: 450, weightValue: 0.5, weightUnit: "kg", isEggless: true, serves: "4-6 Servings", isOffer1kgFree: false },
-      { name: "1kg", price: 850, weightValue: 1.0, weightUnit: "kg", isEggless: true, serves: "8-10 Servings", isOffer1kgFree: false },
+      { name: "0.5kg", price: 450, weightValue: 0.5, weightUnit: "kg", isEggless: true, serves: "4-6 Servings", offer: "", isOffer1kgFree: false },
+      { name: "1kg", price: 850, weightValue: 1.0, weightUnit: "kg", isEggless: true, serves: "8-10 Servings", offer: "", isOffer1kgFree: false },
     ]);
     setShowAddModal(true);
   }
@@ -657,12 +669,15 @@ export default function AdminPage() {
     setImageName(p.imageName || "signature.cake.1");
     setBadge(p.badge || "");
 
+    const isBento = (p.category || "").toLowerCase().includes("bento");
+    setEgglessAvailable(p.egglessAvailable !== undefined ? Boolean(p.egglessAvailable) : (isBento ? false : true));
+
     const existingImg = p.image || (p.imageName && (p.imageName.startsWith("data:") || p.imageName.startsWith("http") || p.imageName.startsWith("/")) ? p.imageName : "");
     setImage(existingImg || "");
     setImagePreview(existingImg || "");
     setImageError(null);
     setSelectedFile(null);
-    
+
     const activeOffer = p.offers?.find((o) => o.isActive);
     const isOffer = Boolean(activeOffer || p.isOfferProduct || (p.badge || "").includes("1kg Free") || (p.badge || "").includes("Offer"));
     setHasOffer(isOffer);
@@ -678,26 +693,28 @@ export default function AdminPage() {
     setVariants(
       p.variants && p.variants.length > 0
         ? p.variants.map((v) => ({
-            id: v.id,
-            name: v.name,
-            price: v.price,
-            weightValue: v.weightValue,
-            weightUnit: v.weightUnit,
-            isEggless: v.isEggless,
-            serves: v.serves,
-            isOffer1kgFree: v.isOffer1kgFree,
-          }))
+          id: v.id,
+          name: v.name,
+          price: v.price,
+          weightValue: v.weightValue,
+          weightUnit: v.weightUnit,
+          isEggless: v.isEggless,
+          serves: v.serves,
+          offer: v.offer || "",
+          isOffer1kgFree: v.isOffer1kgFree,
+        }))
         : [
-            {
-              name: "Regular",
-              price: typeof p.price === "number" ? p.price : 450,
-              weightValue: 0.5,
-              weightUnit: "kg",
-              isEggless: true,
-              serves: "4-6 Servings",
-              isOffer1kgFree: false,
-            },
-          ]
+          {
+            name: "Regular",
+            price: typeof p.price === "number" ? p.price : 450,
+            weightValue: 0.5,
+            weightUnit: "kg",
+            isEggless: true,
+            serves: "4-6 Servings",
+            offer: "",
+            isOffer1kgFree: false,
+          },
+        ]
     );
     setShowAddModal(true);
   }
@@ -827,9 +844,13 @@ export default function AdminPage() {
     e.preventDefault();
     setSaving(true);
     try {
+      const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(categorySlug);
+      const finalEgglessAvailable = isCakeCategory ? egglessAvailable : false;
+
       const updatedVariants = variants.map((v) => ({
         ...v,
-        isOffer1kgFree: hasOffer && v.name.includes(offerBuyVariant),
+        offer: isCakeCategory ? (v.offer || "").trim() : undefined,
+        isOffer1kgFree: false,
       }));
 
       const productId = editingProduct ? editingProduct.id : String(Date.now());
@@ -877,13 +898,14 @@ export default function AdminPage() {
         description,
         imageName: finalImage || imageName || "signature.cake.1",
         image: finalImage || undefined,
-        badge: hasOffer ? (offerBadge || "1kg Free Offer") : badge,
+        badge: badge || undefined,
         rating: editingProduct?.rating || 5.0,
         reviewCount: editingProduct?.reviewCount || 1,
         productType: categorySlug === "snacks" ? "SNACK" : "CAKE",
         isActive: editingProduct ? editingProduct.isActive : true,
+        egglessAvailable: finalEgglessAvailable,
         variants: updatedVariants,
-        offers: editingProduct?.offers || [],
+        offers: [],
         price: updatedVariants[0]?.price || 0,
       };
 
@@ -902,13 +924,10 @@ export default function AdminPage() {
         subCategory: resolvedSubCategory,
         description,
         imageName: payloadImageName,
-        badge: hasOffer ? (offerBadge || "1kg Free Offer") : badge,
-        hasOffer,
-        offerBadge: hasOffer ? (offerBadge || "1kg Free Offer") : "",
-        offerBuyVariant,
-        offerFreeVariant,
+        badge,
         productType: categorySlug === "snacks" ? "SNACK" : "CAKE",
         isActive: true,
+        egglessAvailable: finalEgglessAvailable,
         variants: updatedVariants,
       };
 
@@ -1155,33 +1174,30 @@ export default function AdminPage() {
         <div className="flex border-b border-[#E6DBCE] space-x-1 sm:space-x-3 overflow-x-auto scrollbar-none no-scrollbar -mx-3.5 px-3.5 sm:mx-0 sm:px-0">
           <button
             onClick={() => setActiveTab("sales")}
-            className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
-              activeTab === "sales"
+            className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${activeTab === "sales"
                 ? "border-[#802B52] text-[#802B52] bg-[#FAF5EE]"
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
-            }`}
+              }`}
           >
             📊 <span className="inline">Sales &amp; Overview</span>
           </button>
 
           <button
             onClick={() => setActiveTab("products")}
-            className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
-              activeTab === "products"
+            className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${activeTab === "products"
                 ? "border-[#802B52] text-[#802B52] bg-[#FAF5EE]"
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
-            }`}
+              }`}
           >
             🎂 <span className="inline">Products ({products.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("orders")}
-            className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
-              activeTab === "orders"
+            className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${activeTab === "orders"
                 ? "border-[#802B52] text-[#802B52] bg-[#FAF5EE]"
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
-            }`}
+              }`}
           >
             <span className="inline">Orders ({orders.length})</span>
           </button>
@@ -1189,11 +1205,10 @@ export default function AdminPage() {
           {adminUser?.role === "SUPERADMIN" && (
             <button
               onClick={() => setActiveTab("users")}
-              className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${
-                activeTab === "users"
+              className={`py-2.5 sm:py-3 px-3 sm:px-5 font-bold text-xs sm:text-sm border-b-2 transition-all cursor-pointer flex items-center gap-1.5 shrink-0 ${activeTab === "users"
                   ? "border-[#802B52] text-[#802B52] bg-[#FAF5EE]"
                   : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
-              }`}
+                }`}
             >
               👥 <span className="inline">Admins ({adminUsersList.length})</span>
             </button>
@@ -1220,21 +1235,20 @@ export default function AdminPage() {
                     key={filterKey}
                     onClick={() => handleSalesDateChange(filterKey)}
                     disabled={salesLoading}
-                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all cursor-pointer flex-1 sm:flex-initial text-center disabled:opacity-50 ${
-                      salesDateFilter === filterKey
+                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all cursor-pointer flex-1 sm:flex-initial text-center disabled:opacity-50 ${salesDateFilter === filterKey
                         ? "bg-[#802B52] text-white shadow-sm"
                         : "text-[#7A6B72] hover:bg-[#E6DBCE]/50"
-                    }`}
+                      }`}
                   >
                     {filterKey === "today"
                       ? "Today"
                       : filterKey === "yesterday"
-                      ? "Yesterday"
-                      : filterKey === "7days"
-                      ? "7 Days"
-                      : filterKey === "month"
-                      ? "Month"
-                      : "All"}
+                        ? "Yesterday"
+                        : filterKey === "7days"
+                          ? "7 Days"
+                          : filterKey === "month"
+                            ? "Month"
+                            : "All"}
                   </button>
                 ))}
               </div>
@@ -1474,11 +1488,10 @@ export default function AdminPage() {
                           {p.productCode}
                         </span>
                         <span
-                          className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                            p.isActive
+                          className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${p.isActive
                               ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
                               : "bg-red-50 text-red-800 border border-red-200"
-                          }`}
+                            }`}
                         >
                           {p.isActive ? "● Active" : "○ Paused"}
                         </span>
@@ -1529,11 +1542,10 @@ export default function AdminPage() {
                       <div className="flex items-center justify-between gap-2 pt-3 border-t border-[#E6DBCE]/70">
                         <button
                           onClick={() => handleToggleSales(p.id, p.isActive)}
-                          className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer shadow-sm ${
-                            p.isActive
+                          className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer shadow-sm ${p.isActive
                               ? "border-amber-300 text-amber-900 bg-amber-50 hover:bg-amber-100 active:bg-amber-200"
                               : "border-emerald-300 text-emerald-800 bg-emerald-50 hover:bg-emerald-100 active:bg-emerald-200"
-                          }`}
+                            }`}
                         >
                           {p.isActive ? "⏸ Pause Sales" : "▶ Resume Sales"}
                         </button>
@@ -1657,16 +1669,16 @@ export default function AdminPage() {
                       {activeSearchQuery
                         ? `${orders.length} found`
                         : ordersDateFilter === "today"
-                        ? `${orders.length} Today`
-                        : `${orders.length} in period`}
+                          ? `${orders.length} Today`
+                          : `${orders.length} in period`}
                     </span>
                   </div>
                   <p className="text-xs text-[#7A6B72] mt-0.5">
                     {activeSearchQuery
                       ? `Showing database search matches for "${activeSearchQuery}".`
                       : ordersDateFilter === "today"
-                      ? "Showing today's orders by default. Search by name, order ID, or phone to query any order in the database."
-                      : `Showing orders for: ${ordersDateFilter}.`}
+                        ? "Showing today's orders by default. Search by name, order ID, or phone to query any order in the database."
+                        : `Showing orders for: ${ordersDateFilter}.`}
                   </p>
                 </div>
 
@@ -1747,11 +1759,10 @@ export default function AdminPage() {
                         type="button"
                         onClick={() => handleSelectOrdersDateFilter(key)}
                         disabled={ordersLoading}
-                        className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer disabled:opacity-50 ${
-                          isActive
+                        className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer disabled:opacity-50 ${isActive
                             ? "bg-[#802B52] text-white shadow-sm"
                             : "text-[#7A6B72] hover:bg-[#E6DBCE]/60 hover:text-[#2D2327]"
-                        }`}
+                          }`}
                       >
                         {label}
                       </button>
@@ -1792,8 +1803,8 @@ export default function AdminPage() {
                   {activeSearchQuery
                     ? `No orders found matching "${activeSearchQuery}".`
                     : ordersDateFilter === "today"
-                    ? "No orders recorded for today yet."
-                    : `No orders found for the selected period (${ordersDateFilter}).`}
+                      ? "No orders recorded for today yet."
+                      : `No orders found for the selected period (${ordersDateFilter}).`}
                 </p>
                 {activeSearchQuery ? (
                   <button
@@ -1871,6 +1882,11 @@ export default function AdminPage() {
                             <span className="text-[11px] text-[#802B52] font-semibold underline block mt-0.5">
                               Tap to view items &amp; remarks
                             </span>
+                            {(o.specialInstructions || o.deliveryNotes || o.cakeMessage) && (
+                              <span className="text-[9.5px] font-bold text-[#802B52] bg-[#FAF0F2] border border-[#802B52]/20 px-1.5 py-0.5 rounded mt-1 inline-block">
+                                📝 Remarks/Notes attached
+                              </span>
+                            )}
                           </div>
                           <span className="material-symbols-outlined text-xl text-[#802B52] group-hover:translate-x-0.5 transition-transform">
                             open_in_new
@@ -1995,6 +2011,11 @@ export default function AdminPage() {
                                 <span className="text-[10px] text-[#7A6B72] font-medium block">
                                   View items &amp; remarks
                                 </span>
+                                {(o.specialInstructions || o.deliveryNotes || o.cakeMessage) && (
+                                  <span className="text-[9.5px] font-bold text-[#802B52] bg-[#FAF0F2] border border-[#802B52]/20 px-1.5 py-0.5 rounded mt-1 inline-block">
+                                    📝 Remarks/Notes attached
+                                  </span>
+                                )}
                               </div>
                               <span className="material-symbols-outlined text-base text-[#802B52] transition-transform group-hover:translate-x-0.5">
                                 open_in_new
@@ -2092,13 +2113,12 @@ export default function AdminPage() {
                   <div className="flex items-center justify-between pb-3 border-b border-[#E6DBCE]/70">
                     <span className="font-bold text-sm sm:text-base text-[#2D2327] truncate">{u.fullName}</span>
                     <span
-                      className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                        u.role === "SUPERADMIN"
+                      className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${u.role === "SUPERADMIN"
                           ? "bg-purple-100 text-purple-800 border border-purple-200"
                           : u.role === "RIDER"
-                          ? "bg-amber-100 text-amber-900 border border-amber-300"
-                          : "bg-blue-100 text-blue-800 border border-blue-200"
-                      }`}
+                            ? "bg-amber-100 text-amber-900 border border-amber-300"
+                            : "bg-blue-100 text-blue-800 border border-blue-200"
+                        }`}
                     >
                       {u.role === "SUPERADMIN" ? "👑 Super Admin" : u.role === "RIDER" ? "🛵 Delivery Rider" : "🛡️ Admin"}
                     </span>
@@ -2147,13 +2167,12 @@ export default function AdminPage() {
                       <td className="py-4 px-4 text-[#5C524E]">{u.phone || "—"}</td>
                       <td className="py-4 px-4">
                         <span
-                          className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold ${
-                            u.role === "SUPERADMIN"
+                          className={`inline-block px-2.5 py-0.5 rounded text-[10px] font-bold ${u.role === "SUPERADMIN"
                               ? "bg-purple-100 text-purple-800"
                               : u.role === "RIDER"
-                              ? "bg-amber-100 text-amber-900 border border-amber-300"
-                              : "bg-blue-100 text-blue-800"
-                          }`}
+                                ? "bg-amber-100 text-amber-900 border border-amber-300"
+                                : "bg-blue-100 text-blue-800"
+                            }`}
                         >
                           {u.role === "SUPERADMIN" ? "👑 Super Admin" : u.role === "RIDER" ? "🛵 Delivery Rider (Mobile App Only)" : "🛡️ Admin"}
                         </span>
@@ -2418,115 +2437,104 @@ export default function AdminPage() {
                 />
               </div>
 
+              {/* Eggless Option Availability Toggle (Only for Cake Categories) */}
+              {isCakeCategory && (
+                <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <input
+                      type="checkbox"
+                      id="eggless-available-checkbox"
+                      checked={egglessAvailable}
+                      onChange={(e) => setEgglessAvailable(e.target.checked)}
+                      className="w-4 h-4 text-emerald-700 rounded border-gray-300 focus:ring-emerald-600 cursor-pointer"
+                    />
+                    <label htmlFor="eggless-available-checkbox" className="text-xs font-bold text-[#1C0D0A] cursor-pointer flex items-center gap-1.5">
+                      <span>🌱 Eggless Option Available</span>
+                      <span className="text-[10px] text-[#7A6B72] font-normal">
+                        ({egglessAvailable ? "Customers can choose Eggless or With Egg" : "With Egg only — eggless dropdown hidden from customers"})
+                      </span>
+                    </label>
+                  </div>
+                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${egglessAvailable ? "bg-emerald-100 text-emerald-800" : "bg-gray-100 text-gray-700"}`}>
+                    {egglessAvailable ? "Eggless Available" : "Egg Only"}
+                  </span>
+                </div>
+              )}
+
               {/* Variants Section */}
               <div className="border border-[#E6DBCE] rounded-xl p-3 bg-[#FAF5EE] space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="font-bold text-[#5B1E38] uppercase">Variants &amp; Prices</span>
+                  <div>
+                    <span className="font-bold text-[#5B1E38] uppercase">Variants &amp; Prices</span>
+                    {isCakeCategory && (
+                      <span className="block text-[10px] text-[#7A6B72]">
+                        Enter Size, Price, and optional Offer attribute (in black box)
+                      </span>
+                    )}
+                  </div>
                   <button type="button" onClick={handleAddVariantRow} className="text-xs font-bold text-[#802B52]">
                     + Add Variant
                   </button>
                 </div>
 
                 {variants.map((v, idx) => (
-                  <div key={idx} className="bg-white p-2.5 rounded-xl border border-[#E6DBCE] grid grid-cols-1 sm:grid-cols-3 gap-2 items-center">
-                    <input
-                      type="text"
-                      value={v.name}
-                      placeholder="Size (e.g. 1kg)"
-                      onChange={(e) => handleVariantChange(idx, "name", e.target.value)}
-                      className="px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg text-xs"
-                    />
-                    <input
-                      type="number"
-                      value={v.price}
-                      placeholder="Price (₹)"
-                      onChange={(e) => handleVariantChange(idx, "price", parseFloat(e.target.value) || 0)}
-                      className="px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg text-xs"
-                    />
-                    <div className="flex items-center justify-between gap-1">
+                  <div
+                    key={idx}
+                    className={`bg-white p-2.5 rounded-xl border border-[#E6DBCE] grid gap-2 items-center ${
+                      isCakeCategory
+                        ? "grid-cols-1 sm:grid-cols-12"
+                        : "grid-cols-1 sm:grid-cols-3"
+                    }`}
+                  >
+                    <div className={isCakeCategory ? "sm:col-span-3" : ""}>
+                      <input
+                        type="text"
+                        value={v.name}
+                        placeholder="Size (e.g. 1kg)"
+                        onChange={(e) => handleVariantChange(idx, "name", e.target.value)}
+                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg text-xs"
+                      />
+                    </div>
+                    <div className={isCakeCategory ? "sm:col-span-2" : ""}>
+                      <input
+                        type="number"
+                        value={v.price}
+                        placeholder="Price (₹)"
+                        onChange={(e) => handleVariantChange(idx, "price", parseFloat(e.target.value) || 0)}
+                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg text-xs"
+                      />
+                    </div>
+                    {isCakeCategory && (
+                      <div className="sm:col-span-4">
+                        <input
+                          type="text"
+                          value={v.offer || ""}
+                          placeholder="Offer (e.g. 0.5kg cake, candle)"
+                          onChange={(e) => handleVariantChange(idx, "offer", e.target.value)}
+                          className="w-full px-2.5 py-1.5 bg-[#1C0D0A] text-white placeholder-gray-400 border border-[#1C0D0A] rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#802B52]"
+                        />
+                      </div>
+                    )}
+                    <div className={`flex items-center justify-between gap-1 ${isCakeCategory ? "sm:col-span-3" : ""}`}>
                       <select
                         value={v.isEggless ? "eggless" : "egg"}
                         onChange={(e) => handleVariantChange(idx, "isEggless", e.target.value === "eggless")}
                         className="flex-1 px-2 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
                       >
-                        <option value="eggless">🌱 Eggless</option>
                         <option value="egg">🥚 Egg</option>
+                        <option value="eggless">🌱 Eggless</option>
                       </select>
-                      <button type="button" onClick={() => handleRemoveVariantRow(idx)} className="text-red-500 font-bold px-2 py-1">
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveVariantRow(idx)}
+                        className="text-red-500 hover:text-red-700 font-bold px-2 py-1"
+                        title="Remove Variant"
+                      >
                         ✕
                       </button>
                     </div>
                   </div>
                 ))}
-              </div>
-
-              {/* Special Offers & Extra Weight Section */}
-              <div className="border border-[#E6C184]/60 rounded-xl p-3 bg-[#FAF0F2] space-y-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="enable-product-offer"
-                      checked={hasOffer}
-                      onChange={(e) => setHasOffer(e.target.checked)}
-                      className="w-4 h-4 text-[#802B52] rounded focus:ring-[#802B52] cursor-pointer"
-                    />
-                    <label htmlFor="enable-product-offer" className="font-bold text-[#802B52] uppercase cursor-pointer text-xs">
-                      🎁 Enable Special Offer (e.g. Buy 1kg Get 0.5kg Free)
-                    </label>
-                  </div>
-                </div>
-
-                {hasOffer && (
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                    <div>
-                      <label className="block text-[11px] font-bold text-[#5B1E38] uppercase mb-1">
-                        Offer Badge / Title
-                      </label>
-                      <input
-                        type="text"
-                        value={offerBadge}
-                        onChange={(e) => setOfferBadge(e.target.value)}
-                        placeholder="e.g. 1kg Free Offer"
-                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-[#5B1E38] uppercase mb-1">
-                        Required Buy Variant
-                      </label>
-                      <select
-                        value={offerBuyVariant}
-                        onChange={(e) => setOfferBuyVariant(e.target.value)}
-                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
-                      >
-                        {variants.map((v, i) => (
-                          <option key={i} value={v.name}>
-                            {v.name} (₹{v.price})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold text-[#5B1E38] uppercase mb-1">
-                        Free Bonus Extra Weight
-                      </label>
-                      <select
-                        value={offerFreeVariant}
-                        onChange={(e) => setOfferFreeVariant(e.target.value)}
-                        className="w-full px-2.5 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
-                      >
-                        {variants.map((v, i) => (
-                          <option key={i} value={v.name}>
-                            {v.name} (Free Extra)
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                )}
               </div>
 
               <div className="pt-2 flex justify-end gap-2 sticky bottom-0 bg-white py-2 border-t border-[#E6DBCE]">
@@ -2562,15 +2570,14 @@ export default function AdminPage() {
                     {selectedOrderModal.orderNumber}
                   </span>
                   <span
-                    className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
-                      selectedOrderModal.status === "DELIVERED"
+                    className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${selectedOrderModal.status === "DELIVERED"
                         ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
                         : selectedOrderModal.status === "CANCELLED"
-                        ? "bg-rose-100 text-rose-800 border border-rose-300"
-                        : selectedOrderModal.status === "OUT_FOR_DELIVERY"
-                        ? "bg-amber-100 text-amber-900 border border-amber-300"
-                        : "bg-purple-100 text-[#802B52] border border-purple-200"
-                    }`}
+                          ? "bg-rose-100 text-rose-800 border border-rose-300"
+                          : selectedOrderModal.status === "OUT_FOR_DELIVERY"
+                            ? "bg-amber-100 text-amber-900 border border-amber-300"
+                            : "bg-purple-100 text-[#802B52] border border-purple-200"
+                      }`}
                   >
                     {selectedOrderModal.status}
                   </span>
@@ -2672,68 +2679,77 @@ export default function AdminPage() {
 
                       <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
                         <span
-                          className={`px-2 py-0.5 rounded-md font-bold ${
-                            item.isEggless
+                          className={`px-2 py-0.5 rounded-md font-bold ${item.isEggless
                               ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
                               : "bg-amber-50 text-amber-900 border border-amber-200"
-                          }`}
+                            }`}
                         >
                           {item.isEggless ? "Eggless" : "With Egg"}
                         </span>
 
-                        {item.offer && (
+                        {!item.isEggless && item.offer && (
                           <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-300 text-amber-900 font-bold">
                             Offer: {item.offer}
                           </span>
                         )}
                       </div>
-
-                      {/* Cake Message Remarks */}
-                      {item.cakeMessage && (
-                        <div className="bg-white border border-[#E6DBCE] rounded-lg p-2.5 text-xs">
-                          <span className="font-bold text-[10px] uppercase text-[#7A6B72] block tracking-wider">
-                            Cake Inscription / Remarks:
-                          </span>
-                          <span className="font-semibold italic text-xs text-[#802B52] mt-0.5 block">
-                            &ldquo;{item.cakeMessage}&rdquo;
-                          </span>
-                        </div>
-                      )}
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Customer Texted Remarks & Special Instructions */}
-              <div className="bg-[#FAF5EE] border border-[#E6DBCE] rounded-xl p-3.5 space-y-2">
+              {/* Single Cake Inscription / Remarks for the entire order */}
+              <div className="bg-[#FAF5EE] border border-[#E6DBCE] rounded-xl p-3.5 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-xs uppercase tracking-wider text-[#5B1E38]">
-                    Customer Remarks &amp; Special Instructions
+                  <span className="font-bold text-xs uppercase tracking-wider text-[#5B1E38] flex items-center gap-1.5">
+                    <span>🎂</span>
+                    <span>Cake Inscription / Remarks:</span>
                   </span>
-                  <span className="text-[10px] text-[#7A6B72] font-semibold">Checkout Notes</span>
+                  <span className="text-[10px] text-[#7A6B72] font-semibold">Message on Cake</span>
                 </div>
 
-                {selectedOrderModal.specialInstructions || selectedOrderModal.deliveryNotes ? (
-                  <div className="bg-white p-3 rounded-lg border border-[#E6DBCE] text-xs text-[#1C0D0A] font-medium whitespace-pre-wrap leading-relaxed shadow-2xs">
-                    {selectedOrderModal.specialInstructions || selectedOrderModal.deliveryNotes}
-                  </div>
-                ) : (
-                  <div className="bg-white/60 p-2.5 rounded-lg border border-[#E6DBCE]/50 text-xs text-[#7A6B72] italic">
-                    No special instructions were texted by the customer for this order.
-                  </div>
-                )}
+                {(() => {
+                  const inscription =
+                    selectedOrderModal.cakeMessage ||
+                    selectedOrderModal.items?.find((it: any) => it.cakeMessage)?.cakeMessage;
+                  return inscription ? (
+                    <div className="bg-white p-3 rounded-lg border border-[#E6DBCE] text-xs font-semibold italic text-[#802B52] shadow-2xs">
+                      &ldquo;{inscription}&rdquo;
+                    </div>
+                  ) : (
+                    <div className="bg-white/60 p-2.5 rounded-lg border border-[#E6DBCE]/50 text-xs text-[#7A6B72] italic">
+                      No cake inscription requested for this order.
+                    </div>
+                  );
+                })()}
+              </div>
 
-                {/* Fallback if order-level cake message exists */}
-                {selectedOrderModal.cakeMessage && !selectedOrderModal.items?.some((it: any) => it.cakeMessage === selectedOrderModal.cakeMessage) && (
-                  <div className="bg-white p-3 rounded-lg border border-[#E6DBCE] text-xs space-y-1 shadow-2xs">
-                    <span className="font-bold text-[10px] uppercase text-[#7A6B72] block tracking-wider">
-                      Order Message on Cake:
-                    </span>
-                    <span className="font-semibold italic text-xs text-[#802B52]">
-                      &ldquo;{selectedOrderModal.cakeMessage}&rdquo;
-                    </span>
-                  </div>
-                )}
+              {/* Customer Texted Remarks & Special Instructions / Delivery Notes */}
+              <div className="bg-[#FAF5EE] border border-[#E6DBCE] rounded-xl p-3.5 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs uppercase tracking-wider text-[#5B1E38] flex items-center gap-1.5">
+                    <span>📋</span>
+                    <span>Customer Remarks &amp; Special Instructions</span>
+                  </span>
+                  <span className="text-[10px] text-[#802B52] font-bold bg-[#FAF0F2] px-2 py-0.5 rounded-full border border-[#802B52]/20">
+                    Delivery Notes / Bakery Requests
+                  </span>
+                </div>
+
+                {(() => {
+                  const notes =
+                    selectedOrderModal.specialInstructions ||
+                    selectedOrderModal.deliveryNotes;
+                  return notes ? (
+                    <div className="bg-white p-3 rounded-lg border border-[#E6DBCE] text-xs text-[#1C0D0A] font-medium whitespace-pre-wrap leading-relaxed shadow-2xs">
+                      {notes}
+                    </div>
+                  ) : (
+                    <div className="bg-white/60 p-2.5 rounded-lg border border-[#E6DBCE]/50 text-xs text-[#7A6B72] italic">
+                      No special instructions or delivery notes were texted by the customer for this order.
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Payment & Amount Summary */}

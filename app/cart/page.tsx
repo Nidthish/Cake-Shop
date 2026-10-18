@@ -93,7 +93,7 @@ export default function CartPage() {
             Your Shopping Cart
           </h1>
           <span className="bg-[#FAF0F2] text-[#962854] text-[11px] font-bold tracking-wider uppercase px-3.5 py-1.5 rounded-full border border-[#962854]/30 shadow-xs">
-             Handcrafted Fresh Daily
+            Handcrafted Fresh Daily
           </span>
         </div>
 
@@ -175,20 +175,14 @@ export default function CartPage() {
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-xs text-[#5C524E]">
                     <span>Portion: <strong className="text-[#1C0D0A]">{item.weight}</strong></span>
                     {item.eggPreference && (
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        item.eggPreference === "eggless"
-                          ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
-                          : "bg-[#FAF3EC] text-[#1C0D0A] border border-[#D8C3B3]"
-                      }`}>
-                        {item.eggPreference === "eggless" ? "🌱 Eggless" : "🥚 With Egg"}
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${item.eggPreference === "eggless"
+                        ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                        : "bg-[#FAF3EC] text-[#1C0D0A] border border-[#D8C3B3]"
+                        }`}>
+                        {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
                       </span>
                     )}
                   </div>
-                  {item.offer && (
-                    <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-amber-50 border border-amber-300 text-amber-900 text-[11px] font-bold">
-                      <span>🎁</span> {item.offer}
-                    </div>
-                  )}
                   {item.cakeMessage && (
                     <p className="text-xs text-[#802B52] italic">
                       🎂 Message: &quot;{item.cakeMessage}&quot;
@@ -267,9 +261,14 @@ export default function CartPage() {
             />
 
             {hasEggless && (
-              <p className="text-[10.5px] text-[#962854] font-semibold flex items-center gap-1">
-                <span>Minimum date for Eggless: Tomorrow ({tomorrowStr})</span>
-              </p>
+              <div className="space-y-0.5">
+                <p className="text-[10.5px] text-[#962854] font-semibold flex items-center gap-1">
+                  <span>Minimum date for Eggless: Tomorrow ({tomorrowStr})</span>
+                </p>
+                <p className="text-[10px] text-[#802B52] font-semibold">
+                  • Eggless deliveries start from 01:00 PM onwards (1:00 PM to 9:00 PM)
+                </p>
+              </div>
             )}
 
             {showTodayError && hasEggless && (
@@ -318,9 +317,9 @@ export default function CartPage() {
               <span>Total GST (5%)</span>
               <span>₹{summary.tax}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="font-normal text-[#5C524E]">Doorstep Express Delivery</span>
-              <span className="font-bold text-emerald-700">FREE</span>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#5C524E]">Doorstep Delivery</span>
+              <span className="text-[#802B52] font-semibold text-right">₹5 / km (at delivery)</span>
             </div>
             <div className="border-t border-[#F1E6DF] pt-3 flex justify-between items-center text-base font-bold text-[#1C0D0A]">
               <div>
@@ -334,11 +333,10 @@ export default function CartPage() {
           <button
             onClick={handleProceedToCheckout}
             disabled={!isMinOrderMet}
-            className={`w-full py-4 text-xs uppercase tracking-wider font-bold shadow-xl flex items-center justify-center gap-2 rounded-2xl transition-all cursor-pointer ${
-              isMinOrderMet
-                ? "btn-primary"
-                : "bg-gray-300 text-gray-600 cursor-not-allowed hover:bg-gray-300"
-            }`}
+            className={`w-full py-4 text-xs uppercase tracking-wider font-bold shadow-xl flex items-center justify-center gap-2 rounded-2xl transition-all cursor-pointer ${isMinOrderMet
+              ? "btn-primary"
+              : "bg-gray-300 text-gray-600 cursor-not-allowed hover:bg-gray-300"
+              }`}
           >
             {isMinOrderMet ? (
               <>
@@ -357,6 +355,7 @@ export default function CartPage() {
               <span>Lollipop Bakery Order Rules:</span>
             </div>
             <p>&bull; <strong>Minimum Order:</strong> ₹300 applicable for all orders (COD &amp; GPay).</p>
+            <p>&bull; <strong>Doorstep Delivery:</strong> ₹5 per km from our bakery in Trichy, payable directly upon delivery.</p>
             <p>&bull; <strong>Cash on Delivery:</strong> Available for purchases above ₹1,000.</p>
             <p>&bull; <strong>GST:</strong> Standard 2.5% CGST + 2.5% SGST applied to all orders.</p>
           </div>

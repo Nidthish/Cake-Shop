@@ -48,6 +48,11 @@ export async function GET(req: NextRequest) {
 
         const hasOffer = p.offers && p.offers.some((o: any) => o.isActive);
 
+        const isBento = catSlug.includes("bento");
+        const egglessAvailable = p.egglessAvailable !== undefined && p.egglessAvailable !== null
+          ? Boolean(p.egglessAvailable)
+          : (isBento ? false : (mainCategory !== "snacks"));
+
         return {
           id: p.id.toString(),
           slug: p.slug,
@@ -63,6 +68,7 @@ export async function GET(req: NextRequest) {
           reviewCount: p.reviewCount,
           productType: p.productType,
           isActive: p.isActive,
+          egglessAvailable,
           isOfferProduct: hasOffer || (p.badge || "").includes("1kg Free"),
           isEggless: p.variants.some((v: any) => v.isEggless),
           variants: p.variants.map((v: any) => ({
@@ -74,6 +80,7 @@ export async function GET(req: NextRequest) {
             isEggless: v.isEggless,
             isAvailable: v.isAvailable,
             serves: v.serves,
+            offer: v.offer || "",
             isOffer1kgFree: hasOffer && v.name.includes("1kg"),
           })),
           offers: p.offers.map((o: any) => ({
@@ -104,6 +111,7 @@ const createProductSchema = z.object({
   offerFreeVariant: z.string().optional(),
   productType: z.enum(["CAKE", "SNACK"]).default("CAKE"),
   isActive: z.boolean().default(true),
+  egglessAvailable: z.boolean().optional(),
   variants: z
     .array(
       z.object({
@@ -113,6 +121,7 @@ const createProductSchema = z.object({
         weightUnit: z.string().optional().default("kg"),
         isEggless: z.boolean().optional().default(true),
         serves: z.string().optional(),
+        offer: z.string().optional(),
         isOffer1kgFree: z.boolean().optional().default(false),
       })
     )
@@ -204,7 +213,13 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Create Product in MySQL
+    const isCake = data.categorySlug !== "snacks" && data.productType === "CAKE";
+    const isBento = data.categorySlug.toLowerCase().includes("bento");
+    const egglessAvailable = data.egglessAvailable !== undefined
+      ? Boolean(data.egglessAvailable)
+      : (isBento ? false : (isCake ? true : false));
+
+    // Create Product in Neon DB
     const newProduct = await prisma.product.create({
       data: {
         productCode,
@@ -216,6 +231,7 @@ export async function POST(req: NextRequest) {
         badge: finalBadge,
         productType: data.productType,
         isActive: data.isActive,
+        egglessAvailable,
         rating: 5.0,
         reviewCount: 1,
       },
@@ -239,6 +255,7 @@ export async function POST(req: NextRequest) {
           isEggless: v.isEggless !== undefined ? v.isEggless : true,
           isAvailable: true,
           serves: v.serves || (v.name.includes("0.5") ? "4-6 Servings" : "8-10 Servings"),
+          offer: isCake && v.offer ? v.offer.trim() : null,
         },
       });
 
