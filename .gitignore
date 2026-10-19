@@ -8,3 +8,11 @@ out
 *.log
 .DS_Store
 *.pdf
+
+# Database backups & SQL dumps (Never push to GitHub)
+*.sql
+*.dump
+*.tar
+*.bak
+backups/
+backup/
