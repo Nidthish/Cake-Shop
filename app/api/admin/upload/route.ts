@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import { getAuthenticatedAdmin } from "@/lib/auth";
+import { uploadToR2, isR2Configured, getR2PublicUrl } from "@/lib/r2";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -87,16 +88,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Determine extension
-    let ext = path.extname(originalName).toLowerCase();
-    if (!ALLOWED_EXTENSIONS.includes(ext)) {
-      if (mimeType.includes("png")) ext = ".png";
-      else if (mimeType.includes("webp")) ext = ".webp";
-      else ext = ".jpg";
+    // Determine extension - prioritize .webp format
+    let ext = ".webp";
+    if (mimeType.includes("webp") || originalName.toLowerCase().endsWith(".webp")) {
+      ext = ".webp";
+    } else {
+      const originalExt = path.extname(originalName).toLowerCase();
+      if (ALLOWED_EXTENSIONS.includes(originalExt)) {
+        ext = originalExt;
+      }
     }
 
-    // Determine target subfolder: cakes or Snacks
-    const subDir = category.toLowerCase().includes("snack") ? "Snacks" : "cakes";
+    // Determine target subfolder: cakes or snacks
+    const subDir = category.toLowerCase().includes("snack") ? "snacks" : "cakes";
 
     // Create unique safe filename
     const safeBase = originalName
@@ -105,37 +109,61 @@ export async function POST(req: NextRequest) {
       .replace(/[^a-z0-9_-]+/g, "-")
       .replace(/^-+|-+$/g, "") || "cake";
     const fileName = `${safeBase}-${Date.now()}${ext}`;
+    const r2Key = `${subDir}/${fileName}`;
 
-    // Target directories: public/PRODUCT_IMAGES/<subDir> and PRODUCT_IMAGES/<subDir>
-    const publicDir = path.join(process.cwd(), "public", "PRODUCT_IMAGES", subDir);
-    const rootDir = path.join(process.cwd(), "PRODUCT_IMAGES", subDir);
+    let imageUrl = "";
+    let storageType = "local";
 
-    try {
-      await fs.promises.mkdir(publicDir, { recursive: true });
-      await fs.promises.mkdir(rootDir, { recursive: true });
+    // 1. Try uploading to Cloudflare R2
+    if (isR2Configured()) {
+      const r2Upload = await uploadToR2({
+        buffer,
+        key: r2Key,
+        contentType: ext === ".webp" ? "image/webp" : mimeType || "image/webp",
+      });
 
-      const publicFilePath = path.join(publicDir, fileName);
-      const rootFilePath = path.join(rootDir, fileName);
-
-      await Promise.all([
-        fs.promises.writeFile(publicFilePath, buffer).catch((err) => {
-          console.warn("Notice: Local public filesystem write skipped (serverless environment):", err?.message);
-        }),
-        fs.promises.writeFile(rootFilePath, buffer).catch((err) => {
-          console.warn("Notice: Local root filesystem write skipped (serverless environment):", err?.message);
-        }),
-      ]);
-    } catch (fsErr: any) {
-      console.warn("Notice: Filesystem directory creation skipped (serverless environment):", fsErr?.message);
+      if (r2Upload.success && r2Upload.url) {
+        imageUrl = r2Upload.url;
+        storageType = "cloudflare-r2";
+      } else {
+        console.warn("⚠️ Cloudflare R2 upload error, falling back to local storage:", r2Upload.error);
+      }
     }
 
-    const imageUrl = `/PRODUCT_IMAGES/${subDir}/${fileName}`;
+    // 2. If R2 is not fully configured or upload failed, store locally
+    if (!imageUrl) {
+      const publicDir = path.join(process.cwd(), "public", "PRODUCT_IMAGES", subDir);
+      const rootDir = path.join(process.cwd(), "PRODUCT_IMAGES", subDir);
+
+      try {
+        await fs.promises.mkdir(publicDir, { recursive: true });
+        await fs.promises.mkdir(rootDir, { recursive: true });
+
+        const publicFilePath = path.join(publicDir, fileName);
+        const rootFilePath = path.join(rootDir, fileName);
+
+        await Promise.all([
+          fs.promises.writeFile(publicFilePath, buffer).catch((err) => {
+            console.warn("Notice: Local public filesystem write skipped:", err?.message);
+          }),
+          fs.promises.writeFile(rootFilePath, buffer).catch((err) => {
+            console.warn("Notice: Local root filesystem write skipped:", err?.message);
+          }),
+        ]);
+      } catch (fsErr: any) {
+        console.warn("Notice: Filesystem directory creation skipped:", fsErr?.message);
+      }
+
+      imageUrl = `/PRODUCT_IMAGES/${subDir}/${fileName}`;
+    }
 
     return NextResponse.json({
       success: true,
       fileName,
       imageUrl,
       size: buffer.length,
+      storage: storageType,
+      publicR2Url: `${getR2PublicUrl()}/${r2Key}`,
     });
   } catch (error: any) {
     console.error("[POST /api/admin/upload] Error:", error);

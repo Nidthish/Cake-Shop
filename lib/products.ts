@@ -5,20 +5,28 @@ import rawProducts from "./products-data.json";
 export const PRODUCTS_DATA: Product[] = rawProducts as Product[];
 
 export function normalizeProductImage(rawImage: string | null | undefined, name?: string): string {
-  const cakeName = (name || "").toLowerCase();
-  if (cakeName.includes("black forest") || cakeName.includes("german black")) {
+  const clean = (rawImage || "").trim();
+
+  // 1. If DB has an explicit Cloudflare R2 URL, remote HTTP/HTTPS, or data URL: ALWAYS return it directly
+  if (clean && (clean.startsWith("http://") || clean.startsWith("https://") || clean.startsWith("data:"))) {
+    return clean;
+  }
+
+  // 2. If it is already a valid custom path in public/ (and not a placeholder)
+  if (clean && clean.startsWith("/") && clean !== "product.image" && !clean.includes("signature.cake")) {
+    return clean;
+  }
+
+  // 3. Fallback only if image is missing or a known placeholder
+  if (!clean || clean === "product.image" || clean.includes("signature.cake")) {
+    const cakeName = (name || "").toLowerCase();
+    if (cakeName.includes("black forest") || cakeName.includes("german black")) {
+      return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
+    }
     return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
   }
 
-  let img = (rawImage || "").trim();
-  if (!img || img === "product.image") {
-    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
-  }
-
-  if (img.includes("black_forest") || img.includes("1791131428600")) {
-    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
-  }
-
+  let img = clean;
   if (!img.startsWith("/") && !img.startsWith("http://") && !img.startsWith("https://") && !img.startsWith("data:")) {
     img = `/${img}`;
   }
@@ -136,6 +144,7 @@ export async function getDbProducts(): Promise<Product[]> {
 
           return {
             id: p.slug,
+            slug: p.slug,
             name: p.name,
             baseName: p.name,
             category: mainCategory,
@@ -232,6 +241,7 @@ export async function getDbProducts(): Promise<Product[]> {
 
         return {
           id: p.slug,
+          slug: p.slug,
           name: p.name,
           baseName: p.name,
           category: mainCategory,

@@ -301,6 +301,12 @@ export default function AdminPage() {
   const [imagePreview, setImagePreview] = useState<string>("");
   const [imageError, setImageError] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imageMeta, setImageMeta] = useState<{
+    width: number;
+    height: number;
+    originalSizeKb: number;
+    webpSizeKb: number;
+  } | null>(null);
   const [badge, setBadge] = useState<string>("");
   const [egglessAvailable, setEgglessAvailable] = useState<boolean>(true);
   const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(categorySlug);
@@ -647,6 +653,7 @@ export default function AdminPage() {
     setImagePreview("");
     setImageError(null);
     setSelectedFile(null);
+    setImageMeta(null);
     setBadge("");
     setEgglessAvailable(true);
     setHasOffer(false);
@@ -677,6 +684,7 @@ export default function AdminPage() {
     setImagePreview(existingImg || "");
     setImageError(null);
     setSelectedFile(null);
+    setImageMeta(null);
 
     const activeOffer = p.offers?.find((o) => o.isActive);
     const isOffer = Boolean(activeOffer || p.isOfferProduct || (p.badge || "").includes("1kg Free") || (p.badge || "").includes("Offer"));
@@ -743,8 +751,6 @@ export default function AdminPage() {
       return;
     }
 
-    setSelectedFile(file);
-
     const reader = new FileReader();
     reader.onerror = () => {
       setImageError("Failed to read image file. Please try another image.");
@@ -760,9 +766,11 @@ export default function AdminPage() {
       img.onerror = () => {
         setImage(rawDataUrl);
         setImagePreview(rawDataUrl);
+        setSelectedFile(file);
       };
       img.onload = () => {
         try {
+          // Downscale & optimize dimensions (max 1000px)
           const maxDim = 1000;
           let width = img.width;
           let height = img.height;
@@ -782,16 +790,48 @@ export default function AdminPage() {
           if (!ctx) {
             setImage(rawDataUrl);
             setImagePreview(rawDataUrl);
+            setSelectedFile(file);
             return;
           }
+
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high";
           ctx.drawImage(img, 0, 0, width, height);
-          const mime = file.type === "image/png" ? "image/png" : "image/jpeg";
-          const compressed = canvas.toDataURL(mime, 0.85);
-          setImage(compressed);
-          setImagePreview(compressed);
+
+          // Convert to WebP format
+          const webpDataUrl = canvas.toDataURL("image/webp", 0.85);
+          setImage(webpDataUrl);
+          setImagePreview(webpDataUrl);
+
+          // Generate optimized WebP File for Cloudflare R2 upload
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                const safeBase = file.name
+                  .replace(/\.[^/.]+$/, "")
+                  .toLowerCase()
+                  .replace(/[^a-z0-9_-]+/g, "-") || "cake";
+                const webpFile = new File([blob], `${safeBase}-${Date.now()}.webp`, {
+                  type: "image/webp",
+                });
+                setSelectedFile(webpFile);
+                setImageMeta({
+                  width,
+                  height,
+                  originalSizeKb: Math.round(file.size / 1024),
+                  webpSizeKb: Math.round(blob.size / 1024),
+                });
+              } else {
+                setSelectedFile(file);
+              }
+            },
+            "image/webp",
+            0.85
+          );
         } catch {
           setImage(rawDataUrl);
           setImagePreview(rawDataUrl);
+          setSelectedFile(file);
         }
       };
       img.src = rawDataUrl;
@@ -804,6 +844,7 @@ export default function AdminPage() {
     setImagePreview("");
     setImageError(null);
     setSelectedFile(null);
+    setImageMeta(null);
   }
 
   async function handleToggleSales(id: string, currentActive: boolean) {
@@ -2414,13 +2455,40 @@ export default function AdminPage() {
                   )}
 
                   {imagePreview && (
-                    <div className="relative w-20 h-20 rounded-xl overflow-hidden border border-[#E6DBCE] bg-[#FAF5EE]">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={imagePreview}
-                        alt="Cake preview"
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="relative mt-2 p-3 bg-[#FAF5EE] border border-[#E6DBCE] rounded-2xl flex flex-col sm:flex-row items-center gap-4">
+                      <div className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-xl overflow-hidden border border-[#D5C3B3] bg-white shadow-sm shrink-0 flex items-center justify-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={imagePreview}
+                          alt="Cake preview"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 space-y-1.5 text-center sm:text-left">
+                        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            ✓ WebP Format
+                          </span>
+                          {imageMeta && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-[#F3E8DB] text-[#5B1E38]">
+                              {imageMeta.width} × {imageMeta.height} px
+                            </span>
+                          )}
+                        </div>
+                        {imageMeta ? (
+                          <p className="text-xs text-gray-600">
+                            Pixel Optimized: <span className="line-through text-gray-400">{imageMeta.originalSizeKb} KB</span> →{" "}
+                            <span className="font-bold text-emerald-700">{imageMeta.webpSizeKb} KB</span>
+                          </p>
+                        ) : (
+                          <p className="text-xs text-gray-500">
+                            Current image preview
+                          </p>
+                        )}
+                        <p className="text-[11px] text-gray-500">
+                          {selectedFile ? "☁️ Ready to sync with Cloudflare R2" : "Active product image"}
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>

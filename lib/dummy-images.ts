@@ -290,33 +290,40 @@ export function getDummyFallbackImage(product: ProductLike): string {
  * cakes to their real 1024x1024 WebP image files in public/PRODUCT_IMAGES/cakes/NORMAL CAKES/.
  */
 export function getProductCardImage(product: ProductLike): string {
-  const name = (product.name || "").toLowerCase();
-  if (name.includes("black forest") || name.includes("german black")) {
-    return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
-  }
-
   let img = product.image ? product.image.trim() : "";
 
-  if (img) {
-    if (img.includes("black_forest") || img.includes("1791131428600")) {
-      return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
-    }
-    if (!img.startsWith("/") && !img.startsWith("http://") && !img.startsWith("https://") && !img.startsWith("data:")) {
-      img = `/${img}`;
-    }
-    if (img.startsWith("/images/Cakes/")) {
-      return img
-        .replace("/images/Cakes/", "/PRODUCT_IMAGES/cakes/NORMAL CAKES/")
-        .replace(/\.jpg$/i, ".webp");
-    }
-    if (img.includes("/NORMAL CAKES/") && img.endsWith(".jpg")) {
-      return img.replace(/\.jpg$/i, ".webp");
-    }
-    if (img.includes("/PRODUCT_IMAGES/Snacks/") && img.endsWith(".png")) {
-      return img.replace(/\.png$/i, ".webp");
-    }
+  // 1. If product has an explicit Cloudflare R2 URL or remote HTTP/HTTPS/data image, use it directly
+  if (img && (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("data:"))) {
     return img;
   }
 
-  return getDummyInternetImage(product);
+  // 2. If it is already a valid absolute path in public/
+  if (img && img.startsWith("/") && img !== "product.image" && !img.includes("signature.cake")) {
+    return img;
+  }
+
+  // 3. Fallback only if no image or placeholder provided
+  if (!img || img === "product.image" || img.includes("signature.cake")) {
+    const name = (product.name || "").toLowerCase();
+    if (name.includes("black forest") || name.includes("german black")) {
+      return "/PRODUCT_IMAGES/cakes/NORMAL CAKES/black_forest.webp";
+    }
+    return getDummyInternetImage(product);
+  }
+
+  if (!img.startsWith("/") && !img.startsWith("http://") && !img.startsWith("https://") && !img.startsWith("data:")) {
+    img = `/${img}`;
+  }
+  if (img.startsWith("/images/Cakes/")) {
+    return img
+      .replace("/images/Cakes/", "/PRODUCT_IMAGES/cakes/NORMAL CAKES/")
+      .replace(/\.jpg$/i, ".webp");
+  }
+  if (img.includes("/NORMAL CAKES/") && img.endsWith(".jpg")) {
+    return img.replace(/\.jpg$/i, ".webp");
+  }
+  if (img.includes("/PRODUCT_IMAGES/Snacks/") && img.endsWith(".png")) {
+    return img.replace(/\.png$/i, ".webp");
+  }
+  return img;
 }

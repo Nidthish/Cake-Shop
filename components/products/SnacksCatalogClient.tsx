@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
 import { useToast } from "@/components/common/ToastProvider";
-import { getProductCardImage } from "@/lib/dummy-images";
+import { getProductCardImage, getDummyFallbackImage } from "@/lib/dummy-images";
 
 const SUB_CATEGORIES = [
   { label: "All Snacks & Pastries", value: "all" },
@@ -244,7 +244,10 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
                         decoding="async"
                         className="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/images/hero_cake.png";
+                          const fallback = getDummyFallbackImage(p);
+                          if ((e.target as HTMLImageElement).src !== fallback) {
+                            (e.target as HTMLImageElement).src = fallback;
+                          }
                         }}
                       />
                     </Link>

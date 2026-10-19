@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "api.qrserver.com" },
+      { protocol: "https", hostname: "pub-cc78f2072e744ca2a82f1b0346156699.r2.dev" },
+      { protocol: "https", hostname: "**.r2.dev" },
     ],
   },
   eslint: {
