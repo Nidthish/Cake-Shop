@@ -1,0 +1,1064 @@
+[
+  {
+    "id": "bento-classic-white-heart",
+    "name": "Classic White Heart Bento Cake",
+    "baseName": "Classic White Heart Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/classic-white-heart-bento-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 38,
+    "badge": "Bento Favorite",
+    "description": "Adorable minimalist Korean white heart bento cake piped with delicate red micro-hearts and elegant Happy Birthday cursive calligraphy.",
+    "minPrice": 499,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 499,
+        "originalPrice": 499
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-001"
+  },
+  {
+    "id": "bento-ferrero-chocolate-drizzle",
+    "name": "Ferrero Chocolate Drizzle Bento Cake",
+    "baseName": "Ferrero Chocolate Drizzle Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/ferrero-chocolate-drizzle-bento-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 42,
+    "badge": "Best Seller",
+    "description": "Rich chocolate fudge sponge loaded with Ferrero Rocher halves, glossy chocolate drizzle, and shimmering golden edible pearls.",
+    "minPrice": 550,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 550,
+        "originalPrice": 550
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-002"
+  },
+  {
+    "id": "bento-chocolate-hazelnut-crunch",
+    "name": "Chocolate Hazelnut Crunch Bento Cake",
+    "baseName": "Chocolate Hazelnut Crunch Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/chocolate-hazelnut-crunch-bento-cake.jpeg",
+    "rating": 4.8,
+    "reviewCount": 29,
+    "badge": "Trending",
+    "description": "Decadent dark chocolate sponge layered with creamy Nutella spread, toasted roasted nuts, and a golden Happy Birthday topper.",
+    "minPrice": 520,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 520,
+        "originalPrice": 520
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-003"
+  },
+  {
+    "id": "bento-lotus-biscoff-caramel",
+    "name": "Lotus Biscoff Caramel Bento Cake",
+    "baseName": "Lotus Biscoff Caramel Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/lotus-biscoff-caramel-bento-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 35,
+    "badge": "Chef's Special",
+    "description": "Smooth vanilla cream bento cake topped with rich Belgian Lotus Biscoff speculoos spread drip and a whole crunchy Biscoff biscuit.",
+    "minPrice": 540,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 540,
+        "originalPrice": 540
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-004"
+  },
+  {
+    "id": "bento-romantic-couple-love",
+    "name": "Romantic Couple Love Bento Cake",
+    "baseName": "Romantic Couple Love Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/romantic-couple-love-bento-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 46,
+    "badge": "Romantic Pick",
+    "description": "Sweet love confession bento cake with cute hand-drawn couple illustration, red hearts, and surprise I Love U message ribbon.",
+    "minPrice": 530,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 530,
+        "originalPrice": 530
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-005"
+  },
+  {
+    "id": "bento-happy-birthday-my-love",
+    "name": "Happy Birthday My Love Couple Bento Cake",
+    "baseName": "Happy Birthday My Love Couple Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/happy-birthday-my-love-bento-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 31,
+    "badge": "Couple Favorite",
+    "description": "Charming birthday bento cake featuring an adorable hugging couple illustration, red heart piping, and sparkling golden border.",
+    "minPrice": 520,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 520,
+        "originalPrice": 520
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-006"
+  },
+  {
+    "id": "bento-dark-chocolate-hazelnut-swirl",
+    "name": "Dark Chocolate Hazelnut Swirl Bento Cake",
+    "baseName": "Dark Chocolate Hazelnut Swirl Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/dark-chocolate-hazelnut-swirl-bento-cake.jpeg",
+    "rating": 4.8,
+    "reviewCount": 27,
+    "badge": "Pure Chocolate",
+    "description": "Silky chocolate truffle bento cake with an artisanal spiral swirl top, garnished with crunchy roasted hazelnuts and cocoa drizzle.",
+    "minPrice": 510,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 510,
+        "originalPrice": 510
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-007"
+  },
+  {
+    "id": "bento-lavender-butterfly-floral",
+    "name": "Lavender Butterfly Floral Bento Cake",
+    "baseName": "Lavender Butterfly Floral Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/lavender-butterfly-floral-bento-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 33,
+    "badge": "Cute Aesthetic",
+    "description": "Pastel purple and blush pink square bento cake bordered with piped rosettes, gold sugar pearls, and delicate 3D flutter butterflies.",
+    "minPrice": 530,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 530,
+        "originalPrice": 530
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-008"
+  },
+  {
+    "id": "bento-roasted-nut-chocolate-praline",
+    "name": "Roasted Nut Chocolate Praline Bento Cake",
+    "baseName": "Roasted Nut Chocolate Praline Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/roasted-nut-chocolate-praline-bento-cake.jpeg",
+    "rating": 4.8,
+    "reviewCount": 24,
+    "badge": "Nutty Delight",
+    "description": "Moist chocolate cake layered with chocolate ganache piping, crunchy roasted praline nuts, and a mirror gold Happy Birthday disc.",
+    "minPrice": 520,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 520,
+        "originalPrice": 520
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-009"
+  },
+  {
+    "id": "bento-chocolate-strawberry-overload",
+    "name": "Chocolate Strawberry Overload Bento Cake",
+    "baseName": "Chocolate Strawberry Overload Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/chocolate-strawberry-overload-bento-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 40,
+    "badge": "Overload Special",
+    "description": "Festive celebration bento loaded with farm-fresh strawberries, mini chocolate bar, Oreo biscuit, marshmallow, and roasted peanuts.",
+    "minPrice": 560,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 560,
+        "originalPrice": 560
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-010"
+  },
+  {
+    "id": "bento-pink-ombre-butterfly-birthday",
+    "name": "Pink Ombre Butterfly Birthday Bento Cake",
+    "baseName": "Pink Ombre Butterfly Birthday Bento Cake",
+    "category": "bento-cake",
+    "subCategory": "Bento Cakes",
+    "categoryName": "Bento Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/BENTO CAKES/pink-ombre-butterfly-birthday-bento-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 36,
+    "badge": "Pastel Dream",
+    "description": "Dreamy pink and white ombre textured bento cake piped with Happy Birthday To Me lettering, sugar pearls, and golden-edged butterflies.",
+    "minPrice": 520,
+    "variants": [
+      {
+        "weight": "500g",
+        "price": 520,
+        "originalPrice": 520
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-BNT-011"
+  },
+  {
+    "id": "wedding-cascading-orchid-blue-ombre",
+    "name": "Cascading Orchid Blue Ombre Wedding Cake",
+    "baseName": "Cascading Orchid Blue Ombre Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/WEDDING CAKES/cascading-orchid-blue-ombre-wedding-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 48,
+    "badge": "Signature 2-Tier",
+    "description": "Breathtaking 2-tier wedding cake in sky blue to ivory ombre with cascading yellow jasmine orchids, blush pink peonies, and silhouette Mr & Mrs topper.",
+    "minPrice": 2599,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2599,
+        "originalPrice": 2599,
+        "offer": "Tier Cake Special"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-WED-001"
+  },
+  {
+    "id": "wedding-royal-blush-crown-2tier",
+    "name": "Royal Blush Crown 2-Tier Wedding Cake",
+    "baseName": "Royal Blush Crown 2-Tier Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/WEDDING CAKES/royal-blush-crown-2tier-wedding-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 52,
+    "badge": "Royal Masterpiece",
+    "description": "Majestic blush pink horizontal textured 2-tier wedding cake crowned with a royal rhinestone tiara, custom monogram crest, champagne roses, and edible pearls.",
+    "minPrice": 2899,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2899,
+        "originalPrice": 2899,
+        "offer": "Royal Monogram"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-WED-002"
+  },
+  {
+    "id": "wedding-golden-drip-rose-2tier",
+    "name": "Golden Drip Rose 2-Tier Wedding Cake",
+    "baseName": "Golden Drip Rose 2-Tier Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/WEDDING CAKES/golden-drip-rose-2tier-wedding-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 45,
+    "badge": "Grand Celebration",
+    "description": "Opulent 2-tier wedding cake featuring warm golden mango caramel drip, fresh scarlet red velvet roses, baby's breath, and gold Happy Married Life topper.",
+    "minPrice": 2699,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2699,
+        "originalPrice": 2699,
+        "offer": "Fresh Floral Special"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-WED-003"
+  },
+  {
+    "id": "wedding-pearl-pink-rose-elegance",
+    "name": "Pearl & Pink Rose Elegance Wedding Cake",
+    "baseName": "Pearl & Pink Rose Elegance Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/WEDDING CAKES/pearl-pink-rose-elegance-wedding-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 39,
+    "badge": "Classic Elegance",
+    "description": "Timeless pure white artisanal wedding cake decorated with cascading pastel pink roses, abundant baby's breath blossoms, and scattered edible white pearls.",
+    "minPrice": 1999,
+    "variants": [
+      {
+        "weight": "1.5kg Tall",
+        "price": 1999,
+        "originalPrice": 1999,
+        "offer": "Fresh Floral"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-WED-004"
+  },
+  {
+    "id": "wedding-peach-rose-silhouette",
+    "name": "Peach Rose Silhouette Wedding Cake",
+    "baseName": "Peach Rose Silhouette Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/WEDDING CAKES/peach-rose-silhouette-wedding-cake.jpeg",
+    "rating": 4.8,
+    "reviewCount": 34,
+    "badge": "Modern Romance",
+    "description": "Chic modern wedding cake adorned with fresh peach garden roses, starry baby's breath, metallic gold pearls, and romantic bride & groom silhouette.",
+    "minPrice": 2199,
+    "variants": [
+      {
+        "weight": "1.5kg Tall",
+        "price": 2199,
+        "originalPrice": 2199,
+        "offer": "Silhouette Topper"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-WED-005"
+  },
+  {
+    "id": "wedding-crimson-romance-fondant-2tier",
+    "name": "Crimson Romance Fondant 2-Tier Wedding Cake",
+    "baseName": "Crimson Romance Fondant 2-Tier Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/WEDDING CAKES/crimson-romance-fondant-2tier-wedding-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 56,
+    "badge": "Couture Design",
+    "description": "Showstopping 2-tier wedding cake showcasing a romantic couple portrait with dramatic 3D crimson red fondant ruffle gown, velvety red roses, and gold trim.",
+    "minPrice": 3199,
+    "variants": [
+      {
+        "weight": "2.5kg (2-Tier)",
+        "price": 3199,
+        "originalPrice": 3199,
+        "offer": "Couture Ruffle Art"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-WED-006"
+  },
+  {
+    "id": "wedding-lavender-romance-2tier",
+    "name": "Lavender Romance 2-Tier Wedding Cake",
+    "baseName": "Lavender Romance 2-Tier Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/WEDDING CAKES/lavender-romance-2tier-wedding-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 41,
+    "badge": "Pastel Romance",
+    "description": "Enchanting 2-tier wedding cake in soft lavender watercolor wash with glossy drip, silver leaf, fresh pink roses, and bride & groom portrait silhouette.",
+    "minPrice": 2799,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2799,
+        "originalPrice": 2799,
+        "offer": "Stage Ready Special"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-WED-007"
+  },
+  {
+    "id": "wedding-grand-floating-tier-luxury",
+    "name": "Grand Floating Tier Luxury Wedding Cake",
+    "baseName": "Grand Floating Tier Luxury Wedding Cake",
+    "category": "wedding-cakes",
+    "subCategory": "Wedding Cakes",
+    "categoryName": "Wedding Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/WEDDING CAKES/grand-floating-tier-luxury-wedding-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 60,
+    "badge": "Luxury Floating Tier",
+    "description": "Spectacular multi-tier showstopper featuring an illuminated acrylic floating spacer tier filled with gold and silver spheres, caramel drip, and fresh peach florals.",
+    "minPrice": 4499,
+    "variants": [
+      {
+        "weight": "3.5kg (Floating Tier)",
+        "price": 4499,
+        "originalPrice": 4499,
+        "offer": "Acrylic Spacer Included"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-WED-008"
+  },
+  {
+    "id": "bday-purple-butterfly-fairy-princess",
+    "name": "Purple Butterfly Fairy Princess 2-Tier Cake",
+    "baseName": "Purple Butterfly Fairy Princess 2-Tier Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/purple-butterfly-fairy-princess-birthday-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 44,
+    "badge": "Fairy Theme",
+    "description": "Magical 2-tier lavender birthday cake with 3D purple butterflies, metallic balloons, golden number 1, and adorable fairy princess topper.",
+    "minPrice": 2299,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2299,
+        "originalPrice": 2299,
+        "offer": "Topper Included"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-001"
+  },
+  {
+    "id": "bday-teddy-bear-toy-train-3tier",
+    "name": "Teddy Bear Toy Train 3-Tier 1st Birthday Cake",
+    "baseName": "Teddy Bear Toy Train 3-Tier 1st Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/teddy-bear-toy-train-3tier-1st-birthday-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 57,
+    "badge": "Grand 3-Tier",
+    "description": "Grand 3-tier baby blue milestone cake featuring handcrafted teddy bears, colorful toy train with cargo, fluffy fondant clouds, ladder, and golden crown number 1.",
+    "minPrice": 3499,
+    "variants": [
+      {
+        "weight": "3kg (3-Tier)",
+        "price": 3499,
+        "originalPrice": 3499,
+        "offer": "Full Toy Set"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-002"
+  },
+  {
+    "id": "bday-divine-peacock-vel-2tier",
+    "name": "Divine Peacock & Vel 2-Tier Birthday Cake",
+    "baseName": "Divine Peacock & Vel 2-Tier Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/divine-peacock-vel-2tier-birthday-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 49,
+    "badge": "Divine Traditional",
+    "description": "Traditional divine 2-tier milestone cake with sculpted peacock body and cascading emerald-gold tail feathers, golden Vel, and sacred Tamil alphabet lettering.",
+    "minPrice": 2699,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2699,
+        "originalPrice": 2699,
+        "offer": "Traditional Special"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-003"
+  },
+  {
+    "id": "bday-royal-prince-crown-3tier",
+    "name": "Royal Prince Crown 3-Tier Birthday Cake",
+    "baseName": "Royal Prince Crown 3-Tier Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/royal-prince-crown-3tier-birthday-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 53,
+    "badge": "Royal Prince",
+    "description": "Stately 3-tier royal blue and white striped birthday cake with baroque gold ornate crests, quilted pearl patterns, and a magnificent tall golden crown.",
+    "minPrice": 3399,
+    "variants": [
+      {
+        "weight": "3kg (3-Tier)",
+        "price": 3399,
+        "originalPrice": 3399,
+        "offer": "Royal Crown Included"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-004"
+  },
+  {
+    "id": "bday-jungle-safari-adventure-2tier",
+    "name": "Jungle Safari Adventure 2-Tier Birthday Cake",
+    "baseName": "Jungle Safari Adventure 2-Tier Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/jungle-safari-adventure-2tier-birthday-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 46,
+    "badge": "Safari Adventure",
+    "description": "Exciting 2-tier jungle theme birthday cake featuring an edible safari jeep with elephant & lion, climbing monkey, giraffe, and zebra figures.",
+    "minPrice": 2599,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2599,
+        "originalPrice": 2599,
+        "offer": "Complete Animal Set"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-005"
+  },
+  {
+    "id": "bday-baby-shark-underwater-floating-tier",
+    "name": "Baby Shark Underwater Floating Tier Birthday Cake",
+    "baseName": "Baby Shark Underwater Floating Tier Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/baby-shark-underwater-floating-tier-birthday-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 61,
+    "badge": "Underwater Shark",
+    "description": "Thrilling 3-tier Baby Shark celebration cake with clear LED-illuminated underwater spacer, edible octopus, scuba diver, and sandy ocean shore base.",
+    "minPrice": 3299,
+    "variants": [
+      {
+        "weight": "3kg (Floating Tier)",
+        "price": 3299,
+        "originalPrice": 3299,
+        "offer": "LED Spacer Included"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-006"
+  },
+  {
+    "id": "bday-cocomelon-adventure-2tier",
+    "name": "Cocomelon Adventure 2-Tier 1st Birthday Cake",
+    "baseName": "Cocomelon Adventure 2-Tier 1st Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/cocomelon-adventure-2tier-1st-birthday-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 55,
+    "badge": "Kids Favorite",
+    "description": "Delightful 2-tier Cocomelon celebration cake with JJ figurine, yellow school bus, bright rainbow arch, watermelon TV, and personalized name blocks.",
+    "minPrice": 2599,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2599,
+        "originalPrice": 2599,
+        "offer": "Cocomelon Figures"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-007"
+  },
+  {
+    "id": "bday-pastel-teddy-hot-air-balloon",
+    "name": "Pastel Teddy Hot Air Balloon Birthday Cake",
+    "baseName": "Pastel Teddy Hot Air Balloon Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/pastel-teddy-hot-air-balloon-birthday-cake.jpeg",
+    "rating": 4.8,
+    "reviewCount": 32,
+    "badge": "Pastel Cute",
+    "description": "Dreamy pastel milestone cake with cute fondant teddy bear riding a colorful hot air balloon among fluffy white clouds and gold stars.",
+    "minPrice": 1899,
+    "variants": [
+      {
+        "weight": "1.5kg Tall",
+        "price": 1899,
+        "originalPrice": 1899,
+        "offer": "Smash Cake Friendly"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-008"
+  },
+  {
+    "id": "bday-safari-wild-one-lion-2tier",
+    "name": "Safari Wild One Lion 2-Tier Birthday Cake",
+    "baseName": "Safari Wild One Lion 2-Tier Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/safari-wild-one-lion-2tier-birthday-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 47,
+    "badge": "Wild One Theme",
+    "description": "Vibrant 2-tier jungle cake in lush green gradients featuring a cheerful fondant lion cub, baby elephant, giraffe, zebra, and monstera leaves.",
+    "minPrice": 2599,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2599,
+        "originalPrice": 2599,
+        "offer": "Wild One Special"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-009"
+  },
+  {
+    "id": "bday-rainbow-doll-kitten-2tier",
+    "name": "Rainbow Doll & Kitten 2-Tier 1st Birthday Cake",
+    "baseName": "Rainbow Doll & Kitten 2-Tier 1st Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/rainbow-doll-kitten-2tier-1st-birthday-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 38,
+    "badge": "Princess Doll",
+    "description": "Sweet 2-tier white and gold birthday cake with a seated doll in a rainbow ruffle dress, cute kitty cat, colorful fondant balloons, and number 1.",
+    "minPrice": 2499,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2499,
+        "originalPrice": 2499,
+        "offer": "Handcrafted Dolls"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-010"
+  },
+  {
+    "id": "bday-boss-baby-gentleman-2tier",
+    "name": "Boss Baby Gentleman 2-Tier 1st Birthday Cake",
+    "baseName": "Boss Baby Gentleman 2-Tier 1st Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/boss-baby-gentleman-2tier-1st-birthday-cake.jpeg",
+    "rating": 4.8,
+    "reviewCount": 35,
+    "badge": "Boss Baby",
+    "description": "Stylish 2-tier Boss Baby celebration cake in baby blue and navy stripes with fondant necktie, suitcase, sunglasses, and golden number 1.",
+    "minPrice": 2499,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2499,
+        "originalPrice": 2499,
+        "offer": "Theme Accents"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-011"
+  },
+  {
+    "id": "bday-princess-castle-tiara-2tier",
+    "name": "Princess Castle Tiara 2-Tier Birthday Cake",
+    "baseName": "Princess Castle Tiara 2-Tier Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/princess-castle-tiara-2tier-birthday-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 42,
+    "badge": "Princess Royal",
+    "description": "Fairytale 2-tier pink and ivory princess cake with royal golden tiara, embossed castle walls, sugar blossoms, and gold bunting.",
+    "minPrice": 2699,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2699,
+        "originalPrice": 2699,
+        "offer": "Golden Tiara"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-012"
+  },
+  {
+    "id": "bday-twinkle-twinkle-little-star",
+    "name": "Twinkle Little Star Clouds 1st Birthday Cake",
+    "baseName": "Twinkle Little Star Clouds 1st Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/twinkle-twinkle-little-star-1st-birthday-cake.jpeg",
+    "rating": 4.8,
+    "reviewCount": 28,
+    "badge": "Smash Cake",
+    "description": "Gentle baby celebration cake with sleeping crescent moon, soft pastel clouds, shimmering gold stars, and milestone number 1.",
+    "minPrice": 1799,
+    "variants": [
+      {
+        "weight": "1.5kg",
+        "price": 1799,
+        "originalPrice": 1799,
+        "offer": "Low Sugar Friendly"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-013"
+  },
+  {
+    "id": "bday-golden-elephant-balloon-2tier",
+    "name": "Golden Elephant Balloon 2-Tier Birthday Cake",
+    "baseName": "Golden Elephant Balloon 2-Tier Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/golden-elephant-balloon-2tier-birthday-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 39,
+    "badge": "Cute Animal",
+    "description": "Adorable 2-tier milestone cake with sculpted baby elephant holding golden balloons, soft white clouds, and golden star accents.",
+    "minPrice": 2399,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2399,
+        "originalPrice": 2399,
+        "offer": "Elephant Topper"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-014"
+  },
+  {
+    "id": "bday-enchanted-butterfly-led-floating-tier",
+    "name": "Enchanted Butterfly LED Floating Tier Cake",
+    "baseName": "Enchanted Butterfly LED Floating Tier Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/enchanted-butterfly-led-floating-tier-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 50,
+    "badge": "LED Floating Tier",
+    "description": "Breathtaking 2-tier purple fairy celebration cake with illuminated LED transparent cylinder spacer, gold balloons, and flying butterflies.",
+    "minPrice": 3399,
+    "variants": [
+      {
+        "weight": "3kg (Floating Tier)",
+        "price": 3399,
+        "originalPrice": 3399,
+        "offer": "LED Spacer Included"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-015"
+  },
+  {
+    "id": "bday-birthday-queen-illuminated-floating-tier",
+    "name": "Birthday Queen Illuminated Floating Tier Cake",
+    "baseName": "Birthday Queen Illuminated Floating Tier Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/birthday-queen-illuminated-floating-tier-cake.jpeg",
+    "rating": 5,
+    "reviewCount": 48,
+    "badge": "Birthday Queen",
+    "description": "Opulent blush celebration cake with clear illuminated spacer tier filled with fairy lights, golden crown, chocolate bars, and gold fan.",
+    "minPrice": 3299,
+    "variants": [
+      {
+        "weight": "3kg (Floating Tier)",
+        "price": 3299,
+        "originalPrice": 3299,
+        "offer": "Fairy Lights Included"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-016"
+  },
+  {
+    "id": "bday-peppa-pig-sunny-garden-2tier",
+    "name": "Peppa Pig Sunny Garden 2-Tier Birthday Cake",
+    "baseName": "Peppa Pig Sunny Garden 2-Tier Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/peppa-pig-sunny-garden-2tier-birthday-cake.jpeg",
+    "rating": 4.8,
+    "reviewCount": 37,
+    "badge": "Kids Delight",
+    "description": "Joyful 2-tier kids cake with handcrafted Peppa Pig and George figures playing in a sunny green garden with rainbow and sunshine.",
+    "minPrice": 2499,
+    "variants": [
+      {
+        "weight": "2kg (2-Tier)",
+        "price": 2499,
+        "originalPrice": 2499,
+        "offer": "Peppa & George Figures"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-017"
+  },
+  {
+    "id": "bday-cute-dino-jurassic-adventure",
+    "name": "Cute Dino Jurassic Adventure Birthday Cake",
+    "baseName": "Cute Dino Jurassic Adventure Birthday Cake",
+    "category": "first-birthday",
+    "subCategory": "1st Birthday Cakes",
+    "categoryName": "1st Birthday Cakes",
+    "image": "/PRODUCT_IMAGES/cakes/1ST BIRTHDAY CAKES/cute-dino-jurassic-adventure-birthday-cake.jpeg",
+    "rating": 4.9,
+    "reviewCount": 31,
+    "badge": "Dino Adventure",
+    "description": "Playful pastel dinosaur birthday cake with baby T-Rex and Triceratops figures, green fondant foliage, volcanic rocks, and milestone number 1.",
+    "minPrice": 2199,
+    "variants": [
+      {
+        "weight": "1.5kg",
+        "price": 2199,
+        "originalPrice": 2199,
+        "offer": "Dino Figurines"
+      }
+    ],
+    "ingredients": [
+      "🌱 100% Freshly Baked",
+      "Custom Lettering & Toppers Included",
+      "Delivered Fresh Across Coimbatore"
+    ],
+    "egglessAvailable": true,
+    "productCode": "LLP-FBD-018"
+  }
+]
