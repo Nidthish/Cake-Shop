@@ -415,7 +415,7 @@ export default function CheckoutPage() {
                 <span>Cart</span>
               </Link>
               <span className="text-[#E6C184]">•</span>
-              <span className="text-[#1C0D0A]">Confirm Order &amp; Delivery</span>
+              <span className="text-[#1C0D0A]">Confirm Order & Delivery</span>
               <span className="text-[#E6C184]">•</span>
               <span className="text-[#9C8B84]">Confirmation</span>
             </div>
@@ -423,7 +423,7 @@ export default function CheckoutPage() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div>
                 <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#1C0D0A]">
-                  Order Confirmation &amp; Delivery
+                  Order Confirmation & Delivery
                 </h1>
                 <p className="text-xs text-[#5C524E] mt-1">
                   Quick 60-second checkout — no account creation required.
@@ -450,7 +450,7 @@ export default function CheckoutPage() {
                   </span>
                   <div>
                     <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
-                      Contact &amp; Delivery Address
+                      Contact & Delivery Address
                     </h2>
                     <p className="text-xs text-[#7A6B72]">
                       Where should our delivery team bring your fresh cake?
@@ -517,7 +517,7 @@ export default function CheckoutPage() {
                   {/* Email */}
                   <div>
                     <label htmlFor="email" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Email Address (for instant receipt &amp; order tracking) *
+                      Email Address (for instant receipt & order tracking) *
                     </label>
                     <input
                       id="email"
@@ -541,7 +541,7 @@ export default function CheckoutPage() {
                   {/* Street Address */}
                   <div>
                     <label htmlFor="street" className="text-xs font-bold uppercase tracking-wider text-[#5C524E]">
-                      Complete Street Address &amp; Door No. *
+                      Complete Street Address & Door No. *
                     </label>
                     <input
                       id="street"
@@ -781,7 +781,7 @@ export default function CheckoutPage() {
                   </span>
                   <div>
                     <h2 className="font-display font-bold text-lg text-[#1C0D0A]">
-                      Personalization &amp; Payment
+                      Personalization & Payment
                     </h2>
                     <p className="text-xs text-[#7A6B72]">
                       Add cake piping text and pick your payment method.
@@ -921,7 +921,7 @@ export default function CheckoutPage() {
                           </span>
                         </div>
                         <p className="text-xs text-[#7A6B72] leading-relaxed">
-                          Instant payment via Google Pay, PhonePe, UPI apps, Credit/Debit cards &amp; NetBanking.
+                          Instant payment via Google Pay, PhonePe, UPI apps, Credit/Debit cards & NetBanking.
                         </p>
                       </label>
                     </div>
@@ -1053,7 +1053,7 @@ export default function CheckoutPage() {
                     <span>Minimum Order ₹300 (Add ₹{minOrderDiff} more)</span>
                   ) : paymentOption === "COD" ? (
                     <>
-                      <span>Confirm &amp; Place Order (COD)</span>
+                      <span>Confirm & Place Order (COD)</span>
                       <span className="material-symbols-outlined text-base">check_circle</span>
                     </>
                   ) : (
@@ -1070,7 +1070,7 @@ export default function CheckoutPage() {
                     <span className="material-symbols-outlined text-sm text-[#802B52]">verified</span>
                     <span>Bakery Order Requirements:</span>
                   </div>
-                  <p>&bull; <strong>Minimum Order:</strong> ₹300 across all orders (COD &amp; GPay).</p>
+                  <p>&bull; <strong>Minimum Order:</strong> ₹300 across all orders (COD & GPay).</p>
                   <p>&bull; <strong>Cash on Delivery:</strong> Applicable for orders above ₹1,000.</p>
                   <p>&bull; <strong>GST:</strong> 2.5% CGST + 2.5% SGST applied to all types of payments.</p>
                 </div>
@@ -1079,11 +1079,11 @@ export default function CheckoutPage() {
                 <div className="space-y-2 pt-2 border-t border-[#E6C184]/20 text-[11px] text-[#7A6B72]">
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-base text-emerald-600">verified</span>
-                    <span>Instant PDF Invoice &amp; Handoff OTP via Email</span>
+                    <span>Instant PDF Invoice & Handoff OTP via Email</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-base text-[#802B52]">lock</span>
-                    <span>100% Secure Checkout &amp; Data Privacy</span>
+                    <span>100% Secure Checkout & Data Privacy</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-base text-amber-600">cookie</span>

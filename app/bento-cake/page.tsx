@@ -5,9 +5,28 @@ import CategoryPageClient from "@/components/products/CategoryPageClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Korean Bento Cakes - Lollipop Cake Shop",
+  title: "Bento Cakes in Trichy | Cute Korean Lunchbox Cakes | Lollipop Cake Shop",
   description:
-    "Korean minimalist bento box lunchbox cakes in cute pastel shades with custom piping.",
+    "Cute minimalist Korean lunchbox bento cakes piped with custom messages in Trichy from Lollipop Cake Shop.",
+  alternates: {
+    canonical: "https://lollipopcakeshop.in/bento-cake",
+  },
+  keywords: [
+    "bento cakes in Trichy",
+    "korean bento cake Trichy",
+    "mini lunchbox cake Trichy",
+    "cute bento cakes Trichy",
+    "custom message cake Trichy",
+    "Lollipop Cake Shop bento cake",
+  ],
+  openGraph: {
+    title: "Bento Cakes in Trichy | Cute Korean Lunchbox Cakes | Lollipop Cake Shop",
+    description:
+      "Cute minimalist Korean lunchbox bento cakes piped with custom messages in Trichy from Lollipop Cake Shop.",
+    url: "https://lollipopcakeshop.in/bento-cake",
+    siteName: "Lollipop Cake Shop",
+    type: "website",
+  },
 };
 
 const BENTO_PILLS = [

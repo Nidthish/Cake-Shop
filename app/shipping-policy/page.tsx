@@ -15,10 +15,10 @@ export default function ShippingPolicyPage() {
         {/* Header */}
         <div className="mb-10 pb-6 border-b border-[#E6C184]/40 text-center sm:text-left">
           <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#962854] block mb-2">
-            Logistics &amp; Fulfillment
+            Logistics & Fulfillment
           </span>
           <h1 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
-            Shipping &amp; Delivery Policy
+            Shipping & Delivery Policy
           </h1>
           <p className="text-xs sm:text-sm text-[#5C524E] mt-2">
             Last Updated: October 2024 • Operating merchant: Lollipop The Cake Shop, Tiruchirappalli, Tamil Nadu
@@ -30,7 +30,7 @@ export default function ShippingPolicyPage() {
           
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              1. Service Coverage &amp; Delivery Areas
+              1. Service Coverage & Delivery Areas
             </h2>
             <p className="mb-3">
               <strong>Lollipop The Cake Shop</strong> delivers fresh cakes, desserts, and confectionery items exclusively across <strong>Tiruchirappalli (Trichy), Tamil Nadu</strong> and its immediate urban surroundings.
@@ -47,7 +47,7 @@ export default function ShippingPolicyPage() {
               <span>• KK Nagar</span>
               <span>• Woraiyur</span>
               <span>• TVS Tollgate</span>
-              <span>• Kattur &amp; Thuvakudi</span>
+              <span>• Kattur & Thuvakudi</span>
               <span>• Palakkarai</span>
               <span>• Crawford</span>
               <span>• Golden Rock (Ponmalai)</span>
@@ -59,7 +59,7 @@ export default function ShippingPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              2. Delivery Slots &amp; Operating Schedule
+              2. Delivery Slots & Operating Schedule
             </h2>
             <p className="mb-4">
               We offer convenient delivery time slots 7 days a week (Monday through Sunday) from 9:00 AM to 9:00 PM:
@@ -103,14 +103,14 @@ export default function ShippingPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              3. Delivery Timelines &amp; Lead Times
+              3. Delivery Timelines & Lead Times
             </h2>
             <div className="space-y-3">
               <p>
                 <strong>Same-Day Orders:</strong> Standard catalogue cakes ordered for same-day delivery are baked fresh and dispatched within <strong>2 to 4 hours</strong> of payment confirmation, or during your chosen time slot.
               </p>
               <p>
-                <strong>Eggless &amp; Custom Artisan Cakes:</strong> To uphold our strict hygiene and flavor standards, 100% eggless cakes and intricate designer tier cakes require custom batter formulation and cooling time. Eggless cakes can be scheduled for next-day or chosen future dates.
+                <strong>Eggless & Custom Artisan Cakes:</strong> To uphold our strict hygiene and flavor standards, 100% eggless cakes and intricate designer tier cakes require custom batter formulation and cooling time. Eggless cakes can be scheduled for next-day or chosen future dates.
               </p>
               <p>
                 <strong>Future Scheduled Dates:</strong> You may pre-book your cake up to 30 days in advance via our interactive checkout calendar. Your cake will be baked on the morning of delivery to ensure peak freshness.
@@ -120,7 +120,7 @@ export default function ShippingPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              4. Shipping Rates &amp; Charges
+              4. Shipping Rates & Charges
             </h2>
             <p className="mb-3">
               Delivery charges are calculated manually based on distance and communicated transparently:
@@ -140,7 +140,7 @@ export default function ShippingPolicyPage() {
               <span className="material-symbols-outlined p-2 rounded-lg bg-[#FAF0F2] text-[#962854] text-xl mt-0.5">cake</span>
               <div>
                 <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-2">
-                  5. Perishable Cake Handling &amp; Safe Transit Protocol
+                  5. Perishable Cake Handling & Safe Transit Protocol
                 </h2>
                 <p className="text-[#962854] font-semibold mb-3">
                   Delivered with Specialized Care to Ensure Structural Integrity
@@ -167,7 +167,7 @@ export default function ShippingPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              6. Recipient Instructions &amp; Unsuccessful Delivery
+              6. Recipient Instructions & Unsuccessful Delivery
             </h2>
             <p className="mb-3">
               To guarantee seamless delivery, please ensure:
@@ -209,7 +209,7 @@ export default function ShippingPolicyPage() {
 
           <div className="pt-4 flex flex-wrap gap-4 text-xs">
             <Link href="/refund-policy" className="text-[#962854] font-semibold hover:underline">
-              ← View Refund &amp; Cancellation Policy
+              ← View Refund & Cancellation Policy
             </Link>
             <span className="text-[#D8C3B3]">•</span>
             <Link href="/contact-us" className="text-[#962854] font-semibold hover:underline">

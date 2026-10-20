@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getAuthenticatedAdmin } from "@/lib/auth";
+import { deleteFromR2, isR2Url } from "@/lib/r2";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -206,6 +207,18 @@ export async function PUT(
       }
     }
 
+    // If the image changed and previous image was on Cloudflare R2, delete the previous image
+    if (
+      cleanImageName &&
+      existingProduct.imageName &&
+      cleanImageName !== existingProduct.imageName &&
+      isR2Url(existingProduct.imageName)
+    ) {
+      deleteFromR2(existingProduct.imageName).catch((delErr) => {
+        console.warn("Notice: Failed to delete previous R2 image on product update:", delErr?.message);
+      });
+    }
+
     const effectiveCatSlug = (categorySlug || "").toLowerCase();
     const effectiveProductType = productType || existingProduct.productType;
     const isCake = !["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(effectiveCatSlug) && effectiveProductType === "CAKE";
@@ -321,6 +334,17 @@ export async function DELETE(
 
     const { id } = await context.params;
     const productId = BigInt(id);
+
+    // Fetch existing product to clean up Cloudflare R2 image if present
+    const existingProduct = await prisma.product.findUnique({
+      where: { id: productId },
+      select: { imageName: true },
+    });
+    if (existingProduct?.imageName && isR2Url(existingProduct.imageName)) {
+      deleteFromR2(existingProduct.imageName).catch((delErr) => {
+        console.warn("Notice: Failed to delete image from R2 on product deletion:", delErr?.message);
+      });
+    }
 
     // Delete associated offers, order items, and variants first (foreign key constraints)
     await prisma.productOffer.deleteMany({ where: { productId } });

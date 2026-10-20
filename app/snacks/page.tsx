@@ -5,9 +5,29 @@ import SnacksCatalogClient from "@/components/products/SnacksCatalogClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "French Pastries & Artisanal Snacks - Lollipop Cake Shop",
+  title: "Fresh Snacks & Pastries in Trichy | Lollipop Cake Shop",
   description:
-    "Explore fresh doughnuts, cupcakes, fudge brownies, cookies, puff pastries, buns, and breads.",
+    "Freshly baked puffs, rolls, brownies, cupcakes and savory snacks delivered daily in Trichy from Lollipop Cake Shop.",
+  alternates: {
+    canonical: "https://lollipopcakeshop.in/snacks",
+  },
+  keywords: [
+    "snacks in Trichy",
+    "fresh pastries Trichy",
+    "online snacks shop in Trichy",
+    "cupcakes Trichy",
+    "brownies Trichy",
+    "puff pastries Trichy",
+    "Lollipop Cake Shop snacks",
+  ],
+  openGraph: {
+    title: "Fresh Snacks & Pastries in Trichy | Lollipop Cake Shop",
+    description:
+      "Freshly baked puffs, rolls, brownies, cupcakes and savory snacks delivered daily in Trichy from Lollipop Cake Shop.",
+    url: "https://lollipopcakeshop.in/snacks",
+    siteName: "Lollipop Cake Shop",
+    type: "website",
+  },
 };
 
 export default async function Page() {
@@ -25,7 +45,7 @@ export default async function Page() {
             </span>
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">
-            French Pastries &amp; Artisanal Snacks
+            French Pastries & Artisanal Snacks
           </h1>
           <p className="text-base sm:text-lg text-[#4A3E39] mt-3 leading-relaxed font-sans font-normal">
             Dry cakes, doughnuts, cupcakes, brownies, cookies, savory puffs, buns, and fresh breads baked daily.

@@ -473,7 +473,7 @@ export default function FloatingActions() {
                     onClick={() => setCartOpen(false)}
                     className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#962854] to-[#2A082C] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md hover:shadow-lg transition-all active:scale-98"
                   >
-                    <span>View Full Cart &amp; Checkout</span>
+                    <span>View Full Cart & Checkout</span>
                     <span className="material-symbols-outlined text-sm">arrow_forward</span>
                   </Link>
                 </div>
@@ -520,7 +520,7 @@ export default function FloatingActions() {
         <div className="relative group flex items-center justify-center">
           {/* Subtle Hover Tooltip on Desktop */}
           <span className="hidden md:block absolute right-[calc(100%+14px)] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap bg-[#1C0D0A]/95 text-white text-xs font-bold py-1.5 px-3 rounded-full shadow-lg border border-[#E6C184]/40 z-30">
-            Chat &amp; Order
+            Chat & Order
           </span>
 
           {/* WhatsApp Contacts Popup */}
@@ -536,7 +536,7 @@ export default function FloatingActions() {
               <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#F1E6DF]">
                 <h4 className="font-display font-bold text-xs text-[#1C0D0A] flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-emerald-600 text-sm">chat</span>{" "}
-                  WhatsApp &amp; Mobile Support
+                  WhatsApp & Mobile Support
                 </h4>
                 <button
                   onClick={() => setWaOpen(false)}

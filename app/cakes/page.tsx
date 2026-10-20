@@ -5,9 +5,32 @@ import CakesCatalogClient from "@/components/products/CakesCatalogClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "All Eggless Cakes — Lollipop Cake Shop",
+  title: "Fresh Cakes in Trichy | Birthday & Celebration Cakes | Lollipop Cake Shop",
   description:
-    "Browse all handcrafted 100% eggless signature cakes. Normal Flavors, Choco Cakes, Delight Cakes, Rich Special, Premium, Fruit Cakes & Extreme Combos. Order 1 day prior for eggless.",
+    "Order fresh handcrafted celebration and birthday cakes online in Trichy from Lollipop Cake Shop. 100% fresh, eggless options, fast delivery.",
+  alternates: {
+    canonical: "https://lollipopcakeshop.in/cakes",
+  },
+  keywords: [
+    "fresh cakes in Trichy",
+    "birthday cakes Trichy",
+    "eggless cakes Trichy",
+    "chocolate cake Trichy",
+    "cake delivery in Trichy",
+    "Lollipop Cake Shop",
+    "Lollipop cakes Trichy",
+    "online cake shop in Trichy",
+    "best cake shop in Trichy",
+    "cake offers in Trichy",
+  ],
+  openGraph: {
+    title: "Fresh Cakes in Trichy | Birthday & Celebration Cakes | Lollipop Cake Shop",
+    description:
+      "Order fresh handcrafted celebration and birthday cakes online in Trichy from Lollipop Cake Shop. 100% fresh, eggless options, fast delivery.",
+    url: "https://lollipopcakeshop.in/cakes",
+    siteName: "Lollipop Cake Shop",
+    type: "website",
+  },
 };
 
 export default async function Page() {

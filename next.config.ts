@@ -12,6 +12,30 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async redirects() {
+    return [
+      {
+        source: "/wedding",
+        destination: "/wedding-cakes",
+        permanent: true,
+      },
+      {
+        source: "/1st-birthday",
+        destination: "/first-birthday",
+        permanent: true,
+      },
+      {
+        source: "/contact",
+        destination: "/contact-us",
+        permanent: true,
+      },
+      {
+        source: "/offers",
+        destination: "/cakes",
+        permanent: false,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sortVariantsAscending } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -47,16 +48,18 @@ export async function GET() {
 
       const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
 
-      const variants = p.variants.map((v: any) => {
-        const hasOffer = p.offers.some((o: any) => o.buyVariantId === v.id);
-        return {
-          weight: v.name,
-          price: Number(v.price),
-          originalPrice: Number(v.price),
-          offer: isCakeCategory ? ((v as any).offer || (hasOffer ? (p.badge || "Buy 1kg Get 1/2kg Free (Offer)") : undefined)) : undefined,
-          isEggless: v.isEggless,
-        };
-      });
+      const variants = sortVariantsAscending(
+        p.variants.map((v: any) => {
+          const hasOffer = p.offers.some((o: any) => o.buyVariantId === v.id);
+          return {
+            weight: v.name,
+            price: Number(v.price),
+            originalPrice: Number(v.price),
+            offer: isCakeCategory ? ((v as any).offer || (hasOffer ? (p.badge || "Buy 1kg Get 1/2kg Free (Offer)") : undefined)) : undefined,
+            isEggless: v.isEggless,
+          };
+        })
+      );
 
       const minPrice = variants.length > 0 ? Math.min(...variants.map((v: any) => v.price)) : 0;
       const hasEgglessVariant = p.variants.some((v: any) => v.isEggless);

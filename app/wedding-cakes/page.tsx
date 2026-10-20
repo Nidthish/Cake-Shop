@@ -6,8 +6,29 @@ import CategoryPageClient from "@/components/products/CategoryPageClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Wedding Cake Masterpieces",
-  description: "Elegant, multi-tier wedding cake masterpieces crafted for your most important day.",
+  title: "Wedding Cakes in Trichy | Elegant Tiered Marriage Cakes | Lollipop Cake Shop",
+  description:
+    "Magnificent tiered wedding and reception cakes delivered across Trichy by Lollipop Cake Shop.",
+  alternates: {
+    canonical: "https://lollipopcakeshop.in/wedding-cakes",
+  },
+  keywords: [
+    "wedding cakes in Trichy",
+    "marriage cake Trichy",
+    "reception cake Trichy",
+    "tiered wedding cakes Trichy",
+    "floating tier wedding cake Trichy",
+    "luxury wedding cake Trichy",
+    "Lollipop Cake Shop wedding cakes",
+  ],
+  openGraph: {
+    title: "Wedding Cakes in Trichy | Elegant Tiered Marriage Cakes | Lollipop Cake Shop",
+    description:
+      "Magnificent tiered wedding and reception cakes delivered across Trichy by Lollipop Cake Shop.",
+    url: "https://lollipopcakeshop.in/wedding-cakes",
+    siteName: "Lollipop Cake Shop",
+    type: "website",
+  },
 };
 
 const WEDDING_PILLS = [

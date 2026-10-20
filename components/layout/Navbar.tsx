@@ -285,7 +285,7 @@ export default function Navbar() {
             <div className="mt-4 max-h-80 overflow-y-auto space-y-2">
               {query.trim().length < 2 ? (
                 <p className="text-xs text-[#5C524E] text-center py-6 font-medium">
-                  Start typing to search delicious cakes &amp; treats...
+                  Start typing to search delicious cakes & treats...
                 </p>
               ) : results.length === 0 ? (
                 <p className="text-xs text-[#5C524E] text-center py-6 font-medium">

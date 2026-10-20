@@ -5,9 +5,28 @@ import CategoryPageClient from "@/components/products/CategoryPageClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "1st Birthday Milestone Cakes - Lollipop Cake Shop",
+  title: "1st Birthday Cakes in Trichy | First Birthday Theme Cakes | Lollipop Cake Shop",
   description:
-    "Baby-friendly low-sugar smash cakes, 2-tier safari themes, and princess crown milestone cakes.",
+    "Celebrate your little one's special milestone with handcrafted 1st birthday theme cakes from Lollipop Cake Shop in Trichy.",
+  alternates: {
+    canonical: "https://lollipopcakeshop.in/first-birthday",
+  },
+  keywords: [
+    "1st birthday cakes in Trichy",
+    "first birthday cake Trichy",
+    "baby smash cake Trichy",
+    "safari birthday cake Trichy",
+    "princess crown cake Trichy",
+    "Lollipop Cake Shop birthday cakes",
+  ],
+  openGraph: {
+    title: "1st Birthday Cakes in Trichy | First Birthday Theme Cakes | Lollipop Cake Shop",
+    description:
+      "Celebrate your little one's special milestone with handcrafted 1st birthday theme cakes from Lollipop Cake Shop in Trichy.",
+    url: "https://lollipopcakeshop.in/first-birthday",
+    siteName: "Lollipop Cake Shop",
+    type: "website",
+  },
 };
 
 const BIRTHDAY_PILLS = [
@@ -29,7 +48,7 @@ export default async function Page() {
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF0F2] border border-[#962854]/30 mb-3 font-sans">
             <span className="w-2 h-2 rounded-full bg-[#962854]" />
             <span className="text-xs font-bold text-[#962854] uppercase tracking-wider">
-              Gentle &amp; Low-Sugar Baby Friendly
+              Gentle & Low-Sugar Baby Friendly
             </span>
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">

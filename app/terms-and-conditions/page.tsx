@@ -15,10 +15,10 @@ export default function TermsAndConditionsPage() {
         {/* Header */}
         <div className="mb-10 pb-6 border-b border-[#E6C184]/40 text-center sm:text-left">
           <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#962854] block mb-2">
-            Legal &amp; Compliance
+            Legal & Compliance
           </span>
           <h1 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
-            Terms &amp; Conditions
+            Terms & Conditions
           </h1>
           <p className="text-xs sm:text-sm text-[#5C524E] mt-2">
             Last Updated: October 2024 • Governing entity: Lollipop The Cake Shop, Tiruchirappalli, Tamil Nadu
@@ -30,7 +30,7 @@ export default function TermsAndConditionsPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              1. Introduction &amp; Acceptance of Terms
+              1. Introduction & Acceptance of Terms
             </h2>
             <p className="mb-3">
               Welcome to <strong>Lollipop The Cake Shop</strong> (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;). These Terms and Conditions govern your access to and use of our website, digital storefront, and online cake ordering services.
@@ -42,7 +42,7 @@ export default function TermsAndConditionsPage() {
               </Link>
               , and our{" "}
               <Link href="/refund-policy" className="text-[#962854] font-semibold underline hover:text-[#7A1E43]">
-                Refund &amp; Cancellation Policy
+                Refund & Cancellation Policy
               </Link>
               . If you do not agree to these terms, please do not use our services.
             </p>
@@ -50,7 +50,7 @@ export default function TermsAndConditionsPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              2. Business Information &amp; Operational Jurisdiction
+              2. Business Information & Operational Jurisdiction
             </h2>
             <p className="mb-3">
               Our business operations and physical retail bakeries are headquartered in Tiruchirappalli (Trichy), Tamil Nadu:
@@ -67,7 +67,7 @@ export default function TermsAndConditionsPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              3. Products, Pricing &amp; Perishable Goods Disclaimer
+              3. Products, Pricing & Perishable Goods Disclaimer
             </h2>
             <div className="space-y-3">
               <p>
@@ -77,14 +77,14 @@ export default function TermsAndConditionsPage() {
                 <strong>Handcrafted Variation:</strong> Because each cake is handcrafted by our master bakers, slight artistic variations in color shades, piping patterns, and edible floral arrangements compared to catalogue photographs may occur.
               </p>
               <p>
-                <strong>Pricing &amp; Currency:</strong> All prices listed on our website are in Indian National Rupees (INR ₹) and are inclusive of applicable taxes unless stated otherwise. Delivery fees and eggless customization charges, if applicable, are clearly summarized before checkout.
+                <strong>Pricing & Currency:</strong> All prices listed on our website are in Indian National Rupees (INR ₹) and are inclusive of applicable taxes unless stated otherwise. Delivery fees and eggless customization charges, if applicable, are clearly summarized before checkout.
               </p>
             </div>
           </section>
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              4. Payment Terms &amp; Razorpay Gateway Security
+              4. Payment Terms & Razorpay Gateway Security
             </h2>
             <div className="space-y-3">
               <p>
@@ -107,7 +107,7 @@ export default function TermsAndConditionsPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              5. Order Confirmation &amp; Fulfillment
+              5. Order Confirmation & Fulfillment
             </h2>
             <p className="mb-3">
               An order is deemed confirmed only once successful payment authorization is verified by Razorpay and an automated order confirmation is generated.
@@ -119,12 +119,12 @@ export default function TermsAndConditionsPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              6. Cancellation &amp; Refund Policy Summary
+              6. Cancellation & Refund Policy Summary
             </h2>
             <p className="mb-3">
               Our comprehensive refund and return terms are detailed on our{" "}
               <Link href="/refund-policy" className="text-[#962854] font-semibold underline hover:text-[#7A1E43]">
-                Refund &amp; Cancellation Policy page
+                Refund & Cancellation Policy page
               </Link>
               . Key terms include:
             </p>
@@ -133,7 +133,7 @@ export default function TermsAndConditionsPage() {
                 <strong>Standard Cakes:</strong> Free cancellation up to 4 hours before the scheduled delivery slot for a 100% full refund.
               </li>
               <li>
-                <strong>Custom &amp; 3D Wedding Cakes:</strong> Free cancellation up to 24 hours prior to delivery due to specialized raw material procurement and sculpting.
+                <strong>Custom & 3D Wedding Cakes:</strong> Free cancellation up to 24 hours prior to delivery due to specialized raw material procurement and sculpting.
               </li>
               <li>
                 <strong>Refund Timelines:</strong> Approved refunds are credited back to the original payment source via Razorpay within <strong>5 to 7 business days</strong>.
@@ -143,7 +143,7 @@ export default function TermsAndConditionsPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              7. Dietary Preferences &amp; Allergen Advisory
+              7. Dietary Preferences & Allergen Advisory
             </h2>
             <p className="mb-3">
               We offer both regular and 100% pure vegetarian (eggless) variants across our cake catalogue. Please select your egg preference during order placement.
@@ -155,7 +155,7 @@ export default function TermsAndConditionsPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              8. Governing Law &amp; Dispute Resolution
+              8. Governing Law & Dispute Resolution
             </h2>
             <p>
               These Terms and Conditions shall be governed by and construed in accordance with the laws of India. Any disputes arising out of or related to our website, online orders, or payment transactions shall be subject to the exclusive jurisdiction of the competent courts in <strong>Tiruchirappalli (Trichy), Tamil Nadu, India</strong>.
@@ -164,7 +164,7 @@ export default function TermsAndConditionsPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              9. Customer Support &amp; Grievances
+              9. Customer Support & Grievances
             </h2>
             <p className="mb-3">
               For any questions regarding these Terms, your orders, or payment inquiries, please reach out to our customer care team:

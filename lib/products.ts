@@ -1,8 +1,66 @@
-import type { Product } from "@/types";
+import type { Product, ProductVariant } from "@/types";
 import rawProducts from "./products-data.json";
 
+/**
+ * Parses any weight string into a numeric value in kilograms (kg) for accurate sorting.
+ * E.g. "0.5kg" -> 0.5, "500g" -> 0.5, "1kg" -> 1.0, "1.5kg" -> 1.5, "2kg" -> 2.0
+ */
+export function parseWeightToKg(weightStr: string | null | undefined): number {
+  if (!weightStr) return 999;
+  const str = String(weightStr).toLowerCase().trim();
+
+  // Fraction & text keywords
+  if (str.includes("1/2") || str.includes("half")) return 0.5;
+  if (str.includes("1/4") || str.includes("quarter")) return 0.25;
+  if (str.includes("3/4")) return 0.75;
+
+  // Gram units (500g, 350g, 250gm, etc.)
+  const gramMatch = str.match(/([\d.]+)\s*(g|gm|grm|gram|grams)\b/i);
+  if (gramMatch) {
+    const val = parseFloat(gramMatch[1]);
+    if (!isNaN(val)) return val / 1000;
+  }
+
+  // Kilogram units (0.5kg, 1kg, 1.5kg, 2kg (2-Tier), etc.)
+  const kgMatch = str.match(/([\d.]+)\s*(kg|kilo|kilogram|kilograms)?/i);
+  if (kgMatch) {
+    const val = parseFloat(kgMatch[1]);
+    if (!isNaN(val)) return val;
+  }
+
+  // Generic numeric fallback
+  const numMatch = str.match(/([\d.]+)/);
+  if (numMatch) {
+    const val = parseFloat(numMatch[1]);
+    if (!isNaN(val)) return val;
+  }
+
+  return 999;
+}
+
+/**
+ * Sorts product variants in strict ascending order by weight:
+ * 0.5kg first, then 1kg, then 1.5kg, then 2kg, etc.
+ */
+export function sortVariantsAscending<T extends { weight?: string; name?: string; price?: number } | ProductVariant>(
+  variants: T[]
+): T[] {
+  if (!Array.isArray(variants)) return [];
+  return [...variants].sort((a: any, b: any) => {
+    const weightA = parseWeightToKg(a?.weight || a?.name);
+    const weightB = parseWeightToKg(b?.weight || b?.name);
+    if (weightA !== weightB) {
+      return weightA - weightB;
+    }
+    return Number(a?.price || 0) - Number(b?.price || 0);
+  });
+}
+
 // The full 133-item catalog backup
-export const PRODUCTS_DATA: Product[] = rawProducts as Product[];
+export const PRODUCTS_DATA: Product[] = (rawProducts as Product[]).map((p) => ({
+  ...p,
+  variants: sortVariantsAscending<ProductVariant>(p.variants || []),
+}));
 
 export function normalizeProductImage(rawImage: string | null | undefined, name?: string): string {
   const clean = (rawImage || "").trim();
@@ -119,14 +177,16 @@ export async function getDbProducts(): Promise<Product[]> {
           const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
 
           const variantsList = Array.isArray(p.variants) ? p.variants : [];
-          const mappedVariants = variantsList.map((v: any) => ({
-            weight: v.name,
-            price: Number(v.price),
-            originalPrice: Number(v.price),
-            // Offer is strictly for cakes only
-            offer: isCakeCategory ? (v.offer || ((p.badge || "").includes("1kg Free") ? "Buy 1kg Get 1/2kg Free (Offer)" : undefined)) : undefined,
-            isEggless: Boolean(v.is_eggless),
-          }));
+          const mappedVariants: ProductVariant[] = sortVariantsAscending<ProductVariant>(
+            variantsList.map((v: any) => ({
+              weight: v.name,
+              price: Number(v.price),
+              originalPrice: Number(v.price),
+              // Offer is strictly for cakes only
+              offer: isCakeCategory ? (v.offer || ((p.badge || "").includes("1kg Free") ? "Buy 1kg Get 1/2kg Free (Offer)" : undefined)) : undefined,
+              isEggless: Boolean(v.is_eggless),
+            }))
+          );
 
           const minPrice = mappedVariants.length > 0 ? Math.min(...mappedVariants.map((v: any) => v.price)) : 0;
           const hasEggless = isCakeCategory && mappedVariants.some((v: any) => v.isEggless);
@@ -224,11 +284,13 @@ export async function getDbProducts(): Promise<Product[]> {
         const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
         const hasEgglessVariant = isCakeCategory && p.variants.some((v: any) => v.isEggless);
 
-        // Filter offers for cakes only
-        const cakeVariants = variants.map((v: any) => ({
-          ...v,
-          offer: isCakeCategory ? v.offer : undefined,
-        }));
+        // Filter offers for cakes only and sort ascending by weight
+        const cakeVariants: ProductVariant[] = sortVariantsAscending<ProductVariant>(
+          variants.map((v: any) => ({
+            ...v,
+            offer: isCakeCategory ? v.offer : undefined,
+          }))
+        );
 
         let egglessAvail: boolean;
         if ((p as any).egglessAvailable !== null && (p as any).egglessAvailable !== undefined) {

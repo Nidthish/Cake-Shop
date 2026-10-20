@@ -2,10 +2,17 @@ import type { Metadata } from "next";
 import CustomCakeClient from "@/components/custom-cake/CustomCakeClient";
 
 export const metadata: Metadata = {
-  title: "Custom Cakes in Trichy — Bespoke 1st Birthday & Luxury Wedding Cakes",
+  title: "Customized Cakes in Trichy | Photo & Designer Cakes | Lollipop Cake Shop",
   description:
-    "Explore Trichy's finest handcrafted custom cake showcase by Lollipop Cake Studio. Bespoke 1st birthday milestone cakes, luxury multi-tiered wedding centerpieces, and architectural floating tier cakes. Personal chef consultation on WhatsApp.",
+    "Order custom designed, photo and theme cakes handcrafted for your special celebration in Trichy by Lollipop Cake Shop.",
+  alternates: {
+    canonical: "https://lollipopcakeshop.in/custom-cake",
+  },
   keywords: [
+    "customized cakes in Trichy",
+    "photo cake Trichy",
+    "theme cakes Trichy",
+    "designer cakes Trichy",
     "custom cakes trichy",
     "bespoke wedding cakes trichy",
     "1st birthday cake trichy",
@@ -15,9 +22,12 @@ export const metadata: Metadata = {
     "multi tier wedding cake trichy",
   ],
   openGraph: {
-    title: "Custom Cake Portfolio | Lollipop Cake Studio Trichy",
+    title: "Customized Cakes in Trichy | Photo & Designer Cakes | Lollipop Cake Shop",
     description:
-      "A curated lookbook of handcrafted 1st birthday milestones and luxury wedding centerpieces. Delivered across Tiruchirappalli.",
+      "Order custom designed, photo and theme cakes handcrafted for your special celebration in Trichy by Lollipop Cake Shop.",
+    url: "https://lollipopcakeshop.in/custom-cake",
+    siteName: "Lollipop Cake Shop",
+    type: "website",
   },
 };
 

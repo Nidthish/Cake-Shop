@@ -909,12 +909,24 @@ export default function AdminPage() {
 
       let finalImage = image || (editingProduct ? editingProduct.image : undefined);
 
-      // Upload to server storage in PRODUCT_IMAGES if a new file was chosen
+      // Upload to server storage in PRODUCT_IMAGES / Cloudflare R2 if a new file was chosen
       if (selectedFile) {
         try {
           const formData = new FormData();
           formData.append("file", selectedFile);
           formData.append("category", categorySlug);
+
+          // Pass previous image URL and product ID so previous R2 image is deleted upon replacement
+          if (editingProduct) {
+            const prevImg = editingProduct.imageName || editingProduct.image;
+            if (prevImg) {
+              formData.append("previousImageUrl", prevImg);
+            }
+            if (editingProduct.id) {
+              formData.append("productId", String(editingProduct.id));
+            }
+          }
+
           const uploadRes = await fetch("/api/admin/upload", {
             method: "POST",
             body: formData,

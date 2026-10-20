@@ -62,7 +62,7 @@ export default function ContactUsPage() {
                   Lollipop The Cake Shop
                 </h2>
                 <p className="text-xs text-[#5C524E] mt-1">
-                  Artisanal Cakes, French Pastries &amp; Confectionery • Operating since 2019
+                  Artisanal Cakes, French Pastries & Confectionery • Operating since 2019
                 </p>
               </div>
 
@@ -70,7 +70,7 @@ export default function ContactUsPage() {
                 <div className="flex items-start gap-3">
                   <span className="material-symbols-outlined text-[#962854] text-lg mt-0.5">location_on</span>
                   <div>
-                    <strong className="text-[#1C0D0A] block text-xs">Registered &amp; Operating Headquarters:</strong>
+                    <strong className="text-[#1C0D0A] block text-xs">Registered & Operating Headquarters:</strong>
                     <p className="text-xs text-[#5C524E]">
                       150, N Andar St, Tiruchirappalli, Tamil Nadu 620002, India
                     </p>
@@ -149,7 +149,7 @@ export default function ContactUsPage() {
 
             {/* Grievance Redressal Box */}
             <div className="bg-[#FAF3EC] rounded-2xl p-5 border border-[#E6C184]/40 text-xs space-y-2">
-              <strong className="text-[#1C0D0A] block">Grievance &amp; Compliance Escalation</strong>
+              <strong className="text-[#1C0D0A] block">Grievance & Compliance Escalation</strong>
               <p className="text-[#5C524E]">
                 If your payment or order issue is unresolved after contacting helpline, write directly to:
               </p>
@@ -158,7 +158,7 @@ export default function ContactUsPage() {
                 Email: <a href="mailto:trichylollipop@gmail.com" className="text-[#962854] underline">trichylollipop@gmail.com</a>
               </p>
               <p className="text-[11px] text-[#7A6B63]">
-                Acknowledged within 24–48 working hours under IT Act &amp; RBI compliance guidelines.
+                Acknowledged within 24–48 working hours under IT Act & RBI compliance guidelines.
               </p>
             </div>
 
@@ -247,7 +247,7 @@ export default function ContactUsPage() {
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                         className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-[#D8C3B3] focus:outline-none focus:border-[#962854] focus:ring-1 focus:ring-[#962854] bg-white"
                       >
-                        <option value="Order Inquiry">Order Status &amp; Tracking</option>
+                        <option value="Order Inquiry">Order Status & Tracking</option>
                         <option value="Custom Cake Quote">Custom / Wedding Cake Quote</option>
                         <option value="Razorpay Payment Assistance">Razorpay Payment / Debited Issue</option>
                         <option value="Refund & Cancellation">Refund or Cancellation Request</option>
@@ -292,18 +292,18 @@ export default function ContactUsPage() {
 
             {/* Quick Policies Navigation Links */}
             <div className="mt-6 p-4 rounded-2xl bg-white border border-[#F1E6DF] flex flex-wrap items-center justify-between gap-3 text-xs">
-              <span className="font-semibold text-[#1C0D0A]">Compliance &amp; Support Policies:</span>
+              <span className="font-semibold text-[#1C0D0A]">Compliance & Support Policies:</span>
               <div className="flex flex-wrap gap-3">
                 <Link href="/terms-and-conditions" className="text-[#962854] hover:underline font-medium">
-                  Terms &amp; Conditions
+                  Terms & Conditions
                 </Link>
                 <span className="text-[#D8C3B3]">•</span>
                 <Link href="/refund-policy" className="text-[#962854] hover:underline font-medium">
-                  Refund &amp; Cancellation
+                  Refund & Cancellation
                 </Link>
                 <span className="text-[#D8C3B3]">•</span>
                 <Link href="/shipping-policy" className="text-[#962854] hover:underline font-medium">
-                  Shipping &amp; Delivery
+                  Shipping & Delivery
                 </Link>
               </div>
             </div>

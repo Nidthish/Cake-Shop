@@ -238,7 +238,7 @@ export default function DryCakesCatalogClient({
             </span>
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">
-            Rich &amp; Artisanal Dry Cakes
+            Rich & Artisanal Dry Cakes
           </h1>
           <p className="text-base sm:text-lg text-[#4A3E39] mt-3 leading-relaxed font-normal">
             Delicious plum cakes, moist banana loafs, tea cakes, walnut cakes, and

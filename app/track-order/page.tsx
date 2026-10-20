@@ -94,7 +94,7 @@ function TrackOrderContent() {
         {/* Header Hero */}
         <div className="text-center space-y-3">
           <div className="inline-block bg-[#802B52]/10 text-[#802B52] border border-[#802B52]/20 font-mono text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest">
-            Live Order Status &amp; Tracking
+            Live Order Status & Tracking
           </div>
           <h1 className="font-display font-bold text-3xl sm:text-4xl text-[#1C0D0A]">
             Track Your Cake Order Status

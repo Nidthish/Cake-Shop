@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import type { Product } from "@/types";
 import { useCart } from "@/components/cart/CartProvider";
 
-import { is1kgFreeOfferVariant } from "@/lib/products";
+import { is1kgFreeOfferVariant, sortVariantsAscending } from "@/lib/products";
 import { getProductCardImage, getDummyFallbackImage } from "@/lib/dummy-images";
 
 export default function CakeCardInteractive({
@@ -23,7 +23,7 @@ export default function CakeCardInteractive({
   );
   const [isAdded, setIsAdded] = useState(false);
 
-  const variants =
+  const rawVariants =
     product.variants && product.variants.length > 0
       ? product.variants
       : [
@@ -34,20 +34,10 @@ export default function CakeCardInteractive({
             offer: "",
           },
         ];
+  const variants = sortVariantsAscending(rawVariants);
 
   const [selectedWeightIdx, setSelectedWeightIdx] = useState(() => {
-    const vars =
-      product.variants && product.variants.length > 0
-        ? product.variants
-        : [
-            {
-              weight: "0.5kg",
-              price: product.minPrice || 370,
-              originalPrice: product.originalPrice,
-              offer: "",
-            },
-          ];
-    const halfKgIdx = vars.findIndex(
+    const halfKgIdx = variants.findIndex(
       (v) =>
         v.weight.toLowerCase().includes("0.5") ||
         v.weight.toLowerCase().includes("500") ||

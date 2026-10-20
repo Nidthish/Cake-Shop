@@ -15,10 +15,10 @@ export default function RefundPolicyPage() {
         {/* Header */}
         <div className="mb-10 pb-6 border-b border-[#E6C184]/40 text-center sm:text-left">
           <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#962854] block mb-2">
-            Customer Assurance &amp; Policies
+            Customer Assurance & Policies
           </span>
           <h1 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
-            Refund &amp; Cancellation Policy
+            Refund & Cancellation Policy
           </h1>
           <p className="text-xs sm:text-sm text-[#5C524E] mt-2">
             Last Updated: October 2024 • Governing merchant: Lollipop The Cake Shop, Tiruchirappalli, Tamil Nadu
@@ -50,7 +50,7 @@ export default function RefundPolicyPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="p-4 rounded-xl bg-[#FAF0F2] border border-[#962854]/20">
-                <span className="font-bold text-[#962854] block mb-1">Standard Fresh &amp; Bento Cakes</span>
+                <span className="font-bold text-[#962854] block mb-1">Standard Fresh & Bento Cakes</span>
                 <p className="text-xs text-[#5C524E] mb-2">
                   (Signature cakes, Korean bento, pastries, snack boxes)
                 </p>
@@ -61,7 +61,7 @@ export default function RefundPolicyPage() {
               </div>
 
               <div className="p-4 rounded-xl bg-[#FAF3EC] border border-[#E6C184]/40">
-                <span className="font-bold text-[#1C0D0A] block mb-1">Customised, 3D &amp; Wedding Cakes</span>
+                <span className="font-bold text-[#1C0D0A] block mb-1">Customised, 3D & Wedding Cakes</span>
                 <p className="text-xs text-[#5C524E] mb-2">
                   (Bespoke studio orders, multi-tier wedding cakes, fondant figures)
                 </p>
@@ -79,7 +79,7 @@ export default function RefundPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              3. Perishable Goods &amp; Physical Return Policy
+              3. Perishable Goods & Physical Return Policy
             </h2>
             <div className="space-y-3">
               <p>
@@ -128,7 +128,7 @@ export default function RefundPolicyPage() {
               <span className="material-symbols-outlined p-2 rounded-lg bg-[#FAF0F2] text-[#962854] text-xl mt-0.5">credit_card</span>
               <div>
                 <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-1">
-                  5. Refund Mode &amp; Razorpay Processing Timelines
+                  5. Refund Mode & Razorpay Processing Timelines
                 </h2>
                 <p className="text-[#962854] font-semibold text-xs mb-3">
                   Official Payment Gateway Settlement Timeline
@@ -151,7 +151,7 @@ export default function RefundPolicyPage() {
                   <strong>Timeline for Amount to Reflect:</strong>
                   <div className="mt-2 bg-[#FAF3EC] p-3 rounded-lg border border-[#E6C184]/40 space-y-1 text-xs">
                     <p>• <strong>UPI (GPay, PhonePe, Paytm, BHIM):</strong> Typically credited within <strong>24 to 48 hours</strong>.</p>
-                    <p>• <strong>Credit / Debit Cards &amp; Net Banking:</strong> Reflected in customer bank statement within <strong>5 to 7 business days</strong> (excluding bank holidays and weekends), depending on the issuing bank&rsquo;s clearance cycles.</p>
+                    <p>• <strong>Credit / Debit Cards & Net Banking:</strong> Reflected in customer bank statement within <strong>5 to 7 business days</strong> (excluding bank holidays and weekends), depending on the issuing bank&rsquo;s clearance cycles.</p>
                   </div>
                 </li>
               </ul>
@@ -196,7 +196,7 @@ export default function RefundPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              8. Contact Us for Cancellations &amp; Refund Assistance
+              8. Contact Us for Cancellations & Refund Assistance
             </h2>
             <p className="mb-3">
               For any questions regarding your order status, cancellation, or refund tracking:
@@ -213,11 +213,11 @@ export default function RefundPolicyPage() {
 
           <div className="pt-4 flex flex-wrap gap-4 text-xs">
             <Link href="/shipping-policy" className="text-[#962854] font-semibold hover:underline">
-              ← View Shipping &amp; Delivery Policy
+              ← View Shipping & Delivery Policy
             </Link>
             <span className="text-[#D8C3B3]">•</span>
             <Link href="/terms-and-conditions" className="text-[#962854] font-semibold hover:underline">
-              View Terms &amp; Conditions →
+              View Terms & Conditions →
             </Link>
           </div>
 

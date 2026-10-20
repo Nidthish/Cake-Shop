@@ -7,7 +7,7 @@ import { useCart } from "@/components/cart/CartProvider";
 import { useToast } from "@/components/common/ToastProvider";
 import ProductCard from "@/components/products/ProductCard";
 
-import { is1kgFreeOfferVariant } from "@/lib/products";
+import { is1kgFreeOfferVariant, sortVariantsAscending } from "@/lib/products";
 import { getDummyFallbackImage, getProductCardImage } from "@/lib/dummy-images";
 
 export default function ProductDetailClient({
@@ -23,15 +23,13 @@ export default function ProductDetailClient({
 
   const displayImage = getProductCardImage(product);
 
-  const variants = product.variants?.length
+  const rawVariants = product.variants?.length
     ? product.variants
     : [{ weight: "Regular", price: product.price ?? product.minPrice ?? 0 }];
+  const variants = sortVariantsAscending(rawVariants);
 
   const [variantIdx, setVariantIdx] = useState(() => {
-    const vars = product.variants?.length
-      ? product.variants
-      : [{ weight: "Regular", price: product.price ?? product.minPrice ?? 0 }];
-    const halfKgIdx = vars.findIndex(
+    const halfKgIdx = variants.findIndex(
       (v) =>
         v.weight.toLowerCase().includes("0.5") ||
         v.weight.toLowerCase().includes("500") ||

@@ -354,7 +354,7 @@ export default function CartPage() {
               <span className="material-symbols-outlined text-sm text-[#802B52]">verified</span>
               <span>Lollipop Bakery Order Rules:</span>
             </div>
-            <p>&bull; <strong>Minimum Order:</strong> ₹300 applicable for all orders (COD &amp; GPay).</p>
+            <p>&bull; <strong>Minimum Order:</strong> ₹300 applicable for all orders (COD & GPay).</p>
             <p>&bull; <strong>Doorstep Delivery:</strong> ₹5 per km from our bakery in Trichy, payable directly upon delivery.</p>
             <p>&bull; <strong>Cash on Delivery:</strong> Available for purchases above ₹1,000.</p>
             <p>&bull; <strong>GST:</strong> Standard 2.5% CGST + 2.5% SGST applied to all orders.</p>

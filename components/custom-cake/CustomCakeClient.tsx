@@ -264,7 +264,7 @@ export default function CustomCakeClient() {
                 Design Your Cake
               </h2>
               <p className="text-xs sm:text-sm text-[#5C524E]">
-                Customize tiers, flavours, glaze drips, toppings &amp; inscription. Watch your cake update live in 3D!
+                Customize tiers, flavours, glaze drips, toppings & inscription. Watch your cake update live in 3D!
               </p>
             </div>
 
@@ -352,7 +352,7 @@ export default function CustomCakeClient() {
             {/* Selected Toppings Field */}
             <div className="sm:col-span-1 md:col-span-2">
               <label className="text-[11px] font-bold text-[#5C524E] uppercase tracking-wider block mb-1">
-                Selected Toppings &amp; Garnishes
+                Selected Toppings & Garnishes
               </label>
               <input
                 type="text"

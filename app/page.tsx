@@ -1,13 +1,58 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getDbProducts, getProductsByCategory, PRODUCTS_DATA } from "@/lib/products";
 import ProductCard from "@/components/products/ProductCard";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "Lollipop Cake Shop - Handcrafted Artisanal Cakes & Pastries",
+export const metadata: Metadata = {
+  title: "Lollipop Cake Shop | Fresh Cakes, Snacks & Delivery in Trichy",
   description:
-    "Handcrafted artisanal luxury cakes, French pastries, customized milestone cakes, and gourmet treats baked fresh daily.",
+    "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Enjoy convenient delivery and special offers.",
+  alternates: {
+    canonical: "https://lollipopcakeshop.in",
+  },
+  keywords: [
+    "Lollipop Cake Shop",
+    "Lollipop Cake Shop Trichy",
+    "Lollipop cakes",
+    "Lollipop cake shop Trichy",
+    "Lollipop bakery Trichy",
+    "Lollipop cakes Trichy",
+    "Lollipop online cake shop",
+    "Lollipop cake delivery Trichy",
+    "Lollipop customized cakes",
+    "Lollipop bento cakes",
+    "Lollipop snacks Trichy",
+    "lollipopcakeshop.in",
+    "best fresh cakes in Trichy",
+    "best cake shop in Trichy",
+    "cake shop in Trichy",
+    "fresh cakes in Trichy",
+    "online cake shop in Trichy",
+    "order cake online in Trichy",
+    "cake delivery in Trichy",
+    "fast cake delivery in Trichy",
+    "birthday cakes in Trichy",
+    "customized cakes in Trichy",
+    "chocolate cake in Trichy",
+    "wedding cakes in Trichy",
+    "bento cakes in Trichy",
+    "dry cakes in Trichy",
+    "snacks in Trichy",
+    "online snacks shop in Trichy",
+    "cake offers in Trichy",
+    "1 kg cake + 1/2 kg free Trichy",
+  ],
+  openGraph: {
+    title: "Lollipop Cake Shop | Fresh Cakes, Snacks & Delivery in Trichy",
+    description:
+      "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Enjoy convenient delivery and special offers.",
+    url: "https://lollipopcakeshop.in",
+    siteName: "Lollipop Cake Shop",
+    locale: "en_IN",
+    type: "website",
+  },
 };
 
 const OCCASIONS = [
@@ -213,7 +258,7 @@ export default async function HomePage() {
                     Master Chef Signature Recipes
                   </span>
                   <span className="text-[11px] text-[#5C524E] font-normal">
-                    Handcrafted with Premium Ingredients &amp; Artisan Care
+                    Handcrafted with Premium Ingredients & Artisan Care
                   </span>
                 </div>
               </div>
@@ -306,7 +351,7 @@ export default async function HomePage() {
           <div className="flex flex-col items-center">
             <span className="material-symbols-outlined text-3xl sm:text-4xl text-[#E6C184] mb-2">auto_awesome</span>
             <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">100% Artisanal Recipes</h4>
-            <p className="text-[11px] text-[#FFF9F5]/80 mt-0.5">Fresh &amp; Eggless Options Available</p>
+            <p className="text-[11px] text-[#FFF9F5]/80 mt-0.5">Fresh & Eggless Options Available</p>
           </div>
           <div className="flex flex-col items-center">
             <span className="material-symbols-outlined text-3xl sm:text-4xl text-[#E6C184] mb-2">workspace_premium</span>
@@ -316,7 +361,7 @@ export default async function HomePage() {
           <div className="flex flex-col items-center">
             <span className="material-symbols-outlined text-3xl sm:text-4xl text-[#E6C184] mb-2">local_shipping</span>
             <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">2-Hour Express Delivery</h4>
-            <p className="text-[11px] text-[#FFF9F5]/80 mt-0.5">Fresh &amp; Temperature Controlled</p>
+            <p className="text-[11px] text-[#FFF9F5]/80 mt-0.5">Fresh & Temperature Controlled</p>
           </div>
           <div className="flex flex-col items-center">
             <span className="material-symbols-outlined text-3xl sm:text-4xl text-[#E6C184] mb-2">celebration</span>

@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
         {/* Header */}
         <div className="mb-10 pb-6 border-b border-[#E6C184]/40 text-center sm:text-left">
           <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#962854] block mb-2">
-            Data Protection &amp; Security
+            Data Protection & Security
           </span>
           <h1 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
             Privacy Policy
@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              1. Overview &amp; Commitment
+              1. Overview & Commitment
             </h2>
             <p className="mb-3">
               At <strong>Lollipop The Cake Shop</strong> (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;), we are deeply committed to respecting and protecting the personal privacy of our website visitors and valued customers. This Privacy Policy outlines our procedures concerning the collection, storage, use, and disclosure of personal information when you use our website or purchase fresh cakes and confectionery items from us.
@@ -49,19 +49,19 @@ export default function PrivacyPolicyPage() {
             </p>
             <div className="space-y-3">
               <div>
-                <strong className="text-[#1C0D0A] block">A. Personal Identification &amp; Contact Details:</strong>
+                <strong className="text-[#1C0D0A] block">A. Personal Identification & Contact Details:</strong>
                 <p>Full name, primary mobile phone number, secondary contact number (if provided for delivery coordination), and email address.</p>
               </div>
               <div>
-                <strong className="text-[#1C0D0A] block">B. Delivery Address &amp; Recipient Information:</strong>
+                <strong className="text-[#1C0D0A] block">B. Delivery Address & Recipient Information:</strong>
                 <p>Street address, landmark, area, city (Tiruchirappalli), postal pin code, and recipient contact name (for gift deliveries).</p>
               </div>
               <div>
-                <strong className="text-[#1C0D0A] block">C. Order &amp; Customization Specifications:</strong>
+                <strong className="text-[#1C0D0A] block">C. Order & Customization Specifications:</strong>
                 <p>Cake flavour, weight, dietary choice (standard or 100% eggless), custom text message on cake, occasion details, and reference images uploaded for bespoke designer cakes.</p>
               </div>
               <div>
-                <strong className="text-[#1C0D0A] block">D. Technical &amp; Device Information:</strong>
+                <strong className="text-[#1C0D0A] block">D. Technical & Device Information:</strong>
                 <p>Internet Protocol (IP) address, browser type, operating system, and anonymous analytics data regarding page visits to optimize website loading speeds and checkout flow.</p>
               </div>
             </div>
@@ -72,7 +72,7 @@ export default function PrivacyPolicyPage() {
               <span className="material-symbols-outlined p-2 rounded-lg bg-[#FAF0F2] text-[#962854] text-xl mt-0.5">security</span>
               <div>
                 <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-2">
-                  3. Payment Security &amp; Razorpay Compliance
+                  3. Payment Security & Razorpay Compliance
                 </h2>
                 <p className="text-[#962854] font-semibold mb-3">
                   We Never Store Sensitive Payment Data on Our Servers
@@ -119,7 +119,7 @@ export default function PrivacyPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              5. Information Sharing &amp; Third Parties
+              5. Information Sharing & Third Parties
             </h2>
             <p className="mb-3">
               <strong>We never sell, rent, trade, or monetize your personal information to third-party marketing companies.</strong>
@@ -136,7 +136,7 @@ export default function PrivacyPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              6. Cookies &amp; Local Storage
+              6. Cookies & Local Storage
             </h2>
             <p className="mb-3">
               Our website uses essential session cookies and browser local storage to maintain your shopping cart items, selected egg preferences, and delivery slot selections as you browse through our menu.
@@ -148,7 +148,7 @@ export default function PrivacyPolicyPage() {
 
           <section className="bg-white rounded-2xl p-6 sm:p-8 border border-[#F1E6DF] shadow-xs">
             <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-3">
-              7. Data Retention &amp; User Rights
+              7. Data Retention & User Rights
             </h2>
             <p className="mb-3">
               We retain customer order history and contact details only for as long as necessary to fulfill order delivery, resolve customer service issues, and meet statutory tax audit requirements.
@@ -182,11 +182,11 @@ export default function PrivacyPolicyPage() {
 
           <div className="pt-4 flex flex-wrap gap-4 text-xs">
             <Link href="/terms-and-conditions" className="text-[#962854] font-semibold hover:underline">
-              ← View Terms &amp; Conditions
+              ← View Terms & Conditions
             </Link>
             <span className="text-[#D8C3B3]">•</span>
             <Link href="/refund-policy" className="text-[#962854] font-semibold hover:underline">
-              View Refund &amp; Cancellation Policy →
+              View Refund & Cancellation Policy →
             </Link>
           </div>
 

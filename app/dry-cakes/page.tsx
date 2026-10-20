@@ -5,9 +5,28 @@ import DryCakesCatalogClient from "@/components/products/DryCakesCatalogClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Artisanal Dry Cakes & Tea Cakes - Lollipop Cake Shop",
+  title: "Dry Cakes in Trichy | Freshly Baked Tea Time Cakes | Lollipop Cake Shop",
   description:
-    "Explore handcrafted plum cakes, banana cakes, tea cakes, walnut cakes, and rich cake loafs baked fresh daily.",
+    "Delicious fresh dry cakes, plum cakes, and tea cakes baked daily in Trichy by Lollipop Cake Shop.",
+  alternates: {
+    canonical: "https://lollipopcakeshop.in/dry-cakes",
+  },
+  keywords: [
+    "dry cakes in Trichy",
+    "tea cakes Trichy",
+    "plum cake Trichy",
+    "banana walnut cake Trichy",
+    "Lollipop Cake Shop dry cakes",
+    "tea time cakes Trichy",
+  ],
+  openGraph: {
+    title: "Dry Cakes in Trichy | Freshly Baked Tea Time Cakes | Lollipop Cake Shop",
+    description:
+      "Delicious fresh dry cakes, plum cakes, and tea cakes baked daily in Trichy by Lollipop Cake Shop.",
+    url: "https://lollipopcakeshop.in/dry-cakes",
+    siteName: "Lollipop Cake Shop",
+    type: "website",
+  },
 };
 
 export default async function Page() {

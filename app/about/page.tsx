@@ -5,9 +5,27 @@ import BranchSection from "@/components/about/BranchSection";
 import ScrollReveal from "@/components/common/ScrollReveal";
 
 export const metadata: Metadata = {
-  title: "About Us - Lollipop The Cake Shop, Trichy",
+  title: "About Us | Lollipop Cake Shop Trichy — Handcrafted Since 2019",
   description:
-    "Since 2019, Lollipop The Cake Shop has been making good-quality cakes affordable for Trichy. Our story, our two branches and our Times of India feature.",
+    "Since 2019, Lollipop The Cake Shop has been making good-quality cakes affordable for Trichy. Our story, our two branches in Sanjeevi Nagar & Andar Veedhi and our Times of India feature.",
+  alternates: {
+    canonical: "https://lollipopcakeshop.in/about",
+  },
+  keywords: [
+    "Lollipop Cake Shop Trichy",
+    "about Lollipop Cake Shop",
+    "cake shop in Trichy",
+    "Sanjeevi Nagar cake shop",
+    "Andar Veedhi cake shop",
+  ],
+  openGraph: {
+    title: "About Us | Lollipop Cake Shop Trichy — Handcrafted Since 2019",
+    description:
+      "Since 2019, Lollipop The Cake Shop has been making good-quality cakes affordable for Trichy. Our story, our two branches and our Times of India feature.",
+    url: "https://lollipopcakeshop.in/about",
+    siteName: "Lollipop Cake Shop",
+    type: "website",
+  },
 };
 
 const TOI_ARTICLE_URL = "https://timesofindia.indiatimes.com/city/trichy/home-bakers-in-trichy-see-rising-demand-for-custom-cakes/amp_articleshow/116636146.cms";

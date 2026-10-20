@@ -60,12 +60,12 @@ export default function Footer() {
           {/* Policies & Legal (Razorpay Compliance) */}
           <div className="md:col-span-2">
             <h4 className="font-bold text-white uppercase tracking-wider mb-3 text-xs">
-              Policies &amp; Legal
+              Policies & Legal
             </h4>
             <ul className="space-y-2 text-[#D8C3B3]">
               <li>
                 <Link href="/terms-and-conditions" className="hover:text-white transition-colors">
-                  Terms &amp; Conditions
+                  Terms & Conditions
                 </Link>
               </li>
               <li>
@@ -75,12 +75,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/refund-policy" className="hover:text-white transition-colors">
-                  Refund &amp; Cancellation
+                  Refund & Cancellation
                 </Link>
               </li>
               <li>
                 <Link href="/shipping-policy" className="hover:text-white transition-colors">
-                  Shipping &amp; Delivery
+                  Shipping & Delivery
                 </Link>
               </li>
               <li>
