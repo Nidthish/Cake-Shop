@@ -32,6 +32,11 @@ export default function ContactUsPage() {
 
   return (
     <div className="bg-[#FFF9F5] text-[#1C0D0A] min-h-screen py-12 sm:py-16">
+      <title>Contact Lollipop Cake Shop | Trichy</title>
+      <meta
+        name="description"
+        content="Contact Lollipop Cake Shop in Trichy. Reach our branches in Sanjeevi Nagar & Andar Veedhi, Tiruchirappalli for custom cake orders, queries, and cake delivery in Trichy."
+      />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header */}
@@ -40,10 +45,10 @@ export default function ContactUsPage() {
             Get In Touch • We&rsquo;re Here to Help
           </span>
           <h1 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
-            Contact Us
+            Contact Lollipop Cake Shop in Trichy
           </h1>
           <p className="text-xs sm:text-sm text-[#5C524E] mt-2 max-w-2xl">
-            Have questions about your cake order, custom celebration cakes, delivery tracking, or Razorpay payment support? Reach out to our bakery team.
+            Have questions about your birthday cakes, custom celebration cakes, orders, or cake delivery in Trichy? Reach out directly to our bakery studio counters.
           </p>
         </div>
 

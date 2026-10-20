@@ -124,7 +124,7 @@ export default function ProductDetailClient({
           <div className="rounded-3xl overflow-hidden bg-[#F1E6DF] aspect-square shadow-md">
             <img
               src={displayImage}
-              alt={product.name}
+              alt={`${product.name} from Lollipop Cake Shop in Trichy`}
               width={1024}
               height={1024}
               className="w-full h-full object-cover"

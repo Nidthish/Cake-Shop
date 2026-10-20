@@ -20,8 +20,7 @@ export default function Footer() {
               Lollipop Cake Shop
             </span>
             <p className="leading-relaxed text-[#D8C3B3] text-xs">
-              Handcrafted artisanal luxury cakes, French pastries, customized
-              milestone cakes, and fresh baked delights daily across Tiruchirappalli.
+              Lollipop The Cake Shop — Artisanal cakes in Trichy, birthday cakes, custom designer cakes, and fresh baked pastries daily across Tiruchirappalli with express cake delivery.
             </p>
             <div className="pt-1 text-[11px] text-[#A892A8] space-y-0.5">
               <p>Branch 1: Sanjeevi Nagar, Trichy</p>
@@ -36,12 +35,12 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-[#D8C3B3]">
               <li><Link href="/" className="hover:text-white transition-colors">Home Page</Link></li>
-              <li><Link href="/cakes" className="hover:text-white transition-colors">Signature Cakes</Link></li>
+              <li><Link href="/cakes" className="hover:text-white transition-colors">Cakes in Trichy</Link></li>
               <li><Link href="/dry-cakes" className="hover:text-white transition-colors">Dry Cakes Collection</Link></li>
-              <li><Link href="/snacks" className="hover:text-white transition-colors">Gourmet Pastries</Link></li>
-              <li><Link href="/custom-cake" className="hover:text-white transition-colors">Custom Cake Studio</Link></li>
+              <li><Link href="/snacks" className="hover:text-white transition-colors">Pastries & Snacks</Link></li>
+              <li><Link href="/custom-cake" className="hover:text-white transition-colors">Custom Cakes in Trichy</Link></li>
               <li><Link href="/track-order" className="hover:text-white transition-colors text-[#E6C184] font-semibold">Track Your Order</Link></li>
-              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link href="/about" className="hover:text-white transition-colors">About Lollipop Cake Shop</Link></li>
             </ul>
           </div>
 
@@ -51,9 +50,9 @@ export default function Footer() {
               Occasions
             </h4>
             <ul className="space-y-2 text-[#D8C3B3]">
-              <li><Link href="/first-birthday" className="hover:text-white transition-colors">1st Birthday Smash</Link></li>
-              <li><Link href="/wedding-cakes" className="hover:text-white transition-colors">Wedding Masterpieces</Link></li>
-              <li><Link href="/bento-cake" className="hover:text-white transition-colors">Korean Bento Cakes</Link></li>
+              <li><Link href="/first-birthday" className="hover:text-white transition-colors">1st Birthday Cakes Trichy</Link></li>
+              <li><Link href="/wedding-cakes" className="hover:text-white transition-colors">Wedding Cakes in Trichy</Link></li>
+              <li><Link href="/bento-cake" className="hover:text-white transition-colors">Bento Cakes in Trichy</Link></li>
             </ul>
           </div>
 

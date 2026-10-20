@@ -7,25 +7,16 @@ import { SITE_URL } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Wedding Cakes in Trichy | Elegant Tiered Marriage Cakes | Lollipop Cake Shop",
+  title: "Wedding Cakes in Trichy | Lollipop Cake Shop",
   description:
-    "Magnificent tiered wedding and reception cakes delivered across Trichy by Lollipop Cake Shop.",
+    "Magnificent tiered wedding cakes in Trichy handcrafted by Lollipop Cake Shop. Custom wedding cakes and elegant multi-tier reception centerpieces.",
   alternates: {
     canonical: `${SITE_URL}/wedding-cakes`,
   },
-  keywords: [
-    "wedding cakes in Trichy",
-    "marriage cake Trichy",
-    "reception cake Trichy",
-    "tiered wedding cakes Trichy",
-    "floating tier wedding cake Trichy",
-    "luxury wedding cake Trichy",
-    "Lollipop Cake Shop wedding cakes",
-  ],
   openGraph: {
-    title: "Wedding Cakes in Trichy | Elegant Tiered Marriage Cakes | Lollipop Cake Shop",
+    title: "Wedding Cakes in Trichy | Lollipop Cake Shop",
     description:
-      "Magnificent tiered wedding and reception cakes delivered across Trichy by Lollipop Cake Shop.",
+      "Magnificent tiered wedding cakes in Trichy handcrafted by Lollipop Cake Shop. Custom wedding cakes and elegant multi-tier reception centerpieces.",
     url: `${SITE_URL}/wedding-cakes`,
     siteName: "Lollipop Cake Shop",
     type: "website",
@@ -45,7 +36,16 @@ export default async function Page() {
 
   return (
     <>
-      <CategoryHero eyebrow="Wedding Collection" title="Wedding Cake Masterpieces" description="Elegant, multi-tier wedding cake masterpieces crafted for your most important day." />
+      <CategoryHero
+        eyebrow="Wedding & Reception Collection"
+        title="Wedding Cakes in Trichy"
+        description="Magnificent tiered wedding cakes, custom wedding cakes, and grand reception celebration cakes handcrafted in Trichy."
+      />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2 text-center">
+        <h2 className="font-display font-semibold text-lg sm:text-2xl text-[#962854]">
+          Custom Wedding Cakes for Your Special Celebration
+        </h2>
+      </div>
       <CategoryPageClient products={products} pills={WEDDING_PILLS} />
     </>
   );

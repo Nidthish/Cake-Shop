@@ -117,13 +117,26 @@ export default function CustomCakeClient() {
         <ScrollReveal>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-2 mb-10 sm:mb-14">
             <h1 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
-              Customized Cakes
+              Custom Cakes in Trichy
             </h1>
-            <p className="text-xs sm:text-sm text-[#5C524E] max-w-lg mx-auto">
-              Explore our signature creations or design your own bespoke cake online with instant WhatsApp ordering.
+            <p className="text-xs sm:text-sm text-[#5C524E] max-w-xl mx-auto">
+              Explore our designer cakes in Trichy, theme cakes, photo cakes, and custom birthday cakes handcrafted for every special celebration with instant WhatsApp ordering.
             </p>
           </div>
         </ScrollReveal>
+
+        {/* Section Heading: Designer Cakes in Trichy */}
+        <div className="text-center mb-10 sm:mb-12">
+          <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52] block mb-1">
+            Handcrafted Perfection
+          </span>
+          <h2 className="font-display font-bold text-2xl sm:text-3xl text-[#1C0D0A]">
+            Designer Cakes in Trichy
+          </h2>
+          <p className="text-xs sm:text-sm text-[#5C524E] mt-1 max-w-md mx-auto">
+            From floating tier architectural masterpieces to themed birthday cakes, explore our signature custom creations.
+          </p>
+        </div>
 
         {/* Editorial Layout (Gallery Cards with Scroll Reveal Animation) */}
         <div className="space-y-16 sm:space-y-24">
@@ -258,10 +271,10 @@ export default function CustomCakeClient() {
           <ScrollReveal>
             <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8 space-y-1">
               <span className="text-[11px] font-bold uppercase tracking-widest text-[#802B52]">
-                Online Atelier Studio
+                Custom Cake Studio • Trichy
               </span>
               <h2 className="font-display font-bold text-2xl sm:text-4xl text-[#1C0D0A]">
-                Design Your Cake
+                Custom Birthday Cakes
               </h2>
               <p className="text-xs sm:text-sm text-[#5C524E]">
                 Customize tiers, flavours, glaze drips, toppings & inscription. Watch your cake update live in 3D!

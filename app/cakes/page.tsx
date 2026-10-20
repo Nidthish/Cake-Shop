@@ -6,28 +6,16 @@ import { SITE_URL } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Fresh Cakes in Trichy | Birthday & Celebration Cakes | Lollipop Cake Shop",
+  title: "Cakes in Trichy | Lollipop Cake Shop",
   description:
-    "Order fresh handcrafted celebration and birthday cakes online in Trichy from Lollipop Cake Shop. 100% fresh, eggless options, fast delivery.",
+    "Order fresh handcrafted cakes in Trichy from Lollipop Cake Shop. Choose from chocolate cakes, birthday cakes, custom cakes, and eggless cakes with fast cake delivery in Trichy.",
   alternates: {
     canonical: `${SITE_URL}/cakes`,
   },
-  keywords: [
-    "fresh cakes in Trichy",
-    "birthday cakes Trichy",
-    "eggless cakes Trichy",
-    "chocolate cake Trichy",
-    "cake delivery in Trichy",
-    "Lollipop Cake Shop",
-    "Lollipop cakes Trichy",
-    "online cake shop in Trichy",
-    "best cake shop in Trichy",
-    "cake offers in Trichy",
-  ],
   openGraph: {
-    title: "Fresh Cakes in Trichy | Birthday & Celebration Cakes | Lollipop Cake Shop",
+    title: "Cakes in Trichy | Lollipop Cake Shop",
     description:
-      "Order fresh handcrafted celebration and birthday cakes online in Trichy from Lollipop Cake Shop. 100% fresh, eggless options, fast delivery.",
+      "Order fresh handcrafted cakes in Trichy from Lollipop Cake Shop. Choose from chocolate cakes, birthday cakes, custom cakes, and eggless cakes with fast cake delivery in Trichy.",
     url: `${SITE_URL}/cakes`,
     siteName: "Lollipop Cake Shop",
     type: "website",

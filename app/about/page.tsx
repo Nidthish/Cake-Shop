@@ -6,23 +6,16 @@ import ScrollReveal from "@/components/common/ScrollReveal";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "About Us | Lollipop Cake Shop Trichy — Handcrafted Since 2019",
+  title: "About Lollipop Cake Shop | Trichy",
   description:
-    "Since 2019, Lollipop The Cake Shop has been making good-quality cakes affordable for Trichy. Our story, our two branches in Sanjeevi Nagar & Andar Veedhi and our Times of India feature.",
+    "Learn about Lollipop The Cake Shop in Trichy. Handcrafting affordable, premium celebration cakes and pastries across two branches in Tiruchirappalli since 2019.",
   alternates: {
     canonical: `${SITE_URL}/about`,
   },
-  keywords: [
-    "Lollipop Cake Shop Trichy",
-    "about Lollipop Cake Shop",
-    "cake shop in Trichy",
-    "Sanjeevi Nagar cake shop",
-    "Andar Veedhi cake shop",
-  ],
   openGraph: {
-    title: "About Us | Lollipop Cake Shop Trichy — Handcrafted Since 2019",
+    title: "About Lollipop Cake Shop | Trichy",
     description:
-      "Since 2019, Lollipop The Cake Shop has been making good-quality cakes affordable for Trichy. Our story, our two branches and our Times of India feature.",
+      "Learn about Lollipop The Cake Shop in Trichy. Handcrafting affordable, premium celebration cakes and pastries across two branches in Tiruchirappalli since 2019.",
     url: `${SITE_URL}/about`,
     siteName: "Lollipop Cake Shop",
     type: "website",
@@ -83,11 +76,11 @@ export default function AboutPage() {
             </div>
 
             <h1 className="font-display font-bold text-4xl sm:text-6xl lg:text-7xl text-[#1C0D0A] leading-[1.05] tracking-tight">
-              Everyone deserves a <span className="text-[#962854] italic font-semibold">good cake.</span>
+              About Lollipop Cake Shop in <span className="text-[#962854] italic font-semibold">Trichy</span>
             </h1>
 
             <p className="text-base sm:text-lg text-[#4A3E39] font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
-              In 2019, Lollipop began with a simple dream: to make good-quality cakes affordable for everyone. Birthdays, surprises, or just a slice on a Tuesday shouldn&apos;t come with a heavy price tag.
+              In 2019, Lollipop The Cake Shop began with a simple dream: to make good-quality celebration cakes affordable for everyone across Trichy and Tiruchirappalli. Birthdays, wedding anniversaries, or just a slice of chocolate cake on a Tuesday shouldn&apos;t come with a heavy price tag.
             </p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
@@ -95,7 +88,7 @@ export default function AboutPage() {
                 href="#branches"
                 className="btn-primary py-3.5 px-7 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg"
               >
-                <span>📍 Find our branches</span>
+                <span>📍 Find Lollipop Cake Shop locations in Trichy</span>
               </a>
               <Link
                 href="/custom-cake"

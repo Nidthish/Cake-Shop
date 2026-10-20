@@ -119,7 +119,7 @@ export default function CakeCardInteractive({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={cardImage}
-            alt={product.name}
+            alt={`${product.name} from Lollipop Cake Shop in Trichy`}
             loading="lazy"
             decoding="async"
             width={1024}
