@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getDbProducts, getProductsByCategory } from "@/lib/products";
 import CategoryPageClient from "@/components/products/CategoryPageClient";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "Celebrate your little one's special milestone with handcrafted 1st birthday theme cakes from Lollipop Cake Shop in Trichy.",
   alternates: {
-    canonical: "https://lollipopcakeshop.in/first-birthday",
+    canonical: `${SITE_URL}/first-birthday`,
   },
   keywords: [
     "1st birthday cakes in Trichy",
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     title: "1st Birthday Cakes in Trichy | First Birthday Theme Cakes | Lollipop Cake Shop",
     description:
       "Celebrate your little one's special milestone with handcrafted 1st birthday theme cakes from Lollipop Cake Shop in Trichy.",
-    url: "https://lollipopcakeshop.in/first-birthday",
+    url: `${SITE_URL}/first-birthday`,
     siteName: "Lollipop Cake Shop",
     type: "website",
   },

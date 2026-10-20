@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getDbProducts } from "@/lib/products";
 import DryCakesCatalogClient from "@/components/products/DryCakesCatalogClient";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "Delicious fresh dry cakes, plum cakes, and tea cakes baked daily in Trichy by Lollipop Cake Shop.",
   alternates: {
-    canonical: "https://lollipopcakeshop.in/dry-cakes",
+    canonical: `${SITE_URL}/dry-cakes`,
   },
   keywords: [
     "dry cakes in Trichy",
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     title: "Dry Cakes in Trichy | Freshly Baked Tea Time Cakes | Lollipop Cake Shop",
     description:
       "Delicious fresh dry cakes, plum cakes, and tea cakes baked daily in Trichy by Lollipop Cake Shop.",
-    url: "https://lollipopcakeshop.in/dry-cakes",
+    url: `${SITE_URL}/dry-cakes`,
     siteName: "Lollipop Cake Shop",
     type: "website",
   },

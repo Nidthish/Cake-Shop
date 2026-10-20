@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getAllProductSlugs } from "@/lib/products";
+import { SITE_URL } from "@/lib/site";
 
-const BASE_URL = "https://lollipopcakeshop.in";
+const BASE_URL = SITE_URL;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [

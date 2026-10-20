@@ -63,7 +63,12 @@ export const PRODUCTS_DATA: Product[] = (rawProducts as Product[]).map((p) => ({
 }));
 
 export function normalizeProductImage(rawImage: string | null | undefined, name?: string): string {
-  const clean = (rawImage || "").trim();
+  let clean = (rawImage || "").trim();
+
+  // Dynamically rewrite legacy Cloudflare R2 URLs to the new custom domain
+  if (clean && clean.includes(".r2.dev/")) {
+    clean = clean.replace(/https?:\/\/[a-z0-9-]+\.r2\.dev\//i, "https://images.lollipopcakeshop.in/");
+  }
 
   // 1. If DB has an explicit Cloudflare R2 URL, remote HTTP/HTTPS, or data URL: ALWAYS return it directly
   if (clean && (clean.startsWith("http://") || clean.startsWith("https://") || clean.startsWith("data:"))) {

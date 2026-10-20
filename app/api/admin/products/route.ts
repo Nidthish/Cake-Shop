@@ -204,6 +204,9 @@ export async function POST(req: NextRequest) {
     }
 
     let cleanImageName = data.imageName || "product.image";
+    if (cleanImageName && cleanImageName.includes(".r2.dev/")) {
+      cleanImageName = cleanImageName.replace(/https?:\/\/[a-z0-9-]+\.r2\.dev\//i, "https://images.lollipopcakeshop.in/");
+    }
     if (cleanImageName && (cleanImageName.startsWith("data:") || cleanImageName.length > 450)) {
       if (cleanImageName.startsWith("data:")) {
         const subDir = data.categorySlug?.toLowerCase().includes("snack") ? "Snacks" : "cakes";

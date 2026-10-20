@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getDbProducts, getProductsByCategory } from "@/lib/products";
 import CategoryHero from "@/components/products/CategoryHero";
 import CategoryPageClient from "@/components/products/CategoryPageClient";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   description:
     "Magnificent tiered wedding and reception cakes delivered across Trichy by Lollipop Cake Shop.",
   alternates: {
-    canonical: "https://lollipopcakeshop.in/wedding-cakes",
+    canonical: `${SITE_URL}/wedding-cakes`,
   },
   keywords: [
     "wedding cakes in Trichy",
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     title: "Wedding Cakes in Trichy | Elegant Tiered Marriage Cakes | Lollipop Cake Shop",
     description:
       "Magnificent tiered wedding and reception cakes delivered across Trichy by Lollipop Cake Shop.",
-    url: "https://lollipopcakeshop.in/wedding-cakes",
+    url: `${SITE_URL}/wedding-cakes`,
     siteName: "Lollipop Cake Shop",
     type: "website",
   },

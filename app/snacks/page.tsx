@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getDbProducts } from "@/lib/products";
 import SnacksCatalogClient from "@/components/products/SnacksCatalogClient";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "Freshly baked puffs, rolls, brownies, cupcakes and savory snacks delivered daily in Trichy from Lollipop Cake Shop.",
   alternates: {
-    canonical: "https://lollipopcakeshop.in/snacks",
+    canonical: `${SITE_URL}/snacks`,
   },
   keywords: [
     "snacks in Trichy",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     title: "Fresh Snacks & Pastries in Trichy | Lollipop Cake Shop",
     description:
       "Freshly baked puffs, rolls, brownies, cupcakes and savory snacks delivered daily in Trichy from Lollipop Cake Shop.",
-    url: "https://lollipopcakeshop.in/snacks",
+    url: `${SITE_URL}/snacks`,
     siteName: "Lollipop Cake Shop",
     type: "website",
   },

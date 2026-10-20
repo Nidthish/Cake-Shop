@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import CustomCakeClient from "@/components/custom-cake/CustomCakeClient";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Customized Cakes in Trichy | Photo & Designer Cakes | Lollipop Cake Shop",
   description:
     "Order custom designed, photo and theme cakes handcrafted for your special celebration in Trichy by Lollipop Cake Shop.",
   alternates: {
-    canonical: "https://lollipopcakeshop.in/custom-cake",
+    canonical: `${SITE_URL}/custom-cake`,
   },
   keywords: [
     "customized cakes in Trichy",
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     title: "Customized Cakes in Trichy | Photo & Designer Cakes | Lollipop Cake Shop",
     description:
       "Order custom designed, photo and theme cakes handcrafted for your special celebration in Trichy by Lollipop Cake Shop.",
-    url: "https://lollipopcakeshop.in/custom-cake",
+    url: `${SITE_URL}/custom-cake`,
     siteName: "Lollipop Cake Shop",
     type: "website",
   },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getDbProducts, getProductsByCategory, PRODUCTS_DATA } from "@/lib/products";
 import ProductCard from "@/components/products/ProductCard";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   description:
     "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Enjoy convenient delivery and special offers.",
   alternates: {
-    canonical: "https://lollipopcakeshop.in",
+    canonical: SITE_URL,
   },
   keywords: [
     "Lollipop Cake Shop",
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
     "Lollipop customized cakes",
     "Lollipop bento cakes",
     "Lollipop snacks Trichy",
+    "www.lollipopcakeshop.in",
     "lollipopcakeshop.in",
     "best fresh cakes in Trichy",
     "best cake shop in Trichy",
@@ -48,7 +50,7 @@ export const metadata: Metadata = {
     title: "Lollipop Cake Shop | Fresh Cakes, Snacks & Delivery in Trichy",
     description:
       "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Enjoy convenient delivery and special offers.",
-    url: "https://lollipopcakeshop.in",
+    url: SITE_URL,
     siteName: "Lollipop Cake Shop",
     locale: "en_IN",
     type: "website",

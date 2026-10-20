@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getDbProducts, getProductsByCategory } from "@/lib/products";
 import CategoryPageClient from "@/components/products/CategoryPageClient";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "Cute minimalist Korean lunchbox bento cakes piped with custom messages in Trichy from Lollipop Cake Shop.",
   alternates: {
-    canonical: "https://lollipopcakeshop.in/bento-cake",
+    canonical: `${SITE_URL}/bento-cake`,
   },
   keywords: [
     "bento cakes in Trichy",
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     title: "Bento Cakes in Trichy | Cute Korean Lunchbox Cakes | Lollipop Cake Shop",
     description:
       "Cute minimalist Korean lunchbox bento cakes piped with custom messages in Trichy from Lollipop Cake Shop.",
-    url: "https://lollipopcakeshop.in/bento-cake",
+    url: `${SITE_URL}/bento-cake`,
     siteName: "Lollipop Cake Shop",
     type: "website",
   },

@@ -3,13 +3,14 @@ import Link from "next/link";
 import Image from "next/image";
 import BranchSection from "@/components/about/BranchSection";
 import ScrollReveal from "@/components/common/ScrollReveal";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About Us | Lollipop Cake Shop Trichy — Handcrafted Since 2019",
   description:
     "Since 2019, Lollipop The Cake Shop has been making good-quality cakes affordable for Trichy. Our story, our two branches in Sanjeevi Nagar & Andar Veedhi and our Times of India feature.",
   alternates: {
-    canonical: "https://lollipopcakeshop.in/about",
+    canonical: `${SITE_URL}/about`,
   },
   keywords: [
     "Lollipop Cake Shop Trichy",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     title: "About Us | Lollipop Cake Shop Trichy — Handcrafted Since 2019",
     description:
       "Since 2019, Lollipop The Cake Shop has been making good-quality cakes affordable for Trichy. Our story, our two branches and our Times of India feature.",
-    url: "https://lollipopcakeshop.in/about",
+    url: `${SITE_URL}/about`,
     siteName: "Lollipop Cake Shop",
     type: "website",
   },

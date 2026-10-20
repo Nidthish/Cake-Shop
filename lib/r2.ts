@@ -15,8 +15,9 @@ function getCleanEnv(key: string): string {
 export function getR2PublicUrl(): string {
   const url =
     getCleanEnv("CLOUDFLARE_R2_PUBLIC_URL") ||
+    getCleanEnv("NEXT_PUBLIC_R2_PUBLIC_URL") ||
     getCleanEnv("R2_PUBLIC_URL") ||
-    "https://pub-cc78f2072e744ca2a82f1b0346156699.r2.dev";
+    "https://images.lollipopcakeshop.in";
   return url.replace(/\/+$/, "");
 }
 
@@ -114,6 +115,8 @@ export function extractR2Key(keyOrUrl: string | null | undefined): string | null
       const isR2Host =
         hostname.includes("r2.dev") ||
         hostname.includes("r2.cloudflarestorage.com") ||
+        hostname === "images.lollipopcakeshop.in" ||
+        hostname.endsWith(".lollipopcakeshop.in") ||
         (publicHost && hostname === publicHost);
 
       if (isR2Host || pathname.startsWith("cakes/") || pathname.startsWith("snacks/")) {

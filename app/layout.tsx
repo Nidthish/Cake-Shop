@@ -9,6 +9,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloatingActions from "@/components/layout/FloatingActions";
 import BakeryBackground from "@/components/layout/BakeryBackground";
+import { SITE_URL } from "@/lib/site";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -26,7 +27,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lollipopcakeshop.in"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Lollipop Cake Shop | Fresh Cakes, Snacks & Delivery in Trichy",
     template: "%s | Lollipop Cake Shop",
@@ -45,6 +46,7 @@ export const metadata: Metadata = {
     "Lollipop customized cakes",
     "Lollipop bento cakes",
     "Lollipop snacks Trichy",
+    "www.lollipopcakeshop.in",
     "lollipopcakeshop.in",
     "best fresh cakes in Trichy",
     "best cake shop in Trichy",
@@ -66,14 +68,14 @@ export const metadata: Metadata = {
     "1 kg cake + 1/2 kg free Trichy",
   ],
   alternates: {
-    canonical: "https://lollipopcakeshop.in",
+    canonical: SITE_URL,
   },
   openGraph: {
     title: "Lollipop Cake Shop | Fresh Cakes, Snacks & Delivery in Trichy",
     description:
       "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Enjoy convenient delivery and special offers.",
     siteName: "Lollipop Cake Shop",
-    url: "https://lollipopcakeshop.in",
+    url: SITE_URL,
     locale: "en_IN",
     type: "website",
     images: [
@@ -115,18 +117,18 @@ const websiteSchema = {
   "@type": "WebSite",
   name: "Lollipop Cake Shop",
   alternateName: ["Lollipop", "Lollipop The Cake Shop"],
-  url: "https://lollipopcakeshop.in/",
+  url: `${SITE_URL}/`,
 };
 
 const bakerySchema = {
   "@context": "https://schema.org",
   "@type": "Bakery",
-  "@id": "https://lollipopcakeshop.in/#bakery",
+  "@id": `${SITE_URL}/#bakery`,
   name: "Lollipop Cake Shop",
   alternateName: ["Lollipop The Cake Shop", "Lollipop Cakes Trichy"],
-  url: "https://lollipopcakeshop.in",
-  logo: "https://lollipopcakeshop.in/images/logo_master_inner_balanced.png",
-  image: "https://lollipopcakeshop.in/PRODUCT_IMAGES/cakes/NORMAL%20CAKES/black_forest.webp",
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/logo_master_inner_balanced.png`,
+  image: `${SITE_URL}/PRODUCT_IMAGES/cakes/NORMAL%20CAKES/black_forest.webp`,
   description:
     "Handcrafted fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy.",
   telephone: "+91 84893 24697",

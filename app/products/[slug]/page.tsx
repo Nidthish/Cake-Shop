@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getDbProducts, getProductById, getSimilarProducts, getCardPrice } from "@/lib/products";
 import ProductDetailClient from "@/components/products/ProductDetailClient";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,7 @@ export async function generateMetadata({
   const cleanName = product.name.replace(/&amp;/g, "&");
   const fullImageUrl = product.image.startsWith("http")
     ? product.image
-    : `https://lollipopcakeshop.in${product.image}`;
+    : `${SITE_URL}${product.image}`;
   const description =
     product.description ||
     `Order fresh ${cleanName} online in Trichy from Lollipop Cake Shop. 100% fresh, handcrafted with premium ingredients, fast delivery.`;
@@ -27,12 +28,12 @@ export async function generateMetadata({
     title: `${cleanName} in Trichy | Lollipop Cake Shop`,
     description,
     alternates: {
-      canonical: `https://lollipopcakeshop.in/products/${slug}`,
+      canonical: `${SITE_URL}/products/${slug}`,
     },
     openGraph: {
       title: `${cleanName} in Trichy | Lollipop Cake Shop`,
       description,
-      url: `https://lollipopcakeshop.in/products/${slug}`,
+      url: `${SITE_URL}/products/${slug}`,
       siteName: "Lollipop Cake Shop",
       type: "website",
       images: [
@@ -65,14 +66,14 @@ export default async function ProductDetailPage({
   const cleanName = product.name.replace(/&amp;/g, "&");
   const fullImageUrl = product.image.startsWith("http")
     ? product.image
-    : `https://lollipopcakeshop.in${product.image}`;
+    : `${SITE_URL}${product.image}`;
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Product",
-        "@id": `https://lollipopcakeshop.in/products/${slug}#product`,
+        "@id": `${SITE_URL}/products/${slug}#product`,
         name: cleanName,
         description: product.description || `${cleanName} handcrafted fresh daily by Lollipop Cake Shop in Trichy.`,
         image: [fullImageUrl],
@@ -82,7 +83,7 @@ export default async function ProductDetailPage({
         },
         offers: {
           "@type": "Offer",
-          url: `https://lollipopcakeshop.in/products/${slug}`,
+          url: `${SITE_URL}/products/${slug}`,
           priceCurrency: "INR",
           price: getCardPrice(product),
           availability: "https://schema.org/InStock",
@@ -105,19 +106,19 @@ export default async function ProductDetailPage({
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://lollipopcakeshop.in",
+            item: SITE_URL,
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Cakes",
-            item: "https://lollipopcakeshop.in/cakes",
+            item: `${SITE_URL}/cakes`,
           },
           {
             "@type": "ListItem",
             position: 3,
             name: cleanName,
-            item: `https://lollipopcakeshop.in/products/${slug}`,
+            item: `${SITE_URL}/products/${slug}`,
           },
         ],
       },

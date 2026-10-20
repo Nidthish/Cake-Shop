@@ -292,6 +292,11 @@ export function getDummyFallbackImage(product: ProductLike): string {
 export function getProductCardImage(product: ProductLike): string {
   let img = product.image ? product.image.trim() : "";
 
+  // Dynamically rewrite legacy Cloudflare R2 URLs to the new custom domain
+  if (img && img.includes(".r2.dev/")) {
+    img = img.replace(/https?:\/\/[a-z0-9-]+\.r2\.dev\//i, "https://images.lollipopcakeshop.in/");
+  }
+
   // 1. If product has an explicit Cloudflare R2 URL or remote HTTP/HTTPS/data image, use it directly
   if (img && (img.startsWith("http://") || img.startsWith("https://") || img.startsWith("data:"))) {
     return img;

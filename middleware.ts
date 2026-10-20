@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
+  const host = (req.headers.get("host") || "").toLowerCase().split(":")[0];
+
+  // Canonical apex to www 301 redirect for lollipopcakeshop.in
+  if (host === "lollipopcakeshop.in") {
+    const url = req.nextUrl.clone();
+    url.host = "www.lollipopcakeshop.in";
+    url.port = "";
+    url.protocol = "https:";
+    return NextResponse.redirect(url, 301);
+  }
+
   const response = NextResponse.next();
 
   // Set OWASP Recommended Defense HTTP Headers

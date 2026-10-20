@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
+      { protocol: "https", hostname: "images.lollipopcakeshop.in" },
+      { protocol: "https", hostname: "www.lollipopcakeshop.in" },
+      { protocol: "https", hostname: "lollipopcakeshop.in" },
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "api.qrserver.com" },
       { protocol: "https", hostname: "pub-cc78f2072e744ca2a82f1b0346156699.r2.dev" },
