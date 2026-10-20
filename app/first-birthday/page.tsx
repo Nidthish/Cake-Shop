@@ -6,16 +6,24 @@ import { SITE_URL } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "1st Birthday Cakes in Trichy | Lollipop Cake Shop",
+  title: "1st Birthday Cakes in Trichy | First Birthday Theme Cakes | Lollipop Cake Shop",
   description:
-    "Celebrate your baby's milestone with handcrafted 1st birthday cakes in Trichy from Lollipop Cake Shop. Soft smash cakes and kids birthday cakes baked fresh.",
+    "Celebrate your little one's special milestone with handcrafted 1st birthday theme cakes from Lollipop Cake Shop in Trichy.",
   alternates: {
     canonical: `${SITE_URL}/first-birthday`,
   },
+  keywords: [
+    "1st birthday cakes in Trichy",
+    "first birthday cake Trichy",
+    "baby smash cake Trichy",
+    "safari birthday cake Trichy",
+    "princess crown cake Trichy",
+    "Lollipop Cake Shop birthday cakes",
+  ],
   openGraph: {
-    title: "1st Birthday Cakes in Trichy | Lollipop Cake Shop",
+    title: "1st Birthday Cakes in Trichy | First Birthday Theme Cakes | Lollipop Cake Shop",
     description:
-      "Celebrate your baby's milestone with handcrafted 1st birthday cakes in Trichy from Lollipop Cake Shop. Soft smash cakes and kids birthday cakes baked fresh.",
+      "Celebrate your little one's special milestone with handcrafted 1st birthday theme cakes from Lollipop Cake Shop in Trichy.",
     url: `${SITE_URL}/first-birthday`,
     siteName: "Lollipop Cake Shop",
     type: "website",
@@ -45,13 +53,10 @@ export default async function Page() {
             </span>
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">
-            1st Birthday Cakes in Trichy
+            1st Birthday Smash Cakes
           </h1>
-          <h2 className="font-display font-semibold text-lg sm:text-xl text-[#962854] mt-2">
-            Kids Birthday Cakes & Milestone Smash Cakes
-          </h2>
-          <p className="text-base sm:text-lg text-[#4A3E39] mt-2 leading-relaxed font-sans font-normal">
-            Celebrate baby&apos;s special milestone with handcrafted 1st birthday cakes, first birthday smash cakes, and delightful kids birthday cakes in Trichy.
+          <p className="text-base sm:text-lg text-[#4A3E39] mt-3 leading-relaxed font-sans font-normal">
+            Ultra-soft vanilla smash cakes, safari animal tiers, and royal princess crowns for your baby&apos;s first celebration.
           </p>
         </div>
       </section>

@@ -25,13 +25,13 @@ export async function generateMetadata({
     `Order fresh ${cleanName} online in Trichy from Lollipop Cake Shop. 100% fresh, handcrafted with premium ingredients, fast delivery.`;
 
   return {
-    title: `${cleanName} | Lollipop Cake Shop Trichy`,
+    title: `${cleanName} in Trichy | Lollipop Cake Shop`,
     description,
     alternates: {
       canonical: `${SITE_URL}/products/${slug}`,
     },
     openGraph: {
-      title: `${cleanName} | Lollipop Cake Shop Trichy`,
+      title: `${cleanName} in Trichy | Lollipop Cake Shop`,
       description,
       url: `${SITE_URL}/products/${slug}`,
       siteName: "Lollipop Cake Shop",
@@ -39,13 +39,13 @@ export async function generateMetadata({
       images: [
         {
           url: fullImageUrl,
-          alt: `${cleanName} from Lollipop Cake Shop in Trichy`,
+          alt: `${cleanName} cake from Lollipop Cake Shop`,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${cleanName} | Lollipop Cake Shop Trichy`,
+      title: `${cleanName} in Trichy | Lollipop Cake Shop`,
       description,
       images: [fullImageUrl],
     },

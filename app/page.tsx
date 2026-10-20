@@ -7,16 +7,49 @@ import { SITE_URL } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Lollipop Cake Shop Trichy | Birthday & Custom Cakes",
+  title: "Lollipop Cake Shop | Fresh Cakes, Snacks & Delivery in Trichy",
   description:
-    "Lollipop Cake Shop in Trichy offers fresh birthday cakes, custom cakes, wedding cakes, bento cakes, eggless cakes, pastries and snacks. Order cakes online in Tiruchirappalli.",
+    "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Enjoy convenient delivery and special offers.",
   alternates: {
     canonical: SITE_URL,
   },
+  keywords: [
+    "Lollipop Cake Shop",
+    "Lollipop Cake Shop Trichy",
+    "Lollipop cakes",
+    "Lollipop cake shop Trichy",
+    "Lollipop bakery Trichy",
+    "Lollipop cakes Trichy",
+    "Lollipop online cake shop",
+    "Lollipop cake delivery Trichy",
+    "Lollipop customized cakes",
+    "Lollipop bento cakes",
+    "Lollipop snacks Trichy",
+    "www.lollipopcakeshop.in",
+    "lollipopcakeshop.in",
+    "best fresh cakes in Trichy",
+    "best cake shop in Trichy",
+    "cake shop in Trichy",
+    "fresh cakes in Trichy",
+    "online cake shop in Trichy",
+    "order cake online in Trichy",
+    "cake delivery in Trichy",
+    "fast cake delivery in Trichy",
+    "birthday cakes in Trichy",
+    "customized cakes in Trichy",
+    "chocolate cake in Trichy",
+    "wedding cakes in Trichy",
+    "bento cakes in Trichy",
+    "dry cakes in Trichy",
+    "snacks in Trichy",
+    "online snacks shop in Trichy",
+    "cake offers in Trichy",
+    "1 kg cake + 1/2 kg free Trichy",
+  ],
   openGraph: {
-    title: "Lollipop Cake Shop Trichy | Birthday & Custom Cakes",
+    title: "Lollipop Cake Shop | Fresh Cakes, Snacks & Delivery in Trichy",
     description:
-      "Lollipop Cake Shop in Trichy offers fresh birthday cakes, custom cakes, wedding cakes, bento cakes, eggless cakes, pastries and snacks. Order cakes online in Tiruchirappalli.",
+      "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Enjoy convenient delivery and special offers.",
     url: SITE_URL,
     siteName: "Lollipop Cake Shop",
     locale: "en_IN",
@@ -28,13 +61,11 @@ const OCCASIONS = [
   {
     id: "first-birthday",
     badge: "Milestone",
-    title: "1st Birthday Cakes\nin Trichy",
-    tagline: "Soft Baby Smash Cakes",
-    desc: "Crafted tenderly with organic, low-sugar ingredients perfect for baby's milestone 1st birthday in Trichy.",
+    title: "1st Birthday\nSmash",
+    tagline: "Pure & Low Sugar",
+    desc: "Crafted tenderly with organic, low-sugar ingredients perfect for baby's first celebration.",
     image: "/images/celebration_opt/1st_birthdaycake.png",
-    imageAlt: "1st birthday cake from Lollipop Cake Shop in Trichy",
     href: "/first-birthday",
-    ctaText: "EXPLORE 1ST BIRTHDAY CAKES IN TRICHY",
     iconType: "cake",
     doodle: "sparkle",
     doodleClass: "right-[46%] top-[20%]",
@@ -44,13 +75,11 @@ const OCCASIONS = [
   {
     id: "wedding",
     badge: "Luxury",
-    title: "Wedding Cakes\nin Trichy",
+    title: "Wedding\nCenterpieces",
     tagline: "Multi-tiered Luxury",
-    desc: "Bespoke tier architecture decorated with edible gold leaf and delicate sugar flowers for weddings in Trichy.",
+    desc: "Bespoke tier architecture decorated with edible gold leaf and delicate sugar flowers.",
     image: "/images/celebration_opt/weddingcake.png",
-    imageAlt: "Custom wedding cake in Trichy from Lollipop Cake Shop",
     href: "/wedding-cakes",
-    ctaText: "EXPLORE WEDDING CAKES IN TRICHY",
     iconType: "rings",
     doodle: null,
     doodleClass: "",
@@ -60,13 +89,11 @@ const OCCASIONS = [
   {
     id: "custom",
     badge: "Personalized",
-    title: "Custom Cakes\nStudio",
-    tagline: "Designer & Photo Cakes",
-    desc: "You imagine it, our master artisans bring your custom birthday cakes and designer cakes in Trichy to sweet reality.",
+    title: "Custom 3D\nStudio",
+    tagline: "Bespoke Custom Design",
+    desc: "You imagine it, our master artisans bring your dream cake concept to sweet reality.",
     image: "/images/celebration_opt/customizecake.png",
-    imageAlt: "Custom designer cake from Lollipop Cake Shop in Trichy",
     href: "/custom-cake",
-    ctaText: "VIEW CUSTOM CAKES IN TRICHY",
     iconType: "sparkles",
     doodle: "sparkle",
     doodleClass: "right-[46%] top-[25%]",
@@ -76,13 +103,11 @@ const OCCASIONS = [
   {
     id: "bento",
     badge: "Trending",
-    title: "Korean Bento\nCakes",
+    title: "Korean Bento\nBox",
     tagline: "Cute 300g Mini Treats",
-    desc: "Adorable mini bento cakes in Trichy packed in eco-friendly minimalist bento boxes with custom message piping.",
+    desc: "Adorable mini cakes packed in eco-friendly minimalist bento boxes with wooden cutlery.",
     image: "/images/celebration_opt/betocake.png",
-    imageAlt: "Bento cake from Lollipop Cake Shop in Trichy",
     href: "/bento-cake",
-    ctaText: "EXPLORE BENTO CAKES IN TRICHY",
     iconType: "gift",
     doodle: "heart",
     doodleClass: "right-4 sm:right-5 top-4 sm:top-5",
@@ -95,37 +120,28 @@ const CATEGORY_SHOWCASES = [
   {
     id: "cakes",
     slug: "cakes",
-    title: "Birthday Cakes in Trichy",
+    title: "Normal Cakes",
     subtitle: "A SLICE OF SWEET MEMORIES",
-    desc: "Classic flavours, chocolate cakes, and eggless birthday cakes baked fresh daily in Trichy.",
-    cta: "EXPLORE BIRTHDAY CAKES IN TRICHY →",
+    desc: "Classic flavours, baked for every sweet moment.",
+    cta: "EXPLORE THE CLASSICS →",
     href: "/cakes",
-  },
-  {
-    id: "custom-cake",
-    slug: "cakes", // fallback catalog products
-    title: "Custom Cakes for Every Celebration",
-    subtitle: "DESIGNER & BESPOKE STUDIO",
-    desc: "Handcrafted theme cakes, designer cakes, and custom photo cakes made for your special celebration in Trichy.",
-    cta: "VIEW CUSTOM CAKES IN TRICHY →",
-    href: "/custom-cake",
   },
   {
     id: "first-birthday",
     slug: "first-birthday",
     title: "1st Birthday Cakes",
     subtitle: "A WISH FOR THEIR FIRST",
-    desc: "Magical 1st birthday cakes and smash cakes for baby's very first celebration in Trichy.",
-    cta: "EXPLORE 1ST BIRTHDAY CAKES →",
+    desc: "Magical cakes for their very first celebration.",
+    cta: "MAKE A WISH →",
     href: "/first-birthday",
   },
   {
     id: "wedding-cakes",
     slug: "wedding-cakes",
-    title: "Wedding Cakes in Trichy",
+    title: "Wedding Cakes",
     subtitle: "LOVE, LAYER BY LAYER",
-    desc: "Elegant tiered wedding cakes and custom reception cakes crafted for your forever moment.",
-    cta: "EXPLORE WEDDING CAKES IN TRICHY →",
+    desc: "Elegant creations for your forever moment.",
+    cta: "EXPLORE THE COLLECTION →",
     href: "/wedding-cakes",
   },
   {
@@ -133,18 +149,27 @@ const CATEGORY_SHOWCASES = [
     slug: "bento-cake",
     title: "Bento Cakes",
     subtitle: "LITTLE CAKES, BIG LOVE",
-    desc: "Custom bento cakes in Trichy piped with your personalized sweet messages.",
-    cta: "EXPLORE BENTO CAKES →",
+    desc: "Tiny treats made for the moments that matter.",
+    cta: "DISCOVER LITTLE DELIGHTS →",
     href: "/bento-cake",
   },
   {
     id: "snacks",
     slug: "snacks",
-    title: "Pastries & Bakery Snacks",
+    title: "Snacks & Pastries",
     subtitle: "LITTLE BITES OF HAPPINESS",
-    desc: "Freshly baked pastries, savory puffs, brownies, and bakery snacks in Trichy.",
-    cta: "EXPLORE PASTRIES IN TRICHY →",
+    desc: "Freshly baked delights for every little craving.",
+    cta: "EXPLORE THE BAKES →",
     href: "/snacks",
+  },
+  {
+    id: "custom-cake",
+    slug: "cakes", // fallback catalog products
+    title: "Customised Cakes",
+    subtitle: "MADE FROM YOUR IMAGINATION",
+    desc: "You imagine it. We turn it into cake.",
+    cta: "CREATE YOUR DREAM CAKE →",
+    href: "/custom-cake",
   },
 ];
 
@@ -194,16 +219,19 @@ export default async function HomePage() {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 shadow-sm">
               <span className="material-symbols-outlined text-sm text-[#962854]">auto_awesome</span>
               <span className="text-xs font-bold text-[#1C0D0A] uppercase tracking-wider">
-                 PREMIUM ARTISANAL CAKE SHOP IN TRICHY
+                 PREMIUM ARTISANAL BAKERY
               </span>
             </div>
 
             <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-[#1C0D0A] leading-[1.02] tracking-tight">
-              Lollipop Cake Shop – <span className="text-[#962854] font-display italic font-semibold">Cakes in Trichy</span>
+              Made for <span className="text-[#962854] font-display italic font-semibold">Moments.</span>
+              <br />
+              Baked for <span className="text-[#962854] font-display italic font-semibold">Memories.</span>
             </h1>
 
             <p className="text-base sm:text-lg text-[#5C524E] font-normal max-w-lg leading-relaxed pt-1 mx-auto lg:mx-0">
-              Welcome to Lollipop The Cake Shop, your favourite cake shop in Trichy and Tiruchirappalli. Handcrafted fresh daily with premium ingredients, we create beautiful birthday cakes, bespoke custom cakes, elegant wedding cakes, cute bento cakes, and bakery snacks with 2-hour express cake delivery in Trichy.
+              &ldquo;Beautifully crafted, irresistibly delicious, and made with passion — our cakes are created to make
+              every celebration feel a little more extraordinary.&rdquo;
             </p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
@@ -211,7 +239,7 @@ export default async function HomePage() {
                 href="/cakes"
                 className="btn-primary py-3.5 px-8 text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-2"
               >
-                <span>EXPLORE BIRTHDAY CAKES IN TRICHY</span>
+                <span>EXPLORE CATALOG</span>
                 <span className="material-symbols-outlined text-sm">east</span>
               </Link>
               <Link
@@ -219,7 +247,7 @@ export default async function HomePage() {
                 className="btn-secondary py-3.5 px-7 text-xs font-bold uppercase tracking-wider flex items-center gap-2"
               >
                 <span className="material-symbols-outlined text-sm text-[#962854]">auto_awesome</span>
-                <span>VIEW CUSTOM CAKES IN TRICHY</span>
+                <span>CUSTOM CAKE</span>
               </Link>
             </div>
 
@@ -269,7 +297,7 @@ export default async function HomePage() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/logo_master_border_balanced.png"
-                  alt="Artisanal cake shop in Trichy badge border from Lollipop Cake Shop"
+                  alt="Revolving Wavy Scalloped Border Badge"
                   className="w-full h-full object-contain drop-shadow-xl"
                 />
               </div>
@@ -280,7 +308,7 @@ export default async function HomePage() {
                 <img
                   id="hero-cake-img"
                   src="/images/logo_master_inner_balanced.png"
-                  alt="Lollipop The Cake Shop Signature Logo - Cakes in Trichy"
+                  alt="Lollipop The Cake Shop Signature Logo"
                   className="w-full h-full object-contain select-none cursor-pointer drop-shadow-sm transition-transform duration-300"
                 />
               </div>
@@ -407,7 +435,7 @@ export default async function HomePage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={occ.image}
-                    alt={occ.imageAlt || occ.title.replace("\n", " ")}
+                    alt={occ.title.replace("\n", " ")}
                     className="max-w-full max-h-[88%] sm:max-h-[90%] object-contain filter drop-shadow-[0_10px_16px_rgba(60,20,30,0.14)] drop-shadow-[0_2px_4px_rgba(0,0,0,0.06)] group-hover:scale-105 transition-transform duration-500 ease-out"
                     loading="eager"
                   />
@@ -475,7 +503,7 @@ export default async function HomePage() {
                         : "border border-[#C88FA0]/60 text-[#8C2346] bg-transparent group-hover:bg-gradient-to-r group-hover:from-[#8C2346] group-hover:to-[#711634] group-hover:text-white group-hover:border-transparent group-hover:shadow-md"
                     }`}
                   >
-                    <span>{occ.ctaText || "EXPLORE COLLECTION"}</span>
+                    <span>EXPLORE COLLECTION</span>
                     <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
                   </span>
                 </div>
@@ -553,39 +581,6 @@ export default async function HomePage() {
       </section>
 
       {/* ───────────────────────────────────────────────────────────────
-         BRAND & LOCAL SEO SECTION: LOLLIPOP CAKE SHOP IN TRICHY
-         ─────────────────────────────────────────────────────────────── */}
-      <section className="py-14 sm:py-20 bg-gradient-to-b from-[#FAF3EC]/60 to-[#FFF9F5] border-y border-[#E6C184]/30">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#962854] block">
-            ARTISANAL QUALITY • AFFORDABLE PRICING • TRICHY SINCE 2019
-          </span>
-          <h2 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] tracking-tight">
-            Lollipop Cake Shop in Trichy
-          </h2>
-          <p className="text-sm sm:text-base text-[#5C524E] leading-relaxed max-w-3xl mx-auto font-normal">
-            At Lollipop The Cake Shop (Lollipop Cake Shop Tiruchirappalli), we believe every celebration deserves a handcrafted masterpiece without an extravagant price tag. As a premier cake shop in Trichy operating with two retail branches in Sanjeevi Nagar and Andar Veedhi, our artisanal bakery specializes in fresh birthday cakes, bespoke custom cakes, elegant wedding cakes, cute bento cakes, eggless cakes, rich chocolate cakes, and delicious French pastries. Whether you require same-day celebrations or advance bespoke orders, our dedicated team provides seamless online ordering with fast cake delivery in Trichy.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <Link
-              href="/about#branches"
-              className="btn-primary py-3.5 px-7 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-md"
-            >
-              <span>FIND LOLLIPOP CAKE SHOP LOCATIONS IN TRICHY</span>
-              <span className="material-symbols-outlined text-sm">location_on</span>
-            </Link>
-            <Link
-              href="/cakes"
-              className="btn-secondary py-3.5 px-7 text-xs font-bold uppercase tracking-wider flex items-center gap-2"
-            >
-              <span>VIEW CAKES FROM LOLLIPOP CAKE SHOP</span>
-              <span className="material-symbols-outlined text-sm text-[#962854]">cake</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ───────────────────────────────────────────────────────────────
          6. CUSTOMER REVIEWS & TESTIMONIALS
          ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 sm:py-24 bg-[#FFF9F5]">
@@ -657,16 +652,17 @@ export default async function HomePage() {
               auto_awesome
             </span>
             <h2 className="font-display font-bold text-3xl sm:text-5xl mb-4 leading-tight">
-              Design Your Custom Celebration Cake
+              Design Your Dream Custom Cake
             </h2>
             <p className="text-[#D8C3B3] max-w-xl mx-auto mb-8 text-sm sm:text-base leading-relaxed">
-              Pick your favourite flavour, multi-tier structure, and personalized message — our master pastry chefs at Lollipop Cake Shop in Trichy will bring your custom cake vision to life!
+              Pick your flavour, shape, multi-tier structure and personalized message — our pastry chefs will bring
+              your custom cake vision to life!
             </p>
             <Link
               href="/custom-cake"
               className="btn-primary inline-flex items-center gap-2 py-4 px-10 text-xs font-bold uppercase tracking-wider shadow-xl hover:scale-105 transition-transform"
             >
-              <span>VIEW CUSTOM CAKES IN TRICHY</span>
+              <span>CREATE YOUR DREAM CAKE</span>
               <span className="material-symbols-outlined text-sm">east</span>
             </Link>
           </div>

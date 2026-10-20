@@ -6,16 +6,24 @@ import { SITE_URL } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Bento Cakes in Trichy | Lollipop Cake Shop",
+  title: "Bento Cakes in Trichy | Cute Korean Lunchbox Cakes | Lollipop Cake Shop",
   description:
-    "Order adorable Korean bento cakes in Trichy from Lollipop Cake Shop. Cute mini cakes with custom message piping, perfect for intimate surprises.",
+    "Cute minimalist Korean lunchbox bento cakes piped with custom messages in Trichy from Lollipop Cake Shop.",
   alternates: {
     canonical: `${SITE_URL}/bento-cake`,
   },
+  keywords: [
+    "bento cakes in Trichy",
+    "korean bento cake Trichy",
+    "mini lunchbox cake Trichy",
+    "cute bento cakes Trichy",
+    "custom message cake Trichy",
+    "Lollipop Cake Shop bento cake",
+  ],
   openGraph: {
-    title: "Bento Cakes in Trichy | Lollipop Cake Shop",
+    title: "Bento Cakes in Trichy | Cute Korean Lunchbox Cakes | Lollipop Cake Shop",
     description:
-      "Order adorable Korean bento cakes in Trichy from Lollipop Cake Shop. Cute mini cakes with custom message piping, perfect for intimate surprises.",
+      "Cute minimalist Korean lunchbox bento cakes piped with custom messages in Trichy from Lollipop Cake Shop.",
     url: `${SITE_URL}/bento-cake`,
     siteName: "Lollipop Cake Shop",
     type: "website",
@@ -44,10 +52,10 @@ export default async function Page() {
             </span>
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">
-            Bento Cakes in Trichy
+            Korean Cute Bento Cakes
           </h1>
           <p className="text-base sm:text-lg text-[#4A3E39] mt-3 leading-relaxed font-sans font-normal">
-            Order adorable bento cakes in Trichy! Our 300g Korean bento cake and custom bento cakes are packed in eco-friendly mini lunchboxes with personalized text piping.
+            Adorable 300g mini lunchbox cakes in pastel aesthetic styles with custom text piping.
           </p>
         </div>
       </section>

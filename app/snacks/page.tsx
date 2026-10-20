@@ -6,16 +6,25 @@ import { SITE_URL } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Pastries & Snacks in Trichy | Lollipop Cake Shop",
+  title: "Fresh Snacks & Pastries in Trichy | Lollipop Cake Shop",
   description:
-    "Fresh pastries, brownies, savory puffs, and bakery snacks in Trichy baked daily by Lollipop Cake Shop.",
+    "Freshly baked puffs, rolls, brownies, cupcakes and savory snacks delivered daily in Trichy from Lollipop Cake Shop.",
   alternates: {
     canonical: `${SITE_URL}/snacks`,
   },
+  keywords: [
+    "snacks in Trichy",
+    "fresh pastries Trichy",
+    "online snacks shop in Trichy",
+    "cupcakes Trichy",
+    "brownies Trichy",
+    "puff pastries Trichy",
+    "Lollipop Cake Shop snacks",
+  ],
   openGraph: {
-    title: "Pastries & Snacks in Trichy | Lollipop Cake Shop",
+    title: "Fresh Snacks & Pastries in Trichy | Lollipop Cake Shop",
     description:
-      "Fresh pastries, brownies, savory puffs, and bakery snacks in Trichy baked daily by Lollipop Cake Shop.",
+      "Freshly baked puffs, rolls, brownies, cupcakes and savory snacks delivered daily in Trichy from Lollipop Cake Shop.",
     url: `${SITE_URL}/snacks`,
     siteName: "Lollipop Cake Shop",
     type: "website",
@@ -37,10 +46,10 @@ export default async function Page() {
             </span>
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">
-            Pastries & Snacks in Trichy
+            French Pastries & Artisanal Snacks
           </h1>
           <p className="text-base sm:text-lg text-[#4A3E39] mt-3 leading-relaxed font-sans font-normal">
-            Order fresh pastries in Trichy and bakery snacks from Lollipop Cake Shop. Enjoy delicious brownies, savory puffs, rolls, cupcakes, and bakery snacks baked fresh daily.
+            Dry cakes, doughnuts, cupcakes, brownies, cookies, savory puffs, buns, and fresh breads baked daily.
           </p>
         </div>
       </section>

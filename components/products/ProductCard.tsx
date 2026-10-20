@@ -82,7 +82,7 @@ export default function ProductCard({ product }: { product: Product }) {
       >
         <img
           src={cardImage}
-          alt={`${product.name} from Lollipop Cake Shop in Trichy`}
+          alt={product.name}
           width={1024}
           height={1024}
           decoding="async"

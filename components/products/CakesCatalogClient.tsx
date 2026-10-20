@@ -134,10 +134,11 @@ export default function CakesCatalogClient({
             </span>
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">
-            Cakes in Trichy
+            Signature Cake Collection
           </h1>
           <p className="text-base sm:text-lg text-[#4A3E39] mt-3 max-w-2xl mx-auto leading-relaxed font-normal">
-            Welcome to Lollipop Cake Shop. As Trichy&apos;s favourite cake shop in Trichy, we handcraft freshly baked birthday cakes, rich chocolate cakes, custom cakes, and eggless cakes with fast cake delivery in Trichy.
+            Every cake is handcrafted fresh to order. Choose your weight, pick
+            your preference, and we&apos;ll bake it fresh for you.
           </p>
           <div className="flex items-center justify-center gap-3 mt-5 flex-wrap">
             <span className="flex items-center gap-1.5 bg-[#FAF3EC] text-[#962854] text-xs font-bold px-4 py-1.5 rounded-full border border-[#E6C184]/40 shadow-xs">
@@ -311,28 +312,6 @@ export default function CakesCatalogClient({
           </div>
         )}
       </main>
-
-      {/* ── SEO CONTENT SUMMARY ── */}
-      <section className="bg-[#FAF3EC]/50 border-t border-[#E6C184]/30 py-12 px-4 sm:px-6 lg:px-8 mt-12 text-xs sm:text-sm text-[#5C524E]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-2">
-              Birthday Cakes in Trichy
-            </h2>
-            <p className="leading-relaxed">
-              Celebrate your milestone with freshly baked birthday cakes from Lollipop Cake Shop. Choose from decadent Belgian chocolate cakes, classic Black Forest, Red Velvet, and tender eggless cakes crafted daily by our master chefs with fast cake delivery in Trichy.
-            </p>
-          </div>
-          <div>
-            <h2 className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] mb-2">
-              Custom Cakes in Trichy
-            </h2>
-            <p className="leading-relaxed">
-              Planning a themed party, anniversary, or special celebration? Our cake studio creates bespoke custom cakes, designer cakes, photo cakes, and multi-tier wedding centerpieces tailored to your dream theme. Visit our branches in Sanjeevi Nagar and Andar Veedhi or order online today.
-            </p>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
