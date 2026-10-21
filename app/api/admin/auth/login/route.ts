@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, verifyPassword } from "@/lib/crypto";
 import { signJwt } from "@/lib/jwt";
-
 import { rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+// Session duration: 1 hour (3600 seconds)
+const SESSION_MAX_AGE_SECONDS = 3600;
 
 export async function POST(req: NextRequest) {
   // Brute-force protection: Max 5 login attempts per 15 minutes per IP
@@ -27,69 +29,87 @@ export async function POST(req: NextRequest) {
 
     const cleanEmail = email.trim().toLowerCase();
 
-    // Auto-seed initial Super Admin if default admin email does not exist yet
-    const initialAdminEmail = (process.env.INITIAL_ADMIN_EMAIL || "admin@lollipopcakeshop.com").trim().toLowerCase();
+    // Auto-seed or synchronize initial Super Admin from environment variables
+    const initialAdminEmail = process.env.INITIAL_ADMIN_EMAIL?.trim().toLowerCase();
     const initialAdminPassword = process.env.INITIAL_ADMIN_PASSWORD;
 
-    let existingDefaultAdmin = null;
-    try {
-      existingDefaultAdmin = await prisma.user.findUnique({
-        where: { email: initialAdminEmail },
-      });
-    } catch (err: any) {
-      console.warn("[POST /api/admin/auth/login] DB retry after cold-start pause...", err?.message);
-      await new Promise((r) => setTimeout(r, 600));
-      existingDefaultAdmin = await prisma.user.findUnique({
-        where: { email: initialAdminEmail },
-      });
-    }
-
-    if (!existingDefaultAdmin) {
-      if (initialAdminPassword) {
-        console.log(`🌱 Auto-seeding initial Super Admin user (${initialAdminEmail})...`);
-        const defaultPasswordHash = hashPassword(initialAdminPassword);
-        await prisma.user.create({
-          data: {
-            email: initialAdminEmail,
-            fullName: "Master Super Admin",
-            passwordHash: defaultPasswordHash,
-            role: "SUPERADMIN",
-            isActive: true,
-          },
-        });
-      }
-    } else if (initialAdminPassword && cleanEmail === initialAdminEmail && password === initialAdminPassword) {
-      const isValid = verifyPassword(password, existingDefaultAdmin.passwordHash || "");
-      if (!isValid) {
-        console.log(`🔄 Updating Super Admin password to match INITIAL_ADMIN_PASSWORD...`);
-        const updatedPasswordHash = hashPassword(initialAdminPassword);
-        await prisma.user.update({
+    if (initialAdminEmail && initialAdminPassword) {
+      let existingDefaultAdmin = null;
+      try {
+        existingDefaultAdmin = await prisma.user.findUnique({
           where: { email: initialAdminEmail },
-          data: {
-            passwordHash: updatedPasswordHash,
-            isActive: true,
-            role: "SUPERADMIN",
-          },
         });
+      } catch (err: any) {
+        console.warn("[POST /api/admin/auth/login] DB retry after cold-start pause...", err?.message);
+        await new Promise((r) => setTimeout(r, 600));
+        try {
+          existingDefaultAdmin = await prisma.user.findUnique({
+            where: { email: initialAdminEmail },
+          });
+        } catch {}
+      }
+
+      if (!existingDefaultAdmin) {
+        try {
+          console.log(`🌱 Auto-seeding initial Super Admin user (${initialAdminEmail})...`);
+          const defaultPasswordHash = hashPassword(initialAdminPassword);
+          await prisma.user.create({
+            data: {
+              email: initialAdminEmail,
+              fullName: "Master Super Admin",
+              passwordHash: defaultPasswordHash,
+              role: "SUPERADMIN",
+              isActive: true,
+            },
+          });
+        } catch (seedErr) {
+          console.warn("[POST /api/admin/auth/login] Auto-seed notice:", seedErr);
+        }
+      } else if (cleanEmail === initialAdminEmail && password === initialAdminPassword) {
+        const isValid = verifyPassword(password, existingDefaultAdmin.passwordHash || "");
+        if (!isValid) {
+          console.log(`🔄 Updating Super Admin password to match INITIAL_ADMIN_PASSWORD...`);
+          const updatedPasswordHash = hashPassword(initialAdminPassword);
+          await prisma.user.update({
+            where: { email: initialAdminEmail },
+            data: {
+              passwordHash: updatedPasswordHash,
+              isActive: true,
+              role: "SUPERADMIN",
+            },
+          });
+        }
       }
     }
 
-    // Find User in MySQL
-    const user = await prisma.user.findUnique({
-      where: { email: cleanEmail },
-    });
+    // Find User in Database
+    let user = null;
+    try {
+      user = await prisma.user.findUnique({
+        where: { email: cleanEmail },
+      });
+    } catch (dbErr: any) {
+      console.warn("[POST /api/admin/auth/login] DB retry user lookup...", dbErr?.message);
+      await new Promise((r) => setTimeout(r, 600));
+      user = await prisma.user.findUnique({
+        where: { email: cleanEmail },
+      });
+    }
+
+    // Generic OWASP authentication response (prevents account enumeration / hints)
+    const genericAuthError = "Invalid email or password.";
 
     if (!user || !user.passwordHash || !user.isActive) {
       return NextResponse.json(
-        { success: false, error: "Invalid email credentials or inactive account." },
+        { success: false, error: genericAuthError },
         { status: 401 }
       );
     }
 
     if (user.role !== "ADMIN" && user.role !== "SUPERADMIN") {
       return NextResponse.json(
-        { success: false, error: "Access denied. Admin privileges required." },
-        { status: 403 }
+        { success: false, error: genericAuthError },
+        { status: 401 }
       );
     }
 
@@ -97,12 +117,12 @@ export async function POST(req: NextRequest) {
     const isValidPassword = verifyPassword(password, user.passwordHash);
     if (!isValidPassword) {
       return NextResponse.json(
-        { success: false, error: "Invalid email or password credentials." },
+        { success: false, error: genericAuthError },
         { status: 401 }
       );
     }
 
-    // Generate JWT Token
+    // Generate JWT Token with 1-hour expiration
     const userPayload = {
       userId: user.id.toString(),
       email: user.email,
@@ -110,9 +130,9 @@ export async function POST(req: NextRequest) {
       role: user.role,
     };
 
-    const token = signJwt(userPayload);
+    const token = signJwt(userPayload, SESSION_MAX_AGE_SECONDS);
 
-    // Create HTTP-Only Cookie Response
+    // Create HTTP-Only Cookie Response with 1-hour session lifetime
     const response = NextResponse.json({
       success: true,
       message: "Admin login successful!",
@@ -127,14 +147,14 @@ export async function POST(req: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
-      maxAge: 86400, // 24 hours
+      maxAge: SESSION_MAX_AGE_SECONDS, // Exactly 1 hour (3600 seconds)
     });
 
     return response;
   } catch (error: any) {
     console.error("[POST /api/admin/auth/login] Error:", error);
     return NextResponse.json(
-      { success: false, error: "Authentication failed server error." },
+      { success: false, error: "Authentication service temporarily unavailable." },
       { status: 500 }
     );
   }

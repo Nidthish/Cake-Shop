@@ -291,7 +291,8 @@ export async function sendOrderConfirmationEmail(order: Order): Promise<{ succes
     const smtpUser = (process.env.SMTP_USER || "").trim();
     let fromAddress = process.env.EMAIL_FROM?.trim();
     if (!fromAddress || !fromAddress.includes("@")) {
-      fromAddress = `"Lollipop Cake Shop" <${smtpUser || "no-reply@lollipopcakeshop.com"}>`;
+      const fallbackEmail = smtpUser || process.env.INITIAL_ADMIN_EMAIL || "orders@lollipopcakeshop.in";
+      fromAddress = `"Lollipop Cake Shop" <${fallbackEmail}>`;
     }
 
     const htmlContent = generateOrderConfirmationHtml(order);
@@ -537,7 +538,8 @@ export async function sendOrderDeliveredEmail(order: Order): Promise<{ success: 
     const smtpUser = (process.env.SMTP_USER || "").trim();
     let fromAddress = process.env.EMAIL_FROM?.trim();
     if (!fromAddress || !fromAddress.includes("@")) {
-      fromAddress = `"Lollipop Cake Shop" <${smtpUser || "no-reply@lollipopcakeshop.com"}>`;
+      const fallbackEmail = smtpUser || process.env.INITIAL_ADMIN_EMAIL || "orders@lollipopcakeshop.in";
+      fromAddress = `"Lollipop Cake Shop" <${fallbackEmail}>`;
     }
 
     const htmlContent = generateOrderDeliveredHtml(order);

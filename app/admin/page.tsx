@@ -1091,7 +1091,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
+          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5" autoComplete="off">
             <div>
               <label className="block text-xs font-bold uppercase text-[#E6C184] mb-1.5 tracking-wider">
                 Admin Email
@@ -1100,9 +1100,15 @@ export default function AdminPage() {
               <input
                 type="email"
                 required
-                placeholder="admin@lollipopcakeshop.com"
+                placeholder="Enter admin email"
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck="false"
+                data-lpignore="true"
+                data-form-type="other"
                 className="w-full px-4 py-3 bg-[#1C061E] border border-[#962854]/50 rounded-xl text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#E6C184] transition-colors"
               />
             </div>
@@ -1117,6 +1123,8 @@ export default function AdminPage() {
                 placeholder="••••••••••••"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
+                autoComplete="new-password"
+                data-lpignore="true"
                 className="w-full px-4 py-3 bg-[#1C061E] border border-[#962854]/50 rounded-xl text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#E6C184] transition-colors"
               />
             </div>
@@ -2260,7 +2268,7 @@ export default function AdminPage() {
               </button>
             </div>
 
-            <form onSubmit={handleCreateAdminUser} className="space-y-3.5 text-xs">
+            <form onSubmit={handleCreateAdminUser} className="space-y-3.5 text-xs" autoComplete="off">
               <div>
                 <label className="block text-xs font-bold uppercase text-[#5B1E38] mb-1">
                   Full Name *
@@ -2282,7 +2290,7 @@ export default function AdminPage() {
                 <input
                   type="email"
                   required
-                  placeholder="arun.rider@lollipopcakeshop.com"
+                  placeholder="rider@example.com"
                   value={newAdminEmail}
                   onChange={(e) => setNewAdminEmail(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"

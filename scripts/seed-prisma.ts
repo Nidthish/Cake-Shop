@@ -13,8 +13,12 @@ async function main() {
   console.log("🌱 [Prisma Seed] Starting Neon PostgreSQL Seeding...");
 
   // 1. Seed Initial Super Admin User
-  const initialEmail = (process.env.INITIAL_ADMIN_EMAIL || "admin@lollipopcakeshop.com").trim().toLowerCase();
+  const initialEmail = process.env.INITIAL_ADMIN_EMAIL?.trim().toLowerCase();
   const initialPassword = process.env.INITIAL_ADMIN_PASSWORD;
+  if (!initialEmail) {
+    console.error("❌ ERROR: INITIAL_ADMIN_EMAIL environment variable is not set.");
+    process.exit(1);
+  }
   if (!initialPassword) {
     console.error("❌ ERROR: INITIAL_ADMIN_PASSWORD environment variable is not set.");
     process.exit(1);

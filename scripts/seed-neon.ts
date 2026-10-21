@@ -183,7 +183,7 @@ async function main() {
 
   // Seed Admin User
   console.log("👤 Seeding default Super Admin user into Neon...");
-  const adminEmail = (process.env.INITIAL_ADMIN_EMAIL || "admin@lollipopcakeshop.com").trim().toLowerCase();
+  const adminEmail = process.env.INITIAL_ADMIN_EMAIL?.trim().toLowerCase();
   const adminPassword = process.env.INITIAL_ADMIN_PASSWORD;
   if (!adminPassword) {
     console.error("❌ ERROR: INITIAL_ADMIN_PASSWORD environment variable is not set.");
