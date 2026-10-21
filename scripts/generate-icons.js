@@ -34,12 +34,17 @@ async function generateAllIcons() {
       .toBuffer();
   }
 
-  // 2. Generate 512x512 icon.png
+  // Clean up any stale app/ metadata icons to avoid Next.js conflicting public/page errors
+  ['../app/icon.png', '../app/favicon.ico', '../app/apple-icon.png'].forEach((f) => {
+    const p = path.join(__dirname, f);
+    if (fs.existsSync(p)) fs.unlinkSync(p);
+  });
+
+  // 2. Generate 512x512 icon.png in public/
   console.log('Generating 512x512 icon.png...');
   const icon512 = await createSquareIcon(512);
   fs.writeFileSync(path.join(__dirname, '../public/icon.png'), icon512);
-  fs.writeFileSync(path.join(__dirname, '../app/icon.png'), icon512);
-  console.log('✅ Wrote public/icon.png and app/icon.png (512x512)');
+  console.log('✅ Wrote public/icon.png (512x512)');
 
   // 3. Generate 192x192 favicon.png (multiple of 48px: 48 * 4 = 192, optimal for Googlebot)
   console.log('Generating 192x192 favicon.png...');
@@ -51,8 +56,7 @@ async function generateAllIcons() {
   console.log('Generating 180x180 apple-icon.png...');
   const icon180 = await createSquareIcon(180);
   fs.writeFileSync(path.join(__dirname, '../public/apple-icon.png'), icon180);
-  fs.writeFileSync(path.join(__dirname, '../app/apple-icon.png'), icon180);
-  console.log('✅ Wrote public/apple-icon.png and app/apple-icon.png (180x180)');
+  console.log('✅ Wrote public/apple-icon.png (180x180)');
 
   // 5. Generate 48x48, 32x32, 16x16 PNGs for ICO
   const icon48 = await createSquareIcon(48);
@@ -89,19 +93,15 @@ async function generateAllIcons() {
 
   const icoBuffer = Buffer.concat([icoHeader, ...entries, ...pngBuffers]);
   fs.writeFileSync(path.join(__dirname, '../public/favicon.ico'), icoBuffer);
-  fs.writeFileSync(path.join(__dirname, '../app/favicon.ico'), icoBuffer);
-  console.log('✅ Wrote public/favicon.ico and app/favicon.ico (Multi-size ICO: 16x16, 32x32, 48x48)');
+  console.log('✅ Wrote public/favicon.ico (Multi-size ICO: 16x16, 32x32, 48x48)');
 
   // 7. Verify all files exist
   console.log('\n--- VERIFICATION OF GENERATED ASSETS ---');
   [
     '../public/icon.png',
-    '../app/icon.png',
     '../public/favicon.png',
     '../public/favicon.ico',
-    '../app/favicon.ico',
     '../public/apple-icon.png',
-    '../app/apple-icon.png',
   ].forEach(relPath => {
     const absPath = path.join(__dirname, relPath);
     const stat = fs.statSync(absPath);

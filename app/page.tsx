@@ -7,32 +7,22 @@ import { SITE_URL } from "@/lib/site";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Lollipop Cake Shop | Fresh Cakes, Snacks & Delivery in Trichy",
+  title: "Lollipop Cake Shop",
   description:
-    "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Enjoy convenient delivery and special offers.",
+    "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Handcrafted fresh daily with same-day delivery across Tiruchirappalli.",
   alternates: {
     canonical: SITE_URL,
   },
   keywords: [
     "Lollipop Cake Shop",
     "Lollipop Cake Shop Trichy",
+    "Trichy Lollipop The Cake Shop",
+    "Lollipop The Cake Shop",
     "Lollipop cakes",
-    "Lollipop cake shop Trichy",
     "Lollipop bakery Trichy",
-    "Lollipop cakes Trichy",
-    "Lollipop online cake shop",
-    "Lollipop cake delivery Trichy",
-    "Lollipop customized cakes",
-    "Lollipop bento cakes",
-    "Lollipop snacks Trichy",
-    "www.lollipopcakeshop.in",
-    "lollipopcakeshop.in",
-    "best fresh cakes in Trichy",
     "best cake shop in Trichy",
-    "cake shop in Trichy",
     "fresh cakes in Trichy",
     "online cake shop in Trichy",
-    "order cake online in Trichy",
     "cake delivery in Trichy",
     "fast cake delivery in Trichy",
     "birthday cakes in Trichy",
@@ -42,14 +32,14 @@ export const metadata: Metadata = {
     "bento cakes in Trichy",
     "dry cakes in Trichy",
     "snacks in Trichy",
-    "online snacks shop in Trichy",
-    "cake offers in Trichy",
-    "1 kg cake + 1/2 kg free Trichy",
+    "cake shop Townhall Trichy",
+    "cake shop Sanjeevi Nagar Trichy",
+    "cake shop Andar Veedhi Trichy",
   ],
   openGraph: {
-    title: "Lollipop Cake Shop | Fresh Cakes, Snacks & Delivery in Trichy",
+    title: "Lollipop Cake Shop",
     description:
-      "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Enjoy convenient delivery and special offers.",
+      "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Handcrafted fresh daily with same-day delivery across Tiruchirappalli.",
     url: SITE_URL,
     siteName: "Lollipop Cake Shop",
     locale: "en_IN",
@@ -224,6 +214,7 @@ export default async function HomePage() {
             </div>
 
             <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-[#1C0D0A] leading-[1.02] tracking-tight">
+              <span className="sr-only">Lollipop Cake Shop — </span>
               Made for <span className="text-[#962854] font-display italic font-semibold">Moments.</span>
               <br />
               Baked for <span className="text-[#962854] font-display italic font-semibold">Memories.</span>

@@ -101,7 +101,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-3 xl:gap-5 text-[12px] xl:text-[13px] uppercase tracking-wider font-semibold whitespace-nowrap">
+          <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-3 xl:gap-5 text-[12px] xl:text-[13px] uppercase tracking-wider font-semibold whitespace-nowrap">
             {NAV_LINKS.map((l) => {
               const isActive =
                 l.href === "/"
@@ -204,7 +204,7 @@ export default function Navbar() {
         </div>
 
         {/* Drawer Scrollable Links Container */}
-        <nav className="flex-1 min-h-0 overflow-y-auto px-3.5 py-3 space-y-1 overscroll-contain">
+        <nav aria-label="Mobile Navigation" className="flex-1 min-h-0 overflow-y-auto px-3.5 py-3 space-y-1 overscroll-contain">
           {DRAWER_LINKS.map((l) => {
             const isActive =
               l.href === "/"
