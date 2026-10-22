@@ -214,7 +214,7 @@ export default async function HomePage() {
             </div>
 
             <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-[#1C0D0A] leading-[1.02] tracking-tight">
-              <span className="sr-only">Lollipop Cake Shop — </span>
+              <span className="sr-only">LollipopCakeShop — </span>
               Made for <span className="text-[#962854] font-display italic font-semibold">Moments.</span>
               <br />
               Baked for <span className="text-[#962854] font-display italic font-semibold">Memories.</span>

@@ -1,6 +1,6 @@
 {
-  "name": "Lollipop Cake Shop",
-  "short_name": "Lollipop",
+  "name": "LollipopCakeShop",
+  "short_name": "LollipopCakeShop",
   "description": "Handcrafted fresh cakes, snacks, and celebration treats delivered across Trichy.",
   "start_url": "/",
   "display": "standalone",

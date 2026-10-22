@@ -28,14 +28,15 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  applicationName: "Lollipop Cake Shop",
+  applicationName: "LollipopCakeShop",
   title: {
-    default: "Lollipop Cake Shop",
-    template: "%s | Lollipop Cake Shop",
+    default: "LollipopCakeShop",
+    template: "%s | LollipopCakeShop",
   },
   description:
-    "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Handcrafted daily with same-day doorstep delivery.",
+    "Order delicious cakes online from LollipopCakeShop in Tiruchirappalli. Fresh cakes for birthdays, weddings, celebrations and every special occasion. Handcrafted daily with same-day doorstep delivery.",
   keywords: [
+    "LollipopCakeShop",
     "Lollipop Cake Shop",
     "Lollipop Cake Shop Trichy",
     "Trichy Lollipop The Cake Shop",
@@ -60,42 +61,46 @@ export const metadata: Metadata = {
     canonical: SITE_URL,
   },
   openGraph: {
-    title: "Lollipop Cake Shop",
+    title: "LollipopCakeShop",
     description:
-      "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy. Handcrafted daily with same-day doorstep delivery.",
-    siteName: "Lollipop Cake Shop",
+      "Order delicious cakes online from LollipopCakeShop in Tiruchirappalli. Fresh cakes for birthdays, weddings, celebrations and every special occasion. Handcrafted daily with same-day doorstep delivery.",
+    siteName: "LollipopCakeShop",
     url: SITE_URL,
     locale: "en_IN",
     type: "website",
     images: [
       {
-        url: "/icon.png",
-        width: 512,
-        height: 512,
-        alt: "Lollipop Cake Shop Logo",
+        url: "/logo.png",
+        width: 1254,
+        height: 1254,
+        alt: "LollipopCakeShop Logo",
       },
       {
         url: "/PRODUCT_IMAGES/cakes/NORMAL%20CAKES/black_forest.webp",
         width: 1200,
         height: 630,
-        alt: "Lollipop Cake Shop Trichy",
+        alt: "LollipopCakeShop Trichy",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lollipop Cake Shop",
+    title: "LollipopCakeShop",
     description:
-      "Order fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy.",
-    images: ["/PRODUCT_IMAGES/cakes/NORMAL%20CAKES/black_forest.webp"],
+      "Order delicious cakes online from LollipopCakeShop in Tiruchirappalli. Fresh cakes for birthdays, weddings, celebrations and every special occasion.",
+    images: [
+      "/logo.png",
+      "/PRODUCT_IMAGES/cakes/NORMAL%20CAKES/black_forest.webp",
+    ],
   },
   icons: {
     icon: [
-      { url: "/icon.png", sizes: "512x512", type: "image/png" },
-      { url: "/favicon.png", sizes: "192x192", type: "image/png" },
       { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+      { url: "/favicon.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+      { url: "/logo.png", sizes: "1254x1254", type: "image/png" },
     ],
-    shortcut: "/icon.png",
+    shortcut: "/favicon.png",
     apple: [
       { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
@@ -118,8 +123,9 @@ const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": `${SITE_URL}/#website`,
-  name: "Lollipop Cake Shop",
+  name: "LollipopCakeShop",
   alternateName: [
+    "Lollipop Cake Shop",
     "Lollipop The Cake Shop",
     "Trichy Lollipop The Cake Shop",
     "Lollipop Cakes Trichy",
@@ -141,8 +147,8 @@ const sitelinksNavigationSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   "@id": `${SITE_URL}/#sitelinks`,
-  name: "Lollipop Cake Shop Sitelinks",
-  description: "Primary departments and popular services at Lollipop Cake Shop",
+  name: "LollipopCakeShop Sitelinks",
+  description: "Primary departments and popular services at LollipopCakeShop",
   itemListElement: [
     {
       "@type": "SiteNavigationElement",
@@ -193,8 +199,9 @@ const bakerySchema = {
   "@context": "https://schema.org",
   "@type": "Bakery",
   "@id": `${SITE_URL}/#bakery`,
-  name: "Lollipop Cake Shop",
+  name: "LollipopCakeShop",
   alternateName: [
+    "Lollipop Cake Shop",
     "Lollipop The Cake Shop",
     "Trichy Lollipop The Cake Shop",
     "Trichy Lollipop The Cake Shop in Tiruchirappalli Townhall",
@@ -202,13 +209,13 @@ const bakerySchema = {
     "Lollipop Bakery",
   ],
   url: SITE_URL,
-  logo: `${SITE_URL}/icon.png`,
+  logo: `${SITE_URL}/logo.png`,
   image: [
-    `${SITE_URL}/icon.png`,
+    `${SITE_URL}/logo.png`,
     `${SITE_URL}/PRODUCT_IMAGES/cakes/NORMAL%20CAKES/black_forest.webp`,
   ],
   description:
-    "Handcrafted fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from Lollipop Cake Shop in Trichy.",
+    "Handcrafted fresh cakes, birthday cakes, customized cakes, bento cakes, dry cakes and snacks online from LollipopCakeShop in Trichy.",
   telephone: "+91 84893 24697",
   email: "trichylollipop@gmail.com",
   priceRange: "₹₹",
@@ -267,9 +274,12 @@ export default function RootLayout({
     <html lang="en" className={`${cormorant.variable} ${manrope.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
         {/* Google Site Name & Identity Metas */}
-        <meta name="application-name" content="Lollipop Cake Shop" />
-        <meta name="apple-mobile-web-app-title" content="Lollipop Cake Shop" />
-        <meta property="og:site_name" content="Lollipop Cake Shop" />
+        <meta name="application-name" content="LollipopCakeShop" />
+        <meta name="apple-mobile-web-app-title" content="LollipopCakeShop" />
+        <meta property="og:site_name" content="LollipopCakeShop" />
+        <link rel="icon" href="/favicon.ico" sizes="48x48" />
+        <link rel="icon" href="/favicon.png" type="image/png" sizes="192x192" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
 
         {/* 1. Google Site Name & Search Action Schema */}
         <script
