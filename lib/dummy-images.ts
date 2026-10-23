@@ -94,7 +94,7 @@ export function getDummyInternetImage(product: ProductLike): string {
       return "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80"; // Fresh bakery dinner buns
     }
     if (name.includes("bread")) {
-      return "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80"; // Artisanal sliced loaf
+      return "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80"; // Sliced loaf
     }
     if (name.includes("cup") || name.includes("cupcake")) {
       return "https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?auto=format&fit=crop&w=600&q=80"; // Gourmet frosted cupcakes

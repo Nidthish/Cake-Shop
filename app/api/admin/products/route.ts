@@ -31,7 +31,10 @@ export async function GET(req: NextRequest) {
         let mainCategory = "cakes";
         if (
           p.productType === "SNACK" ||
-          ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug)
+          ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug) ||
+          catSlug.startsWith("snacks-") ||
+          catSlug.startsWith("snacks--") ||
+          catSlug.includes("-snack")
         ) {
           mainCategory = "snacks";
         } else if (catSlug.includes("dry")) {
@@ -44,6 +47,8 @@ export async function GET(req: NextRequest) {
           mainCategory = "first-birthday";
         } else if (catSlug.includes("custom")) {
           mainCategory = "custom-cake";
+        } else if (catSlug.includes("--")) {
+          mainCategory = catSlug.split("--")[0];
         }
 
         const hasOffer = p.offers && p.offers.some((o: any) => o.isActive);
@@ -53,14 +58,16 @@ export async function GET(req: NextRequest) {
           ? Boolean(p.egglessAvailable)
           : (isBento ? false : (mainCategory !== "snacks"));
 
+        const cleanSubCategory = (p.category.name || "").replace(/\s*\([^)]*\)$/, "");
+
         return {
           id: p.id.toString(),
           slug: p.slug,
           productCode: p.productCode,
           name: p.name,
           category: mainCategory,
-          categoryName: p.category.name,
-          subCategory: p.category.name,
+          categoryName: cleanSubCategory,
+          subCategory: cleanSubCategory,
           description: p.description,
           imageName: p.imageName,
           badge: p.badge,
@@ -160,23 +167,14 @@ export async function POST(req: NextRequest) {
 
     const productCode = `LOL-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    // Resolve category name in MySQL based on primary category & subcategory
-    let targetCatName = "Normal Flavors";
-    if (data.categorySlug === "cakes") {
-      targetCatName = (data.subCategory && data.subCategory.trim()) ? data.subCategory.trim() : "Normal Flavors";
-    } else {
-      const primaryNames: Record<string, string> = {
-        "dry-cakes": "Dry Cakes",
-        snacks: "Snacks & Pastries",
-        "bento-cake": "Bento Cakes",
-        "wedding-cakes": "Wedding Cakes",
-        "first-birthday": "1st Birthday Cakes",
-        "custom-cake": "Customized Cakes",
-      };
-      targetCatName = primaryNames[data.categorySlug] || data.categorySlug;
-    }
+    // Resolve category name in Neon DB based on primary category & subcategory
+    const subCat = (data.subCategory && data.subCategory.trim()) || "General";
+    let targetCatName = subCat;
+    let cleanSlug = targetCatName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
 
-    const cleanSlug = targetCatName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+    if (data.categorySlug !== "cakes") {
+      cleanSlug = `${data.categorySlug}--${cleanSlug}`;
+    }
 
     let category = await prisma.category.findFirst({
       where: {
@@ -188,11 +186,14 @@ export async function POST(req: NextRequest) {
     });
 
     if (!category) {
+      const nameTaken = await prisma.category.findUnique({ where: { name: targetCatName } });
+      const finalName = nameTaken ? `${targetCatName} (${data.categorySlug})` : targetCatName;
+
       category = await prisma.category.create({
         data: {
-          name: targetCatName,
+          name: finalName,
           slug: cleanSlug,
-          description: `${targetCatName} collection`,
+          description: `${finalName} in ${data.categorySlug} collection`,
         },
       });
     }

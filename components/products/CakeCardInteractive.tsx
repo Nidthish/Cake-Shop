@@ -58,9 +58,10 @@ export default function CakeCardInteractive({
   // Other cakes show egg preference unless egglessAvailable is false.
   const showEggPreference = isCakeCategory && (isBento ? product.egglessAvailable === true : product.egglessAvailable !== false);
 
-  // The offer is active ONLY for cakes and for egg cakes ("With Egg")
+  // The offer is active for Egg, and if the admin checked the "Eggless" checkbox for this variant, for Eggless as well
   const isVariantOffer = isCakeCategory && (is1kgFreeOfferVariant(currentVariant) || Boolean(rawOffer));
-  const showOfferTag = eggPreference === "egg" && isVariantOffer;
+  const isOfferActiveForPreference = eggPreference === "egg" || (eggPreference === "eggless" && Boolean(currentVariant.isEggless));
+  const showOfferTag = isOfferActiveForPreference && isVariantOffer;
 
   const cardImage = getProductCardImage(product);
 
@@ -98,7 +99,7 @@ export default function CakeCardInteractive({
       weight: currentVariant.weight,
       price: price,
       originalPrice: currentVariant.originalPrice,
-      offer: actualEggPref === "eggless" ? undefined : (showOfferTag ? (rawOffer || "1kg + 1/2kg Free") : undefined),
+      offer: showOfferTag ? (rawOffer || "1kg + 1/2kg Free") : undefined,
       quantity: 1,
       eggPreference: actualEggPref,
     });
@@ -208,9 +209,6 @@ export default function CakeCardInteractive({
         {/* Egg Preference Section (Shown only if eggless is available for this cake) */}
         {showEggPreference && (
           <div className="mt-2 font-sans">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#5C524E] mb-1.5 text-left font-sans">
-              Egg Preference
-            </p>
             <div className="flex gap-1.5 items-center">
               <button
                 type="button"
@@ -233,16 +231,6 @@ export default function CakeCardInteractive({
                 Eggless
               </button>
             </div>
-            {eggPreference === "eggless" && (
-              <div className="text-[10px] text-[#962854] font-semibold mt-1.5 space-y-0.5 font-sans">
-                <p className="flex items-center gap-1">
-                  <span>• For eggless cakes, you need to order 1 day prior.</span>
-                </p>
-                <p className="text-amber-900 font-bold flex items-center gap-1">
-                  <span>• 1/2kg Free Offer is valid for With Egg cakes only.</span>
-                </p>
-              </div>
-            )}
           </div>
         )}
 

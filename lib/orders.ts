@@ -1,5 +1,4 @@
 import { getNeonSql } from "./neon";
-import { getMySqlPool } from "./mysql";
 import { prisma } from "./prisma";
 import { sendOrderDeliveredEmail } from "./email";
 import type { Order, OrderLineItem } from "@/types";
@@ -151,103 +150,6 @@ class HybridOrderStore implements OrderStore {
       }
     }
 
-    // 3. Persist to MySQL Database (localhost:3306 lollipop_db)
-    try {
-      const mysqlPool = getMySqlPool();
-      if (mysqlPool) {
-        // Upsert User in MySQL
-        await mysqlPool.query(`
-          INSERT INTO lollipop_db.users (email, full_name, phone, role, is_active, updated_at)
-          VALUES (?, ?, ?, 'CUSTOMER', 1, NOW())
-          ON DUPLICATE KEY UPDATE full_name = VALUES(full_name), phone = VALUES(phone), updated_at = NOW()
-        `, [order.customer.email, order.customer.fullName, order.customer.phone]);
-
-        const [[mysqlUser]]: any = await mysqlPool.query(
-          "SELECT id FROM lollipop_db.users WHERE email = ? LIMIT 1",
-          [order.customer.email]
-        );
-
-        // Check if order already exists
-        const [existingMySql]: any = await mysqlPool.query(
-          "SELECT id FROM lollipop_db.orders WHERE order_number = ? LIMIT 1",
-          [order.id]
-        );
-        let mysqlOrderId: number;
-
-        if (existingMySql.length > 0) {
-          mysqlOrderId = existingMySql[0].id;
-          await mysqlPool.query(
-            "UPDATE lollipop_db.orders SET delivery_otp = COALESCE(delivery_otp, ?) WHERE id = ?",
-            [order.deliveryOtp || null, mysqlOrderId]
-          );
-        } else {
-          const [orderRes]: any = await mysqlPool.query(`
-            INSERT INTO lollipop_db.orders (
-              order_number, user_id, customer_name, customer_email, customer_phone,
-              street_address, city, pincode, state,
-              delivery_date, delivery_time_slot, delivery_notes, has_eggless_items,
-              subtotal, sgst, cgst, tax_amount, delivery_fee, discount_amount, total_amount, status,
-              delivery_otp, delivery_otp_verified,
-              created_at, updated_at
-            ) VALUES (
-              ?, ?, ?, ?, ?,
-              ?, ?, ?, 'Tamil Nadu',
-              ?, ?, ?, ?,
-              ?, ?, ?, ?, ?, 0.00, ?, ?,
-              ?, ?,
-              NOW(), NOW()
-            )
-          `, [
-            order.id, mysqlUser?.id || null, order.customer.fullName, order.customer.email, order.customer.phone,
-            order.address.street, order.address.city, order.address.pincode,
-            new Date(order.schedule.date), order.schedule.timeSlot, order.specialInstructions || null, hasEggless ? 1 : 0,
-            order.subtotal, order.sgst, order.cgst, order.tax, order.deliveryFee, order.total, order.orderStatus || "CONFIRMED",
-            order.deliveryOtp || null, order.deliveryOtpVerified ? 1 : 0
-          ]);
-          mysqlOrderId = orderRes.insertId;
-        }
-
-        if (mysqlOrderId) {
-          for (const item of order.items) {
-            const [pRows]: any = await mysqlPool.query(
-              "SELECT id, product_code FROM lollipop_db.products WHERE slug = ? OR product_code = ? OR name = ? LIMIT 1",
-              [item.productId, item.productId, item.name]
-            );
-            const prodId = pRows.length > 0 ? pRows[0].id : 1;
-            const prodCode = pRows.length > 0 ? pRows[0].product_code : (item.productId || "LLP-PRD");
-            const isEgglessItem = item.eggPreference === "eggless" || item.weight?.toLowerCase().includes("eggless") ? 1 : 0;
-
-            await mysqlPool.query(`
-              INSERT INTO lollipop_db.order_items (
-                order_id, product_id, product_code, product_name, variant_name,
-                is_eggless, quantity, unit_price, line_total, cake_message, offer, created_at
-              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
-            `, [
-              mysqlOrderId, prodId, prodCode, item.name, item.weight,
-              isEgglessItem, item.quantity, item.unitPrice, item.lineTotal, item.cakeMessage || null, item.offer || null
-            ]);
-          }
-
-          await mysqlPool.query(`
-            INSERT INTO lollipop_db.payments (
-              order_id, payment_method, payment_status, currency, amount, razorpay_order_id, paid_at, created_at, updated_at
-            ) VALUES (?, ?, ?, 'INR', ?, ?, ?, NOW(), NOW())
-            ON DUPLICATE KEY UPDATE 
-              payment_status = VALUES(payment_status),
-              razorpay_order_id = COALESCE(VALUES(razorpay_order_id), razorpay_order_id),
-              paid_at = COALESCE(VALUES(paid_at), paid_at),
-              updated_at = NOW()
-          `, [
-            mysqlOrderId, paymentMethodEnum, paymentStatusEnum, order.total,
-            order.razorpayOrderId || null, paymentStatusEnum === "PAID" ? new Date() : null
-          ]);
-          console.log(`✅ [MySQL DB Store] Order ${order.id} saved to MySQL successfully!`);
-        }
-      }
-    } catch (mysqlErr: any) {
-      console.warn("⚠️ [MySQL DB Store Notice]:", mysqlErr?.message || mysqlErr);
-    }
-
     return order;
   }
 
@@ -346,76 +248,6 @@ class HybridOrderStore implements OrderStore {
       }
     } catch {}
 
-    // Check MySQL
-    try {
-      const mysqlPool = getMySqlPool();
-      if (mysqlPool) {
-        const [orders]: any = await mysqlPool.query(
-          "SELECT o.*, p.payment_method, p.payment_status, p.razorpay_order_id, p.razorpay_payment_id FROM lollipop_db.orders o LEFT JOIN lollipop_db.payments p ON p.order_id = o.id WHERE LOWER(o.order_number) = LOWER(?) OR o.order_number = ? OR o.id = ? LIMIT 1",
-          [cleanId, cleanId, cleanId]
-        );
-        if (orders.length > 0) {
-          const o = orders[0];
-          const [items]: any = await mysqlPool.query(
-            "SELECT * FROM lollipop_db.order_items WHERE order_id = ?",
-            [o.id]
-          );
-
-          return {
-            id: o.order_number,
-            items: items.map((i: any) => ({
-              productId: i.product_code,
-              name: i.product_name,
-              weight: i.variant_name,
-              quantity: i.quantity,
-              unitPrice: Number(i.unit_price),
-              isEggless: Boolean(i.is_eggless),
-              eggPreference: i.is_eggless ? "eggless" : "egg",
-              offer: i.offer || undefined,
-              cakeMessage: i.cake_message || undefined,
-            })),
-            customer: {
-              fullName: o.customer_name,
-              email: o.customer_email,
-              phone: o.customer_phone,
-            },
-            address: {
-              street: o.street_address,
-              city: o.city,
-              pincode: o.pincode,
-            },
-            schedule: {
-              date: new Date(o.delivery_date).toISOString().split("T")[0],
-              timeSlot: o.delivery_time_slot,
-            },
-            subtotal: Number(o.subtotal),
-            sgst: Number(o.sgst),
-            cgst: Number(o.cgst),
-            tax: Number(o.tax_amount),
-            deliveryFee: Number(o.delivery_fee),
-            total: Number(o.total_amount),
-            orderStatus: o.status,
-            paymentStatus: o.payment_status || "PENDING",
-            paymentMethod: o.payment_method || "COD",
-            cakeMessage: (Array.isArray(items) ? items.find((it: any) => it.cake_message)?.cake_message : undefined) || undefined,
-            specialInstructions: o.delivery_notes || undefined,
-            deliveryNotes: o.delivery_notes || undefined,
-            razorpayOrderId: o.razorpay_order_id || undefined,
-            deliveryOtp: o.delivery_otp || undefined,
-            deliveryOtpVerified: Boolean(o.delivery_otp_verified),
-            deliveryPartnerName: o.delivery_partner_name || undefined,
-            deliveryPartnerPhone: o.delivery_partner_phone || undefined,
-            cancellationReason: o.cancellation_reason || undefined,
-            cancelledAt: o.cancelled_at ? new Date(o.cancelled_at).toISOString() : undefined,
-            deliveredAt: o.delivered_at ? new Date(o.delivered_at).toISOString() : undefined,
-            assignedAt: o.assigned_at ? new Date(o.assigned_at).toISOString() : undefined,
-            createdAt: new Date(o.created_at).toISOString(),
-            updatedAt: new Date(o.updated_at).toISOString(),
-          };
-        }
-      }
-    } catch {}
-
     return null;
   }
 
@@ -432,19 +264,6 @@ class HybridOrderStore implements OrderStore {
           WHERE p.razorpay_order_id = ${razorpayOrderId}
           LIMIT 1
         `;
-        if (rows.length > 0) {
-          return this.get(rows[0].order_number);
-        }
-      }
-    } catch {}
-
-    try {
-      const mysqlPool = getMySqlPool();
-      if (mysqlPool) {
-        const [rows]: any = await mysqlPool.query(
-          "SELECT o.order_number FROM lollipop_db.payments p JOIN lollipop_db.orders o ON o.id = p.order_id WHERE p.razorpay_order_id = ? LIMIT 1",
-          [razorpayOrderId]
-        );
         if (rows.length > 0) {
           return this.get(rows[0].order_number);
         }
@@ -668,75 +487,6 @@ class HybridOrderStore implements OrderStore {
           console.warn("⚠️ [Neon Update Notice]:", e?.message || e);
         }
       }
-    }
-
-    // 2. Update MySQL
-    try {
-      const mysqlPool = getMySqlPool();
-      if (mysqlPool) {
-        const isNumeric = /^\d+$/.test(orderId);
-        const deliveredAtVal = patch.deliveredAt ? new Date(patch.deliveredAt) : (patch.orderStatus === "DELIVERED" ? new Date() : null);
-        const cancelledAtVal = patch.cancelledAt ? new Date(patch.cancelledAt) : (patch.orderStatus === "CANCELLED" ? new Date() : null);
-        const assignedAtVal = patch.assignedAt ? new Date(patch.assignedAt) : (patch.orderStatus === "OUT_FOR_DELIVERY" ? new Date() : null);
-
-        const mysqlUpdateQuery = `
-          UPDATE lollipop_db.orders 
-          SET 
-            status = COALESCE(?, status),
-            delivery_otp = COALESCE(?, delivery_otp),
-            delivery_otp_verified = CASE WHEN ? IS NOT NULL THEN ? ELSE delivery_otp_verified END,
-            delivery_partner_name = COALESCE(?, delivery_partner_name),
-            delivery_partner_phone = COALESCE(?, delivery_partner_phone),
-            cancellation_reason = COALESCE(?, cancellation_reason),
-            cancelled_at = COALESCE(?, cancelled_at),
-            delivered_at = COALESCE(?, delivered_at),
-            assigned_at = COALESCE(?, assigned_at),
-            updated_at = NOW()
-          WHERE ${isNumeric ? "order_number = ? OR id = ?" : "order_number = ?"}
-        `;
-
-        const otpVerifiedParam = patch.deliveryOtpVerified !== undefined ? (patch.deliveryOtpVerified ? 1 : 0) : null;
-        const mysqlParams = [
-          patch.orderStatus || null,
-          patch.deliveryOtp || null,
-          otpVerifiedParam,
-          otpVerifiedParam,
-          patch.deliveryPartnerName || null,
-          patch.deliveryPartnerPhone || null,
-          patch.cancellationReason || null,
-          cancelledAtVal,
-          deliveredAtVal,
-          assignedAtVal,
-          orderId,
-          ...(isNumeric ? [Number(orderId)] : []),
-        ];
-
-        await mysqlPool.query(mysqlUpdateQuery, mysqlParams);
-
-        if (patch.paymentStatus || patch.razorpayPaymentId) {
-          if (isNumeric) {
-            await mysqlPool.query(`
-              UPDATE lollipop_db.payments 
-              SET payment_status = COALESCE(?, payment_status),
-                  razorpay_payment_id = COALESCE(?, razorpay_payment_id),
-                  paid_at = COALESCE(?, paid_at),
-                  updated_at = NOW()
-              WHERE order_id = (SELECT id FROM lollipop_db.orders WHERE order_number = ? OR id = ? LIMIT 1)
-            `, [payStatus || null, patch.razorpayPaymentId || null, paidAt, orderId, Number(orderId)]);
-          } else {
-            await mysqlPool.query(`
-              UPDATE lollipop_db.payments 
-              SET payment_status = COALESCE(?, payment_status),
-                  razorpay_payment_id = COALESCE(?, razorpay_payment_id),
-                  paid_at = COALESCE(?, paid_at),
-                  updated_at = NOW()
-              WHERE order_id = (SELECT id FROM lollipop_db.orders WHERE order_number = ? LIMIT 1)
-            `, [payStatus || null, patch.razorpayPaymentId || null, paidAt, orderId]);
-          }
-        }
-      }
-    } catch (e: any) {
-      console.warn("⚠️ [MySQL Update Notice]:", e?.message || e);
     }
 
     return this.get(orderId);

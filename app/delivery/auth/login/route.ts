@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getNeonSql } from "@/lib/neon";
-import { getMySqlPool } from "@/lib/mysql";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/crypto";
 import { signJwt } from "@/lib/jwt";
@@ -62,31 +61,10 @@ export async function POST(req: NextRequest) {
         }
       }
     } catch (neonErr) {
-      console.warn("[POST /delivery/auth/login] Neon query fallback to MySQL/Prisma:", neonErr);
+      console.warn("[POST /delivery/auth/login] Neon query fallback to Prisma:", neonErr);
     }
 
-    // 2. Try MySQL Pool
-    if (!user) {
-      try {
-        const pool = getMySqlPool();
-        if (pool) {
-          const [rows]: any = await pool.query(
-            `SELECT id, full_name as fullName, email, phone, role, password_hash as passwordHash, is_active as isActive
-             FROM users
-             WHERE LOWER(email) = ? OR phone = ?
-             LIMIT 1`,
-            [identifier, identifier]
-          );
-          if (Array.isArray(rows) && rows.length > 0) {
-            user = rows[0];
-          }
-        }
-      } catch (mysqlErr) {
-        console.warn("[POST /delivery/auth/login] MySQL query fallback to Prisma:", mysqlErr);
-      }
-    }
-
-    // 3. Try Prisma
+    // 2. Try Prisma
     if (!user) {
       try {
         const dbUser = await prisma.user.findFirst({

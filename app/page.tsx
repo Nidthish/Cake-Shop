@@ -81,7 +81,7 @@ const OCCASIONS = [
     badge: "Personalized",
     title: "Custom 3D\nStudio",
     tagline: "Bespoke Custom Design",
-    desc: "You imagine it, our master artisans bring your dream cake concept to sweet reality.",
+    desc: "You imagine it, our master bakers bring your dream cake concept to sweet reality.",
     image: "/images/celebration_opt/customizecake.png",
     href: "/custom-cake",
     iconType: "cake",
@@ -198,82 +198,151 @@ export default async function HomePage() {
   const allProducts = await getDbProducts();
 
   return (
-    <div className="relative overflow-x-hidden min-h-screen bg-[#FFF9F5]/70">
+    <div className="relative overflow-x-hidden min-h-screen bg-[#FFF9F5]/30">
       {/* ───────────────────────────────────────────────────────────────
          1. HERO SECTION
          ─────────────────────────────────────────────────────────────── */}
-      <section className="relative bg-gradient-to-b from-[#FAF3EC]/60 via-[#FFF9F5]/80 to-[#FFF9F5]/70 py-10 lg:py-16 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
+      <section className="relative bg-gradient-to-b from-[#FAF3EC]/30 via-transparent to-[#FFF9F5]/25 py-10 lg:py-16 xl:py-20 lg:min-h-[calc(100vh-5rem)] lg:flex lg:flex-col lg:justify-center overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-8 xl:gap-12 items-center w-full">
           {/* Hero Left Content */}
-          <div className="text-center lg:text-left space-y-6 z-10">
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 shadow-sm">
-              <span className="text-xs font-bold text-[#1C0D0A] uppercase tracking-wider">
-                 PREMIUM ARTISANAL BAKERY
-              </span>
-            </div>
-
-            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold text-[#1C0D0A] leading-[1.02] tracking-tight">
+          <div className="text-center lg:text-left space-y-6 lg:space-y-6 xl:space-y-7 z-10">
+            <h1 className="font-display text-4xl sm:text-6xl lg:text-[52px] xl:text-[66px] 2xl:text-7xl font-bold text-[#1C0D0A] leading-[1.02] lg:leading-[1.05] tracking-tight">
               <span className="sr-only">LollipopCakeShop — </span>
-              Made for <span className="text-[#962854] font-display italic font-semibold">Moments.</span>
+              Sweet{" "}
+              <span className="relative inline-block text-[#962854] font-display italic font-semibold">
+                Moments.
+                {/* Sparkle burst at top right */}
+                <svg
+                  className="absolute -top-2.5 -right-3.5 sm:-top-4 sm:-right-5 lg:-top-3.5 lg:-right-4.5 xl:-top-4 xl:-right-5 w-7 h-7 sm:w-10 sm:h-10 lg:w-9 lg:h-9 xl:w-10 xl:h-10 text-[#BD426B] pointer-events-none"
+                  viewBox="0 0 28 28"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3.2"
+                  strokeLinecap="round"
+                >
+                  <line x1="7" y1="14" x2="10" y2="2" />
+                  <line x1="12" y1="16" x2="23" y2="6" />
+                  <line x1="14" y1="21" x2="26" y2="18" />
+                </svg>
+              </span>
               <br />
-              Baked for <span className="text-[#962854] font-display italic font-semibold">Memories.</span>
+              Beautifully{" "}
+              <span className="inline-flex items-center text-[#962854] font-display italic font-semibold">
+                Baked.
+                {/* Heart outline icon */}
+                <svg
+                  className="inline-block ml-2 sm:ml-3 lg:ml-2.5 w-5 h-5 sm:w-7 sm:h-7 lg:w-6 lg:h-6 text-[#BD426B] not-italic shrink-0 -mt-0.5 sm:-mt-1"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+              </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-[#5C524E] font-normal max-w-lg leading-relaxed pt-1 mx-auto lg:mx-0">
-              &ldquo;Beautifully crafted, irresistibly delicious, and made with passion — our cakes are created to make
-              every celebration feel a little more extraordinary.&rdquo;
+            <p className="text-base sm:text-lg text-[#5C524E] font-normal max-w-lg lg:max-w-xl leading-relaxed pt-1 lg:pt-1 mx-auto lg:mx-0">
+              Premium cakes in Trichy, handcrafted with love and baked fresh daily to make every celebration a little more special and unforgettable.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
-              <Link
-                href="/cakes"
-                className="btn-primary py-3.5 px-8 text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-2"
-              >
-                <span>EXPLORE CATALOG</span>
-                <span className="material-symbols-outlined text-sm">east</span>
-              </Link>
-              <Link
-                href="/custom-cake"
-                className="btn-secondary py-3.5 px-7 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2"
-              >
-                <span>CUSTOM CAKE</span>
-              </Link>
-            </div>
+            {/* CTA Buttons & Master Chef Promise Card (Locked Same-Width Alignment) */}
+            <div className="w-full max-w-[440px] sm:max-w-[460px] mx-auto lg:mx-0 space-y-2.5 sm:space-y-3 pt-1.5 sm:pt-2 lg:pt-1.5">
+              {/* Row 1: The Two Action Buttons */}
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5 w-full">
+                <Link
+                  href="/cakes"
+                  className="btn-primary py-3 sm:py-3.5 lg:py-3.5 px-2 xs:px-3 sm:px-5 text-[10px] xs:text-[11px] sm:text-xs font-bold uppercase tracking-normal sm:tracking-wider shadow-lg flex items-center justify-center gap-1 sm:gap-2 w-full text-center whitespace-nowrap"
+                >
+                  <span>VIEW OUR CAKES</span>
+                  <span className="material-symbols-outlined text-xs sm:text-sm shrink-0">east</span>
+                </Link>
+                <Link
+                  href="/custom-cake"
+                  className="btn-secondary py-3 sm:py-3.5 lg:py-3.5 px-2 xs:px-3 sm:px-5 text-[10px] xs:text-[11px] sm:text-xs font-bold uppercase tracking-normal sm:tracking-wider flex items-center justify-center gap-1 sm:gap-2 shadow-sm w-full text-center whitespace-nowrap"
+                >
+                  <span>CUSTOM CAKE</span>
+                  <span className="material-symbols-outlined text-xs sm:text-sm shrink-0">east</span>
+                </Link>
+              </div>
 
-            {/* Master Chef Quality Promise */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
-              <div className="flex items-center px-4 py-2 rounded-2xl bg-[#962854]/10 border border-[#962854]/20 shadow-sm">
-                <div className="text-left">
-                  <span className="font-bold text-xs text-[#1C0D0A] block leading-tight">
-                    Master Chef Signature Recipes
-                  </span>
-                  <span className="text-[11px] text-[#5C524E] font-normal">
-                    Handcrafted with Premium Ingredients & Artisan Care
+              {/* Row 2: Master Chef Quality Promise Banner (Exact same width as above two combined) */}
+              <Link
+                href="/about"
+                className="group relative flex items-center justify-between gap-2.5 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 lg:py-2.5 xl:py-3 rounded-2xl bg-gradient-to-r from-[#FCEBED] via-[#FDF0F1] to-[#FCEBED] border border-[#F5D6D9] shadow-xs hover:shadow-md hover:border-[#E8B5BD] transition-all overflow-hidden w-full block"
+              >
+                {/* Decorative organic petal shape at bottom right */}
+                <div className="absolute right-0 bottom-0 w-24 h-20 rounded-tl-[48px] bg-gradient-to-tl from-[#F4CCD1]/50 to-transparent pointer-events-none" />
+
+                <div className="flex items-center gap-2.5 sm:gap-3 relative z-10 text-left min-w-0">
+                  {/* Chef Hat Icon with Sparkles */}
+                  <div className="w-9 h-9 sm:w-11 sm:h-11 lg:w-10 lg:h-10 xl:w-11 xl:h-11 rounded-full bg-[#F0D0D3] flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                    <svg
+                      viewBox="0 0 32 32"
+                      className="w-5 h-5 sm:w-6 sm:h-6 lg:w-5.5 lg:h-5.5 text-[#561027]"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      {/* Sparkle rays */}
+                      <line x1="22" y1="6" x2="25" y2="3" />
+                      <line x1="25" y1="9" x2="28" y2="8" />
+                      <line x1="24" y1="12" x2="27" y2="13" />
+
+                      {/* Chef Hat Toque */}
+                      <path d="M7 19c-1.5-1-2-3-1-5s3-2.5 4.5-1.5c.5-2 2-3.5 4.5-3.5s4 1.5 4.5 3.5c1.5-1 3.5-.5 4.5 1.5s.5 4-1 5" />
+
+                      {/* Hat Band */}
+                      <rect x="7" y="19" width="16" height="7" rx="1.5" />
+                      {/* Pleats */}
+                      <line x1="12" y1="21" x2="12" y2="24" />
+                      <line x1="18" y1="21" x2="18" y2="24" />
+                    </svg>
+                  </div>
+
+                  <div className="min-w-0">
+                    <h3 className="font-serif font-bold text-xs xs:text-sm sm:text-base lg:text-sm xl:text-base text-[#561027] leading-tight group-hover:text-[#802348] transition-colors truncate sm:whitespace-normal">
+                      Master Chef Signature Recipes
+                    </h3>
+                    <p className="text-[10px] xs:text-[11px] sm:text-xs lg:text-[11px] xl:text-xs text-[#736367] mt-0.5 leading-snug line-clamp-1 sm:line-clamp-none">
+                      Handcrafted with Premium Ingredients & Loving Care
+                    </p>
+                  </div>
+                </div>
+
+                {/* Right Arrow Circle */}
+                <div className="w-7 h-7 sm:w-8 sm:h-8 lg:w-7 lg:h-7 xl:w-8 xl:h-8 rounded-full bg-[#FCE0E1] flex items-center justify-center shrink-0 relative z-10 group-hover:bg-[#F9D2D4] group-hover:translate-x-0.5 transition-all">
+                  <span className="material-symbols-outlined text-sm sm:text-base lg:text-sm text-[#561027]">
+                    arrow_forward
                   </span>
                 </div>
-              </div>
+              </Link>
             </div>
 
             {/* Trust Stats Bar */}
-            <div className="pt-6 border-t border-[#E6C184]/30 grid grid-cols-3 gap-4 text-center lg:text-left">
+            <div className="pt-5 sm:pt-6 lg:pt-6 xl:pt-8 border-t border-[#E6C184]/30 grid grid-cols-3 gap-3 sm:gap-4 text-center lg:text-left w-full max-w-[440px] sm:max-w-[460px] mx-auto lg:mx-0">
               <div>
-                <span className="font-display text-2xl sm:text-3xl font-bold text-[#1C0D0A] block">10,000+</span>
-                <span className="text-[11px] text-[#5C524E] uppercase tracking-wider font-bold">Cakes Delivered</span>
+                <span className="font-display text-2xl sm:text-3xl lg:text-2xl xl:text-3xl font-bold text-[#1C0D0A] block">10,000+</span>
+                <span className="text-[11px] lg:text-[11px] xl:text-xs text-[#5C524E] uppercase tracking-wider font-bold">Cakes Delivered</span>
               </div>
               <div>
-                <span className="font-display text-2xl sm:text-3xl font-bold text-[#1C0D0A] block">4.9 ★</span>
-                <span className="text-[11px] text-[#5C524E] uppercase tracking-wider font-bold">Customer Rating</span>
+                <span className="font-display text-2xl sm:text-3xl lg:text-2xl xl:text-3xl font-bold text-[#1C0D0A] block">4.9 ★</span>
+                <span className="text-[11px] lg:text-[11px] xl:text-xs text-[#5C524E] uppercase tracking-wider font-bold">Customer Rating</span>
               </div>
               <div>
-                <span className="font-display text-2xl sm:text-3xl font-bold text-[#1C0D0A] block">2 Hours</span>
-                <span className="text-[11px] text-[#5C524E] uppercase tracking-wider font-bold">Express Delivery</span>
+                <span className="font-display text-2xl sm:text-3xl lg:text-2xl xl:text-3xl font-bold text-[#1C0D0A] block">2 Hours</span>
+                <span className="text-[11px] lg:text-[11px] xl:text-xs text-[#5C524E] uppercase tracking-wider font-bold">Express Delivery</span>
               </div>
             </div>
           </div>
 
           {/* Hero Right Interactive Graphic */}
           <div id="hero-cake-container" className="relative flex justify-center items-center py-4 lg:py-0 order-first lg:order-last">
-            <div className="relative w-80 h-80 sm:w-[420px] sm:h-[420px] md:w-[480px] md:h-[480px] lg:w-[520px] lg:h-[520px] flex items-center justify-center animate-hero-float">
+            <div className="relative w-80 h-80 sm:w-[420px] sm:h-[420px] md:w-[480px] md:h-[480px] lg:w-[470px] lg:h-[470px] xl:w-[510px] xl:h-[510px] 2xl:w-[550px] 2xl:h-[550px] flex items-center justify-center animate-hero-float">
               {/* 3D Glowing Ambient Aura */}
               <div className="absolute inset-4 bg-gradient-to-tr from-[#962854]/25 via-[#E6C184]/35 to-pink-300/40 rounded-full blur-3xl transform scale-105 animate-pulse" />
 
@@ -302,14 +371,14 @@ export default async function HomePage() {
               </div>
 
               {/* Floating Quality Badge 1 */}
-              <div className="absolute -top-7 left-2 sm:top-4 sm:-left-2 z-30 glass-header px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#E6C184]/60 shadow-xl flex items-center animate-bounce-slow">
+              <div className="absolute -top-7 left-2 sm:top-4 sm:-left-2 lg:top-2 lg:-left-2 xl:top-3 xl:-left-2 z-30 glass-header px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#E6C184]/60 shadow-xl flex items-center animate-bounce-slow">
                 <span className="text-[11px] sm:text-xs font-bold text-[#1C0D0A] tracking-wide">
                   Official Signature Badge
                 </span>
               </div>
 
               {/* Floating Quality Badge 2 */}
-              <div className="absolute -bottom-7 right-2 sm:bottom-4 sm:-right-2 z-30 glass-header px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#E6C184]/60 shadow-xl flex items-center">
+              <div className="absolute -bottom-7 right-2 sm:bottom-4 sm:-right-2 lg:bottom-2 lg:-right-2 xl:bottom-3 xl:-right-2 z-30 glass-header px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#E6C184]/60 shadow-xl flex items-center">
                 <span className="text-[11px] sm:text-xs font-bold text-[#1C0D0A] tracking-wide">Freshly Baked Daily</span>
               </div>
             </div>
@@ -335,11 +404,11 @@ export default async function HomePage() {
       <section className="bg-[#962854] text-white py-6 sm:py-8 shadow-inner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div className="flex flex-col items-center">
-            <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">100% Artisanal Recipes</h4>
+            <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">100% Fresh Handcrafted Recipes</h4>
             <p className="text-[11px] text-[#FFF9F5]/80 mt-1">Fresh & Eggless Options Available</p>
           </div>
           <div className="flex flex-col items-center">
-            <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">Artisanal Craftsmanship</h4>
+            <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">Master Craftsmanship</h4>
             <p className="text-[11px] text-[#FFF9F5]/80 mt-1">Baked Daily by Master Chefs</p>
           </div>
           <div className="flex flex-col items-center">

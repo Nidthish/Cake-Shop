@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 
-// --- 1. ARTISANAL FLAVOUR DEFINITIONS & COLOR PALETTES (NO PRICES) ---
+// --- 1. SIGNATURE FLAVOUR DEFINITIONS & COLOR PALETTES (NO PRICES) ---
 export interface FlavourConfig {
   id: string;
   name: string;
@@ -188,7 +188,7 @@ export const FLAVOURS: FlavourConfig[] = [
   {
     id: 'pistachio',
     name: 'Pistachio',
-    badge: 'Artisanal',
+    badge: 'Signature',
     tastingNote: 'Roasted Iranian pistachio sponge with rosewater cardamom cream & crushed green nuts.',
     calories: '395 kcal / 100g',
     sponge: '#AFC77D',
@@ -225,7 +225,7 @@ export const DRIP_STYLES = [
   { id: 'dark-ganache', name: 'Dark Ganache', color: '#2B1105', highlight: '#522510' },
   { id: 'white-choc', name: 'White Chocolate', color: '#FFF8EB', highlight: '#FFFFFF' },
   { id: 'salted-caramel', name: 'Golden Caramel', color: '#C87619', highlight: '#EDA145' },
-  { id: 'none', name: 'Naked (No Drip)', desc: 'Clean artisan edge' },
+  { id: 'none', name: 'Naked (No Drip)', desc: 'Clean rustic edge' },
 ];
 
 export const CAKE_STANDS = [

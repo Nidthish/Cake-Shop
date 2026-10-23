@@ -143,10 +143,10 @@ export default function BranchSection() {
                 <div
                   key={b.id}
                   onClick={() => handleSelectBranch(b)}
-                  className={`p-6 rounded-2xl border transition-all cursor-pointer ${
+                  className={`p-6 rounded-2xl border-2 transition-all cursor-pointer ${
                     isSelected
-                      ? "border-[#E6C184] bg-[#2A082C] shadow-xl opacity-100 ring-1 ring-[#E6C184]"
-                      : "border-white/15 bg-white/5 opacity-70 hover:opacity-100 hover:border-white/40"
+                      ? "border-[#E6C184] bg-[#2A082C] shadow-xl opacity-100 ring-2 ring-[#E6C184]/40"
+                      : "border-white/30 bg-white/5 opacity-85 hover:opacity-100 hover:border-[#E6C184]/70 hover:bg-white/10"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -158,7 +158,7 @@ export default function BranchSection() {
                     {b.address}
                   </p>
 
-                  <dl className="mt-4 text-xs sm:text-sm space-y-1.5 text-[#E5D2E7] pt-3 border-t border-white/10">
+                  <dl className="mt-4 text-xs sm:text-sm space-y-1.5 text-[#E5D2E7] pt-3 border-t border-white/20">
                     <div className="flex gap-2">
                       <dt className="font-bold text-white">Hours:</dt>
                       <dd>{b.hours}</dd>
@@ -193,7 +193,7 @@ export default function BranchSection() {
 
           {/* Interactive Leaflet / OpenStreetMap Map Container */}
           <ScrollReveal direction="right" distance={50} duration={850} className="lg:col-span-7">
-            <div className="rounded-3xl overflow-hidden border border-white/15 bg-[#E8E0D8] min-h-[420px] h-full shadow-2xl relative">
+            <div className="rounded-3xl overflow-hidden border-2 border-white/25 bg-[#E8E0D8] min-h-[420px] h-full shadow-2xl relative">
               <div ref={mapRef} id="branch-map" className="w-full h-full min-h-[420px] z-10" />
 
               {!mapLoaded && (

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getNeonSql } from "@/lib/neon";
-import { getMySqlPool } from "@/lib/mysql";
 import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
@@ -257,100 +256,10 @@ export async function GET(req: NextRequest) {
         }, { headers: corsHeaders });
       }
     } catch (neonErr: any) {
-      console.warn("⚠️ [Delivery API /orders] Neon query failed, falling back to MySQL:", neonErr?.message || neonErr);
+      console.warn("⚠️ [Delivery API /orders] Neon query failed, falling back to Prisma:", neonErr?.message || neonErr);
     }
 
-    // 2. MySQL Fallback
-    try {
-      const pool = getMySqlPool();
-      if (pool) {
-        let query = `
-          SELECT 
-            o.*,
-            DATE_FORMAT(o.delivery_date, '%Y-%m-%d') as deliveryDate,
-            p.payment_status as paymentStatus,
-            p.payment_method as paymentMethod,
-            p.razorpay_payment_id as razorpayPaymentId
-          FROM lollipop_db.orders o
-          LEFT JOIN lollipop_db.payments p ON p.order_id = o.id
-        `;
-        const queryParams: any[] = [];
-
-        if (statusParam !== "ALL" && !searchParam) {
-          query += ` WHERE o.status = ?`;
-          queryParams.push(statusParam);
-        } else if (searchParam) {
-          query += ` WHERE 1=1`;
-          if (statusParam !== "ALL") {
-            query += ` AND o.status = ?`;
-            queryParams.push(statusParam);
-          }
-          query += ` AND (o.order_number LIKE ? OR o.customer_name LIKE ? OR o.customer_phone LIKE ? OR o.city LIKE ?)`;
-          const pat = `%${searchParam}%`;
-          queryParams.push(pat, pat, pat, pat);
-        }
-
-        query += ` ORDER BY o.created_at DESC LIMIT ?`;
-        queryParams.push(limit);
-
-        const [orders]: any = await pool.query(query, queryParams);
-
-        const orderIds = orders.map((o: any) => o.id);
-        const itemsByOrderId: Record<number, any[]> = {};
-        if (orderIds.length > 0) {
-          const [items]: any = await pool.query(
-            `SELECT * FROM lollipop_db.order_items WHERE order_id IN (?)`,
-            [orderIds]
-          );
-          for (const item of items) {
-            if (!itemsByOrderId[item.order_id]) itemsByOrderId[item.order_id] = [];
-            itemsByOrderId[item.order_id].push(item);
-          }
-        }
-
-        // Stats from MySQL
-        const [statsRows]: any = await pool.query(
-          `SELECT status, COUNT(*) as cnt FROM lollipop_db.orders GROUP BY status`
-        );
-        const stats: Record<string, number> = {
-          total: 0,
-          pending: 0,
-          confirmed: 0,
-          preparing: 0,
-          outForDelivery: 0,
-          delivered: 0,
-          cancelled: 0,
-          active: 0,
-        };
-
-        for (const sr of statsRows) {
-          const st = sr.status;
-          const cnt = Number(sr.cnt);
-          stats.total += cnt;
-          if (st === "PENDING") stats.pending += cnt;
-          else if (st === "CONFIRMED") stats.confirmed += cnt;
-          else if (st === "PREPARING") stats.preparing += cnt;
-          else if (st === "OUT_FOR_DELIVERY") stats.outForDelivery += cnt;
-          else if (st === "DELIVERED") stats.delivered += cnt;
-          else if (st === "CANCELLED") stats.cancelled += cnt;
-        }
-        stats.active = stats.pending + stats.confirmed + stats.preparing + stats.outForDelivery;
-
-        const formatted = orders.map((o: any) => formatDeliveryOrder(o, itemsByOrderId[o.id] || []));
-
-        return NextResponse.json({
-          success: true,
-          source: "mysql",
-          stats,
-          count: formatted.length,
-          orders: formatted,
-        }, { headers: corsHeaders });
-      }
-    } catch (mysqlErr: any) {
-      console.warn("⚠️ [Delivery API /orders] MySQL query failed, falling back to Prisma:", mysqlErr?.message || mysqlErr);
-    }
-
-    // 3. Prisma Fallback
+    // 2. Prisma Fallback
     const whereClause: any = {};
     if (statusParam !== "ALL") {
       whereClause.status = statusParam;

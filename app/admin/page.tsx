@@ -90,16 +90,63 @@ const PRIMARY_CATEGORIES = [
   { slug: "custom-cake", name: "Customized Cakes" },
 ];
 
-const DEFAULT_CAKE_SUBCATEGORIES = [
-  "Normal Flavors",
-  "Choco Cakes",
-  "Choco Special",
-  "Delight Cakes",
-  "Rich Special",
-  "Premium Cakes",
-  "Fruit Cakes",
-  "Extreme Combo",
-];
+const DEFAULT_SUBCATEGORIES_BY_CATEGORY: Record<string, string[]> = {
+  cakes: [
+    "Normal Flavors",
+    "Choco Cakes",
+    "Choco Special",
+    "Delight Cakes",
+    "Rich Special",
+    "Premium Cakes",
+    "Fruit Cakes",
+    "Extreme Combo",
+  ],
+  "dry-cakes": [
+    "Plum Cakes",
+    "Banana Cakes",
+    "Tea Cakes",
+    "Walnut Cakes",
+    "Pudding Cakes",
+  ],
+  snacks: [
+    "Doughnuts",
+    "Cup Cakes",
+    "Brownies",
+    "Cookies",
+    "Puffs",
+    "Buns",
+    "Breads",
+    "Pastries",
+  ],
+  "bento-cake": [
+    "Chocolate & Nutella",
+    "Lotus Biscoff",
+    "Hearts & Love",
+    "Pastel & Butterfly",
+    "Custom Message",
+  ],
+  "wedding-cakes": [
+    "2-Tier Classic",
+    "Fresh Florals & Roses",
+    "Luxury Floating Tier",
+    "Romance & Monogram",
+    "Grand 3-Tier",
+  ],
+  "first-birthday": [
+    "Safari & Jungle",
+    "Prince & Crown",
+    "Fairy & Butterfly",
+    "Teddy Bear & Toys",
+    "LED Floating Tier",
+  ],
+  "custom-cake": [
+    "3D Sculpted",
+    "Fondant Theme",
+    "Tiered Celebration",
+    "Photo Cake",
+    "Cartoon & Kids",
+  ],
+};
 
 const STORAGE_KEY = "cakes";
 const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
@@ -293,8 +340,48 @@ export default function AdminPage() {
   // Add Product Form State
   const [name, setName] = useState<string>("");
   const [categorySlug, setCategorySlug] = useState<string>("cakes");
+  const [customCategoryName, setCustomCategoryName] = useState<string>("");
+  const [customCategorySlug, setCustomCategorySlug] = useState<string>("");
   const [subCategory, setSubCategory] = useState<string>("Normal Flavors");
   const [customSubCategory, setCustomSubCategory] = useState<string>("");
+
+  const allCategories = useMemo(() => {
+    const list = [...PRIMARY_CATEGORIES];
+    const existingSlugs = new Set(list.map((c) => c.slug));
+
+    products.forEach((p) => {
+      const cat = p.category || "";
+      if (cat && !existingSlugs.has(cat)) {
+        list.push({
+          slug: cat,
+          name: p.categoryName || cat,
+        });
+        existingSlugs.add(cat);
+      }
+    });
+
+    return list;
+  }, [products]);
+
+  const availableSubcategories = useMemo(() => {
+    const defaults = DEFAULT_SUBCATEGORIES_BY_CATEGORY[categorySlug] || ["General"];
+    const set = new Set<string>(defaults);
+
+    products.forEach((p) => {
+      if (p.category === categorySlug && p.subCategory && p.subCategory.trim()) {
+        const sub = p.subCategory.trim();
+        if (sub !== "General" && sub !== categorySlug) {
+          set.add(sub);
+        }
+      }
+    });
+
+    if (editingProduct && editingProduct.subCategory && editingProduct.category === categorySlug) {
+      set.add(editingProduct.subCategory.trim());
+    }
+
+    return Array.from(set);
+  }, [categorySlug, products, editingProduct]);
   const [description, setDescription] = useState<string>("");
   const [imageName, setImageName] = useState<string>("signature.cake.1");
   const [image, setImage] = useState<string>("");
@@ -585,6 +672,107 @@ export default function AdminPage() {
     }
   }
 
+  // Delete a single admin or rider user
+  async function handleDeleteUser(userId: string, name: string) {
+    if (!window.confirm(`Are you sure you want to permanently delete user "${name}"? This will terminate all active sessions.`)) return;
+
+    try {
+      const res = await fetch(`/api/admin/users?id=${userId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setAlertMessage(data.message || `User "${name}" deleted successfully.`);
+        fetchAdminUsers();
+      } else {
+        alert(data.error || "Failed to delete user.");
+      }
+    } catch (err: any) {
+      alert("Error: " + err.message);
+    }
+  }
+
+  // Delete all non-superadmin users
+  async function handleDeleteAllUsers() {
+    if (!window.confirm("WARNING: Are you sure you want to delete ALL admin and rider accounts (except your own Super Admin account)? This will revoke all active sessions.")) return;
+
+    try {
+      const res = await fetch("/api/admin/users?all=true", {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setAlertMessage(data.message || "All users deleted successfully.");
+        fetchAdminUsers();
+      } else {
+        alert(data.error || "Failed to delete users.");
+      }
+    } catch (err: any) {
+      alert("Error: " + err.message);
+    }
+  }
+
+  // Cancel order modal state & handler
+  const [cancellingOrder, setCancellingOrder] = useState<OrderAdmin | null>(null);
+  const [cancelReasonInput, setCancelReasonInput] = useState("");
+  const [isCancelSubmitting, setIsCancelSubmitting] = useState(false);
+
+  function handleCancelOrder(order: OrderAdmin) {
+    setCancellingOrder(order);
+    const isCod = isCodOrder(order);
+    setCancelReasonInput(
+      isCod ? "Customer requested cancellation" : "Customer requested cancellation & refund"
+    );
+  }
+
+  async function handleConfirmCancel() {
+    if (!cancellingOrder) return;
+    const order = cancellingOrder;
+    const reason =
+      cancelReasonInput.trim() ||
+      (isCodOrder(order) ? "Cancelled by admin" : "Customer requested cancellation & refund");
+
+    setIsCancelSubmitting(true);
+    try {
+      const res = await fetch("/api/admin/orders/cancel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: order.id || order.orderNumber,
+          reason,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert(data.message || "Order cancelled successfully and email sent to customer.");
+        setOrders((prev) =>
+          prev.map((o) =>
+            o.id === order.id || o.orderNumber === order.orderNumber
+              ? { ...o, status: "CANCELLED", paymentStatus: data.paymentStatus || "CANCELLED" }
+              : o
+          )
+        );
+        if (
+          selectedOrderModal &&
+          (selectedOrderModal.id === order.id || selectedOrderModal.orderNumber === order.orderNumber)
+        ) {
+          setSelectedOrderModal((prev) =>
+            prev ? { ...prev, status: "CANCELLED", paymentStatus: data.paymentStatus || "CANCELLED" } : null
+          );
+        }
+        setCancellingOrder(null);
+        fetchOrders();
+        fetchSalesOrders();
+      } else {
+        alert(data.error || "Failed to cancel order.");
+      }
+    } catch (err: any) {
+      alert("Cancellation error: " + err.message);
+    } finally {
+      setIsCancelSubmitting(false);
+    }
+  }
+
   // Helper to determine if an order is Cash on Delivery
   const isCodOrder = (o: OrderAdmin) => {
     const pm = (o.paymentMethod || "").toString().trim().toUpperCase();
@@ -592,7 +780,7 @@ export default function AdminPage() {
   };
 
   // Sales Statistics dynamically computed for the selected timeline
-  // 1. Number of Orders, 2. Cash on Delivery, 3. GPay, 4. Total Amount
+  // 1. Number of Orders, 2. Cash on Delivery, 3. GPay, 4. Razorpay Tax, 5. Total Amount
   const salesStats = useMemo(() => {
     // Valid non-cancelled orders for revenue & financial amounts
     const validOrders = salesOrders.filter((o) => o.status !== "CANCELLED");
@@ -627,6 +815,10 @@ export default function AdminPage() {
     const totalGst = validOrders.reduce((sum, o) => sum + Number(o.taxAmount || 0), 0);
     const totalDeliveryFee = validOrders.reduce((sum, o) => sum + Number(o.deliveryFee || 0), 0);
 
+    // 5. Razorpay Tax & Gateway Fees
+    const razorpayTax = gpayOrders.reduce((sum, o) => sum + Number(o.taxAmount || 0), 0);
+    const razorpayGatewayFee = Math.round(gpayAmount * 0.0236 * 100) / 100;
+
     return {
       totalOrdersCount,
       deliveredCount,
@@ -641,6 +833,8 @@ export default function AdminPage() {
       totalSubtotal,
       totalGst,
       totalDeliveryFee,
+      razorpayTax,
+      razorpayGatewayFee,
     };
   }, [salesOrders]);
 
@@ -849,6 +1043,8 @@ export default function AdminPage() {
     setEditingProduct(null);
     setName("");
     setCategorySlug("cakes");
+    setCustomCategoryName("");
+    setCustomCategorySlug("");
     setSubCategory("Normal Flavors");
     setCustomSubCategory("");
     setDescription("");
@@ -874,8 +1070,13 @@ export default function AdminPage() {
   function handleEditClick(p: ProductAdmin) {
     setEditingProduct(p);
     setName(p.name || "");
-    setCategorySlug(p.category || "cakes");
-    setSubCategory(p.subCategory || "Normal Flavors");
+    const targetCat = p.category || "cakes";
+    setCategorySlug(targetCat);
+    setCustomCategoryName("");
+    setCustomCategorySlug("");
+    const defaultSub = (DEFAULT_SUBCATEGORIES_BY_CATEGORY[targetCat] || ["General"])[0] || "General";
+    setSubCategory(p.subCategory || defaultSub);
+    setCustomSubCategory("");
     setDescription(p.description || "");
     setImageName(p.imageName || "signature.cake.1");
     setBadge(p.badge || "");
@@ -1073,12 +1274,31 @@ export default function AdminPage() {
   }
 
   async function handleDeleteProduct(id: string, nameStr: string) {
-    if (!confirm(`Are you sure you want to delete "${nameStr}"?`)) return;
+    const enteredPwd = window.prompt(
+      `To confirm deleting cake "${nameStr}", enter the security password:`
+    );
+    if (!enteredPwd) return;
+    if (enteredPwd.trim() !== "LollipopDLT") {
+      alert("Incorrect deletion password! Cake deletion cancelled.");
+      return;
+    }
+
     deleteCakeFromLocalStorage(id);
     setProducts((prev) => prev.filter((p) => String(p.id) !== String(id)));
     setAlertMessage(`Deleted "${nameStr}" successfully.`);
     try {
-      await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/products/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-delete-password": enteredPwd.trim(),
+        },
+        body: JSON.stringify({ password: enteredPwd.trim() }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        alert(data.error || "Failed to delete product from database.");
+      }
     } catch (err) {
       console.warn("API delete notice:", err);
     }
@@ -1106,10 +1326,16 @@ export default function AdminPage() {
         ? editingProduct.productCode
         : `LOL-${Math.floor(1000 + Math.random() * 9000)}`;
 
+      const resolvedCategorySlug = categorySlug === "__NEW_CAT__"
+        ? (customCategorySlug.trim().toLowerCase() || customCategoryName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "") || "custom-category")
+        : categorySlug;
+
+      const resolvedCategoryName = categorySlug === "__NEW_CAT__"
+        ? (customCategoryName.trim() || resolvedCategorySlug)
+        : (PRIMARY_CATEGORIES.find((c) => c.slug === categorySlug)?.name || allCategories.find((c) => c.slug === categorySlug)?.name || categorySlug);
+
       const resolvedSubCategory =
-        categorySlug === "cakes" && subCategory === "__NEW__" ? customSubCategory : subCategory;
-      const categoryObj = PRIMARY_CATEGORIES.find((c) => c.slug === categorySlug);
-      const categoryName = categoryObj ? categoryObj.name : categorySlug;
+        subCategory === "__NEW__" ? (customSubCategory.trim() || "General") : (subCategory.trim() || "General");
 
       let finalImage = image || (editingProduct ? editingProduct.image : undefined);
 
@@ -1118,7 +1344,7 @@ export default function AdminPage() {
         try {
           const formData = new FormData();
           formData.append("file", selectedFile);
-          formData.append("category", categorySlug);
+          formData.append("category", resolvedCategorySlug);
 
           // Pass previous image URL and product ID so previous R2 image is deleted upon replacement
           if (editingProduct) {
@@ -1149,8 +1375,8 @@ export default function AdminPage() {
         slug,
         productCode,
         name,
-        category: categorySlug,
-        categoryName,
+        category: resolvedCategorySlug,
+        categoryName: resolvedCategoryName,
         subCategory: resolvedSubCategory,
         description,
         imageName: finalImage || imageName || "signature.cake.1",
@@ -1158,7 +1384,7 @@ export default function AdminPage() {
         badge: badge || undefined,
         rating: editingProduct?.rating || 5.0,
         reviewCount: editingProduct?.reviewCount || 1,
-        productType: categorySlug === "snacks" ? "SNACK" : "CAKE",
+        productType: resolvedCategorySlug === "snacks" ? "SNACK" : "CAKE",
         isActive: editingProduct ? editingProduct.isActive : true,
         egglessAvailable: finalEgglessAvailable,
         variants: updatedVariants,
@@ -1171,18 +1397,19 @@ export default function AdminPage() {
 
       let payloadImageName = finalImage || imageName || "signature.cake.1";
       if (payloadImageName.startsWith("data:")) {
-        const subDir = categorySlug === "snacks" ? "Snacks" : "cakes";
+        const subDir = resolvedCategorySlug === "snacks" ? "Snacks" : "cakes";
         payloadImageName = `/PRODUCT_IMAGES/${subDir}/cake-${Date.now()}.jpg`;
       }
 
       const payload = {
         name,
-        categorySlug,
+        categorySlug: resolvedCategorySlug,
+        categoryName: resolvedCategoryName,
         subCategory: resolvedSubCategory,
         description,
         imageName: payloadImageName,
         badge,
-        productType: categorySlug === "snacks" ? "SNACK" : "CAKE",
+        productType: resolvedCategorySlug === "snacks" ? "SNACK" : "CAKE",
         isActive: true,
         egglessAvailable: finalEgglessAvailable,
         variants: updatedVariants,
@@ -1525,31 +1752,26 @@ export default function AdminPage() {
               </div>
             </div>
 
-            {/* Sales Stat Cards Grid (4 boxes: 1. Number of Orders & Delivered, 2. Cash on Delivery, 3. GPay, 4. Total Amount) */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-              {/* Box 1: Number of Orders & Delivered Orders */}
+            {/* Sales Stat Cards Grid (5 boxes: 1. Total & Delivered Orders, 2. Cash on Delivery, 3. GPay, 4. Razorpay Tax, 5. Total Amount) */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+              {/* Box 1: Total & Delivered Orders */}
               <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                    Number of Orders
+                    Total Orders
                   </span>
                   <span className="material-symbols-outlined text-base text-[#7A6B72]">inventory_2</span>
                 </div>
                 <div className="text-xl sm:text-3xl font-extrabold text-[#2A082C]">
-                  {salesStats.totalOrdersCount} <span className="text-xs sm:text-base font-normal text-gray-500">Orders</span>
+                  {salesStats.totalOrdersCount} <span className="text-xs sm:text-sm font-normal text-gray-500">Orders</span>
                 </div>
-                <div className="flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px] font-semibold">
+                <div className="pt-1.5 border-t border-[#E6DBCE]/60 flex flex-wrap items-center gap-1 text-[10px] sm:text-[11px] font-bold">
                   <span className="text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                    {salesStats.deliveredCount} Delivered
+                    ✓ {salesStats.deliveredCount} Delivered
                   </span>
                   {salesStats.pendingDeliveryCount > 0 && (
-                    <span className="text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                    <span className="text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200 font-semibold">
                       {salesStats.pendingDeliveryCount} In Delivery
-                    </span>
-                  )}
-                  {salesStats.cancelledCount > 0 && (
-                    <span className="text-red-700 bg-red-50 px-1.5 py-0.5 rounded-md border border-red-200">
-                      {salesStats.cancelledCount} Cancelled
                     </span>
                   )}
                 </div>
@@ -1566,7 +1788,7 @@ export default function AdminPage() {
                 <div className="text-xl sm:text-3xl font-extrabold text-[#962854] truncate">
                   ₹{salesStats.codAmount.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-md inline-block border border-amber-200">
+                <p className="text-[10px] sm:text-[11px] text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-md inline-block border border-amber-200 truncate">
                   {salesStats.codCount} COD Orders
                 </p>
               </div>
@@ -1582,12 +1804,28 @@ export default function AdminPage() {
                 <div className="text-xl sm:text-3xl font-extrabold text-indigo-700 truncate">
                   ₹{salesStats.gpayAmount.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded-md inline-block border border-indigo-200">
-                  {salesStats.gpayCount} GPay / Online Paid
+                <p className="text-[10px] sm:text-[11px] text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded-md inline-block border border-indigo-200 truncate">
+                  {salesStats.gpayCount} Online Paid
                 </p>
               </div>
 
-              {/* Box 4: Total Amount */}
+              {/* Box 4: Razorpay Tax */}
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+                    Razorpay Tax
+                  </span>
+                  <span className="material-symbols-outlined text-base text-[#7A6B72]">receipt_long</span>
+                </div>
+                <div className="text-xl sm:text-3xl font-extrabold text-[#802B52] truncate">
+                  ₹{salesStats.razorpayTax.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                </div>
+                <p className="text-[10px] sm:text-[11px] text-[#802B52] font-semibold bg-[#FAF0F2] px-2 py-0.5 rounded-md inline-block border border-[#802B52]/20 truncate">
+                  GST on Online Orders
+                </p>
+              </div>
+
+              {/* Box 5: Total Amount */}
               <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
@@ -1598,8 +1836,8 @@ export default function AdminPage() {
                 <div className="text-xl sm:text-3xl font-extrabold text-[#802B52] truncate">
                   ₹{salesStats.totalAmount.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md inline-block border border-emerald-200">
-                  ✓ All Payment Methods
+                <p className="text-[10px] sm:text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md inline-block border border-emerald-200 truncate">
+                  ✓ Net Sales Volume
                 </p>
               </div>
             </div>
@@ -1748,7 +1986,7 @@ export default function AdminPage() {
                   className="flex-1 sm:flex-initial px-3 sm:px-4 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm bg-white font-medium focus:outline-none focus:border-[#802B52]"
                 >
                   <option value="all">All Categories ({products.length})</option>
-                  {PRIMARY_CATEGORIES.map((c) => (
+                  {allCategories.map((c) => (
                     <option key={c.slug} value={c.slug}>
                       {c.name}
                     </option>
@@ -1814,7 +2052,8 @@ export default function AdminPage() {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-bold text-sm sm:text-base text-[#2D2327] truncate leading-snug">{p.name}</h3>
                           <p className="text-xs font-medium text-[#802B52] truncate mt-0.5">
-                            {p.categoryName || p.category || "Cakes"}
+                            {PRIMARY_CATEGORIES.find((c) => c.slug === p.category)?.name || p.categoryName || p.category || "Cakes"}
+                            {p.subCategory && p.subCategory !== p.category ? ` • ${p.subCategory}` : ""}
                           </p>
                         </div>
                       </div>
@@ -1901,7 +2140,12 @@ export default function AdminPage() {
                               <div className="font-bold text-sm text-[#2D2327]">{p.name}</div>
                             </div>
                           </td>
-                          <td className="py-4 px-4 font-medium text-[#5B1E38]">{p.categoryName || p.category || "Cakes"}</td>
+                          <td className="py-4 px-4 font-medium text-[#5B1E38]">
+                            <div>{PRIMARY_CATEGORIES.find((c) => c.slug === p.category)?.name || p.categoryName || p.category || "Cakes"}</div>
+                            {p.subCategory && p.subCategory !== p.category && (
+                              <div className="text-[11px] text-[#802B52] font-semibold mt-0.5">{p.subCategory}</div>
+                            )}
+                          </td>
                           <td className="py-4 px-4">
                             {(p.variants || []).map((v, i) => (
                               <span key={i} className="inline-block bg-[#FAF5EE] border border-[#E6DBCE] text-[#2D2327] font-semibold px-2 py-0.5 rounded text-[11px] mr-1.5 mb-1">
@@ -2229,26 +2473,28 @@ export default function AdminPage() {
                         )}
                       </div>
 
-                      {/* Card Footer / Status Action */}
-                      <div className="flex items-center justify-between pt-3 border-t border-[#E6DBCE]/70">
-                        <span className="text-xs font-bold uppercase text-[#7A6B72]">Order Status:</span>
-                        {adminUser?.role === "SUPERADMIN" ? (
-                          <select
-                            value={o.status}
-                            onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
-                            className="px-3 py-1.5 rounded-xl border border-[#E6DBCE] bg-white text-xs font-bold text-[#2D2327] focus:outline-none focus:border-[#802B52] shadow-sm cursor-pointer"
-                          >
-                            <option value="PENDING">PENDING</option>
-                            <option value="CONFIRMED">CONFIRMED</option>
-                            <option value="PREPARING">PREPARING</option>
-                            <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
-                            <option value="DELIVERED">DELIVERED</option>
-                            <option value="CANCELLED">CANCELLED</option>
-                          </select>
-                        ) : (
-                          <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#802B52] text-white shadow-sm">
-                            {o.status}
+                      {/* Card Footer / Single Action Button: Cancel Order -> Order Delivered */}
+                      <div className="flex items-center justify-between gap-2.5 pt-3 border-t border-[#E6DBCE]/70">
+                        {o.status === "DELIVERED" ? (
+                          <span className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 flex items-center justify-center gap-1.5 shadow-2xs w-full sm:w-auto">
+                            <span className="material-symbols-outlined text-sm text-emerald-600">check_circle</span>
+                            <span>Order Delivered</span>
                           </span>
+                        ) : o.status === "CANCELLED" ? (
+                          <span className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-rose-800 bg-rose-50 border border-rose-300 flex items-center justify-center gap-1.5 shadow-2xs w-full sm:w-auto">
+                            <span className="material-symbols-outlined text-sm text-rose-600">cancel</span>
+                            <span>Order Cancelled</span>
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleCancelOrder(o)}
+                            className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 hover:bg-rose-100 transition-colors shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer w-full sm:w-auto"
+                            title="Cancel order and notify customer via email"
+                          >
+                            <span className="material-symbols-outlined text-sm">cancel</span>
+                            <span>Cancel Order</span>
+                          </button>
                         )}
                       </div>
                     </div>
@@ -2348,24 +2594,29 @@ export default function AdminPage() {
                           </td>
                           <td className="py-4 px-4 font-bold text-[#802B52]">₹{o.totalAmount}</td>
                           <td className="py-4 px-4">
-                            {adminUser?.role === "SUPERADMIN" ? (
-                              <select
-                                value={o.status}
-                                onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
-                                className="px-2 py-1 rounded border border-[#E6DBCE] bg-white text-xs font-semibold focus:outline-none focus:border-[#802B52]"
-                              >
-                                <option value="PENDING">PENDING</option>
-                                <option value="CONFIRMED">CONFIRMED</option>
-                                <option value="PREPARING">PREPARING</option>
-                                <option value="OUT_FOR_DELIVERY">OUT FOR DELIVERY</option>
-                                <option value="DELIVERED">DELIVERED</option>
-                                <option value="CANCELLED">CANCELLED</option>
-                              </select>
-                            ) : (
-                              <span className="inline-block px-2.5 py-1 rounded text-[11px] font-bold bg-[#2A082C] text-[#E6C184]">
-                                {o.status}
-                              </span>
-                            )}
+                            <div className="flex items-center min-w-[130px]">
+                              {o.status === "DELIVERED" ? (
+                                <span className="px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 flex items-center justify-center gap-1.5 shadow-2xs whitespace-nowrap">
+                                  <span className="material-symbols-outlined text-sm text-emerald-600">check_circle</span>
+                                  <span>Order Delivered</span>
+                                </span>
+                              ) : o.status === "CANCELLED" ? (
+                                <span className="px-3 py-1.5 rounded-xl text-xs font-bold text-rose-800 bg-rose-50 border border-rose-300 flex items-center justify-center gap-1.5 shadow-2xs whitespace-nowrap">
+                                  <span className="material-symbols-outlined text-sm text-rose-600">cancel</span>
+                                  <span>Order Cancelled</span>
+                                </span>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => handleCancelOrder(o)}
+                                  className="px-3 py-1.5 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 hover:bg-rose-100 transition-colors cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs whitespace-nowrap"
+                                  title="Cancel order and notify customer via email"
+                                >
+                                  <span className="material-symbols-outlined text-sm">cancel</span>
+                                  <span>Cancel Order</span>
+                                </button>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -2390,12 +2641,24 @@ export default function AdminPage() {
                 </p>
               </div>
 
-              <button
-                onClick={() => setShowUserModal(true)}
-                className="bg-[#802B52] hover:bg-[#962854] text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1 shrink-0"
-              >
-                + <span className="hidden sm:inline">Create New Admin User</span><span className="sm:hidden">Add User</span>
-              </button>
+              <div className="flex items-center gap-2">
+                {adminUsersList.some((u) => u.id !== adminUser?.id) && (
+                  <button
+                    onClick={handleDeleteAllUsers}
+                    className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold px-3 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-1 shrink-0 shadow-2xs"
+                    title="Delete all admin and rider accounts (except self)"
+                  >
+                    <span className="material-symbols-outlined text-sm">delete_sweep</span>
+                    <span className="hidden sm:inline">Delete All Users</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => setShowUserModal(true)}
+                  className="bg-[#802B52] hover:bg-[#962854] text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1 shrink-0"
+                >
+                  + <span className="hidden sm:inline">Create New Admin User</span><span className="sm:hidden">Add User</span>
+                </button>
+              </div>
             </div>
 
             {/* MOBILE CARD VIEW FOR ADMIN & RIDER USERS */}
@@ -2436,7 +2699,19 @@ export default function AdminPage() {
                       <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
                       <span className="font-semibold text-emerald-800">Active</span>
                     </span>
-                    <span className="font-medium">Created: {new Date(u.createdAt).toLocaleDateString("en-IN")}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-[11px]">{new Date(u.createdAt).toLocaleDateString("en-IN")}</span>
+                      {u.id !== adminUser?.id && (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteUser(u.id, u.fullName)}
+                          className="px-2 py-1 rounded-lg text-[11px] font-bold text-red-600 bg-red-50 border border-red-200 hover:bg-red-100 transition-colors cursor-pointer flex items-center gap-0.5"
+                        >
+                          <span className="material-symbols-outlined text-xs">delete</span>
+                          <span>Delete</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -2453,6 +2728,7 @@ export default function AdminPage() {
                     <th className="py-3 px-4">Role</th>
                     <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4">Created Date</th>
+                    <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E6DBCE]">
@@ -2480,6 +2756,21 @@ export default function AdminPage() {
                       </td>
                       <td className="py-4 px-4 text-[#7A6B72]">
                         {new Date(u.createdAt).toLocaleDateString("en-IN")}
+                      </td>
+                      <td className="py-4 px-4 text-right">
+                        {u.id !== adminUser?.id ? (
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteUser(u.id, u.fullName)}
+                            className="px-2.5 py-1.5 rounded-lg text-xs font-bold text-red-600 bg-red-50 border border-red-200 hover:bg-red-100 transition-all cursor-pointer inline-flex items-center gap-1 shadow-2xs"
+                            title="Delete user account and revoke sessions"
+                          >
+                            <span className="material-symbols-outlined text-sm">delete</span>
+                            <span>Delete</span>
+                          </button>
+                        ) : (
+                          <span className="text-[11px] text-gray-400 italic">Current User</span>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -2632,37 +2923,75 @@ export default function AdminPage() {
                   <label className="block font-bold text-[#5B1E38] uppercase mb-1">Category *</label>
                   <select
                     value={categorySlug}
-                    onChange={(e) => setCategorySlug(e.target.value)}
+                    onChange={(e) => {
+                      const newCat = e.target.value;
+                      setCategorySlug(newCat);
+                      if (newCat === "__NEW_CAT__") {
+                        setSubCategory("__NEW__");
+                      } else {
+                        const firstSub = (DEFAULT_SUBCATEGORIES_BY_CATEGORY[newCat] || ["General"])[0] || "General";
+                        setSubCategory(firstSub);
+                      }
+                    }}
                     className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl bg-white text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
                   >
-                    {PRIMARY_CATEGORIES.map((cat) => (
+                    {allCategories.map((cat) => (
                       <option key={cat.slug} value={cat.slug}>
                         {cat.name}
                       </option>
                     ))}
+                    <option value="__NEW_CAT__">+ Add New Category...</option>
                   </select>
                 </div>
 
-                {categorySlug === "cakes" && (
-                  <div>
-                    <label className="block font-bold text-[#5B1E38] uppercase mb-1">Sub-Category</label>
-                    <select
-                      value={subCategory}
-                      onChange={(e) => setSubCategory(e.target.value)}
-                      className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl bg-white text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
-                    >
-                      {DEFAULT_CAKE_SUBCATEGORIES.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                      <option value="__NEW__">+ Add New Sub-Category...</option>
-                    </select>
-                  </div>
-                )}
+                <div>
+                  <label className="block font-bold text-[#5B1E38] uppercase mb-1">Sub-Category *</label>
+                  <select
+                    value={subCategory}
+                    onChange={(e) => setSubCategory(e.target.value)}
+                    className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl bg-white text-xs sm:text-sm focus:outline-none focus:border-[#802B52]"
+                  >
+                    {availableSubcategories.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                    <option value="__NEW__">+ Add New Sub-Category...</option>
+                  </select>
+                </div>
               </div>
 
-              {categorySlug === "cakes" && subCategory === "__NEW__" && (
+              {categorySlug === "__NEW_CAT__" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-[#FAF5EE] rounded-xl border border-[#E6DBCE]">
+                  <div>
+                    <label className="block font-bold text-[#802B52] uppercase mb-1">New Category Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={customCategoryName}
+                      onChange={(e) => {
+                        setCustomCategoryName(e.target.value);
+                        setCustomCategorySlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, ""));
+                      }}
+                      placeholder="e.g. Desserts"
+                      className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl bg-white focus:outline-none focus:border-[#802B52]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-[#802B52] uppercase mb-1">Category Slug (URL code) *</label>
+                    <input
+                      type="text"
+                      required
+                      value={customCategorySlug}
+                      onChange={(e) => setCustomCategorySlug(e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, ""))}
+                      placeholder="e.g. desserts"
+                      className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl bg-white focus:outline-none focus:border-[#802B52]"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {subCategory === "__NEW__" && (
                 <div>
                   <label className="block font-bold text-[#802B52] uppercase mb-1">New Sub-Category Name *</label>
                   <input
@@ -2670,7 +2999,7 @@ export default function AdminPage() {
                     required
                     value={customSubCategory}
                     onChange={(e) => setCustomSubCategory(e.target.value)}
-                    placeholder="e.g. Cheesecake Special"
+                    placeholder="e.g. Chocolate Fudge"
                     className="w-full px-3 py-2 border border-[#E6DBCE] rounded-xl focus:outline-none focus:border-[#802B52]"
                   />
                 </div>
@@ -2791,7 +3120,7 @@ export default function AdminPage() {
                     <span className="font-bold text-[#5B1E38] uppercase">Variants &amp; Prices</span>
                     {isCakeCategory && (
                       <span className="block text-[10px] text-[#7A6B72]">
-                        Enter Size, Price, and optional Offer attribute (in black box)
+                        Enter Size, Price, optional Offer attribute (in black box), and check &apos;Eggless&apos; if the offer applies to eggless cakes
                       </span>
                     )}
                   </div>
@@ -2838,19 +3167,22 @@ export default function AdminPage() {
                         />
                       </div>
                     )}
-                    <div className={`flex items-center justify-between gap-1 ${isCakeCategory ? "sm:col-span-3" : ""}`}>
-                      <select
-                        value={v.isEggless ? "eggless" : "egg"}
-                        onChange={(e) => handleVariantChange(idx, "isEggless", e.target.value === "eggless")}
-                        className="flex-1 px-2 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
-                      >
-                        <option value="egg">Egg</option>
-                        <option value="eggless">Eggless</option>
-                      </select>
+                    <div className={`flex items-center justify-between gap-1.5 ${isCakeCategory ? "sm:col-span-3" : ""}`}>
+                      <label className="flex items-center gap-1.5 cursor-pointer select-none bg-white border border-[#E6DBCE] px-2.5 py-1.5 rounded-lg text-xs hover:border-[#802B52]/50 transition-colors flex-1" title="Check this if this variant / offer applies to Eggless cakes too">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(v.isEggless)}
+                          onChange={(e) => handleVariantChange(idx, "isEggless", e.target.checked)}
+                          className="w-4 h-4 text-[#802B52] rounded border-[#E6DBCE] focus:ring-[#802B52] accent-[#802B52] cursor-pointer"
+                        />
+                        <span className="font-bold text-[#2D2327] text-[11px] whitespace-nowrap">
+                          🌱 Eggless
+                        </span>
+                      </label>
                       <button
                         type="button"
                         onClick={() => handleRemoveVariantRow(idx)}
-                        className="text-red-500 hover:text-red-700 font-bold px-2 py-1"
+                        className="text-red-500 hover:text-red-700 font-bold px-2 py-1 shrink-0"
                         title="Remove Variant"
                       >
                         ✕
@@ -3010,7 +3342,7 @@ export default function AdminPage() {
                           {item.isEggless ? "Eggless" : "With Egg"}
                         </span>
 
-                        {!item.isEggless && item.offer && (
+                        {item.offer && (
                           <span className="px-2 py-0.5 rounded-md bg-amber-50 border border-amber-300 text-amber-900 font-bold">
                             Offer: {item.offer}
                           </span>
@@ -3103,13 +3435,174 @@ export default function AdminPage() {
             </div>
 
             {/* Modal Footer Actions */}
-            <div className="p-3.5 sm:p-4 border-t border-[#E6DBCE] bg-[#FAF5EE]/70 flex items-center justify-end gap-2 shrink-0">
+            <div className="p-3.5 sm:p-4 border-t border-[#E6DBCE] bg-[#FAF5EE]/70 flex items-center justify-between gap-2 shrink-0">
+              <div>
+                {selectedOrderModal.status === "DELIVERED" ? (
+                  <span className="px-4 py-2 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 flex items-center gap-1.5 shadow-2xs">
+                    <span className="material-symbols-outlined text-sm text-emerald-600">check_circle</span>
+                    <span>Order Delivered</span>
+                  </span>
+                ) : selectedOrderModal.status === "CANCELLED" ? (
+                  <span className="px-4 py-2 rounded-xl text-xs font-bold text-rose-800 bg-rose-50 border border-rose-300 flex items-center gap-1.5 shadow-2xs">
+                    <span className="material-symbols-outlined text-sm text-rose-600">cancel</span>
+                    <span>Order Cancelled</span>
+                  </span>
+                ) : (
+                  adminUser?.role === "SUPERADMIN" && (
+                    <button
+                      type="button"
+                      onClick={() => handleCancelOrder(selectedOrderModal)}
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 hover:bg-rose-100 transition-colors shadow-2xs flex items-center gap-1.5 cursor-pointer"
+                      title="Cancel order and notify customer via email"
+                    >
+                      <span className="material-symbols-outlined text-sm">cancel</span>
+                      <span>Cancel Order</span>
+                    </button>
+                  )
+                )}
+              </div>
               <button
                 type="button"
                 onClick={() => setSelectedOrderModal(null)}
                 className="px-5 py-2 rounded-xl bg-[#802B52] hover:bg-[#962854] text-white text-xs font-bold transition-colors shadow-sm cursor-pointer"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CANCEL ORDER MODAL WITH REASON & REFUND TIMING NOTICE */}
+      {cancellingOrder && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 animate-fadeIn">
+          <div className="bg-white rounded-2xl max-w-lg w-full border border-[#E6DBCE] shadow-2xl overflow-hidden animate-scaleUp">
+            {/* Header */}
+            <div className="p-4 sm:p-5 border-b border-[#E6DBCE] bg-[#FAF5EE] flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-full bg-rose-100 border border-rose-200 flex items-center justify-center text-rose-700 shrink-0">
+                  <span className="material-symbols-outlined text-xl">cancel</span>
+                </div>
+                <div>
+                  <h3 className="font-serif font-bold text-base sm:text-lg text-[#5B1E38] leading-tight">
+                    Cancel Order #{cancellingOrder.orderNumber}
+                  </h3>
+                  <p className="text-xs text-[#7A6B72]">
+                    Customer: {cancellingOrder.customerName} ({cancellingOrder.customerEmail || "No email"})
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCancellingOrder(null)}
+                className="w-8 h-8 rounded-full bg-white hover:bg-gray-100 border border-[#E6DBCE] text-[#7A6B72] flex items-center justify-center font-bold text-sm cursor-pointer transition-colors"
+                disabled={isCancelSubmitting}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="p-4 sm:p-5 space-y-4 text-xs">
+              {/* Payment Info Card */}
+              {isCodOrder(cancellingOrder) ? (
+                <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 text-[#2D2327]">
+                  <div className="flex justify-between font-bold text-sm text-[#1C0D0A] mb-1">
+                    <span>Cash on Delivery (COD)</span>
+                    <span className="text-[#802B52]">₹{cancellingOrder.totalAmount}</span>
+                  </div>
+                  <p className="text-[11.5px] text-[#5C524E] leading-relaxed">
+                    ℹ️ No payment was collected from the customer. Cancelling will notify the customer via email with your reason.
+                  </p>
+                </div>
+              ) : (
+                <div className="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-200 text-emerald-950">
+                  <div className="flex justify-between font-bold text-sm text-emerald-900 mb-1">
+                    <span>Prepaid Online (Razorpay / GPAY)</span>
+                    <span className="text-emerald-700 font-extrabold">₹{cancellingOrder.totalAmount}</span>
+                  </div>
+                  <p className="text-[11.5px] text-emerald-800 leading-relaxed">
+                    ⚡ <strong>Automated Refund:</strong> Full refund of <strong>₹{cancellingOrder.totalAmount}</strong> will be initiated via Razorpay to the customer&apos;s original payment method.
+                  </p>
+                  <p className="text-[11px] text-emerald-700 mt-1 font-semibold">
+                    ⏱️ The customer will receive an official cancellation email specifying that funds will be credited within <strong>5 to 7 business days</strong>.
+                  </p>
+                </div>
+              )}
+
+              {/* Cancellation Reason Input */}
+              <div className="space-y-2">
+                <label className="block font-bold text-xs text-[#2D2327]">
+                  Reason for Cancellation: <span className="text-rose-600">*</span>
+                </label>
+
+                {/* Fast select chips */}
+                <div className="flex flex-wrap gap-1.5 pb-1">
+                  {[
+                    "Customer requested cancellation",
+                    "Item/Flavor out of stock",
+                    "Delivery location unreachable",
+                    "Kitchen capacity limit reached",
+                  ].map((chip) => (
+                    <button
+                      key={chip}
+                      type="button"
+                      onClick={() => setCancelReasonInput(chip)}
+                      className={`px-2.5 py-1 rounded-full text-[10.5px] font-semibold border transition-all cursor-pointer ${
+                        cancelReasonInput === chip
+                          ? "bg-[#802B52] text-white border-[#802B52]"
+                          : "bg-white text-[#5C524E] border-[#E6DBCE] hover:border-[#802B52]"
+                      }`}
+                    >
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+
+                <textarea
+                  value={cancelReasonInput}
+                  onChange={(e) => setCancelReasonInput(e.target.value)}
+                  rows={3}
+                  placeholder="Enter reason for cancelling this order (will be sent in customer email)..."
+                  className="w-full p-2.5 rounded-xl border border-[#E6DBCE] bg-white text-xs font-medium text-[#1C0D0A] focus:outline-none focus:border-[#802B52] leading-relaxed shadow-xs"
+                />
+              </div>
+
+              <div className="p-3 bg-amber-50/70 border border-amber-200 rounded-xl text-[11px] text-amber-900 flex items-start gap-2">
+                <span className="material-symbols-outlined text-base text-amber-700 shrink-0">mail</span>
+                <span>
+                  A formal cancellation receipt will be sent directly to <strong>{cancellingOrder.customerEmail || "the customer"}</strong> with this reason{!isCodOrder(cancellingOrder) && " and 5-7 days refund timeline"}.
+                </span>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="p-3.5 sm:p-4 border-t border-[#E6DBCE] bg-[#FAF5EE]/70 flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setCancellingOrder(null)}
+                className="px-4 py-2 rounded-xl border border-[#E6DBCE] bg-white hover:bg-gray-50 text-xs font-bold text-[#5C524E] transition-colors cursor-pointer"
+                disabled={isCancelSubmitting}
+              >
+                Keep Order
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmCancel}
+                disabled={isCancelSubmitting || !cancelReasonInput.trim()}
+                className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:bg-rose-300 text-white text-xs font-bold transition-colors shadow-sm flex items-center gap-1.5 cursor-pointer"
+              >
+                {isCancelSubmitting ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>
+                    <span>Cancelling &amp; Emailing...</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-sm">cancel</span>
+                    <span>Confirm Order Cancellation</span>
+                  </>
+                )}
               </button>
             </div>
           </div>

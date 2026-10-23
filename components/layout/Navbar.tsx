@@ -6,11 +6,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useCart } from "@/components/cart/CartProvider";
 import { PRODUCTS_DATA, getCardPrice } from "@/lib/products";
 
-const NAV_LINKS = [
+const NAV_LINKS: { href: string; label: string; icon?: string }[] = [
   { href: "/", label: "Home" },
   { href: "/cakes", label: "Cakes" },
   { href: "/dry-cakes", label: "Dry Cakes" },
-  { href: "/custom-cake", label: "Custom Cake" },
+  { href: "/custom-cake", label: "Customized Cakes" },
   { href: "/first-birthday", label: "1st Birthday" },
   { href: "/wedding-cakes", label: "Wedding" },
   { href: "/bento-cake", label: "Bento Cake" },
@@ -22,7 +22,7 @@ const DRAWER_LINKS = [
   { href: "/", label: "Home", icon: "home" },
   { href: "/cakes", label: "Cakes", icon: "cake" },
   { href: "/dry-cakes", label: "Dry Cakes", icon: "bakery_dining" },
-  { href: "/custom-cake", label: "Custom Cake", icon: "cake" },
+  { href: "/custom-cake", label: "Customized Cakes", icon: "cake" },
   { href: "/first-birthday", label: "1st Birthday", icon: "child_care" },
   { href: "/wedding-cakes", label: "Wedding Cakes", icon: "favorite" },
   { href: "/bento-cake", label: "Bento Cake", icon: "lunch_dining" },

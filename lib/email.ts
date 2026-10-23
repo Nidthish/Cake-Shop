@@ -107,7 +107,7 @@ export function generateOrderConfirmationHtml(order: Order): string {
                   Lollipop Cake Shop
                 </h1>
                 <p style="margin: 6px 0 0 0; font-size: 13px; color: #F1E6DF; font-style: italic;">
-                  Handcrafted Luxury Artisanal Cakes & Pastries
+                  Handcrafted Luxury Cakes & Pastries
                 </p>
               </td>
             </tr>
@@ -408,7 +408,7 @@ export function generateOrderDeliveredHtml(order: Order): string {
                   Lollipop Cake Shop
                 </h1>
                 <p style="margin: 6px 0 0 0; font-size: 13px; color: #F1E6DF; font-style: italic;">
-                  Handcrafted Luxury Artisanal Cakes & Pastries
+                  Handcrafted Luxury Cakes & Pastries
                 </p>
               </td>
             </tr>
@@ -566,6 +566,326 @@ export async function sendOrderDeliveredEmail(order: Order): Promise<{ success: 
     return { success: true, messageId: info.messageId };
   } catch (error: any) {
     console.error("❌ [Email Service Error] Failed to send delivery email:", error?.message || error);
+    return { success: false, error: error?.message || "Email sending failed" };
+  }
+}
+
+/**
+ * Interface for order cancellation email
+ */
+export interface OrderCancelledEmailData {
+  orderId: string;
+  orderNumber?: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone?: string;
+  deliveryDate?: string;
+  deliveryTimeSlot?: string;
+  streetAddress?: string;
+  city?: string;
+  pincode?: string;
+  paymentMethod: string;
+  totalAmount: number;
+  cancellationReason: string;
+  refundStatus?: string;
+  refundId?: string | null;
+  items?: Array<{
+    name: string;
+    weight?: string;
+    quantity: number;
+    unitPrice?: number;
+    lineTotal?: number;
+    cakeMessage?: string;
+  }>;
+}
+
+/**
+ * Generate a luxury HTML email for Order Cancellation & Refund Details
+ */
+export function generateOrderCancelledHtml(data: OrderCancelledEmailData): string {
+  const isCod =
+    data.paymentMethod.toUpperCase() === "COD" ||
+    data.paymentMethod.toUpperCase().includes("CASH");
+
+  const itemsHtml = (data.items && data.items.length > 0)
+    ? data.items
+      .map(
+        (item) => `
+        <tr>
+          <td style="padding: 12px 14px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; color: #1C0D0A;">
+            <strong style="color: #802B52; font-size: 14px;">${item.name}</strong>
+            ${item.weight ? `<br/><span style="font-size: 12px; color: #7A6B72;">Weight / Variant: ${item.weight}</span>` : ""}
+            ${item.cakeMessage ? `<br/><span style="font-size: 11px; color: #802B52; font-style: italic;">🎂 Message: "${item.cakeMessage}"</span>` : ""}
+          </td>
+          <td style="padding: 12px 14px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; color: #1C0D0A; text-align: center; font-weight: bold;">
+            ${item.quantity}
+          </td>
+          <td style="padding: 12px 14px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; color: #1C0D0A; text-align: right;">
+            ₹${(item.unitPrice || 0).toFixed(2)}
+          </td>
+          <td style="padding: 12px 14px; border-bottom: 1px solid #F1E6DF; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 13px; color: #802B52; text-align: right; font-weight: bold;">
+            ₹${(item.lineTotal || (item.unitPrice || 0) * (item.quantity || 1)).toFixed(2)}
+          </td>
+        </tr>
+      `
+      )
+      .join("")
+    : "";
+
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Cancellation - Lollipop Cake Shop</title>
+  </head>
+  <body style="margin: 0; padding: 0; background-color: #FAF5EE; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #FAF5EE; padding: 30px 10px;">
+      <tr>
+        <td align="center">
+          <!-- Main Container -->
+          <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 650px; background-color: #FFFFFF; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(128, 43, 82, 0.08); border: 1px solid #E6DBCE;">
+            
+            <!-- Brand Header -->
+            <tr>
+              <td style="background-color: #802B52; padding: 30px 28px; text-align: center; color: #FFFFFF;">
+                <div style="display: inline-block; background-color: rgba(255,255,255,0.15); padding: 7px 16px; border-radius: 50px; font-size: 11px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.3);">
+                  Order Update Notice
+                </div>
+                <h1 style="margin: 0; font-size: 28px; font-weight: bold; letter-spacing: -0.5px; color: #FFFFFF; font-family: Georgia, serif;">
+                  Lollipop Cake Shop
+                </h1>
+                <p style="margin: 6px 0 0 0; font-size: 13px; color: #F1E6DF; font-style: italic;">
+                  Handcrafted Luxury Cakes & Pastries
+                </p>
+              </td>
+            </tr>
+
+            <!-- Status Banner -->
+            <tr>
+              <td style="background-color: #FFF1F2; padding: 22px 28px; border-bottom: 1.5px solid #FDA4AF; text-align: center;">
+                <div style="font-size: 20px; font-weight: bold; color: #BE123C; margin-bottom: 6px;">
+                  ❌ Order #${data.orderNumber || data.orderId} Has Been Cancelled
+                </div>
+                <div style="font-size: 13px; color: #9F1239; line-height: 1.5;">
+                  We regret to inform you that your order has been cancelled by our store management. Below are the cancellation details and refund status.
+                </div>
+              </td>
+            </tr>
+
+            <!-- Content Area -->
+            <tr>
+              <td style="padding: 24px 28px 30px 28px;">
+                
+                <!-- Reason for Cancellation Box -->
+                <div style="background-color: #FFF8E7; border: 1.5px dashed #E6C184; border-radius: 14px; padding: 18px 20px; margin-bottom: 24px;">
+                  <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: #802B52; letter-spacing: 1.5px; margin-bottom: 6px;">
+                    📋 Reason for Cancellation
+                  </div>
+                  <div style="font-size: 15px; font-weight: 600; color: #1C0D0A; line-height: 1.5; font-style: italic;">
+                    "${data.cancellationReason || "Cancelled by store management"}"
+                  </div>
+                </div>
+
+                <!-- Payment & Refund Details Section -->
+                ${
+                  !isCod
+                    ? `
+                <!-- Online Paid / Razorpay Refund Box -->
+                <div style="background-color: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 14px; padding: 20px 22px; margin-bottom: 24px;">
+                  <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: #166534; letter-spacing: 1.5px; margin-bottom: 12px;">
+                    💳 Refund Information
+                  </div>
+                  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 13px; color: #1C0D0A; line-height: 1.9;">
+                    <tr>
+                      <td style="color: #4B5563;">Original Payment Mode:</td>
+                      <td style="font-weight: bold; text-align: right; color: #1C0D0A;">Online Prepaid (${data.paymentMethod || "Razorpay / UPI / Cards"})</td>
+                    </tr>
+                    <tr>
+                      <td style="color: #4B5563;">Refund Amount:</td>
+                      <td style="font-weight: 800; color: #15803D; font-size: 16px; text-align: right;">₹${data.totalAmount.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                      <td style="color: #4B5563;">Refund Status:</td>
+                      <td style="font-weight: bold; color: #15803D; text-align: right;">
+                        ${data.refundStatus === "REFUNDED" ? "✅ Successfully Initiated via Razorpay" : "✅ Refund Initiated"}
+                      </td>
+                    </tr>
+                    ${
+                      data.refundId
+                        ? `
+                    <tr>
+                      <td style="color: #4B5563;">Gateway Refund ID:</td>
+                      <td style="font-family: monospace; font-weight: bold; text-align: right; color: #1F2937;">${data.refundId}</td>
+                    </tr>
+                    `
+                        : ""
+                    }
+                  </table>
+
+                  <!-- Prominent Refund Timing Box -->
+                  <div style="margin-top: 14px; padding: 14px 16px; background-color: #DCFCE7; border-radius: 10px; border-left: 4px solid #16A34A;">
+                    <strong style="color: #14532D; font-size: 13px; display: block; margin-bottom: 5px;">
+                      ⏱️ Refund Timing &amp; Bank Settlement:
+                    </strong>
+                    <p style="margin: 0; font-size: 12.5px; color: #166534; line-height: 1.6;">
+                      Your full refund of <strong>₹${data.totalAmount.toFixed(2)}</strong> has been initiated back to your original source account (UPI / Bank Account / Card). According to Reserve Bank of India (RBI) and banking gateway standard settlement cycles, the funds will be credited to your account within <strong>5 to 7 business days</strong>.
+                    </p>
+                  </div>
+                </div>
+                `
+                    : `
+                <!-- COD Notice Box -->
+                <div style="background-color: #F8FAFC; border: 1.5px solid #CBD5E1; border-radius: 14px; padding: 18px 20px; margin-bottom: 24px;">
+                  <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: #475569; letter-spacing: 1.5px; margin-bottom: 8px;">
+                    💵 Payment Status
+                  </div>
+                  <div style="font-size: 13px; color: #1C0D0A; line-height: 1.6;">
+                    <strong>Payment Method:</strong> Cash on Delivery (COD)<br />
+                    <strong>Order Amount:</strong> ₹${data.totalAmount.toFixed(2)}<br />
+                    <span style="color: #64748B; font-size: 12px; display: inline-block; margin-top: 6px;">
+                      ℹ️ Since this order was placed under Cash on Delivery, no payment was collected from you, and therefore no refund is required.
+                    </span>
+                  </div>
+                </div>
+                `
+                }
+
+                <!-- Customer & Order Summary Grid -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 22px;">
+                  <tr>
+                    <td width="50%" style="vertical-align: top; padding-right: 10px;">
+                      <div style="background-color: #FAF5EE; padding: 14px; border-radius: 12px; border: 1px solid #E6DBCE;">
+                        <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: #802B52; letter-spacing: 1px; display: block; margin-bottom: 6px;">
+                          👤 Customer Info
+                        </span>
+                        <div style="font-size: 12.5px; color: #1C0D0A; line-height: 1.6;">
+                          <strong>${data.customerName}</strong><br />
+                          ${data.customerPhone ? `Phone: ${data.customerPhone}<br />` : ""}
+                          Email: ${data.customerEmail}
+                        </div>
+                      </div>
+                    </td>
+                    <td width="50%" style="vertical-align: top; padding-left: 10px;">
+                      <div style="background-color: #FAF5EE; padding: 14px; border-radius: 12px; border: 1px solid #E6DBCE;">
+                        <span style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: #802B52; letter-spacing: 1px; display: block; margin-bottom: 6px;">
+                          📦 Order Summary
+                        </span>
+                        <div style="font-size: 12.5px; color: #1C0D0A; line-height: 1.6;">
+                          Order #: <strong style="color: #802B52;">${data.orderNumber || data.orderId}</strong><br />
+                          Total: <strong>₹${data.totalAmount.toFixed(2)}</strong><br />
+                          Status: <span style="background-color: #FFE4E6; color: #BE123C; padding: 1px 6px; border-radius: 4px; font-weight: bold; font-size: 11px;">CANCELLED</span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+
+                ${
+                  itemsHtml
+                    ? `
+                <!-- Ordered Items Table Header -->
+                <h3 style="margin: 0 0 10px 0; font-size: 15px; font-weight: bold; color: #5B1E38; font-family: Georgia, serif;">
+                  🎂 Cancelled Order Items
+                </h3>
+
+                <!-- Items Table -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: 1px solid #E6DBCE; border-radius: 12px; overflow: hidden; margin-bottom: 24px;">
+                  <thead>
+                    <tr style="background-color: #802B52; color: #FFFFFF;">
+                      <th align="left" style="padding: 10px 14px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Item</th>
+                      <th align="center" style="padding: 10px 14px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Qty</th>
+                      <th align="right" style="padding: 10px 14px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Price</th>
+                      <th align="right" style="padding: 10px 14px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${itemsHtml}
+                  </tbody>
+                </table>
+                `
+                    : ""
+                }
+
+                <!-- WhatsApp & Help Support Banner -->
+                <div style="background-color: #E8F5E9; border: 1px solid #A5D6A7; border-radius: 12px; padding: 16px; text-align: center;">
+                  <span style="font-size: 13.5px; font-weight: bold; color: #2E7D32; display: block; margin-bottom: 4px;">
+                    💬 Questions or Need to Place a New Order?
+                  </span>
+                  <p style="margin: 0; font-size: 12px; color: #1B5E20; line-height: 1.5;">
+                    Contact our bakery team directly on WhatsApp at <strong>+91 9489569661</strong> or call <strong>+91 84893 24697</strong>. We are always ready to assist you!
+                  </p>
+                </div>
+
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="background-color: #1C0D0A; padding: 22px 28px; text-align: center; color: #D8C3B3; font-size: 12px;">
+                <p style="margin: 0 0 4px 0; font-weight: bold; color: #FFFFFF; font-size: 13px;">
+                  Lollipop Cake Shop · Handcrafted Fresh Daily
+                </p>
+                <p style="margin: 0;">
+                  Thank you for your understanding. We look forward to serving you again soon!
+                </p>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+  `;
+}
+
+/**
+ * Send Order Cancelled Email to customer with reason and refund timing
+ */
+export async function sendOrderCancelledEmail(
+  data: OrderCancelledEmailData
+): Promise<{ success: boolean; messageId?: string; error?: string }> {
+  try {
+    const toAddress = data.customerEmail?.trim();
+    if (!toAddress || !toAddress.includes("@")) {
+      console.warn(`⚠️ [Email Service] Skipping cancellation email: invalid customer email "${toAddress}" for Order ${data.orderId}`);
+      return { success: false, error: "Invalid recipient email address" };
+    }
+
+    const smtpUser = (process.env.SMTP_USER || "").trim();
+    let fromAddress = process.env.EMAIL_FROM?.trim();
+    if (!fromAddress || !fromAddress.includes("@")) {
+      const fallbackEmail = smtpUser || process.env.INITIAL_ADMIN_EMAIL || "orders@lollipopcakeshop.in";
+      fromAddress = `"Lollipop Cake Shop" <${fallbackEmail}>`;
+    }
+
+    const htmlContent = generateOrderCancelledHtml(data);
+
+    const mailOptions = {
+      from: fromAddress,
+      to: toAddress,
+      replyTo: smtpUser || undefined,
+      subject: `❌ Order #${data.orderNumber || data.orderId} Cancelled - Lollipop Cake Shop`,
+      html: htmlContent,
+      attachments: [],
+    };
+
+    console.log(`📧 [Email Service] Sending cancellation email to ${toAddress} for Order ${data.orderNumber || data.orderId}...`);
+
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.log(`ℹ️ [Email Test Mode] SMTP credentials not set. Simulated cancellation email to ${toAddress}.`);
+      return { success: true, messageId: `test-cancelled-simulated-${data.orderId}` };
+    }
+
+    const transporter = getTransporter();
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ [Email Service] Sent cancellation email successfully! Message ID: ${info.messageId}`);
+    return { success: true, messageId: info.messageId };
+  } catch (error: any) {
+    console.error("❌ [Email Service Error] Failed to send cancellation email:", error?.message || error);
     return { success: false, error: error?.message || "Email sending failed" };
   }
 }

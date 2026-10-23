@@ -61,7 +61,12 @@ export default async function Page() {
         </div>
       </section>
 
-      <CategoryPageClient products={products} pills={BIRTHDAY_PILLS} />
+      <CategoryPageClient
+        products={products}
+        pills={BIRTHDAY_PILLS}
+        allLabel="All 1st Birthday Cakes"
+        searchPlaceholder="Search Safari, Prince Crown, Fairy, Teddy Bear, Smash Cakes..."
+      />
     </>
   );
 }

@@ -92,7 +92,9 @@ export type PaymentStatus =
   | "PENDING"
   | "PAYMENT_INITIATED"
   | "PAID"
-  | "PAYMENT_FAILED";
+  | "PAYMENT_FAILED"
+  | "REFUNDED"
+  | "REFUND_PENDING";
 
 export interface OrderLineItem {
   productId: string;

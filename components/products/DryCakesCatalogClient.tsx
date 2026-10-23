@@ -180,6 +180,32 @@ export default function DryCakesCatalogClient({
   const [currentSearch, setCurrentSearch] = useState("");
   const [currentSort, setCurrentSort] = useState("default");
 
+  const subPills = useMemo(() => {
+    const list = [
+      { label: "All Dry Cakes", keyword: "all" },
+      { label: "Plum Cakes", keyword: "plum" },
+      { label: "Banana Cakes", keyword: "banana" },
+      { label: "Tea Cakes", keyword: "tea" },
+      { label: "Walnut Cakes", keyword: "walnut" },
+      { label: "Pudding Cakes", keyword: "pudding" },
+    ];
+    const existingKeywords = new Set(list.map((p) => p.keyword.toLowerCase()));
+    const existingLabels = new Set(list.map((p) => p.label.toLowerCase()));
+
+    allDryCakes.forEach((c) => {
+      const sub = (c.subCategory || "").trim();
+      if (sub && sub.toLowerCase() !== "dry cakes" && sub.toLowerCase() !== "general") {
+        const subLower = sub.toLowerCase();
+        if (!existingLabels.has(subLower) && !existingKeywords.has(subLower)) {
+          list.push({ label: sub, keyword: subLower });
+          existingLabels.add(subLower);
+          existingKeywords.add(subLower);
+        }
+      }
+    });
+    return list;
+  }, [allDryCakes]);
+
   function resetAll() {
     setCurrentKeyword("all");
     setCurrentSearch("");
@@ -193,6 +219,7 @@ export default function DryCakesCatalogClient({
       const kw = currentKeyword.toLowerCase();
       list = list.filter(
         (p) =>
+          (p.subCategory && p.subCategory.toLowerCase().includes(kw)) ||
           p.name.toLowerCase().includes(kw) ||
           p.description.toLowerCase().includes(kw)
       );
@@ -235,7 +262,7 @@ export default function DryCakesCatalogClient({
             </span>
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1C0D0A] mt-1 leading-tight tracking-tight">
-            Rich & Artisanal Dry Cakes
+            Rich & Handcrafted Dry Cakes
           </h1>
           <p className="text-base sm:text-lg text-[#4A3E39] mt-3 leading-relaxed font-normal">
             Delicious plum cakes, moist banana loafs, tea cakes, walnut cakes, and
@@ -286,37 +313,16 @@ export default function DryCakesCatalogClient({
             </div>
           </div>
 
-          {/* Mobile View Subcategory Dropdown (sm:hidden) */}
-          <div className="block sm:hidden w-full">
-            <div className="relative">
-              <select
-                value={currentKeyword}
-                onChange={(e) => setCurrentKeyword(e.target.value)}
-                className="w-full appearance-none bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] focus:ring-2 focus:ring-[#962854]/20 rounded-xl px-4 py-2.5 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer pr-10 shadow-xs transition-all"
-                suppressHydrationWarning
-              >
-                {SUB_PILLS.map((pill) => (
-                  <option key={pill.keyword} value={pill.keyword}>
-                    {pill.label} {pill.keyword === "all" ? `(${allDryCakes.length})` : ""}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#962854]">
-                <span className="material-symbols-outlined text-xl">expand_more</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop View Subcategory Quick Filter Pills (hidden sm:flex) */}
-          <div className="hidden sm:flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold flex-wrap">
-            {SUB_PILLS.map((pill) => {
+          {/* Subcategory Quick Filter Card Pills (Mobile & Desktop Responsive) */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold no-scrollbar flex-nowrap sm:flex-wrap py-1 -mx-4 px-4 sm:mx-0 sm:px-0">
+            {subPills.map((pill) => {
               const isActive = currentKeyword === pill.keyword;
               return (
                 <button
                   key={pill.keyword}
                   type="button"
                   onClick={() => setCurrentKeyword(pill.keyword)}
-                  className={`cat-pill px-3.5 py-2 rounded-lg border transition-all whitespace-nowrap text-xs font-bold ${
+                  className={`cat-pill shrink-0 px-3.5 py-2 rounded-lg border transition-all whitespace-nowrap text-xs font-bold cursor-pointer active:scale-95 ${
                     isActive
                       ? "bg-[#962854] text-white border-[#962854] shadow-xs"
                       : "bg-[#FFF9F5] text-[#1C0D0A] border-[#D8C3B3] hover:border-[#962854] hover:bg-[#FAF0F2]"
@@ -325,7 +331,7 @@ export default function DryCakesCatalogClient({
                 >
                   {pill.label}{" "}
                   {pill.keyword === "all" && (
-                    <span className="opacity-75">({allDryCakes.length})</span>
+                    <span className="opacity-80">({allDryCakes.length})</span>
                   )}
                 </button>
               );
@@ -354,7 +360,7 @@ export default function DryCakesCatalogClient({
             <button
               type="button"
               onClick={resetAll}
-              className="mt-4 btn-primary text-xs uppercase tracking-wider py-2.5 px-6 rounded-full"
+              className="mt-4 btn-primary text-xs uppercase tracking-wider py-2.5 px-6 rounded-xl"
             >
               Clear Filters
             </button>

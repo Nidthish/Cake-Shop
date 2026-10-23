@@ -62,7 +62,7 @@ export default function ContactUsPage() {
                   Lollipop The Cake Shop
                 </h2>
                 <p className="text-xs text-[#5C524E] mt-1">
-                  Artisanal Cakes, French Pastries & Confectionery • Operating since 2019
+                  Handcrafted Cakes, French Pastries & Confectionery • Operating since 2019
                 </p>
               </div>
 

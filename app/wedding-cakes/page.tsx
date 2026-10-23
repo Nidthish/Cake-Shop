@@ -46,7 +46,12 @@ export default async function Page() {
   return (
     <>
       <CategoryHero eyebrow="Wedding Collection" title="Wedding Cake Masterpieces" description="Elegant, multi-tier wedding cake masterpieces crafted for your most important day." />
-      <CategoryPageClient products={products} pills={WEDDING_PILLS} />
+      <CategoryPageClient
+        products={products}
+        pills={WEDDING_PILLS}
+        allLabel="All Wedding Cakes"
+        searchPlaceholder="Search 2-Tier, Fresh Florals, Luxury Floating Tier, Romance..."
+      />
     </>
   );
 }

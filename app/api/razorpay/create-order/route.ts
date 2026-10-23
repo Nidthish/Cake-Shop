@@ -137,7 +137,7 @@ export async function POST(req: NextRequest) {
           ...item,
           isEggless,
           eggPreference: (items[idx]?.eggPreference === "egg" ? "egg" : "eggless") as "eggless" | "egg",
-          offer: isEggless ? undefined : (items[idx]?.offer || item.offer || undefined),
+          offer: items[idx]?.offer || item.offer || undefined,
           cakeMessage: items[idx]?.cakeMessage || parsed.data.cakeMessage,
         };
       }),

@@ -30,13 +30,13 @@ export default function ErrorPage({
         <button
           type="button"
           onClick={() => reset()}
-          className="btn-primary inline-flex items-center gap-2 py-3 px-6 text-xs font-bold uppercase tracking-wider rounded-full shadow-sm hover:shadow-md transition-all"
+          className="btn-primary inline-flex items-center gap-2 py-3 px-6 text-xs font-bold uppercase tracking-wider rounded-xl shadow-sm hover:shadow-md transition-all"
         >
           <span className="material-symbols-outlined text-sm">refresh</span> Try Again
         </button>
         <Link
           href="/"
-          className="bg-[#FAF3EC] text-[#1C0D0A] hover:bg-[#FAF0F2] border border-[#D8C3B3] inline-flex items-center gap-2 py-3 px-6 text-xs font-bold uppercase tracking-wider rounded-full transition-all"
+          className="bg-[#FAF3EC] text-[#1C0D0A] hover:bg-[#FAF0F2] border border-[#D8C3B3] inline-flex items-center gap-2 py-3 px-6 text-xs font-bold uppercase tracking-wider rounded-xl transition-all"
         >
           <span className="material-symbols-outlined text-sm">home</span> Back to Home
         </Link>

@@ -37,11 +37,36 @@ export async function GET(
     }
 
     const catSlug = (product.category.slug || "").toLowerCase();
+    let mainCategory = "cakes";
+    if (
+      product.productType === "SNACK" ||
+      ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug) ||
+      catSlug.startsWith("snacks-") ||
+      catSlug.startsWith("snacks--") ||
+      catSlug.includes("-snack")
+    ) {
+      mainCategory = "snacks";
+    } else if (catSlug.includes("dry")) {
+      mainCategory = "dry-cakes";
+    } else if (catSlug.includes("bento")) {
+      mainCategory = "bento-cake";
+    } else if (catSlug.includes("wedding")) {
+      mainCategory = "wedding-cakes";
+    } else if (catSlug.includes("1st") || catSlug.includes("first")) {
+      mainCategory = "first-birthday";
+    } else if (catSlug.includes("custom")) {
+      mainCategory = "custom-cake";
+    } else if (catSlug.includes("--")) {
+      mainCategory = catSlug.split("--")[0];
+    }
+
     const isBento = catSlug.includes("bento");
     const isCake = !["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug) && product.productType === "CAKE";
     const egglessAvailable = product.egglessAvailable !== undefined && product.egglessAvailable !== null
       ? Boolean(product.egglessAvailable)
       : (isBento ? false : isCake);
+
+    const cleanSubCategory = (product.category.name || "").replace(/\s*\([^)]*\)$/, "");
 
     return NextResponse.json({
       success: true,
@@ -50,9 +75,9 @@ export async function GET(
         slug: product.slug,
         productCode: product.productCode,
         name: product.name,
-        category: product.category.slug,
-        categoryName: product.category.name,
-        subCategory: product.category.name,
+        category: mainCategory,
+        categoryName: cleanSubCategory,
+        subCategory: cleanSubCategory,
         description: product.description,
         imageName: product.imageName,
         badge: product.badge,
@@ -150,22 +175,14 @@ export async function PUT(
     let categoryId = existingProduct.categoryId;
 
     if (categorySlug) {
-      let targetCatName = "Normal Flavors";
-      if (categorySlug === "cakes") {
-        targetCatName = (subCategory && subCategory.trim()) ? subCategory.trim() : "Normal Flavors";
-      } else {
-        const primaryNames: Record<string, string> = {
-          "dry-cakes": "Dry Cakes",
-          snacks: "Snacks & Pastries",
-          "bento-cake": "Bento Cakes",
-          "wedding-cakes": "Wedding Cakes",
-          "first-birthday": "1st Birthday Cakes",
-          "custom-cake": "Customized Cakes",
-        };
-        targetCatName = primaryNames[categorySlug] || categorySlug;
+      const subCat = (subCategory && subCategory.trim()) || "General";
+      let targetCatName = subCat;
+      let cleanSlug = targetCatName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
+
+      if (categorySlug !== "cakes") {
+        cleanSlug = `${categorySlug}--${cleanSlug}`;
       }
 
-      const cleanSlug = targetCatName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)+/g, "");
       let category = await prisma.category.findFirst({
         where: {
           OR: [
@@ -176,11 +193,14 @@ export async function PUT(
       });
 
       if (!category) {
+        const nameTaken = await prisma.category.findUnique({ where: { name: targetCatName } });
+        const finalName = nameTaken ? `${targetCatName} (${categorySlug})` : targetCatName;
+
         category = await prisma.category.create({
           data: {
-            name: targetCatName,
+            name: finalName,
             slug: cleanSlug,
-            description: `${targetCatName} collection`,
+            description: `${finalName} in ${categorySlug} collection`,
           },
         });
       }
@@ -324,7 +344,7 @@ export async function PUT(
   }
 }
 
-// DELETE /api/admin/products/[id] — Delete product from MySQL (SUPERADMIN only)
+// DELETE /api/admin/products/[id] — Delete product from database (SUPERADMIN only + Password "LollipopDLT")
 export async function DELETE(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -333,6 +353,17 @@ export async function DELETE(
     const admin = await getAuthenticatedAdmin(req);
     if (!admin || admin.role !== "SUPERADMIN") {
       return NextResponse.json({ success: false, error: "Access denied. Only Super Admins can delete products." }, { status: 403 });
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const authHeader = req.headers.get("x-delete-password") || "";
+    const providedPassword = (body.password || authHeader || "").toString().trim();
+
+    if (providedPassword !== "LollipopDLT") {
+      return NextResponse.json(
+        { success: false, error: "Incorrect deletion password. You must provide the correct password ('LollipopDLT') to delete cakes." },
+        { status: 403 }
+      );
     }
 
     const { id } = await context.params;

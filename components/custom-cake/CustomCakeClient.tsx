@@ -725,7 +725,7 @@ export default function CustomCakeClient() {
                 <div className="pt-4 border-t border-[#E6DBCE]">
                   <button
                     onClick={() => setInspectCake(null)}
-                    className="w-full py-2.5 rounded-full border border-[#E6DBCE] text-xs font-bold uppercase tracking-wider text-[#5C524E] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+                    className="w-full py-2.5 rounded-xl border border-[#E6DBCE] text-xs font-bold uppercase tracking-wider text-[#5C524E] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
                   >
                     Close Preview
                   </button>

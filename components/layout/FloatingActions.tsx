@@ -22,6 +22,29 @@ export default function FloatingActions() {
   const [cartChomp, setCartChomp] = useState(false);
   const [badgeBouncing, setBadgeBouncing] = useState(false);
   const [slidePanelOpen, setSlidePanelOpen] = useState(false);
+  const [isMobileHero, setIsMobileHero] = useState(pathname === "/");
+
+  // On mobile view only: hide WhatsApp and Cart floating buttons while in the top entry hero section of the home page
+  useEffect(() => {
+    if (pathname !== "/") {
+      setIsMobileHero(false);
+      return;
+    }
+
+    const checkHeroScroll = () => {
+      // Hide buttons when within the top hero entry section (< 280px) on mobile
+      const inHero = window.scrollY < 280;
+      setIsMobileHero(inHero);
+      if (inHero && window.innerWidth < 768) {
+        setCartOpen(false);
+        setWaOpen(false);
+      }
+    };
+
+    checkHeroScroll();
+    window.addEventListener("scroll", checkHeroScroll, { passive: true });
+    return () => window.removeEventListener("scroll", checkHeroScroll);
+  }, [pathname]);
 
   const cartBtnRef = useRef<HTMLButtonElement | null>(null);
   const waBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -297,7 +320,11 @@ export default function FloatingActions() {
       <div
         ref={containerRef}
         id="floating-actions-dock"
-        className="fixed bottom-5 right-3.5 sm:right-6 sm:bottom-6 z-50 flex flex-col items-center gap-3.5 select-none pointer-events-auto"
+        className={`fixed bottom-5 right-3.5 sm:right-6 sm:bottom-6 z-50 flex flex-col items-center gap-3.5 select-none pointer-events-auto transition-all duration-300 ${
+          isMobileHero
+            ? "max-md:opacity-0 max-md:invisible max-md:pointer-events-none max-md:translate-y-6"
+            : "max-md:opacity-100 max-md:visible max-md:pointer-events-auto max-md:translate-y-0"
+        }`}
       >
         {/* =========================================================================
             1. TOP BUTTON: PINK CANDY SHOPPING CART

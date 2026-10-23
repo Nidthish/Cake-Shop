@@ -31,6 +31,22 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
   const [sort, setSort] = useState<"default" | "price-low" | "price-high">("default");
   const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
 
+  const snackCategories = useMemo(() => {
+    const list = [...SUB_CATEGORIES];
+    const existingValues = new Set(list.map((c) => c.value.toLowerCase()));
+    products.forEach((p) => {
+      const sub = (p.subCategory || p.categoryName || "").trim();
+      if (sub && sub.toLowerCase() !== "snacks" && sub.toLowerCase() !== "general") {
+        const subLower = sub.toLowerCase();
+        if (!existingValues.has(subLower)) {
+          list.push({ label: sub, value: sub });
+          existingValues.add(subLower);
+        }
+      }
+    });
+    return list;
+  }, [products]);
+
   const filtered = useMemo(() => {
     let list = products;
 
@@ -147,37 +163,16 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
             </div>
           </div>
 
-          {/* Mobile View Subcategory Dropdown (sm:hidden) */}
-          <div className="block sm:hidden w-full">
-            <div className="relative">
-              <select
-                value={subCat}
-                onChange={(e) => setSubCat(e.target.value)}
-                className="w-full appearance-none bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] focus:ring-2 focus:ring-[#962854]/20 rounded-xl px-4 py-2.5 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer pr-10 shadow-xs transition-all"
-                suppressHydrationWarning
-              >
-                {SUB_CATEGORIES.map((cat) => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.label} {cat.value === "all" ? `(${products.length})` : ""}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#962854]">
-                <span className="material-symbols-outlined text-xl">expand_more</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Desktop View Subcategory Pills (hidden sm:flex) */}
-          <div className="hidden sm:flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold flex-wrap">
-            {SUB_CATEGORIES.map((cat) => {
+          {/* Subcategory Quick Filter Card Pills (Mobile & Desktop Responsive) */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold no-scrollbar flex-nowrap sm:flex-wrap py-1 -mx-4 px-4 sm:mx-0 sm:px-0">
+            {snackCategories.map((cat) => {
               const isActive = subCat.toLowerCase() === cat.value.toLowerCase();
               return (
                 <button
                   key={cat.value}
                   type="button"
                   onClick={() => setSubCat(cat.value)}
-                  className={`cat-pill px-3.5 py-2 rounded-lg border transition-all whitespace-nowrap text-xs font-bold ${
+                  className={`cat-pill shrink-0 px-3.5 py-2 rounded-lg border transition-all whitespace-nowrap text-xs font-bold cursor-pointer active:scale-95 ${
                     isActive
                       ? "bg-[#962854] text-white border-[#962854] shadow-xs"
                       : "bg-[#FFF9F5] text-[#1C0D0A] border-[#D8C3B3] hover:border-[#962854] hover:bg-[#FAF0F2]"
@@ -185,7 +180,7 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
                 >
                   {cat.label}{" "}
                   {cat.value === "all" && (
-                    <span className="opacity-75">({products.length})</span>
+                    <span className="opacity-80">({products.length})</span>
                   )}
                 </button>
               );
@@ -209,7 +204,7 @@ export default function SnacksCatalogClient({ products }: { products: Product[] 
             <h3 className="font-display font-bold text-2xl text-[#1C0D0A]">No matching snacks found</h3>
             <button
               onClick={handleReset}
-              className="mt-4 btn-primary text-xs uppercase tracking-wider py-2.5 px-6 rounded-full"
+              className="mt-4 btn-primary text-xs uppercase tracking-wider py-2.5 px-6 rounded-xl"
             >
               Clear Filters
             </button>

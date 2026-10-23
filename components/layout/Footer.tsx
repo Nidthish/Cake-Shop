@@ -20,7 +20,7 @@ export default function Footer() {
               Lollipop Cake Shop
             </span>
             <p className="leading-relaxed text-[#D8C3B3] text-xs">
-              Handcrafted artisanal luxury cakes, French pastries, customized
+              Handcrafted luxury cakes, French pastries, customized
               milestone cakes, and fresh baked delights daily across Tiruchirappalli.
             </p>
             <div className="pt-1 text-[11px] text-[#A892A8] space-y-0.5">
@@ -106,7 +106,7 @@ export default function Footer() {
               <p><a href="mailto:trichylollipop@gmail.com" className="hover:text-white">Email: trichylollipop@gmail.com</a></p>
             </div>
             <p className="text-[11px] text-[#A892A8] pt-1">
-              Open Mon–Sun: 8:00 AM – 10:00 PM
+              Open Mon–Sun: 10:00 AM – 10:00 PM
             </p>
           </div>
         </div>
@@ -191,7 +191,7 @@ export default function Footer() {
             <span>•</span>
             <span>PCI-DSS Level 1 Compliant</span>
             <span>•</span>
-            <span>Artisanal Quality</span>
+            <span>Handcrafted Quality</span>
           </p>
         </div>
 

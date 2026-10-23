@@ -58,7 +58,9 @@ export default function ProductDetailClient({
   const originalPrice = variant.originalPrice;
   const hasDiscount = Boolean(originalPrice && originalPrice > price);
   const isKgOffer = is1kgFreeOfferVariant(variant);
-  const itemOffer = !eggless
+  const isOfferAvailableForEggless = Boolean(variant.isEggless);
+  const isOfferActiveForCurrentPref = !eggless || isOfferAvailableForEggless;
+  const itemOffer = isOfferActiveForCurrentPref
     ? (variant.offer || (isKgOffer ? "1kg + 1/2kg Free" : (product.badge || undefined)))
     : undefined;
 
@@ -171,13 +173,19 @@ export default function ProductDetailClient({
             </span>
             {!eggless && (variant.offer || isKgOffer) && (
               <span className="bg-[#FAF0F2] text-[#962854] border border-[#962854]/30 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs">
-                {variant.offer || "1kg + 1/2kg Free"} (With Egg Only)
+                {variant.offer || "1kg + 1/2kg Free"} {!isOfferAvailableForEggless ? "(With Egg Only)" : ""}
               </span>
             )}
             {eggless && (variant.offer || isKgOffer) && (
-              <span className="bg-[#FAF3EC] text-[#962854] border border-[#962854]/30 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-2xs">
-                Special Offers are valid for With Egg cakes only
-              </span>
+              isOfferAvailableForEggless ? (
+                <span className="bg-[#FAF0F2] text-[#962854] border border-[#962854]/30 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs">
+                  {variant.offer || "1kg + 1/2kg Free"} (Eggless Offer)
+                </span>
+              ) : (
+                <span className="bg-[#FAF3EC] text-[#962854] border border-[#962854]/30 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-2xs">
+                  Special Offers for this size are valid for With Egg only
+                </span>
+              )
             )}
           </div>
 
@@ -187,7 +195,7 @@ export default function ProductDetailClient({
               <p className="text-xs font-bold uppercase tracking-wider text-[#5C524E] mb-2">Select Weight</p>
               <div className="flex flex-wrap gap-2">
                 {variants.map((v, idx) => {
-                  const hasVOffer = !eggless && (v.offer || is1kgFreeOfferVariant(v));
+                  const hasVOffer = (!eggless || Boolean(v.isEggless)) && (v.offer || is1kgFreeOfferVariant(v));
                   return (
                     <button
                       key={v.weight}
@@ -233,8 +241,8 @@ export default function ProductDetailClient({
                   onChange={(e) => setEggless(e.target.value === "eggless")}
                   className="w-full appearance-none bg-white border-2 border-[#E6C184]/50 hover:border-[#962854] text-[#1C0D0A] font-bold text-sm px-4 py-3 pr-10 rounded-2xl shadow-sm focus:outline-none focus:border-[#962854] focus:ring-4 focus:ring-[#962854]/15 transition-all cursor-pointer"
                 >
-                  <option value="egg">With Egg (Default)</option>
-                  <option value="eggless">Eggless (No Egg)</option>
+                  <option value="egg">With Egg</option>
+                  <option value="eggless">Eggless</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3.5 text-[#962854]">
                   <span className="material-symbols-outlined text-xl">expand_more</span>
@@ -247,9 +255,7 @@ export default function ProductDetailClient({
                     <span className="material-symbols-outlined text-base text-[#962854] shrink-0">info</span>
                     <span>For eggless cakes, you need to order one day prior.</span>
                   </div>
-                  <div className="flex items-center gap-2 text-amber-900 font-bold text-[11px] pl-6">
-                    <span>• 1/2kg Free Offer is valid only for With Egg cakes (Not applicable for Eggless).</span>
-                  </div>
+                  
                 </div>
               )}
             </div>

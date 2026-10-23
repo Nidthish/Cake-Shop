@@ -124,3 +124,123 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
+// DELETE /api/admin/users — Delete admin/rider user(s) and revoke sessions immediately (SUPERADMIN only)
+export async function DELETE(req: NextRequest) {
+  try {
+    const admin = await getAuthenticatedAdmin(req);
+    if (!admin || admin.role !== "SUPERADMIN") {
+      return NextResponse.json(
+        { success: false, error: "Access denied. Only Super Admins can delete users." },
+        { status: 403 }
+      );
+    }
+
+    const { searchParams } = new URL(req.url);
+    const idParam = searchParams.get("id");
+    const deleteAllNonSuper = searchParams.get("all") === "true";
+
+    const body = await req.json().catch(() => ({}));
+    const targetId = idParam || body.id || body.userId;
+
+    // Bulk deletion mode: Delete all non-superadmin users (or all users except self)
+    if (deleteAllNonSuper) {
+      const currentAdminId = BigInt(admin.userId);
+      const usersToDelete = await prisma.user.findMany({
+        where: {
+          id: { not: currentAdminId },
+          role: { in: ["ADMIN", "RIDER", "STAFF"] },
+        },
+        select: { id: true, fullName: true, email: true },
+      });
+
+      if (usersToDelete.length === 0) {
+        return NextResponse.json({
+          success: true,
+          message: "No other admin or rider accounts found to delete.",
+          deletedCount: 0,
+        });
+      }
+
+      const idsToDelete = usersToDelete.map((u) => u.id);
+
+      // Nullify foreign key references so referential integrity doesn't block deletion
+      await prisma.customCakeRequest.updateMany({
+        where: { userId: { in: idsToDelete } },
+        data: { userId: null },
+      });
+      await prisma.order.updateMany({
+        where: { userId: { in: idsToDelete } },
+        data: { userId: null },
+      });
+      await prisma.auditLog.updateMany({
+        where: { userId: { in: idsToDelete } },
+        data: { userId: null },
+      });
+
+      const deleteResult = await prisma.user.deleteMany({
+        where: { id: { in: idsToDelete } },
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: `Successfully deleted ${deleteResult.count} user account(s). All their sessions have been permanently terminated.`,
+        deletedCount: deleteResult.count,
+      });
+    }
+
+    if (!targetId) {
+      return NextResponse.json(
+        { success: false, error: "User ID is required for deletion." },
+        { status: 400 }
+      );
+    }
+
+    const targetUserIdStr = String(targetId);
+    if (targetUserIdStr === String(admin.userId)) {
+      return NextResponse.json(
+        { success: false, error: "You cannot delete your own active Super Admin account." },
+        { status: 400 }
+      );
+    }
+
+    const targetIdBigInt = BigInt(targetUserIdStr);
+    const existing = await prisma.user.findUnique({
+      where: { id: targetIdBigInt },
+    });
+
+    if (!existing) {
+      return NextResponse.json(
+        { success: false, error: "User not found or already deleted." },
+        { status: 404 }
+      );
+    }
+
+    // Nullify foreign key references so referential integrity doesn't block deletion
+    await prisma.customCakeRequest.updateMany({
+      where: { userId: targetIdBigInt },
+      data: { userId: null },
+    });
+    await prisma.order.updateMany({
+      where: { userId: targetIdBigInt },
+      data: { userId: null },
+    });
+    await prisma.auditLog.updateMany({
+      where: { userId: targetIdBigInt },
+      data: { userId: null },
+    });
+
+    // Delete user from Database — this immediately terminates all active sessions
+    await prisma.user.delete({
+      where: { id: targetIdBigInt },
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: `User "${existing.fullName}" (${existing.email}) has been permanently deleted and their sessions have been revoked.`,
+    });
+  } catch (error: any) {
+    console.error("[DELETE /api/admin/users] Error:", error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}

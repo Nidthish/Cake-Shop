@@ -107,7 +107,7 @@ export default function AboutPage() {
           </ScrollReveal>
 
           <ScrollReveal direction="right" distance={50} duration={850} className="lg:col-span-5 flex justify-center">
-            <div className="w-full max-w-md aspect-square rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-2xl bg-white relative group">
+            <div className="w-full max-w-md aspect-square rounded-3xl overflow-hidden border-2 border-[#C9AD96] shadow-2xl bg-white relative group">
               <Image
                 src="/images/about/hero-storefront.webp"
                 alt="Lollipop The Cake Shop storefront in Trichy, lit with festive string lights at night"
@@ -146,7 +146,7 @@ export default function AboutPage() {
               Over the years, Lollipop has grown alongside the people of Trichy, becoming part of birthdays, anniversaries, family celebrations, surprises and countless little moments of happiness. The reason we started hasn&apos;t changed.
             </p>
 
-            <div className="p-6 rounded-2xl bg-[#FAF3EC] border border-[#E6C184]/50 my-6">
+            <div className="p-6 rounded-2xl bg-[#FAF3EC] border-2 border-[#E6C184]/70 my-6 shadow-xs">
               <p className="font-display font-semibold text-2xl sm:text-3xl text-[#962854] leading-snug">
                 Good taste. Fresh cakes. Happy customers.
               </p>
@@ -157,7 +157,7 @@ export default function AboutPage() {
             </p>
           </ScrollReveal>
 
-          <ScrollReveal direction="right" distance={50} duration={850} className="lg:col-span-5 sticky top-28 bg-white border border-[#F1E6DF] p-8 rounded-3xl shadow-xl space-y-6 border-l-4 border-l-[#962854]">
+          <ScrollReveal direction="right" distance={50} duration={850} className="lg:col-span-5 sticky top-28 bg-white border-2 border-[#C9AD96] border-l-4 border-l-[#962854] p-8 rounded-3xl shadow-xl space-y-6">
             <p className="font-display font-semibold text-2xl sm:text-3xl text-[#1C0D0A] leading-tight">
               &ldquo;Because a cake is never just a cake.&rdquo;
             </p>
@@ -178,7 +178,7 @@ export default function AboutPage() {
                 <span>It&apos;s a memory.</span>
               </li>
             </ul>
-            <p className="text-xs sm:text-sm text-[#5C524E] font-medium pt-4 border-t border-[#F1E6DF]">
+            <p className="text-xs sm:text-sm text-[#5C524E] font-medium pt-4 border-t border-[#C9AD96]/40">
               And we&apos;re happy to be a small part of it.
             </p>
           </ScrollReveal>
@@ -191,7 +191,7 @@ export default function AboutPage() {
       <section className="py-8 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-6">
           <ScrollReveal direction="left" distance={50} duration={850} className="md:col-span-7">
-            <figure className="relative rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-md h-72 sm:h-96 group">
+            <figure className="relative rounded-3xl overflow-hidden border-2 border-[#C9AD96] shadow-md h-72 sm:h-96 group">
               <Image
                 src="/images/about/counter-display.webp"
                 alt="Display counter with cakes, pastries and fondant cake posters at Lollipop"
@@ -202,14 +202,14 @@ export default function AboutPage() {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 768px) 100vw, 700px"
               />
-              <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md">
+              <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md border border-[#C9AD96]/40">
                 Fresh cakes and bakes, daily
               </figcaption>
             </figure>
           </ScrollReveal>
 
           <ScrollReveal direction="right" distance={50} duration={850} className="md:col-span-5">
-            <figure className="relative rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-md h-72 sm:h-96 group">
+            <figure className="relative rounded-3xl overflow-hidden border-2 border-[#C9AD96] shadow-md h-72 sm:h-96 group">
               <Image
                 src="/images/about/seating-area.webp"
                 alt="Seating area inside Lollipop with colourful chairs and framed custom cake photos"
@@ -220,7 +220,7 @@ export default function AboutPage() {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 768px) 100vw, 500px"
               />
-              <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md">
+              <figcaption className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-[#1C0D0A] shadow-md border border-[#C9AD96]/40">
                 Sit, taste, celebrate
               </figcaption>
             </figure>
@@ -291,7 +291,7 @@ export default function AboutPage() {
               ].map((f, idx) => (
                 <div
                   key={idx}
-                  className="p-5 rounded-2xl bg-white border border-[#F1E6DF] shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow"
+                  className="p-5 rounded-2xl bg-white border-2 border-[#C9AD96] shadow-sm flex items-start gap-4 hover:shadow-md hover:border-[#962854] transition-all"
                 >
                   <div>
                     <h3 className="font-bold text-base sm:text-lg text-[#1C0D0A]">
@@ -319,7 +319,7 @@ export default function AboutPage() {
             </h2>
           </ScrollReveal>
 
-          <div className="relative pl-8 border-l-2 border-gradient-to-b from-[#962854] to-[#E6C184] space-y-10">
+          <div className="relative pl-8 border-l-2 border-[#962854]/40 space-y-10">
             <ScrollReveal direction="left" distance={40} delay={100} className="relative">
               <span className="absolute -left-[41px] top-1.5 w-4 h-4 rounded-full bg-[#962854] border-4 border-[#FFF9F5] shadow-md ring-2 ring-[#962854]" />
               <h3 className="font-display font-bold text-2xl text-[#962854]">
@@ -374,7 +374,7 @@ export default function AboutPage() {
               Lollipop Cakes was featured in a Times of India article on the growing demand for custom cakes in Trichy. It mentions our proprietor, Rockfort Inba, speaking about freshly prepared, order-based cakes and the rising interest in customised cakes and baked treats.
             </p>
 
-            <div className="p-6 rounded-2xl bg-white border-l-4 border-l-[#962854] border border-[#F1E6DF] shadow-md my-4">
+            <div className="p-6 rounded-2xl bg-white border-l-4 border-l-[#962854] border-2 border-[#C9AD96] shadow-md my-4">
               <p className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] leading-snug">
                 &ldquo;Home bakers in Trichy see rising demand for custom cakes&rdquo;
               </p>
@@ -398,7 +398,7 @@ export default function AboutPage() {
               href={TOI_ARTICLE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="block rounded-3xl overflow-hidden border border-[#F1E6DF] shadow-2xl bg-white group"
+              className="block rounded-3xl overflow-hidden border-2 border-[#C9AD96] shadow-2xl bg-white group hover:border-[#962854] transition-colors"
             >
               <Image
                 src="/images/about/timesofindia.webp"
@@ -477,7 +477,7 @@ export default function AboutPage() {
                 delay={idx * 50}
               >
                 <details
-                  className="group border border-[#F1E6DF] bg-white rounded-2xl p-6 transition-all hover:border-[#962854]/40"
+                  className="group border-2 border-[#C9AD96] bg-white rounded-2xl p-6 transition-all hover:border-[#962854] shadow-sm hover:shadow-md open:border-[#962854]/70"
                 >
                   <summary className="font-display font-bold text-xl sm:text-2xl text-[#1C0D0A] cursor-pointer list-none flex items-center justify-between gap-4">
                     <span>{faq.q}</span>
@@ -485,7 +485,7 @@ export default function AboutPage() {
                       add
                     </span>
                   </summary>
-                  <p className="text-xs sm:text-sm text-[#4A3E39] mt-3 leading-relaxed border-t border-[#F1E6DF] pt-3">
+                  <p className="text-xs sm:text-sm text-[#4A3E39] mt-3 leading-relaxed border-t border-[#C9AD96]/40 pt-3">
                     {faq.a}{" "}
                     {faq.linkText && faq.linkUrl && (
                       <a href={faq.linkUrl} className="text-[#962854] font-bold underline">

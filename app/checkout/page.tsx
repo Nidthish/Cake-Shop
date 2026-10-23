@@ -1087,7 +1087,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-base text-amber-600">cookie</span>
-                    <span>Artisanal Cake Baked Fresh for Your Time Slot</span>
+                    <span>Fresh Cake Baked for Your Time Slot</span>
                   </div>
                 </div>
 

@@ -60,7 +60,12 @@ export default async function Page() {
         </div>
       </section>
 
-      <CategoryPageClient products={products} pills={BENTO_PILLS} />
+      <CategoryPageClient
+        products={products}
+        pills={BENTO_PILLS}
+        allLabel="All Bento Cakes"
+        searchPlaceholder="Search Chocolate, Nutella, Biscoff, Hearts, Pastel..."
+      />
     </>
   );
 }

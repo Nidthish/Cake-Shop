@@ -202,29 +202,8 @@ export default function CakesCatalogClient({
             </div>
           </div>
 
-          {/* Mobile View Category Dropdown (sm:hidden) */}
-          <div className="block sm:hidden w-full">
-            <div className="relative">
-              <select
-                value={currentSubCat}
-                onChange={(e) => setCurrentSubCat(e.target.value)}
-                className="w-full appearance-none bg-[#FFF9F5] border border-[#D8C3B3] focus:border-[#962854] focus:ring-2 focus:ring-[#962854]/20 rounded-xl px-4 py-2.5 text-xs font-bold text-[#1C0D0A] outline-none cursor-pointer pr-10 shadow-xs transition-all"
-                suppressHydrationWarning
-              >
-                {categoryPills.map((pill) => (
-                  <option key={pill.subcat} value={pill.subcat}>
-                    {pill.label} {pill.subcat === "all" ? `(${allCakes.length})` : ""}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-[#962854]">
-                <span className="material-symbols-outlined text-xl">expand_more</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Laptop / Desktop View Category Filter Buttons (hidden sm:flex) */}
-          <div className="hidden sm:flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold flex-wrap">
+          {/* Category Filter Card Pills (Mobile & Desktop Responsive) */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold no-scrollbar flex-nowrap sm:flex-wrap py-1 -mx-4 px-4 sm:mx-0 sm:px-0">
             {categoryPills.map((pill) => {
               const isActive = currentSubCat === pill.subcat;
               return (
@@ -232,7 +211,7 @@ export default function CakesCatalogClient({
                   key={pill.subcat}
                   type="button"
                   onClick={() => setCurrentSubCat(pill.subcat)}
-                  className={`cat-pill px-3.5 py-2 rounded-lg border transition-all whitespace-nowrap text-xs font-bold ${
+                  className={`cat-pill shrink-0 px-3.5 py-2 rounded-lg border transition-all whitespace-nowrap text-xs font-bold cursor-pointer active:scale-95 ${
                     isActive
                       ? "bg-[#962854] text-white border-[#962854] shadow-xs"
                       : "bg-[#FFF9F5] text-[#1C0D0A] border-[#D8C3B3] hover:border-[#962854] hover:bg-[#FAF0F2]"
@@ -241,7 +220,7 @@ export default function CakesCatalogClient({
                 >
                   {pill.label}{" "}
                   {pill.subcat === "all" && (
-                    <span className="opacity-75">({allCakes.length})</span>
+                    <span className="opacity-80">({allCakes.length})</span>
                   )}
                 </button>
               );
@@ -269,7 +248,7 @@ export default function CakesCatalogClient({
               Advance Order Available
             </span>
             <span className="text-xs font-bold text-[#962854] bg-[#FAF0F2] px-3 py-1.5 rounded-lg border border-[#962854]/20">
-              100% Artisanal Quality
+              100% Handcrafted Quality
             </span>
           </div>
         </div>
@@ -289,7 +268,7 @@ export default function CakesCatalogClient({
             <button
               type="button"
               onClick={resetAll}
-              className="mt-5 btn-primary text-xs uppercase tracking-wider py-3 px-8 rounded-full"
+              className="mt-5 btn-primary text-xs uppercase tracking-wider py-3 px-8 rounded-xl"
             >
               Clear Filters
             </button>

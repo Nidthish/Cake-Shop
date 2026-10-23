@@ -90,3 +90,25 @@ export function verifyWebhookSignature(rawBody: string, signature: string): bool
   if (a.length !== b.length) return false;
   return crypto.timingSafeEqual(a, b);
 }
+
+/**
+ * Initiates a real refund on Razorpay for a paid order payment ID.
+ * Returns the refund object from Razorpay API.
+ */
+export async function createRazorpayRefund(
+  paymentId: string,
+  options?: { amountInRupees?: number; notes?: Record<string, string>; speed?: "normal" | "optimum" }
+) {
+  const client = getRazorpayClient();
+  const payload: any = {};
+  if (options?.amountInRupees && options.amountInRupees > 0) {
+    payload.amount = Math.round(options.amountInRupees * 100); // Amount in paise
+  }
+  if (options?.notes) {
+    payload.notes = options.notes;
+  }
+  if (options?.speed) {
+    payload.speed = options.speed;
+  }
+  return await (client.payments as any).refund(paymentId, payload);
+}

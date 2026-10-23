@@ -71,7 +71,7 @@ export default function TermsAndConditionsPage() {
             </h2>
             <div className="space-y-3">
               <p>
-                <strong>Perishable Nature:</strong> All artisanal cakes, Korean bento cakes, French pastries, and confectionery items sold on our website are freshly baked perishable food products. They must be stored in temperature-controlled conditions (refrigerated at 4°C – 8°C) immediately upon receipt.
+                <strong>Perishable Nature:</strong> All handcrafted cakes, Korean bento cakes, French pastries, and confectionery items sold on our website are freshly baked perishable food products. They must be stored in temperature-controlled conditions (refrigerated at 4°C – 8°C) immediately upon receipt.
               </p>
               <p>
                 <strong>Handcrafted Variation:</strong> Because each cake is handcrafted by our master bakers, slight artistic variations in color shades, piping patterns, and edible floral arrangements compared to catalogue photographs may occur.

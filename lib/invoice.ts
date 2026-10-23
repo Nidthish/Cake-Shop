@@ -319,7 +319,7 @@ export function generateInvoiceHtml(order: Order, options: { autoPrint?: boolean
     <div class="header-band">
       <div>
         <div class="brand-title">Lollipop Cake Shop</div>
-        <div class="brand-subtitle">Artisanal Patisserie &amp; Celebration Bakery</div>
+        <div class="brand-subtitle">Celebration Patisserie &amp; Bakery</div>
         <div class="brand-contact">
           Tiruchirappalli, Tamil Nadu &bull; Pin: 620001<br />
           Helpline / WhatsApp: +91 9489569661<br />
@@ -460,7 +460,7 @@ export function generateInvoicePdf(order: Order): Uint8Array {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8.5);
   doc.setTextColor(60, 60, 60);
-  doc.text("ARTISANAL PATISSERIE & CELEBRATION BAKERY", margin, y + 14);
+  doc.text("CELEBRATION PATISSERIE & BAKERY", margin, y + 14);
 
   doc.setFontSize(7.5);
   doc.setTextColor(80, 80, 80);

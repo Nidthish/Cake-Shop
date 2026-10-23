@@ -274,7 +274,13 @@ export async function getDbProducts(): Promise<Product[]> {
         // Map DB category slug to primary store section category
         const catSlug = (p.category.slug || "").toLowerCase();
         let mainCategory = "cakes";
-        if (p.productType === "SNACK" || ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug)) {
+        if (
+          p.productType === "SNACK" ||
+          ["breads", "buns", "puffs", "cookies", "brownies", "cup-cakes", "doughnuts", "snacks"].includes(catSlug) ||
+          catSlug.startsWith("snacks-") ||
+          catSlug.startsWith("snacks--") ||
+          catSlug.includes("-snack")
+        ) {
           mainCategory = "snacks";
         } else if (catSlug.includes("dry")) {
           mainCategory = "dry-cakes";
@@ -284,6 +290,10 @@ export async function getDbProducts(): Promise<Product[]> {
           mainCategory = "wedding-cakes";
         } else if (catSlug.includes("1st") || catSlug.includes("first")) {
           mainCategory = "first-birthday";
+        } else if (catSlug.includes("custom")) {
+          mainCategory = "custom-cake";
+        } else if (catSlug.includes("--")) {
+          mainCategory = catSlug.split("--")[0];
         }
 
         const isCakeCategory = ["cakes", "bento-cake", "wedding-cakes", "first-birthday", "custom-cake"].includes(mainCategory);
@@ -306,14 +316,16 @@ export async function getDbProducts(): Promise<Product[]> {
           egglessAvail = isCakeCategory;
         }
 
+        const cleanSubCategory = (p.category.name || "").replace(/\s*\([^)]*\)$/, "");
+
         return {
           id: p.slug,
           slug: p.slug,
           name: p.name,
           baseName: p.name,
           category: mainCategory,
-          subCategory: p.category.name,
-          categoryName: p.category.name,
+          subCategory: cleanSubCategory,
+          categoryName: cleanSubCategory,
           price: minPrice,
           minPrice,
           originalPrice: minPrice,

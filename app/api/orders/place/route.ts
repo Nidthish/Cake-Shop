@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
           ...item,
           isEggless,
           eggPreference: items[idx]?.eggPreference || item.eggPreference || (isEggless ? "eggless" : "egg"),
-          offer: isEggless ? undefined : (items[idx]?.offer || item.offer || undefined),
+          offer: items[idx]?.offer || item.offer || undefined,
           cakeMessage: sanitizeString(items[idx]?.cakeMessage || cleanCakeMessage),
         };
       }),

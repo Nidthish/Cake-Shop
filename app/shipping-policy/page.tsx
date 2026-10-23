@@ -110,7 +110,7 @@ export default function ShippingPolicyPage() {
                 <strong>Same-Day Orders:</strong> Standard catalogue cakes ordered for same-day delivery are baked fresh and dispatched within <strong>2 to 4 hours</strong> of payment confirmation, or during your chosen time slot.
               </p>
               <p>
-                <strong>Eggless & Custom Artisan Cakes:</strong> To uphold our strict hygiene and flavor standards, 100% eggless cakes and intricate designer tier cakes require custom batter formulation and cooling time. Eggless cakes can be scheduled for next-day or chosen future dates.
+                <strong>Eggless & Custom Handcrafted Cakes:</strong> To uphold our strict hygiene and flavor standards, 100% eggless cakes and intricate designer tier cakes require custom batter formulation and cooling time. Eggless cakes can be scheduled for next-day or chosen future dates.
               </p>
               <p>
                 <strong>Future Scheduled Dates:</strong> You may pre-book your cake up to 30 days in advance via our interactive checkout calendar. Your cake will be baked on the morning of delivery to ensure peak freshness.
