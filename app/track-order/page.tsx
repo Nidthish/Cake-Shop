@@ -376,7 +376,7 @@ function TrackOrderContent() {
                             </div>
                             {item.eggPreference !== "eggless" && item.offer && (
                               <div className="text-[11px] text-amber-800 font-bold mt-0.5 inline-flex items-center gap-1">
-                                <span>🎁</span> Offer: {item.offer}
+                                Offer: {item.offer}
                               </div>
                             )}
                             {item.cakeMessage && (

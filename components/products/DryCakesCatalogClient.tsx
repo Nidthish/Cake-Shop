@@ -229,10 +229,7 @@ export default function DryCakesCatalogClient({
       {/* ── Hero Header Banner ─────────────────────────────────────────── */}
       <section className="bg-gradient-to-r from-[#FFF9F5] via-[#FAF3EC] to-[#FAF0F2] py-10 sm:py-14 border-b border-[#E6C184]/20 text-center relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 mb-3">
-            <span className="material-symbols-outlined text-sm text-[#962854]">
-              auto_awesome
-            </span>
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 mb-3">
             <span className="text-xs font-bold text-[#1C0D0A] uppercase tracking-wider">
                Handcrafted Fresh Daily
             </span>

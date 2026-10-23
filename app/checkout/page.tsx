@@ -961,8 +961,8 @@ export default function CheckoutPage() {
                           </span>
                         </div>
                         {item.offer && (
-                          <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold">
-                            <span>🎁</span> {item.offer}
+                          <div className="inline-flex items-center px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[10px] font-bold">
+                            {item.offer}
                           </div>
                         )}
                         {item.cakeMessage && (

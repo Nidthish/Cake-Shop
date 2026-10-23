@@ -170,15 +170,13 @@ export default function ProductDetailClient({
               {variant.weight}
             </span>
             {!eggless && (variant.offer || isKgOffer) && (
-              <span className="bg-[#FAF0F2] text-[#962854] border border-[#962854]/30 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-sm">card_giftcard</span>
-                <span>🎁 {variant.offer || "1kg + 1/2kg Free"} (With Egg Only)</span>
+              <span className="bg-[#FAF0F2] text-[#962854] border border-[#962854]/30 text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xs">
+                {variant.offer || "1kg + 1/2kg Free"} (With Egg Only)
               </span>
             )}
             {eggless && (variant.offer || isKgOffer) && (
-              <span className="bg-[#FAF3EC] text-[#962854] border border-[#962854]/30 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-2xs flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-sm text-[#962854]">info</span>
-                <span>Special Offers are valid for With Egg cakes only</span>
+              <span className="bg-[#FAF3EC] text-[#962854] border border-[#962854]/30 text-xs font-semibold px-3.5 py-1.5 rounded-full shadow-2xs">
+                Special Offers are valid for With Egg cakes only
               </span>
             )}
           </div>

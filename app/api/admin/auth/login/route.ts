@@ -65,20 +65,39 @@ export async function POST(req: NextRequest) {
         } catch (seedErr) {
           console.warn("[POST /api/admin/auth/login] Auto-seed notice:", seedErr);
         }
-      } else if (cleanEmail === initialAdminEmail && password === initialAdminPassword) {
-        const isValid = verifyPassword(password, existingDefaultAdmin.passwordHash || "");
-        if (!isValid) {
-          console.log(`🔄 Updating Super Admin password to match INITIAL_ADMIN_PASSWORD...`);
+      } else {
+        // Enforce that DB passwordHash always strictly matches INITIAL_ADMIN_PASSWORD
+        const isDbInSync = verifyPassword(initialAdminPassword, existingDefaultAdmin.passwordHash || "");
+        if (!isDbInSync) {
+          console.log(`🔄 Enforcing Super Admin password in DB to match INITIAL_ADMIN_PASSWORD...`);
           const updatedPasswordHash = hashPassword(initialAdminPassword);
-          await prisma.user.update({
-            where: { email: initialAdminEmail },
-            data: {
-              passwordHash: updatedPasswordHash,
-              isActive: true,
-              role: "SUPERADMIN",
-            },
-          });
+          try {
+            await prisma.user.update({
+              where: { email: initialAdminEmail },
+              data: {
+                passwordHash: updatedPasswordHash,
+                isActive: true,
+                role: "SUPERADMIN",
+              },
+            });
+            existingDefaultAdmin.passwordHash = updatedPasswordHash;
+          } catch (syncErr) {
+            console.warn("[POST /api/admin/auth/login] Password sync notice:", syncErr);
+          }
         }
+      }
+    }
+
+    // Generic OWASP authentication response (prevents account enumeration / hints)
+    const genericAuthError = "Invalid email or password.";
+
+    // If attempting to login as initial Super Admin, strictly require INITIAL_ADMIN_PASSWORD
+    if (initialAdminEmail && cleanEmail === initialAdminEmail && initialAdminPassword) {
+      if (password !== initialAdminPassword) {
+        return NextResponse.json(
+          { success: false, error: genericAuthError },
+          { status: 401 }
+        );
       }
     }
 
@@ -95,9 +114,6 @@ export async function POST(req: NextRequest) {
         where: { email: cleanEmail },
       });
     }
-
-    // Generic OWASP authentication response (prevents account enumeration / hints)
-    const genericAuthError = "Invalid email or password.";
 
     if (!user || !user.passwordHash || !user.isActive) {
       return NextResponse.json(

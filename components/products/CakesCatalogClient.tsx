@@ -125,10 +125,7 @@ export default function CakesCatalogClient({
         </div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 mb-3 shadow-xs">
-            <span className="material-symbols-outlined text-sm text-[#962854]">
-              auto_awesome
-            </span>
+          <div className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 mb-3 shadow-xs">
             <span className="text-xs font-bold text-[#1C0D0A] uppercase tracking-wider">
               {allCakes.length} Unique Signature Cakes · Fresh Daily
             </span>

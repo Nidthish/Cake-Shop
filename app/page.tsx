@@ -57,8 +57,8 @@ const OCCASIONS = [
     image: "/images/celebration_opt/1st_birthdaycake.png",
     href: "/first-birthday",
     iconType: "cake",
-    doodle: "sparkle",
-    doodleClass: "right-[46%] top-[20%]",
+    doodle: null,
+    doodleClass: "",
     isPrimary: true,
     archClass: "right-0 top-3 sm:top-4 bottom-0 w-[52%] sm:w-[50%] bg-[#FAF0EB] rounded-tl-full rounded-tr-[28px] rounded-br-[28px]",
   },
@@ -84,9 +84,9 @@ const OCCASIONS = [
     desc: "You imagine it, our master artisans bring your dream cake concept to sweet reality.",
     image: "/images/celebration_opt/customizecake.png",
     href: "/custom-cake",
-    iconType: "sparkles",
-    doodle: "sparkle",
-    doodleClass: "right-[46%] top-[25%]",
+    iconType: "cake",
+    doodle: null,
+    doodleClass: "",
     isPrimary: false,
     archClass: "right-0 top-3 sm:top-4 bottom-0 w-[52%] sm:w-[50%] bg-[#FAF0EB] rounded-tl-full rounded-tr-[28px] rounded-br-[28px]",
   },
@@ -206,8 +206,7 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center w-full">
           {/* Hero Left Content */}
           <div className="text-center lg:text-left space-y-6 z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 shadow-sm">
-              <span className="material-symbols-outlined text-sm text-[#962854]">auto_awesome</span>
+            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#FAF3EC] border border-[#E6C184]/60 shadow-sm">
               <span className="text-xs font-bold text-[#1C0D0A] uppercase tracking-wider">
                  PREMIUM ARTISANAL BAKERY
               </span>
@@ -235,17 +234,15 @@ export default async function HomePage() {
               </Link>
               <Link
                 href="/custom-cake"
-                className="btn-secondary py-3.5 px-7 text-xs font-bold uppercase tracking-wider flex items-center gap-2"
+                className="btn-secondary py-3.5 px-7 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2"
               >
-                <span className="material-symbols-outlined text-sm text-[#962854]">auto_awesome</span>
                 <span>CUSTOM CAKE</span>
               </Link>
             </div>
 
             {/* Master Chef Quality Promise */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
-              <div className="flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-[#962854]/10 border border-[#962854]/20 shadow-sm">
-                <span className="material-symbols-outlined text-xl text-[#962854]">workspace_premium</span>
+              <div className="flex items-center px-4 py-2 rounded-2xl bg-[#962854]/10 border border-[#962854]/20 shadow-sm">
                 <div className="text-left">
                   <span className="font-bold text-xs text-[#1C0D0A] block leading-tight">
                     Master Chef Signature Recipes
@@ -305,18 +302,14 @@ export default async function HomePage() {
               </div>
 
               {/* Floating Quality Badge 1 */}
-              <div className="absolute -top-7 left-2 sm:top-4 sm:-left-2 z-30 glass-header px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#E6C184]/60 shadow-xl flex items-center gap-1.5 sm:gap-2 animate-bounce-slow">
-                <span className="material-symbols-outlined text-sm sm:text-base text-[#962854]">
-                  workspace_premium
-                </span>
+              <div className="absolute -top-7 left-2 sm:top-4 sm:-left-2 z-30 glass-header px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#E6C184]/60 shadow-xl flex items-center animate-bounce-slow">
                 <span className="text-[11px] sm:text-xs font-bold text-[#1C0D0A] tracking-wide">
                   Official Signature Badge
                 </span>
               </div>
 
               {/* Floating Quality Badge 2 */}
-              <div className="absolute -bottom-7 right-2 sm:bottom-4 sm:-right-2 z-30 glass-header px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#E6C184]/60 shadow-xl flex items-center gap-1.5 sm:gap-2">
-                <span className="material-symbols-outlined text-sm sm:text-base text-[#962854]">bakery_dining</span>
+              <div className="absolute -bottom-7 right-2 sm:bottom-4 sm:-right-2 z-30 glass-header px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full border border-[#E6C184]/60 shadow-xl flex items-center">
                 <span className="text-[11px] sm:text-xs font-bold text-[#1C0D0A] tracking-wide">Freshly Baked Daily</span>
               </div>
             </div>
@@ -342,24 +335,20 @@ export default async function HomePage() {
       <section className="bg-[#962854] text-white py-6 sm:py-8 shadow-inner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div className="flex flex-col items-center">
-            <span className="material-symbols-outlined text-3xl sm:text-4xl text-[#E6C184] mb-2">auto_awesome</span>
             <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">100% Artisanal Recipes</h4>
-            <p className="text-[11px] text-[#FFF9F5]/80 mt-0.5">Fresh & Eggless Options Available</p>
+            <p className="text-[11px] text-[#FFF9F5]/80 mt-1">Fresh & Eggless Options Available</p>
           </div>
           <div className="flex flex-col items-center">
-            <span className="material-symbols-outlined text-3xl sm:text-4xl text-[#E6C184] mb-2">workspace_premium</span>
             <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">Artisanal Craftsmanship</h4>
-            <p className="text-[11px] text-[#FFF9F5]/80 mt-0.5">Baked Daily by Master Chefs</p>
+            <p className="text-[11px] text-[#FFF9F5]/80 mt-1">Baked Daily by Master Chefs</p>
           </div>
           <div className="flex flex-col items-center">
-            <span className="material-symbols-outlined text-3xl sm:text-4xl text-[#E6C184] mb-2">local_shipping</span>
             <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">2-Hour Express Delivery</h4>
-            <p className="text-[11px] text-[#FFF9F5]/80 mt-0.5">Fresh & Temperature Controlled</p>
+            <p className="text-[11px] text-[#FFF9F5]/80 mt-1">Fresh & Temperature Controlled</p>
           </div>
           <div className="flex flex-col items-center">
-            <span className="material-symbols-outlined text-3xl sm:text-4xl text-[#E6C184] mb-2">celebration</span>
             <h4 className="font-bold text-xs sm:text-sm tracking-wider uppercase">Custom Handcrafted Designs</h4>
-            <p className="text-[11px] text-[#FFF9F5]/80 mt-0.5">Personalized For Your Special Day</p>
+            <p className="text-[11px] text-[#FFF9F5]/80 mt-1">Personalized For Your Special Day</p>
           </div>
         </div>
       </section>
@@ -392,15 +381,6 @@ export default async function HomePage() {
                 />
 
                 {/* Doodle accents */}
-                {occ.doodle === "sparkle" && (
-                  <div className={`absolute pointer-events-none text-[#BA9684] ${occ.doodleClass}`}>
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                      <path d="M5 16L9 12" />
-                      <path d="M11 18L12 11" />
-                      <path d="M18 15L14 10" />
-                    </svg>
-                  </div>
-                )}
                 {occ.doodle === "heart" && (
                   <div className={`absolute pointer-events-none z-10 text-[#9A7067] ${occ.doodleClass}`}>
                     <svg className="w-6 h-6" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
@@ -453,12 +433,6 @@ export default async function HomePage() {
                         <path d="M8 2.5L9.5 4.5H6.5L8 2.5Z" fill="currentColor" strokeWidth="1.2" />
                         <circle cx="8" cy="12.5" r="5.5" />
                         <circle cx="15.5" cy="14" r="5" />
-                      </svg>
-                    )}
-                    {occ.iconType === "sparkles" && (
-                      <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M9 3C9 6.31 6.31 9 3 9C6.31 9 9 11.69 9 15C9 11.69 11.69 9 15 9C11.69 9 9 6.31 9 3Z" />
-                        <path d="M17.5 11C17.5 13.21 15.71 15 13.5 15C15.71 15 17.5 16.79 17.5 19C17.5 16.79 19.29 15 21.5 15C19.29 15 17.5 13.21 17.5 11Z" />
                       </svg>
                     )}
                     {occ.iconType === "gift" && (
@@ -639,9 +613,6 @@ export default async function HomePage() {
       <section className="py-14 sm:py-20 bg-[#FAF3EC]/60">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="celebration-card rounded-3xl bg-[#1C0D0A] text-white p-8 sm:p-14 text-center relative overflow-hidden shadow-2xl">
-            <span className="material-symbols-outlined text-4xl sm:text-5xl text-[#E6C184] mb-4 inline-block animate-bounce-slow">
-              auto_awesome
-            </span>
             <h2 className="font-display font-bold text-3xl sm:text-5xl mb-4 leading-tight">
               Design Your Dream Custom Cake
             </h2>

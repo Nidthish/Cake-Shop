@@ -152,14 +152,14 @@ function SuccessContent() {
                 onClick={handleManualDownload}
                 className="flex-1 sm:flex-initial bg-[#250527] hover:bg-[#4A0E4E] text-white text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm cursor-pointer"
               >
-                <span>📥</span> Download PDF Invoice
+                Download PDF Invoice
               </button>
               <button
                 type="button"
                 onClick={handlePrintInvoice}
                 className="flex-1 sm:flex-initial bg-[#D4AF37] hover:bg-[#C29D26] text-[#250527] text-xs font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 transition-colors shadow-sm cursor-pointer"
               >
-                <span>🖨️</span> View / Print PDF
+                View / Print PDF
               </button>
             </div>
           </div>
@@ -199,7 +199,7 @@ function SuccessContent() {
                 <div><strong>Time Slot:</strong> <span className="font-bold text-[#802B52]">{order.schedule.timeSlot}</span></div>
                 <div><strong>Address:</strong> {order.address.street}, {order.address.city} - {order.address.pincode}</div>
                 <div className="mt-2 pt-2 border-t border-[#E6DBCE] text-[11px] text-[#5C524E]">
-                  <strong className="text-[#802B52]">🛵 Delivery Charge Note:</strong> Delivery charge will be calculated manually at <strong>₹5 per kilometer</strong> from our bakery to your doorstep and payable to the delivery partner upon arrival.
+                  <strong className="text-[#802B52]">Delivery Charge Note:</strong> Delivery charge will be calculated manually at <strong>₹5 per kilometer</strong> from our bakery to your doorstep and payable to the delivery partner upon arrival.
                 </div>
               </div>
             </div>
@@ -244,7 +244,7 @@ function SuccessContent() {
                       </div>
                       {item.eggPreference !== "eggless" && item.offer && (
                         <div className="text-[11px] text-amber-800 font-bold mt-0.5 inline-flex items-center gap-1">
-                          <span>🎁</span> Offer: {item.offer}
+                          Offer: {item.offer}
                         </div>
                       )}
                       {item.cakeMessage && (

@@ -374,6 +374,7 @@ export default function AdminPage() {
       if (res.ok && data.success) {
         setIsAuthenticated(true);
         setAdminUser(data.user);
+        setLoginPassword("");
         loadDashboardData();
       } else {
         setLoginError(data.error || "Invalid email or password.");
@@ -391,6 +392,7 @@ export default function AdminPage() {
     } catch (err) { }
     setIsAuthenticated(false);
     setAdminUser(null);
+    setLoginPassword("");
   }
 
   async function loadDashboardData() {
@@ -583,41 +585,243 @@ export default function AdminPage() {
     }
   }
 
-  // Realized Revenue Orders:
-  // An order counts towards revenue ONLY AFTER:
-  // 1. It is DELIVERED (cash collected or completed), OR
-  // 2. Paid online via GPay / UPI / Razorpay (PAID), AND
-  // 3. Not CANCELLED
-  const revenueOrders = useMemo(() => {
-    return salesOrders.filter((o) => {
-      if (o.status === "CANCELLED") return false;
-      const isDelivered = o.status === "DELIVERED";
-      const isPaidOnline = o.paymentStatus === "PAID";
-      return isDelivered || isPaidOnline;
-    });
-  }, [salesOrders]);
+  // Helper to determine if an order is Cash on Delivery
+  const isCodOrder = (o: OrderAdmin) => {
+    const pm = (o.paymentMethod || "").toString().trim().toUpperCase();
+    return pm === "COD" || pm.includes("CASH");
+  };
 
+  // Sales Statistics dynamically computed for the selected timeline
+  // 1. Number of Orders, 2. Cash on Delivery, 3. GPay, 4. Total Amount
   const salesStats = useMemo(() => {
-    const totalRevenue = revenueOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
-    const totalCount = salesOrders.length;
-    const avgOrderValue = revenueOrders.length > 0 ? totalRevenue / revenueOrders.length : 0;
-    const paidOrders = revenueOrders.length;
+    // Valid non-cancelled orders for revenue & financial amounts
+    const validOrders = salesOrders.filter((o) => o.status !== "CANCELLED");
+    const cancelledOrders = salesOrders.filter((o) => o.status === "CANCELLED");
 
-    // Unfulfilled / Pending COD orders not yet delivered
-    const pendingCodOrders = salesOrders.filter(
-      (o) => o.status !== "CANCELLED" && o.status !== "DELIVERED" && o.paymentStatus !== "PAID"
-    );
-    const pendingCodAmount = pendingCodOrders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+    // 1. Number of Orders (total orders placed in the selected timeline)
+    const totalOrdersCount = salesOrders.length;
+    const activeOrdersCount = validOrders.length;
+    const cancelledCount = cancelledOrders.length;
+
+    // Delivered Orders and In-Progress Delivery Orders
+    const deliveredOrders = validOrders.filter((o) => o.status === "DELIVERED");
+    const deliveredCount = deliveredOrders.length;
+    const pendingDeliveryOrders = validOrders.filter((o) => o.status !== "DELIVERED");
+    const pendingDeliveryCount = pendingDeliveryOrders.length;
+
+    // 2. Cash on Delivery (COD)
+    const codOrders = validOrders.filter(isCodOrder);
+    const codAmount = codOrders.reduce((sum, o) => sum + Number(o.totalAmount || 0), 0);
+    const codCount = codOrders.length;
+
+    // 3. GPay / Online (UPI, Razorpay, GPay, Card, Net Banking)
+    const gpayOrders = validOrders.filter((o) => !isCodOrder(o));
+    const gpayAmount = gpayOrders.reduce((sum, o) => sum + Number(o.totalAmount || 0), 0);
+    const gpayCount = gpayOrders.length;
+
+    // 4. Total Amount (Sum of all orders in selected timeline)
+    const totalAmount = validOrders.reduce((sum, o) => sum + Number(o.totalAmount || 0), 0);
+
+    // GST & Fee totals for comprehensive analysis
+    const totalSubtotal = validOrders.reduce((sum, o) => sum + Number(o.subtotal || 0), 0);
+    const totalGst = validOrders.reduce((sum, o) => sum + Number(o.taxAmount || 0), 0);
+    const totalDeliveryFee = validOrders.reduce((sum, o) => sum + Number(o.deliveryFee || 0), 0);
 
     return {
-      totalRevenue,
-      totalCount,
-      avgOrderValue,
-      paidOrders,
-      pendingCodCount: pendingCodOrders.length,
-      pendingCodAmount,
+      totalOrdersCount,
+      deliveredCount,
+      pendingDeliveryCount,
+      activeOrdersCount,
+      cancelledCount,
+      codAmount,
+      codCount,
+      gpayAmount,
+      gpayCount,
+      totalAmount,
+      totalSubtotal,
+      totalGst,
+      totalDeliveryFee,
     };
-  }, [salesOrders, revenueOrders]);
+  }, [salesOrders]);
+
+  // Export Orders Excel / CSV Spreadsheet with full monthly analysis
+  function handleExportOrdersExcel() {
+    if (!salesOrders || salesOrders.length === 0) {
+      alert("No orders available to export for the selected timeline.");
+      return;
+    }
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    // Determine target month from the orders or current date
+    let targetDate = new Date();
+    if (salesOrders.length > 0 && salesOrders[0].createdAt) {
+      const parsedDate = new Date(salesOrders[0].createdAt);
+      if (!isNaN(parsedDate.getTime())) {
+        targetDate = parsedDate;
+      }
+    }
+
+    const monthName = monthNames[targetDate.getMonth()];
+    const year = targetDate.getFullYear();
+    const timelineLabel =
+      salesDateFilter === "month"
+        ? "Monthly"
+        : salesDateFilter === "today"
+          ? "Today"
+          : salesDateFilter === "yesterday"
+            ? "Yesterday"
+            : salesDateFilter === "7days"
+              ? "7Days"
+              : "All";
+
+    const fileName = `Lollipop_Orders_${monthName}_${year}_${timelineLabel}.csv`;
+
+    const escapeCsv = (val: any): string => {
+      if (val === null || val === undefined) return '""';
+      const str = String(val).replace(/"/g, '""').replace(/\r?\n|\r/g, " ");
+      return `"${str}"`;
+    };
+
+    const headers = [
+      "Order Number",
+      "Order Date & Time",
+      "Customer Name",
+      "Customer Phone",
+      "Customer Email",
+      "Delivery Address",
+      "City",
+      "Pincode",
+      "Delivery Date",
+      "Delivery Time Slot",
+      "Order Status",
+      "Payment Method",
+      "Payment Status",
+      "Ordered Cakes & Items Details",
+      "Total Cake Items",
+      "Eggless Order?",
+      "Cake Message",
+      "Special Instructions",
+      "Subtotal (₹)",
+      "SGST (2.5%) (₹)",
+      "CGST (2.5%) (₹)",
+      "Total GST (5%) (₹)",
+      "Delivery Fee (₹)",
+      "Total Amount (₹)",
+      "Delivery Partner Name",
+      "Delivery Partner Phone",
+      "Delivered Date & Time",
+    ];
+
+    const rows: string[][] = salesOrders.map((o) => {
+      let itemsSummary = "No item details";
+      let totalQty = 0;
+      if (Array.isArray(o.items) && o.items.length > 0) {
+        itemsSummary = o.items
+          .map((it: any) => {
+            const cakeName = it.productName || it.name || "Cake";
+            const variant = it.variantName ? ` (${it.variantName})` : "";
+            const eggless = it.isEggless ? " [Eggless]" : "";
+            const qty = it.quantity || 1;
+            totalQty += qty;
+            const price = it.lineTotal || it.unitPrice ? ` - ₹${it.lineTotal || it.unitPrice}` : "";
+            const msg = it.cakeMessage ? ` [Msg: "${it.cakeMessage}"]` : "";
+            return `${cakeName}${variant}${eggless} x${qty}${price}${msg}`;
+          })
+          .join(" | ");
+      }
+
+      const orderIsCod = isCodOrder(o);
+      const paymentMethodLabel = orderIsCod ? "Cash on Delivery (COD)" : `GPay / Online (${o.paymentMethod || "UPI / Razorpay"})`;
+
+      const tax = Number(o.taxAmount || 0);
+      const halfTax = (tax / 2).toFixed(2);
+      const subtotal = Number(o.subtotal || 0).toFixed(2);
+      const deliveryFee = Number(o.deliveryFee || 0).toFixed(2);
+      const totalAmount = Number(o.totalAmount || 0).toFixed(2);
+
+      const formattedOrderDate = o.createdAt
+        ? new Date(o.createdAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })
+        : "";
+
+      const formattedDeliveredAt = o.deliveredAt
+        ? new Date(o.deliveredAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" })
+        : "";
+
+      return [
+        o.orderNumber,
+        formattedOrderDate,
+        o.customerName,
+        o.customerPhone,
+        o.customerEmail,
+        o.streetAddress,
+        o.city,
+        o.pincode,
+        o.deliveryDate || "",
+        o.deliveryTimeSlot || "",
+        o.status,
+        paymentMethodLabel,
+        o.paymentStatus,
+        itemsSummary,
+        String(totalQty || o.items?.length || 0),
+        o.hasEgglessItems ? "Yes" : "No",
+        o.cakeMessage || "",
+        o.specialInstructions || o.deliveryNotes || "",
+        subtotal,
+        halfTax,
+        halfTax,
+        tax.toFixed(2),
+        deliveryFee,
+        totalAmount,
+        o.deliveryPartnerName || "",
+        o.deliveryPartnerPhone || "",
+        formattedDeliveredAt,
+      ];
+    });
+
+    // Executive Financial Analysis Summary Rows for the bottom of the spreadsheet
+    const summaryRows: string[][] = [
+      [],
+      ["=== MONTHLY FINANCIAL & SALES ANALYSIS SUMMARY ==="],
+      ["Report Timeline / Period:", `${timelineLabel} (${monthName} ${year})`],
+      ["Total Orders Placed:", String(salesStats.totalOrdersCount)],
+      ["Orders Delivered:", String(salesStats.deliveredCount)],
+      ["Orders In Progress / Delivery:", String(salesStats.pendingDeliveryCount)],
+      ["Active Orders (Excl. Cancelled):", String(salesStats.activeOrdersCount)],
+      ["Cancelled Orders:", String(salesStats.cancelledCount)],
+      ["Total Cash on Delivery (COD) Revenue (₹):", salesStats.codAmount.toFixed(2)],
+      ["Total Cash on Delivery (COD) Orders Count:", String(salesStats.codCount)],
+      ["Total GPay / Online Payment Revenue (₹):", salesStats.gpayAmount.toFixed(2)],
+      ["Total GPay / Online Orders Count:", String(salesStats.gpayCount)],
+      ["Total Subtotal / Taxable Base (₹):", salesStats.totalSubtotal.toFixed(2)],
+      ["Total SGST (2.5%) (₹):", (salesStats.totalGst / 2).toFixed(2)],
+      ["Total CGST (2.5%) (₹):", (salesStats.totalGst / 2).toFixed(2)],
+      ["Total GST Collected (5%) (₹):", salesStats.totalGst.toFixed(2)],
+      ["Total Delivery Fees (₹):", salesStats.totalDeliveryFee.toFixed(2)],
+      ["GRAND TOTAL REVENUE (₹):", salesStats.totalAmount.toFixed(2)],
+      ["Report Generated At:", new Date().toLocaleString("en-IN")],
+    ];
+
+    const csvLines = [
+      headers.map(escapeCsv).join(","),
+      ...rows.map((row) => row.map(escapeCsv).join(",")),
+      ...summaryRows.map((row) => row.map(escapeCsv).join(",")),
+    ];
+
+    const BOM = "\uFEFF"; // UTF-8 Byte Order Mark for Microsoft Excel
+    const blob = new Blob([BOM + csvLines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
 
   // Product Helpers
   function handleAddVariantRow() {
@@ -1068,14 +1272,14 @@ export default function AdminPage() {
     );
   }
 
-  // 🔒 LOGIN SCREEN (UNAUTHENTICATED VIEW)
+  // LOGIN SCREEN (UNAUTHENTICATED VIEW)
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#1C061E] flex items-center justify-center px-4 py-8 sm:py-12">
         <div className="max-w-md w-full bg-[#2A082C] rounded-2xl sm:rounded-3xl border border-[#962854]/40 p-5 sm:p-8 shadow-2xl space-y-6 sm:space-y-8">
           <div className="text-center space-y-2">
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#802B52]/40 border border-[#E6C184]/40 flex items-center justify-center mx-auto text-2xl sm:text-3xl shadow-lg">
-              🔐
+              <span className="material-symbols-outlined text-3xl sm:text-4xl text-[#E6C184]">lock</span>
             </div>
             <h1 className="font-serif text-xl sm:text-2xl font-bold text-white tracking-wide">
               Lollipop Admin Portal
@@ -1087,11 +1291,11 @@ export default function AdminPage() {
 
           {loginError && (
             <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-3.5 text-xs text-red-200 text-center font-medium">
-              ⚠️ {loginError}
+              {loginError}
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5" autoComplete="off">
+          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
             <div>
               <label className="block text-xs font-bold uppercase text-[#E6C184] mb-1.5 tracking-wider">
                 Admin Email
@@ -1103,12 +1307,7 @@ export default function AdminPage() {
                 placeholder="Enter admin email"
                 value={loginEmail}
                 onChange={(e) => setLoginEmail(e.target.value)}
-                autoComplete="off"
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck="false"
-                data-lpignore="true"
-                data-form-type="other"
+                autoComplete="username"
                 className="w-full px-4 py-3 bg-[#1C061E] border border-[#962854]/50 rounded-xl text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#E6C184] transition-colors"
               />
             </div>
@@ -1123,8 +1322,7 @@ export default function AdminPage() {
                 placeholder="••••••••••••"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                autoComplete="new-password"
-                data-lpignore="true"
+                autoComplete="current-password"
                 className="w-full px-4 py-3 bg-[#1C061E] border border-[#962854]/50 rounded-xl text-white text-sm placeholder-gray-500 focus:outline-none focus:border-[#E6C184] transition-colors"
               />
             </div>
@@ -1149,7 +1347,7 @@ export default function AdminPage() {
     );
   }
 
-  // 🏆 AUTHENTICATED ADMIN DASHBOARD
+  // AUTHENTICATED ADMIN DASHBOARD
   return (
     <div className="min-h-screen bg-[#FAF5EE] text-[#2D2327]">
       {/* Admin Navbar Header */}
@@ -1158,7 +1356,7 @@ export default function AdminPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5 sm:gap-3">
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#802B52] flex items-center justify-center text-lg sm:text-xl shadow-md border border-[#E6C184]/30 shrink-0">
-                🎂
+                <span className="material-symbols-outlined text-lg sm:text-xl text-[#E6C184]">bakery_dining</span>
               </div>
               <div>
                 <h1 className="font-serif font-bold text-lg sm:text-2xl text-white tracking-wide leading-tight">
@@ -1176,17 +1374,17 @@ export default function AdminPage() {
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white/10 hover:bg-white/20 text-white text-xs p-2 rounded-lg transition-all border border-white/20"
+                className="bg-white/10 hover:bg-white/20 text-white text-xs p-2 rounded-lg transition-all border border-white/20 flex items-center justify-center"
                 title="View Storefront"
               >
-                🌐
+                <span className="material-symbols-outlined text-base">open_in_new</span>
               </a>
               <button
                 onClick={handleLogout}
-                className="bg-red-500/20 hover:bg-red-500/40 text-red-200 border border-red-500/40 text-xs px-2.5 py-1.5 rounded-lg transition-all"
+                className="bg-red-500/20 hover:bg-red-500/40 text-red-200 border border-red-500/40 text-xs px-2.5 py-1.5 rounded-lg transition-all flex items-center justify-center"
                 title="Logout"
               >
-                🚪
+                <span className="material-symbols-outlined text-base">logout</span>
               </button>
             </div>
           </div>
@@ -1197,7 +1395,7 @@ export default function AdminPage() {
                 onClick={handleOpenCreateModal}
                 className="flex-1 sm:flex-initial bg-[#E6C184] hover:bg-[#d8b070] text-[#2A082C] text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer min-h-[40px]"
               >
-                ➕ Add Product
+                <span>+ Add Product</span>
               </button>
             )}
 
@@ -1207,14 +1405,14 @@ export default function AdminPage() {
               rel="noopener noreferrer"
               className="hidden md:flex bg-white/10 hover:bg-white/20 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all border border-white/20 items-center gap-1.5"
             >
-              🌐 View Storefront
+              <span>View Storefront</span>
             </a>
 
             <button
               onClick={handleLogout}
               className="hidden md:flex bg-red-500/20 hover:bg-red-500/40 text-red-200 border border-red-500/40 text-xs font-bold px-3 py-2.5 rounded-xl transition-all cursor-pointer items-center gap-1"
             >
-              🚪 Logout
+              <span>Logout</span>
             </button>
           </div>
         </div>
@@ -1240,7 +1438,7 @@ export default function AdminPage() {
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
               }`}
           >
-            📊 <span className="inline">Sales &amp; Overview</span>
+            <span className="inline">Sales &amp; Overview</span>
           </button>
 
           <button
@@ -1250,7 +1448,7 @@ export default function AdminPage() {
                 : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
               }`}
           >
-            🎂 <span className="inline">Products ({products.length})</span>
+            <span className="inline">Products ({products.length})</span>
           </button>
 
           <button
@@ -1271,7 +1469,7 @@ export default function AdminPage() {
                   : "border-transparent text-[#7A6B72] hover:text-[#2D2327]"
                 }`}
             >
-              👥 <span className="inline">Admins ({adminUsersList.length})</span>
+              <span className="inline">Admins ({adminUsersList.length})</span>
             </button>
           )}
         </div>
@@ -1279,145 +1477,164 @@ export default function AdminPage() {
         {/* TAB 1: SALES & OVERVIEW */}
         {activeTab === "sales" && (
           <div className="space-y-4 sm:space-y-6">
+            {/* Sales Overview Header & Timeline Controls */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-6 rounded-2xl border border-[#E6DBCE] shadow-sm">
               <div>
                 <h2 className="font-serif text-xl sm:text-2xl font-bold text-[#5B1E38]">
-                  Sales Overview
+                  Sales &amp; Revenue Overview
                 </h2>
                 <p className="text-xs text-[#7A6B72]">
-                  View your store sales and order performance metrics.
+                  Track orders, Cash on Delivery, GPay, and total revenue across selected timelines
                 </p>
               </div>
 
-              {/* Date Filter Bar */}
-              <div className="flex flex-wrap items-center gap-1 bg-[#FAF5EE] p-1.5 rounded-xl border border-[#E6DBCE]">
-                {(["today", "yesterday", "7days", "month", "all"] as const).map((filterKey) => (
-                  <button
-                    key={filterKey}
-                    onClick={() => handleSalesDateChange(filterKey)}
-                    disabled={salesLoading}
-                    className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all cursor-pointer flex-1 sm:flex-initial text-center disabled:opacity-50 ${salesDateFilter === filterKey
-                        ? "bg-[#802B52] text-white shadow-sm"
-                        : "text-[#7A6B72] hover:bg-[#E6DBCE]/50"
-                      }`}
-                  >
-                    {filterKey === "today"
-                      ? "Today"
-                      : filterKey === "yesterday"
-                        ? "Yesterday"
-                        : filterKey === "7days"
-                          ? "7 Days"
-                          : filterKey === "month"
-                            ? "Month"
-                            : "All"}
-                  </button>
-                ))}
+              {/* Date Filter Bar & Excel Download */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-1 bg-[#FAF5EE] p-1.5 rounded-xl border border-[#E6DBCE]">
+                  {(["today", "yesterday", "7days", "month", "all"] as const).map((filterKey) => (
+                    <button
+                      key={filterKey}
+                      onClick={() => handleSalesDateChange(filterKey)}
+                      disabled={salesLoading}
+                      className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold uppercase transition-all cursor-pointer flex-1 sm:flex-initial text-center disabled:opacity-50 ${salesDateFilter === filterKey
+                          ? "bg-[#802B52] text-white shadow-sm"
+                          : "text-[#7A6B72] hover:bg-[#E6DBCE]/50"
+                        }`}
+                    >
+                      {filterKey === "today"
+                        ? "Today"
+                        : filterKey === "yesterday"
+                          ? "Yesterday"
+                          : filterKey === "7days"
+                            ? "7 Days"
+                            : filterKey === "month"
+                              ? "Month"
+                              : "All"}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={handleExportOrdersExcel}
+                  disabled={salesOrders.length === 0}
+                  className="px-3.5 py-2 bg-[#802B52] hover:bg-[#962854] text-white rounded-xl text-xs font-bold transition-all shadow-sm hover:shadow flex items-center gap-1.5 disabled:opacity-40 cursor-pointer"
+                  title="Download Excel Spreadsheet with full monthly analysis"
+                >
+                  <span>Export Excel ({salesOrders.length})</span>
+                </button>
               </div>
             </div>
 
-            {/* Sales Stat Cards Grid */}
+            {/* Sales Stat Cards Grid (4 boxes: 1. Number of Orders & Delivered, 2. Cash on Delivery, 3. GPay, 4. Total Amount) */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+              {/* Box 1: Number of Orders & Delivered Orders */}
               <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                    Realized Revenue
+                    Number of Orders
                   </span>
-                  <span className="text-base">💰</span>
-                </div>
-                <div className="text-xl sm:text-3xl font-extrabold text-[#802B52] truncate">
-                  ₹{salesStats.totalRevenue.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                </div>
-                <p className="text-[10px] sm:text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md inline-block border border-emerald-200">
-                  ✓ Delivered or GPay Paid
-                </p>
-              </div>
-
-              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                    Total Orders
-                  </span>
-                  <span className="text-base">📦</span>
+                  <span className="material-symbols-outlined text-base text-[#7A6B72]">inventory_2</span>
                 </div>
                 <div className="text-xl sm:text-3xl font-extrabold text-[#2A082C]">
-                  {salesStats.totalCount} <span className="text-xs sm:text-base font-normal text-gray-500">Orders</span>
+                  {salesStats.totalOrdersCount} <span className="text-xs sm:text-base font-normal text-gray-500">Orders</span>
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-semibold bg-[#FAF5EE] px-2 py-0.5 rounded-md inline-block border border-[#E6DBCE]">
-                  Placed in period
-                </p>
+                <div className="flex flex-wrap items-center gap-1.5 text-[10px] sm:text-[11px] font-semibold">
+                  <span className="text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                    {salesStats.deliveredCount} Delivered
+                  </span>
+                  {salesStats.pendingDeliveryCount > 0 && (
+                    <span className="text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                      {salesStats.pendingDeliveryCount} In Delivery
+                    </span>
+                  )}
+                  {salesStats.cancelledCount > 0 && (
+                    <span className="text-red-700 bg-red-50 px-1.5 py-0.5 rounded-md border border-red-200">
+                      {salesStats.cancelledCount} Cancelled
+                    </span>
+                  )}
+                </div>
               </div>
 
+              {/* Box 2: Cash on Delivery */}
               <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                    Avg Realized Value
+                    Cash on Delivery
                   </span>
-                  <span className="text-base">🎂</span>
+                  <span className="material-symbols-outlined text-base text-[#7A6B72]">payments</span>
                 </div>
                 <div className="text-xl sm:text-3xl font-extrabold text-[#962854] truncate">
-                  ₹{salesStats.avgOrderValue.toFixed(0)}
+                  ₹{salesStats.codAmount.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                 </div>
-                <p className="text-[10px] sm:text-[11px] text-[#7A6B72] font-semibold bg-[#FAF5EE] px-2 py-0.5 rounded-md inline-block border border-[#E6DBCE]">
-                  Per realized order
+                <p className="text-[10px] sm:text-[11px] text-amber-800 font-semibold bg-amber-50 px-2 py-0.5 rounded-md inline-block border border-amber-200">
+                  {salesStats.codCount} COD Orders
                 </p>
               </div>
 
+              {/* Box 3: GPay */}
               <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
-                    Revenue Orders
+                    GPay
                   </span>
-                  <span className="text-base">✅</span>
+                  <span className="material-symbols-outlined text-base text-[#7A6B72]">phone_iphone</span>
                 </div>
-                <div className="text-xl sm:text-3xl font-extrabold text-emerald-600">
-                  {salesStats.paidOrders} / {salesStats.totalCount}
+                <div className="text-xl sm:text-3xl font-extrabold text-indigo-700 truncate">
+                  ₹{salesStats.gpayAmount.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                </div>
+                <p className="text-[10px] sm:text-[11px] text-indigo-700 font-semibold bg-indigo-50 px-2 py-0.5 rounded-md inline-block border border-indigo-200">
+                  {salesStats.gpayCount} GPay / Online Paid
+                </p>
+              </div>
+
+              {/* Box 4: Total Amount */}
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#E6DBCE] shadow-sm hover:shadow-md hover:border-[#802B52]/30 transition-all space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#7A6B72]">
+                    Total Amount
+                  </span>
+                  <span className="material-symbols-outlined text-base text-[#7A6B72]">account_balance_wallet</span>
+                </div>
+                <div className="text-xl sm:text-3xl font-extrabold text-[#802B52] truncate">
+                  ₹{salesStats.totalAmount.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                 </div>
                 <p className="text-[10px] sm:text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded-md inline-block border border-emerald-200">
-                  Delivered / Paid
+                  ✓ All Payment Methods
                 </p>
               </div>
             </div>
 
-            {/* Pending COD Notice */}
-            {salesStats.pendingCodCount > 0 && (
-              <div className="bg-[#FFFDF8] border border-[#E6C184] rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="text-base">⏳</span>
-                  <div>
-                    <strong className="text-[#802B52]">Pending Delivery (COD Orders):</strong>{" "}
-                    <span className="text-[#5C524E]">
-                      ₹{salesStats.pendingCodAmount.toLocaleString("en-IN")} across {salesStats.pendingCodCount} orders are pending delivery handoff.
+            {/* Sales Orders & Payment Analysis Table */}
+            <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm overflow-hidden">
+              <div className="p-4 sm:p-5 border-b border-[#E6DBCE] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="font-serif font-bold text-base text-[#5B1E38]">
+                    Orders &amp; Payment Analysis ({salesOrders.length})
+                  </h3>
+                  <p className="text-xs text-[#7A6B72]">
+                    Showing {salesStats.totalOrdersCount} orders ({salesStats.deliveredCount} Delivered): {salesStats.codCount} Cash on Delivery (₹{salesStats.codAmount.toLocaleString("en-IN")}) and {salesStats.gpayCount} GPay / Online (₹{salesStats.gpayAmount.toLocaleString("en-IN")})
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleExportOrdersExcel}
+                    disabled={salesOrders.length === 0}
+                    className="px-3.5 py-1.5 bg-[#FAF5EE] hover:bg-[#E6DBCE] text-[#5B1E38] border border-[#E6DBCE] rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-40"
+                  >
+                    <span>Download Excel Sheet</span>
+                  </button>
+                  <div className="text-right">
+                    <span className="text-xs text-[#7A6B72]">Total: </span>
+                    <span className="font-extrabold text-base text-[#802B52]">
+                      ₹{salesStats.totalAmount.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
-                <span className="text-[11px] font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2.5 py-1 rounded-full whitespace-nowrap">
-                  Not counted in revenue until delivered
-                </span>
-              </div>
-            )}
-
-            {/* Realized Revenue Orders Table */}
-            <div className="bg-white rounded-2xl border border-[#E6DBCE] shadow-sm overflow-hidden">
-              <div className="p-4 sm:p-5 border-b border-[#E6DBCE] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <h3 className="font-serif font-bold text-base text-[#5B1E38]">
-                    Realized Revenue Orders ({revenueOrders.length})
-                  </h3>
-                  <p className="text-xs text-[#7A6B72]">
-                    Only orders that have been successfully delivered or paid online (GPay / Razorpay / UPI) are listed here.
-                  </p>
-                </div>
-                <div className="text-right">
-                  <span className="text-xs text-[#7A6B72]">Realized Total: </span>
-                  <span className="font-extrabold text-base text-[#802B52]">
-                    ₹{salesStats.totalRevenue.toLocaleString("en-IN", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                  </span>
-                </div>
               </div>
 
-              {revenueOrders.length === 0 ? (
+              {salesOrders.length === 0 ? (
                 <div className="text-center py-10 text-xs text-[#7A6B72]">
-                  No orders have been delivered or paid online for the selected date filter.
+                  No orders recorded for the selected timeline.
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -1426,66 +1643,82 @@ export default function AdminPage() {
                       <tr>
                         <th className="py-3 px-4">Order ID</th>
                         <th className="py-3 px-4">Customer</th>
-                        <th className="py-3 px-4">Revenue Qualification</th>
+                        <th className="py-3 px-4">Payment Method</th>
+                        <th className="py-3 px-4">Order Status</th>
                         <th className="py-3 px-4">Delivery Partner</th>
                         <th className="py-3 px-4">Date</th>
                         <th className="py-3 px-4 text-right">Amount</th>
-                        <th className="py-3 px-4 text-center">Invoice</th>
+                        <th className="py-3 px-4 text-center">Details</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#E6DBCE]">
-                      {revenueOrders.map((o) => (
-                        <tr key={o.id} className="hover:bg-[#FDFBF7]">
-                          <td className="py-3 px-4 font-mono font-bold text-[#802B52]">
-                            {o.orderNumber}
-                          </td>
-                          <td className="py-3 px-4">
-                            <div className="font-bold text-[#2D2327]">{o.customerName}</div>
-                            <div className="text-[11px] text-[#7A6B72]">{o.customerPhone}</div>
-                          </td>
-                          <td className="py-3 px-4">
-                            {o.status === "DELIVERED" ? (
-                              <span className="inline-flex items-center gap-1 font-bold text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded">
-                                ✅ Delivered
-                              </span>
-                            ) : o.paymentStatus === "PAID" ? (
-                              <span className="inline-flex items-center gap-1 font-bold text-[11px] text-[#802B52] bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">
-                                💳 Paid Online (GPay/UPI)
-                              </span>
-                            ) : (
-                              <span className="text-[11px] text-gray-500">Realized</span>
-                            )}
-                          </td>
-                          <td className="py-3 px-4">
-                            {o.deliveryPartnerName ? (
-                              <div>
-                                <span className="font-semibold text-[#5B1E38]">🛵 {o.deliveryPartnerName}</span>
-                                {o.deliveryPartnerPhone && (
-                                  <div className="text-[10px] text-[#7A6B72]">{o.deliveryPartnerPhone}</div>
-                                )}
-                              </div>
-                            ) : (
-                              <span className="text-gray-400 italic text-[11px]">Direct Bakery</span>
-                            )}
-                          </td>
-                          <td className="py-3 px-4 text-[#7A6B72]">
-                            {o.deliveryDate || new Date(o.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}
-                          </td>
-                          <td className="py-3 px-4 font-extrabold text-[#802B52] text-right">
-                            ₹{o.totalAmount}
-                          </td>
-                          <td className="py-3 px-4 text-center">
-                            <a
-                              href={`/api/orders/${o.id}/invoice?download=1`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FAF5EE] hover:bg-[#E6DBCE] text-[#802B52] border border-[#E6DBCE] rounded text-[11px] font-bold transition-colors"
-                            >
-                              📥 PDF
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
+                      {salesOrders.map((o) => {
+                        const orderIsCod = isCodOrder(o);
+                        return (
+                          <tr key={o.id} className="hover:bg-[#FDFBF7]">
+                            <td className="py-3 px-4 font-mono font-bold text-[#802B52]">
+                              {o.orderNumber}
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="font-bold text-[#2D2327]">{o.customerName}</div>
+                              <div className="text-[11px] text-[#7A6B72]">{o.customerPhone}</div>
+                            </td>
+                            <td className="py-3 px-4">
+                              {orderIsCod ? (
+                                <span className="inline-flex items-center gap-1 font-bold text-[11px] text-amber-800 bg-amber-50 border border-amber-300 px-2 py-0.5 rounded">
+                                  Cash on Delivery
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 font-bold text-[11px] text-indigo-800 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded">
+                                  GPay / Online ({o.paymentStatus || "PAID"})
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-3 px-4">
+                              {o.status === "DELIVERED" ? (
+                                <span className="inline-flex items-center gap-1 font-bold text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded">
+                                  Delivered
+                                </span>
+                              ) : o.status === "CANCELLED" ? (
+                                <span className="inline-flex items-center gap-1 font-bold text-[11px] text-red-800 bg-red-50 border border-red-300 px-2 py-0.5 rounded">
+                                  Cancelled
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 font-bold text-[11px] text-[#802B52] bg-pink-50 border border-pink-200 px-2 py-0.5 rounded">
+                                  {o.status}
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-3 px-4">
+                              {o.deliveryPartnerName ? (
+                                <div>
+                                  <span className="font-semibold text-[#5B1E38]">{o.deliveryPartnerName}</span>
+                                  {o.deliveryPartnerPhone && (
+                                    <div className="text-[10px] text-[#7A6B72]">{o.deliveryPartnerPhone}</div>
+                                  )}
+                                </div>
+                              ) : (
+                                <span className="text-gray-400 italic text-[11px]">Direct Bakery</span>
+                              )}
+                            </td>
+                            <td className="py-3 px-4 text-[#7A6B72]">
+                              {o.deliveryDate || (o.createdAt ? new Date(o.createdAt).toLocaleDateString("en-IN", { day: "2-digit", month: "short" }) : "")}
+                            </td>
+                            <td className="py-3 px-4 font-extrabold text-[#802B52] text-right">
+                              ₹{o.totalAmount}
+                            </td>
+                            <td className="py-3 px-4 text-center">
+                              <button
+                                type="button"
+                                onClick={() => setSelectedOrderModal(o)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FAF5EE] hover:bg-[#E6DBCE] text-[#5B1E38] border border-[#E6DBCE] rounded text-[11px] font-bold transition-colors cursor-pointer"
+                              >
+                                View
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -1525,7 +1758,7 @@ export default function AdminPage() {
                   onClick={fetchProducts}
                   className="px-3 py-2.5 rounded-xl border border-[#E6DBCE] bg-[#FAF5EE] hover:bg-[#f2e7d8] text-xs font-bold text-[#802B52] transition-all cursor-pointer shrink-0"
                 >
-                  🔄 <span className="hidden sm:inline">Refresh</span>
+                  <span className="hidden sm:inline">Refresh</span>
                 </button>
               </div>
             </div>
@@ -1536,7 +1769,7 @@ export default function AdminPage() {
               </div>
             ) : (
               <>
-                {/* 📱 MOBILE CARD VIEW FOR PRODUCTS (Visible on screens < 768px) */}
+                {/* MOBILE CARD VIEW FOR PRODUCTS (Visible on screens < 768px) */}
                 <div className="block md:hidden space-y-3.5">
                   {filteredProducts.map((p) => (
                     <div
@@ -1572,7 +1805,9 @@ export default function AdminPage() {
                               }}
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-2xl">🎂</div>
+                            <div className="w-full h-full flex items-center justify-center text-gray-400">
+                              <span className="material-symbols-outlined text-2xl">cake</span>
+                            </div>
                           )}
                         </div>
 
@@ -1608,7 +1843,7 @@ export default function AdminPage() {
                               : "border-emerald-300 text-emerald-800 bg-emerald-50 hover:bg-emerald-100 active:bg-emerald-200"
                             }`}
                         >
-                          {p.isActive ? "⏸ Pause Sales" : "▶ Resume Sales"}
+                          {p.isActive ? "Pause Sales" : "Resume Sales"}
                         </button>
 
                         {adminUser?.role === "SUPERADMIN" && (
@@ -1617,14 +1852,14 @@ export default function AdminPage() {
                               onClick={() => handleEditClick(p)}
                               className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#802B52] hover:bg-[#962854] text-white transition-all shadow-sm cursor-pointer"
                             >
-                              ✏️ Edit
+                              Edit
                             </button>
                             <button
                               onClick={() => handleDeleteProduct(p.id, p.name)}
-                              className="px-3 py-2 rounded-xl text-xs font-bold text-red-600 bg-red-50 border border-red-200 hover:bg-red-100 transition-all cursor-pointer shadow-sm"
+                              className="px-3 py-2 rounded-xl text-xs font-bold text-red-600 bg-red-50 border border-red-200 hover:bg-red-100 transition-all cursor-pointer shadow-sm flex items-center justify-center"
                               title="Delete"
                             >
-                              🗑️
+                              <span className="material-symbols-outlined text-base leading-none">delete</span>
                             </button>
                           </div>
                         )}
@@ -1633,7 +1868,7 @@ export default function AdminPage() {
                   ))}
                 </div>
 
-                {/* 🖥️ DESKTOP TABLE VIEW FOR PRODUCTS (Visible on screens >= 768px) */}
+                {/* DESKTOP TABLE VIEW FOR PRODUCTS (Visible on screens >= 768px) */}
                 <div className="hidden md:block overflow-x-auto">
                   <table className="w-full text-left text-xs">
                     <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
@@ -1676,7 +1911,7 @@ export default function AdminPage() {
                           </td>
                           <td className="py-4 px-4">
                             <span className={`inline-block px-2.5 py-1 rounded text-[11px] font-bold ${p.isActive ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-                              {p.isActive ? "🟢 Active for Sales" : "🔴 Sales Paused"}
+                              {p.isActive ? "Active for Sales" : "Sales Paused"}
                             </span>
                           </td>
                           <td className="py-4 px-4 text-right">
@@ -1697,9 +1932,9 @@ export default function AdminPage() {
                                   </button>
                                   <button
                                     onClick={() => handleDeleteProduct(p.id, p.name)}
-                                    className="px-2.5 py-1.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 cursor-pointer"
+                                    className="px-2.5 py-1.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 cursor-pointer flex items-center justify-center"
                                   >
-                                    🗑️
+                                    <span className="material-symbols-outlined text-base leading-none">delete</span>
                                   </button>
                                 </>
                               )}
@@ -1945,7 +2180,7 @@ export default function AdminPage() {
                             </span>
                             {(o.specialInstructions || o.deliveryNotes || o.cakeMessage) && (
                               <span className="text-[9.5px] font-bold text-[#802B52] bg-[#FAF0F2] border border-[#802B52]/20 px-1.5 py-0.5 rounded mt-1 inline-block">
-                                📝 Remarks/Notes attached
+                                Remarks/Notes attached
                               </span>
                             )}
                           </div>
@@ -2074,7 +2309,7 @@ export default function AdminPage() {
                                 </span>
                                 {(o.specialInstructions || o.deliveryNotes || o.cakeMessage) && (
                                   <span className="text-[9.5px] font-bold text-[#802B52] bg-[#FAF0F2] border border-[#802B52]/20 px-1.5 py-0.5 rounded mt-1 inline-block">
-                                    📝 Remarks/Notes attached
+                                    Remarks/Notes attached
                                   </span>
                                 )}
                               </div>
@@ -2159,11 +2394,11 @@ export default function AdminPage() {
                 onClick={() => setShowUserModal(true)}
                 className="bg-[#802B52] hover:bg-[#962854] text-white text-xs font-bold px-3.5 py-2.5 rounded-xl transition-all shadow-md cursor-pointer flex items-center gap-1 shrink-0"
               >
-                ➕ <span className="hidden sm:inline">Create New Admin User</span><span className="sm:hidden">Add User</span>
+                + <span className="hidden sm:inline">Create New Admin User</span><span className="sm:hidden">Add User</span>
               </button>
             </div>
 
-            {/* 📱 MOBILE CARD VIEW FOR ADMIN & RIDER USERS */}
+            {/* MOBILE CARD VIEW FOR ADMIN & RIDER USERS */}
             <div className="block md:hidden space-y-3.5">
               {adminUsersList.map((u) => (
                 <div
@@ -2181,7 +2416,7 @@ export default function AdminPage() {
                             : "bg-blue-100 text-blue-800 border border-blue-200"
                         }`}
                     >
-                      {u.role === "SUPERADMIN" ? "👑 Super Admin" : u.role === "RIDER" ? "🛵 Delivery Rider" : "🛡️ Admin"}
+                      {u.role === "SUPERADMIN" ? "Super Admin" : u.role === "RIDER" ? "Delivery Rider" : "Admin"}
                     </span>
                   </div>
 
@@ -2190,7 +2425,7 @@ export default function AdminPage() {
                     <p className="font-mono text-xs font-semibold text-[#802B52]">{u.email}</p>
                     {u.phone && (
                       <p className="text-xs text-[#5C524E]">
-                        📞 Phone: <a href={`tel:${u.phone}`} className="font-semibold text-[#1C0D0A] hover:underline">{u.phone}</a>
+                        Phone: <a href={`tel:${u.phone}`} className="font-semibold text-[#1C0D0A] hover:underline">{u.phone}</a>
                       </p>
                     )}
                   </div>
@@ -2207,7 +2442,7 @@ export default function AdminPage() {
               ))}
             </div>
 
-            {/* 🖥️ DESKTOP TABLE VIEW FOR ADMIN & RIDER USERS */}
+            {/* DESKTOP TABLE VIEW FOR ADMIN & RIDER USERS */}
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-[#FAF5EE] border-b border-[#E6DBCE] text-[#5B1E38] font-bold uppercase">
@@ -2235,7 +2470,7 @@ export default function AdminPage() {
                                 : "bg-blue-100 text-blue-800"
                             }`}
                         >
-                          {u.role === "SUPERADMIN" ? "👑 Super Admin" : u.role === "RIDER" ? "🛵 Delivery Rider (Mobile App Only)" : "🛡️ Admin"}
+                          {u.role === "SUPERADMIN" ? "Super Admin" : u.role === "RIDER" ? "Delivery Rider (Mobile App Only)" : "Admin"}
                         </span>
                       </td>
                       <td className="py-4 px-4">
@@ -2334,13 +2569,13 @@ export default function AdminPage() {
                   onChange={(e) => setNewAdminRole(e.target.value as any)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-[#E6DBCE] text-xs sm:text-sm bg-white focus:outline-none focus:border-[#802B52]"
                 >
-                  <option value="RIDER">🛵 Delivery Rider (Mobile App Only)</option>
-                  <option value="ADMIN">🛡️ Admin (Dashboard Access)</option>
-                  <option value="SUPERADMIN">👑 Super Admin (Full Access)</option>
+                  <option value="RIDER">Delivery Rider (Mobile App Only)</option>
+                  <option value="ADMIN">Admin (Dashboard Access)</option>
+                  <option value="SUPERADMIN">Super Admin (Full Access)</option>
                 </select>
                 {newAdminRole === "RIDER" && (
                   <p className="text-[11px] text-[#802B52] mt-1 bg-[#FAF0F2] p-2 rounded-lg border border-[#802B52]/20">
-                    ℹ️ Delivery Riders are strictly restricted to the mobile app and cannot access this admin dashboard.
+                    Delivery Riders are strictly restricted to the mobile app and cannot access this admin dashboard.
                   </p>
                 )}
               </div>
@@ -2421,7 +2656,7 @@ export default function AdminPage() {
                           {s}
                         </option>
                       ))}
-                      <option value="__NEW__">➕ Add New Sub-Category...</option>
+                      <option value="__NEW__">+ Add New Sub-Category...</option>
                     </select>
                   </div>
                 )}
@@ -2448,7 +2683,7 @@ export default function AdminPage() {
                 <div className="space-y-2">
                   <div className="flex flex-wrap items-center gap-3">
                     <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-2 border border-[#E6DBCE] rounded-xl bg-[#FAF5EE] hover:bg-[#F3E8DB] text-xs font-bold text-[#802B52] transition-colors">
-                      <span>📷 {imagePreview ? "Change Image" : "Upload Cake Image"}</span>
+                      <span>{imagePreview ? "Change Image" : "Upload Cake Image"}</span>
                       <input
                         type="file"
                         accept="image/jpeg,image/png,image/webp,image/jpg"
@@ -2470,7 +2705,7 @@ export default function AdminPage() {
 
                   {imageError && (
                     <p className="text-[11px] text-red-600 font-medium">
-                      ⚠️ {imageError}
+                      {imageError}
                     </p>
                   )}
 
@@ -2506,7 +2741,7 @@ export default function AdminPage() {
                           </p>
                         )}
                         <p className="text-[11px] text-gray-500">
-                          {selectedFile ? "☁️ Ready to sync with Cloudflare R2" : "Active product image"}
+                          {selectedFile ? "Ready to sync with Cloudflare R2" : "Active product image"}
                         </p>
                       </div>
                     </div>
@@ -2537,7 +2772,7 @@ export default function AdminPage() {
                       className="w-4 h-4 text-emerald-700 rounded border-gray-300 focus:ring-emerald-600 cursor-pointer"
                     />
                     <label htmlFor="eggless-available-checkbox" className="text-xs font-bold text-[#1C0D0A] cursor-pointer flex items-center gap-1.5">
-                      <span>🌱 Eggless Option Available</span>
+                      <span>Eggless Option Available</span>
                       <span className="text-[10px] text-[#7A6B72] font-normal">
                         ({egglessAvailable ? "Customers can choose Eggless or With Egg" : "With Egg only — eggless dropdown hidden from customers"})
                       </span>
@@ -2609,8 +2844,8 @@ export default function AdminPage() {
                         onChange={(e) => handleVariantChange(idx, "isEggless", e.target.value === "eggless")}
                         className="flex-1 px-2 py-1.5 border border-[#E6DBCE] rounded-lg bg-white text-xs"
                       >
-                        <option value="egg">🥚 Egg</option>
-                        <option value="eggless">🌱 Eggless</option>
+                        <option value="egg">Egg</option>
+                        <option value="eggless">Eggless</option>
                       </select>
                       <button
                         type="button"
@@ -2790,7 +3025,6 @@ export default function AdminPage() {
               <div className="bg-[#FAF5EE] border border-[#E6DBCE] rounded-xl p-3.5 space-y-1.5">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-xs uppercase tracking-wider text-[#5B1E38] flex items-center gap-1.5">
-                    <span>🎂</span>
                     <span>Cake Inscription / Remarks:</span>
                   </span>
                   <span className="text-[10px] text-[#7A6B72] font-semibold">Message on Cake</span>
@@ -2816,7 +3050,6 @@ export default function AdminPage() {
               <div className="bg-[#FAF5EE] border border-[#E6DBCE] rounded-xl p-3.5 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-xs uppercase tracking-wider text-[#5B1E38] flex items-center gap-1.5">
-                    <span>📋</span>
                     <span>Customer Remarks &amp; Special Instructions</span>
                   </span>
                   <span className="text-[10px] text-[#802B52] font-bold bg-[#FAF0F2] px-2 py-0.5 rounded-full border border-[#802B52]/20">
@@ -2870,17 +3103,7 @@ export default function AdminPage() {
             </div>
 
             {/* Modal Footer Actions */}
-            <div className="p-3.5 sm:p-4 border-t border-[#E6DBCE] bg-[#FAF5EE]/70 flex items-center justify-between gap-2 shrink-0">
-              <a
-                href={`/api/orders/${selectedOrderModal.id}/invoice`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#FAF5EE] text-[#802B52] border border-[#E6DBCE] text-xs font-bold transition-colors inline-flex items-center gap-1.5 shadow-2xs cursor-pointer"
-              >
-                <span>View / Print Invoice</span>
-                <span className="material-symbols-outlined text-sm">open_in_new</span>
-              </a>
-
+            <div className="p-3.5 sm:p-4 border-t border-[#E6DBCE] bg-[#FAF5EE]/70 flex items-center justify-end gap-2 shrink-0">
               <button
                 type="button"
                 onClick={() => setSelectedOrderModal(null)}

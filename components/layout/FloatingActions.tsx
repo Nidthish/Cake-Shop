@@ -11,7 +11,6 @@ const CONTACTS = [
   { name: "Lollipop Support 3", phone: "917373737810", display: "+91 73737 37810" },
 ];
 
-const CANDY_TRAIL_EMOJIS = ["✨", "🌟", "🍬", "🍭", "⭐", "💖", "🍰"];
 const BURST_ANGLES = [0, 60, 120, 180, 240, 300];
 
 export default function FloatingActions() {
@@ -83,7 +82,7 @@ export default function FloatingActions() {
       star.style.top = `${targetY}px`;
       star.style.setProperty("--bx", `${bx}px`);
       star.style.setProperty("--by", `${by}px`);
-      star.textContent = deg % 120 === 0 ? "✨" : "⭐";
+      star.textContent = "✦";
 
       document.body.appendChild(star);
       setTimeout(() => star.remove(), 750);
@@ -231,35 +230,8 @@ export default function FloatingActions() {
         easing: "linear",
       });
 
-      // 5. Spawning Twinkling Candy Trail Stars along the path
-      let trailCount = 0;
-      const trailInterval = setInterval(() => {
-        trailCount++;
-        if (trailCount > 10) return;
-
-        const rect = flyer.getBoundingClientRect();
-        if (rect.width > 0 && rect.left > 0) {
-          const star = document.createElement("div");
-          star.className = "candy-trail-sparkle";
-          star.style.left = `${rect.left + rect.width / 2}px`;
-          star.style.top = `${rect.top + rect.height / 2}px`;
-
-          const dx = (Math.random() - 0.5) * 36;
-          const dy = Math.random() * 26 + 10;
-          star.style.setProperty("--dx", `${dx}px`);
-          star.style.setProperty("--dy", `${dy}px`);
-
-          const emoji = CANDY_TRAIL_EMOJIS[Math.floor(Math.random() * CANDY_TRAIL_EMOJIS.length)];
-          star.textContent = emoji;
-
-          document.body.appendChild(star);
-          setTimeout(() => star.remove(), 700);
-        }
-      }, 130);
-
-      // 6. Arrival Impact at Candy Cart
+      // 5. Arrival Impact at Candy Cart
       animation.onfinish = () => {
-        clearInterval(trailInterval);
         flyer.remove();
 
         // Trigger joyful Jelly Chomp on the pink candy cart button
@@ -406,12 +378,12 @@ export default function FloatingActions() {
                               className={`font-semibold ${item.eggPreference === "eggless" ? "text-emerald-700" : "text-amber-700"
                                 }`}
                             >
-                              • {item.eggPreference === "eggless" ? "Eggless" : "🥚 Egg"}
+                              • {item.eggPreference === "eggless" ? "Eggless" : "With Egg"}
                             </span>
                           )}
                           {item.offer && (
                             <span className="text-[#962854] font-bold truncate">
-                              • 🎁 {item.offer}
+                              • {item.offer}
                             </span>
                           )}
                         </div>

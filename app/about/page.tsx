@@ -95,13 +95,12 @@ export default function AboutPage() {
                 href="#branches"
                 className="btn-primary py-3.5 px-7 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-lg"
               >
-                <span>📍 Find our branches</span>
+                <span>Find our branches</span>
               </a>
               <Link
                 href="/custom-cake"
                 className="btn-secondary py-3.5 px-7 text-xs font-bold uppercase tracking-wider flex items-center gap-2"
               >
-                <span className="text-[#962854]">✨</span>
                 <span>Design a custom cake</span>
               </Link>
             </div>
@@ -164,23 +163,23 @@ export default function AboutPage() {
             </p>
             <ul className="space-y-3 font-display text-xl sm:text-2xl text-[#962854] font-medium">
               <li className="flex items-center gap-2">
-                <span>🎂</span> <span>It&apos;s a birthday wish.</span>
+                <span>It&apos;s a birthday wish.</span>
               </li>
               <li className="flex items-center gap-2">
-                <span>🎁</span> <span>It&apos;s a surprise.</span>
+                <span>It&apos;s a surprise.</span>
               </li>
               <li className="flex items-center gap-2">
-                <span>👨‍👩‍👧‍👦</span> <span>It&apos;s a family gathering.</span>
+                <span>It&apos;s a family gathering.</span>
               </li>
               <li className="flex items-center gap-2">
-                <span>🎉</span> <span>It&apos;s a celebration.</span>
+                <span>It&apos;s a celebration.</span>
               </li>
               <li className="flex items-center gap-2">
-                <span>❤️</span> <span>It&apos;s a memory.</span>
+                <span>It&apos;s a memory.</span>
               </li>
             </ul>
             <p className="text-xs sm:text-sm text-[#5C524E] font-medium pt-4 border-t border-[#F1E6DF]">
-              And we&apos;re happy to be a small part of it. ❤️
+              And we&apos;re happy to be a small part of it.
             </p>
           </ScrollReveal>
         </div>
@@ -270,27 +269,22 @@ export default function AboutPage() {
             <div className="space-y-4 pt-4">
               {[
                 {
-                  emoji: "🍰",
                   title: "Great taste",
                   desc: "Cakes that are made to be enjoyed, not just admired.",
                 },
                 {
-                  emoji: "❤️",
                   title: "Customer satisfaction",
                   desc: "Your happiness is at the centre of every order.",
                 },
                 {
-                  emoji: "✨",
                   title: "Freshness and quality",
                   desc: "Careful preparation with attention to freshness, flavour and presentation.",
                 },
                 {
-                  emoji: "🤍",
                   title: "Comfort and convenience",
                   desc: "A smooth experience from choosing your cake to receiving it.",
                 },
                 {
-                  emoji: "💰",
                   title: "Affordable cakes",
                   desc: "Our journey began with a simple goal: making good cakes accessible at prices people can feel good about.",
                 },
@@ -299,9 +293,6 @@ export default function AboutPage() {
                   key={idx}
                   className="p-5 rounded-2xl bg-white border border-[#F1E6DF] shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow"
                 >
-                  <span className="text-2xl sm:text-3xl p-2 rounded-xl bg-[#FAF3EC] flex-shrink-0">
-                    {f.emoji}
-                  </span>
                   <div>
                     <h3 className="font-bold text-base sm:text-lg text-[#1C0D0A]">
                       {f.title}
@@ -374,7 +365,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <ScrollReveal direction="left" distance={50} duration={850} className="lg:col-span-6 space-y-6">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#FAF3EC] border border-[#E6C184] text-xs font-bold text-[#1C0D0A]">
-              <span>📰 Media Feature</span>
+              <span>Media Feature</span>
             </div>
             <h2 className="font-display font-bold text-3xl sm:text-5xl text-[#1C0D0A] leading-tight">
               As featured in The Times of India
@@ -454,7 +445,7 @@ export default function AboutPage() {
               href="/cakes"
               className="btn-primary py-3.5 px-8 text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-2"
             >
-              <span>🎂 Browse cakes</span>
+              <span>Browse cakes</span>
             </Link>
             <Link
               href="/custom-cake"

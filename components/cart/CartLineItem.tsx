@@ -34,13 +34,13 @@ export default function CartLineItem({ item }: { item: CartItem }) {
           )}
         </div>
         {item.offer && (
-          <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-amber-800 text-[10px] font-bold">
-            <span>🎁</span> {item.offer}
+          <div className="inline-flex items-center px-2 py-0.5 rounded bg-amber-50 border border-amber-200 text-amber-800 text-[10px] font-bold">
+            {item.offer}
           </div>
         )}
         {item.cakeMessage && (
           <p className="text-[11px] text-[#802B52] italic">
-            🎂 Message: &quot;{item.cakeMessage}&quot;
+            Message: &quot;{item.cakeMessage}&quot;
           </p>
         )}
         <div className="flex items-baseline gap-2 pt-0.5">

@@ -9,13 +9,14 @@ export async function GET(req: NextRequest) {
 
   if (!admin) {
     return NextResponse.json(
-      { success: false, error: "Unauthorized admin session." },
+      { success: false, authenticated: false, error: "Unauthorized admin session." },
       { status: 401 }
     );
   }
 
   return NextResponse.json({
     success: true,
+    authenticated: true,
     user: admin,
   });
 }

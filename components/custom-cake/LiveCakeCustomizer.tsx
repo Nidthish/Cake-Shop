@@ -1,23 +1,6 @@
 "use client";
 
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import {
-  Flame,
-  Wind,
-  Slice,
-  PartyPopper,
-  Moon,
-  Sun,
-  Check,
-  RotateCcw,
-  Layers as LayersIcon,
-  Utensils,
-  Scale,
-  Type,
-  Palette,
-  X,
-  Crown,
-} from 'lucide-react';
 
 // --- 1. ARTISANAL FLAVOUR DEFINITIONS & COLOR PALETTES (NO PRICES) ---
 export interface FlavourConfig {
@@ -280,12 +263,12 @@ export const DECORATIONS = [
 ];
 
 export const MOBILE_TABS = [
-  { id: 'all', label: 'All Steps', icon: Utensils },
-  { id: 'size', label: '1. Layers', icon: LayersIcon },
-  { id: 'flavour', label: '2. Flavour', icon: Utensils },
-  { id: 'weight', label: '3. Weight', icon: Scale },
-  { id: 'message', label: '4. Name', icon: Type },
-  { id: 'decor', label: '5. Toppings', icon: Palette },
+  { id: 'all', label: 'All Steps' },
+  { id: 'size', label: '1. Layers' },
+  { id: 'flavour', label: '2. Flavour' },
+  { id: 'weight', label: '3. Weight' },
+  { id: 'message', label: '4. Name' },
+  { id: 'decor', label: '5. Toppings' },
 ];
 
 // --- 3. MEMOIZED MINI SVG ICONS FOR CONFIGURATION BUTTONS ---
@@ -1111,9 +1094,6 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
       {/* ==================== TOP STUDIO CONTROLS BAR (EGGLESS REMOVED) ==================== */}
       <header className="max-w-[1320px] w-full flex flex-wrap items-center justify-between gap-2 mb-3 sm:mb-5 px-1">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-[#802348] text-white flex items-center justify-center shadow-sm">
-            <Crown className="w-5 h-5" />
-          </div>
           <div>
             <h2 className="text-base sm:text-lg font-extrabold tracking-tight text-[#2B1810] leading-none">
               Lollipop Live Cake Studio
@@ -1130,9 +1110,8 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
             type="button"
             onClick={handleResetDefault}
             title="Reset to default cake"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white hover:bg-[#F5EDE3] text-[#5C4B42] border border-[#E6DCD2] transition-colors cursor-pointer"
+            className="flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-white hover:bg-[#F5EDE3] text-[#5C4B42] border border-[#E6DCD2] transition-colors cursor-pointer"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
             <span>Reset Cake</span>
           </button>
         </div>
@@ -1157,22 +1136,16 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
                   <button
                     type="button"
                     onClick={handleToggleCandles}
-                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-[11px] font-bold shadow-sm transition-all cursor-pointer ${
+                    className={`flex items-center px-2.5 py-1.5 rounded-full text-[11px] font-bold shadow-sm transition-all cursor-pointer ${
                       candlesLit
                         ? 'bg-[#FFF3D6] text-[#B85D00] border border-[#F5D08A] hover:bg-[#FFE8B3]'
                         : 'bg-white/90 text-[#4A3B34] border border-[#E6DCD2] hover:bg-white'
                     }`}
                   >
                     {candlesLit ? (
-                      <>
-                        <Wind className="w-3.5 h-3.5 text-[#E07A00]" />
-                        <span>Blow Candles</span>
-                      </>
+                      <span>Blow Candles</span>
                     ) : (
-                      <>
-                        <Flame className="w-3.5 h-3.5 text-[#E03C42]" />
-                        <span>Relight</span>
-                      </>
+                      <span>Relight</span>
                     )}
                   </button>
                 )}
@@ -1181,13 +1154,12 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
                 <button
                   type="button"
                   onClick={() => setSliceView((s) => !s)}
-                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-bold shadow-sm transition-all cursor-pointer ${
+                  className={`flex items-center px-2.5 py-1.5 rounded-full text-[11px] font-bold shadow-sm transition-all cursor-pointer ${
                     sliceView
                       ? 'bg-[#802348] text-white'
                       : 'bg-white/90 text-[#4A3B34] border border-[#E6DCD2] hover:bg-white'
                   }`}
                 >
-                  <Slice className="w-3.5 h-3.5" />
                   <span>{sliceView ? 'Close Slice' : 'Slice View'}</span>
                 </button>
               </div>
@@ -1198,23 +1170,22 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
                   type="button"
                   onClick={() => setWishMode((w) => !w)}
                   title="Toggle Studio Light / Night Glow"
-                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[11px] font-bold shadow-sm transition-all cursor-pointer ${
+                  className={`flex items-center px-2.5 py-1.5 rounded-full text-[11px] font-bold shadow-sm transition-all cursor-pointer ${
                     wishMode
                       ? 'bg-[#F3C65F] text-[#2B1810]'
                       : 'bg-white text-[#4A3B34] border border-[#E6DCD2] hover:bg-[#FAF4EC]'
                   }`}
                 >
-                  {wishMode ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5 text-[#E07A00]" />}
-                  <span className="hidden sm:inline">{wishMode ? 'Night Glow' : 'Studio Light'}</span>
+                  <span>{wishMode ? 'Night Glow' : 'Studio Light'}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={triggerCelebration}
                   title="Celebrate with confetti"
-                  className="p-1.5 rounded-full bg-white/90 hover:bg-white text-[#802348] border border-[#E6DCD2] shadow-sm transition-transform active:scale-90 cursor-pointer"
+                  className="flex items-center px-2.5 py-1.5 rounded-full text-[11px] font-bold bg-white/90 hover:bg-white text-[#802348] border border-[#E6DCD2] shadow-sm transition-transform active:scale-90 cursor-pointer"
                 >
-                  <PartyPopper className="w-3.5 h-3.5" />
+                  <span>Celebrate</span>
                 </button>
               </div>
             </div>
@@ -1820,20 +1791,18 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
         <div className="lg:hidden w-full overflow-x-auto no-scrollbar -my-1">
           <div className="flex items-center gap-2 pb-1">
             {MOBILE_TABS.map((tab) => {
-              const IconComponent = tab.icon;
               const active = mobileTab === tab.id;
               return (
                 <button
                   key={tab.id}
                   type="button"
                   onClick={() => setMobileTab(tab.id)}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  className={`flex items-center px-3.5 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                     active
                       ? 'bg-[#802348] text-white shadow-sm'
                       : 'bg-white text-[#5C4B42] border border-[#EADFD4]'
                   }`}
                 >
-                  <IconComponent className="w-3.5 h-3.5" />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -2079,9 +2048,7 @@ export default function LiveCakeCustomizer({ onDesignChange }: LiveCakeCustomize
                       }`}
                     >
                       {isSelected && (
-                        <span className="absolute top-1 right-1 w-3.5 h-3.5 rounded-full bg-[#802348] text-white flex items-center justify-center">
-                          <Check className="w-2.5 h-2.5" />
-                        </span>
+                        <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#802348]" />
                       )}
                       <div className="w-10 h-10 flex items-center justify-center">
                         <MiniDecorationIcon id={deco.id} />

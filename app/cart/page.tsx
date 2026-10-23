@@ -185,7 +185,7 @@ export default function CartPage() {
                   </div>
                   {item.cakeMessage && (
                     <p className="text-xs text-[#802B52] italic">
-                      🎂 Message: &quot;{item.cakeMessage}&quot;
+                      Message: &quot;{item.cakeMessage}&quot;
                     </p>
                   )}
                   <div className="flex items-baseline gap-2">
